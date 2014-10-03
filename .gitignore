@@ -1,7 +1,0 @@
-.env.*
-/.idea
-/vendor
-.DS_Store
-Thumbs.db
-composer.lock
-composer.phar
