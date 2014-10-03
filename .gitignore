@@ -1,0 +1,11 @@
+.env.*
+/assets
+/.idea
+/vendor
+/node_modules
+.DS_Store
+Thumbs.db
+composer.lock
+composer.phar
+**/.sass-cache
+**/.sass-cache/*
