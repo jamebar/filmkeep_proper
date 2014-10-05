@@ -1,5 +1,6 @@
 <?php namespace App;
 
+
 use Illuminate\Auth\UserTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Reminders\RemindableTrait;
@@ -23,5 +24,16 @@ class User extends Model implements UserContract, RemindableContract {
 	 * @var array
 	 */
 	protected $hidden = ['password', 'remember_token'];
+
+
+	protected $fillable =['email', 'password'];
+
+	/*
+	* @param $password
+	*/
+	public function setPasswordAttribute($password)
+	{
+		$this->attributes['password'] = \Hash::make($password);
+	}
 
 }

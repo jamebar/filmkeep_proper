@@ -12,3 +12,6 @@
 */
 
 $router->get('/', 'HomeController@index');
+
+$router->controller('auth', 'Auth\AuthController');
+$router->controller('password', 'Auth\RemindersController');
