@@ -22,4 +22,6 @@
 		{!!Form::submit('Login' ,['class'=>'button']) !!}
 
 	{!! Form::close()!!}
+
+	{!! link_to(route('loginFacebook'), 'Login with facebook') !!}
 @stop

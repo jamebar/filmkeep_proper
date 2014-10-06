@@ -129,6 +129,7 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
+		'Laravel\Socialite\SocialiteServiceProvider',
 
 		'Way\Generators\GeneratorsServiceProvider',
 		'Illuminate\Html\HtmlServiceProvider'
@@ -191,7 +192,8 @@ return [
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
 		'Form'		=> 'Illuminate\Html\FormFacade',
-		'HTML'		=> 'Illuminate\Html\HtmlFacade'
+		'HTML'		=> 'Illuminate\Html\HtmlFacade',
+		'Socialite' => 'Laravel\Socialite\Facades\Socialite'
 
 	],
 

@@ -7,6 +7,8 @@ use Illuminate\Contracts\Auth\Authenticator;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 
+use Laravel\Socialite\Contracts\Factory as SocialiteFactory;
+
 class AuthController extends Controller {
 
 	/**
@@ -16,15 +18,18 @@ class AuthController extends Controller {
 	 */
 	protected $auth;
 
+	protected $socialite;
+
 	/**
 	 * Create a new authentication controller instance.
 	 *
 	 * @param  Authenticator  $auth
 	 * @return void
 	 */
-	public function __construct(Authenticator $auth)
+	public function __construct(Authenticator $auth, SocialiteFactory $socialite)
 	{
 		$this->auth = $auth;
+		$this->socialite = $socialite;
 
 		$this->beforeFilter('csrf', ['on' => ['post']]);
 		$this->beforeFilter('guest', ['except' => ['getLogout']]);
@@ -76,7 +81,7 @@ class AuthController extends Controller {
 	{
 		if ($this->auth->attempt($request->only('email', 'password')))
 		{
-			return redirect('/');
+			return redirect('/')->with('message', 'You are logged in.');
 		}
 
 		return redirect('/login')->withErrors([
@@ -93,7 +98,18 @@ class AuthController extends Controller {
 	{
 		$this->auth->logout();
 
-		return redirect('/');
+		return redirect('/')->with('message', 'You are logged out.');
+	}
+
+	public function getLoginFacebook()
+	{
+		if(\Input::has('code'))
+		{
+			$user = $this->socialite->driver('facebook')->user();
+			dd($user);
+		}
+
+		return $this->socialite->driver('facebook')->redirect();
 	}
 
 }
