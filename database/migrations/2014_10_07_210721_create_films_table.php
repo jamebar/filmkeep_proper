@@ -16,11 +16,12 @@ class CreateFilmsTable extends Migration {
 		{
 			$table->increments('id');
             $table->string('title');
-            $table->integer('tmdb_id');
-            $table->integer('imdb_id');
+            $table->string('rotten_id');
+            $table->string('tmdb_id');
+            $table->string('imdb_id');
             $table->string('release_date');
-            $table->string('poster_img');
-            $table->string('backdrop_img');
+            $table->string('poster_path');
+            $table->string('backdrop_path');
             $table->string('summary');
 			$table->timestamps();
 		});

@@ -15,9 +15,10 @@ class CreateRatingTypesTable extends Migration {
 		Schema::create('rating_types', function(Blueprint $table)
 		{
 			$table->increments('id');
-            $table->string('name');
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('user_id');
+            $table->string('label');
+            $table->string('label_short');
+            $table->integer('sort_order');
 			$table->timestamps();
 		});
 	}
