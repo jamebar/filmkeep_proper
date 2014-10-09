@@ -1,6 +1,10 @@
 <?php
 
+use App\Review;
 
+$router->get('/test', function(){
+   return Review::with('ratings','film')->where('user_id',1)->take(3)->get();
+});
 
 $router->get('/', function(){
 	return View('home');
@@ -16,3 +20,11 @@ post('/auth/register', 'Auth\AuthController@postRegister');
 
 get('/auth/loginFacebook', ['as'=>'loginFacebook', 'uses' => 'Auth\AuthController@getLoginFacebook']);
 //post('/auth/loginFacebook', ['uses' => 'Auth\AuthController@getLoginFacebook']);
+
+
+
+$router->group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
+
+    $router->resource('reviews', 'ReviewsController');
+
+});

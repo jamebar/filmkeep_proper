@@ -1,8 +1,10 @@
-<?php namespace App\Http\Filters;
+<?php namespace App\Http\Middleware;
 
+use Closure;
+use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Contracts\Auth\Authenticator;
 
-class BasicAuthFilter {
+class BasicAuthMiddleware implements Middleware {
 
 	/**
 	 * The authenticator implementation.
@@ -23,13 +25,15 @@ class BasicAuthFilter {
 	}
 
 	/**
-	 * Run the request filter.
+	 * Handle an incoming request.
 	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Closure  $next
 	 * @return mixed
 	 */
-	public function filter()
+	public function handle($request, Closure $next)
 	{
-		return $this->auth->basic();
+		return $this->auth->basic() ?: $next($request);
 	}
 
 }

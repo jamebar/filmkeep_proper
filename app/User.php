@@ -36,4 +36,9 @@ class User extends Model implements UserContract, RemindableContract {
 		$this->attributes['password'] = \Hash::make($password);
 	}
 
+    public function reviews(){
+         return $this->hasMany('App\Review');
+    }
+
+
 }

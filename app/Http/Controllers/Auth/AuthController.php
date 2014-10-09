@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers\Auth;
 
 use App\User;
-use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Authenticator;
 
 use App\Http\Requests\Auth\LoginRequest;
@@ -9,7 +8,7 @@ use App\Http\Requests\Auth\RegisterRequest;
 
 use Laravel\Socialite\Contracts\Factory as SocialiteFactory;
 
-class AuthController extends Controller {
+class AuthController  {
 
 	/**
 	 * The authenticator implementation.
@@ -31,7 +30,7 @@ class AuthController extends Controller {
 		$this->auth = $auth;
 		$this->socialite = $socialite;
 
-		$this->beforeFilter('csrf', ['on' => ['post']]);
+		$this->middleware('csrf', ['on' => ['post']]);
 		$this->beforeFilter('guest', ['except' => ['getLogout']]);
 	}
 
