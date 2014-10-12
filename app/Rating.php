@@ -11,6 +11,6 @@ class Rating extends Model {
     }
 
     public function rating_type(){
-         return $this->hasOne('App\Rating_type');
+         return $this->belongsTo('App\Rating_type');
     }
 }

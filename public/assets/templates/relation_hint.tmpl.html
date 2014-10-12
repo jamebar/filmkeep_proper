@@ -1,0 +1,6 @@
+<div class="relation-hint-container">
+    <div class="relation-bg">
+        <span class="relation-dot current-dot"  ng-style="{'left': (curValue/2000)*100 + '%' }"></span>
+        <span class="relation-dot" ng-repeat="review in reviews" ng-style="{'left': (review.ratings[hint_index].value/2000)*100 + '%' }"></span>
+    </div>
+</div>

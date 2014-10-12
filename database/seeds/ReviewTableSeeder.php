@@ -27,7 +27,7 @@ class ReviewTableSeeder extends Seeder {
       {
         $r = new Rating([
             'rating_type_id' => $rating_type->id,
-            'value'=> $faker->numberBetween(1,100)
+            'value'=> $faker->numberBetween(1,2000)
             ]);
 
         $review->ratings()->save($r);

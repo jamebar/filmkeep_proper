@@ -1,33 +1,29 @@
 <?php namespace App\Http\Controllers;
 
-use App\Review;
+use App\Rating_type;
 
-class ReviewsController  {
+class RatingTypesController {
 
 	/**
 	 * Display a listing of the resource.
-	 * GET /reviews
 	 *
 	 * @return Response
 	 */
 	public function index()
 	{
-        $user= \Input::get('user');
-        $num = \Input::get('num') ? \Input::get('num') : 20;
-        $sortBy = \Input::get('sort_by') ? \Input::get('sort_by') : 'id';
-        $sortDirection = \Input::get('sort_direction') ;
+        $rating_types = Rating_type::where('user_id', 0);
 
-		$review = Review::with('ratings','ratings.rating_type','film')->take($num)->orderBy($sortBy, $sortDirection);
-        
-        if($user)
-            $review->where('user_id',$user);
+        if( \Input::has('user_id') )
+        {
+            $rating_types->orWhere('user_id', \Input::get('user_id'));
+        }
+            
 
-        return \Response::json(['status' => 200, 'results' => $review->get()]);
+		return \Response::json(['status' => 200, 'results'=>$rating_types->get()]);
 	}
 
 	/**
 	 * Show the form for creating a new resource.
-	 * GET /reviews/create
 	 *
 	 * @return Response
 	 */
@@ -38,7 +34,6 @@ class ReviewsController  {
 
 	/**
 	 * Store a newly created resource in storage.
-	 * POST /reviews
 	 *
 	 * @return Response
 	 */
@@ -49,21 +44,17 @@ class ReviewsController  {
 
 	/**
 	 * Display the specified resource.
-	 * GET /reviews/{id}
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
 	public function show($id)
 	{
-        $review = Review::find($id)->with('ratings','film')->first();
-
-        return \Response::json(['status' => 200, 'results' => $review]);
+		//
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
-	 * GET /reviews/{id}/edit
 	 *
 	 * @param  int  $id
 	 * @return Response
@@ -75,7 +66,6 @@ class ReviewsController  {
 
 	/**
 	 * Update the specified resource in storage.
-	 * PUT /reviews/{id}
 	 *
 	 * @param  int  $id
 	 * @return Response
@@ -87,7 +77,6 @@ class ReviewsController  {
 
 	/**
 	 * Remove the specified resource from storage.
-	 * DELETE /reviews/{id}
 	 *
 	 * @param  int  $id
 	 * @return Response

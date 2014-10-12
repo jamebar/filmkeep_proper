@@ -26,5 +26,6 @@ get('/auth/loginFacebook', ['as'=>'loginFacebook', 'uses' => 'Auth\AuthControlle
 $router->group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
     $router->resource('reviews', 'ReviewsController');
+    $router->resource('rating_types', 'RatingTypesController');
 
 });

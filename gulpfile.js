@@ -19,18 +19,27 @@ gulp.task('styles', function() {
 	.pipe(sass({ style: 'expanded' }))
 	.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'ios 6', 'android 4'))
 	.pipe(rename({ suffix: '.min' }))
-	.pipe(minifycss())
+	//.pipe(minifycss())
 	.pipe(gulp.dest('public/assets/css'))
-	.pipe(livereload(server))
 	.pipe(notify({ message: 'Style task completed.' }));
 });
 
 gulp.task('scripts', function() {
-	return gulp.src([
+	gulp.src([
+        'assets/bower_components/jquery/dist/jquery.min.js',
+        'assets/bower_components/lodash/dist/lodash.min.js',
 		'assets/bower_components/foundation/js/foundation.min.js',
-		'assets/bower_components/fastclick/lib/fastclick.js'])
-        .pipe(concat('all.js'))
-        .pipe(uglify())
+		'assets/bower_components/fastclick/lib/fastclick.js',
+        'assets/bower_components/angular/angular.min.js',
+        'assets/bower_components/angular-ui-router/release/angular-ui-router.min.js',
+        'assets/bower_components/angular-resource/angular-resource.min.js',
+        'assets/bower_components/angular-touch/angular-touch.min.js',
+        'assets/bower_components/venturocket-angular-slider/build/angular-slider.min.js'])
+        .pipe(concat('vendor.js'))
+        .pipe(gulp.dest('public/assets/js'));
+
+    gulp.src('assets/app_ui/js/**/*.js')
+        .pipe(concat('app.js'))
         .pipe(gulp.dest('public/assets/js'));
 });
 
@@ -42,7 +51,7 @@ gulp.task('watch', function() {
 		};
 
 		gulp.watch(['assets/sass/*.scss'], ['styles']);
-		gulp.watch(['assets/bower_components/*.js'], ['scripts']);
+		gulp.watch(['assets/**/*.js'], ['scripts']);
 		
 	});
 });

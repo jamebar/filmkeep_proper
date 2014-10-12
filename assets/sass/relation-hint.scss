@@ -1,0 +1,22 @@
+.relation-hint-container{
+    
+    .relation-bg{
+        background:#000;
+        position:relative;
+        height:20px;
+    }
+
+    .relation-dot{
+        background:#fff;
+        width:8px;
+        height:15px;
+        border-radius:3px;
+        display:inline-block;
+        position:absolute;
+        top:0px;
+    }
+
+    .current-dot{
+        background:#fb0000;
+    }
+}

@@ -1,9 +1,13 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="myApp">
 <head>
 	<meta charset="UTF-8">
 	<title>Filmkeep</title>
 	<link rel="stylesheet" href="/assets/css/styles.min.css">
+    <script src="/assets/js/vendor.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+
 </head>
 <body>
 	@if (Session::has('message'))
