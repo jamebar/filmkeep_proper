@@ -1,8 +1,43 @@
 @charset 'UTF-8';
 @import 'foundation_settings';
 @import '../bower_components/foundation/scss/normalize';
-@import '../bower_components/foundation/scss/foundation';
+@import '../bower_components/foundation/scss/foundation'; 
 
 @import 'slider';
 @import 'relation-hint';
 
+.review-editor{
+    margin:0 auto;
+}
+
+.relation-hint-container.ng-hide-remove {
+    -webkit-animation: fadeInUp .5s;
+    animation: fadeInUp .5s;
+}
+ 
+.relation-hint-container.ng-hide-add {
+    -webkit-animation: fadeOutDown .5s;
+    animation: fadeOutDown .5s; 
+    display: block !important;
+} 
+
+@-webkit-keyframes dimOut {
+  0% {opacity: 1;}
+  100% {opacity: .3;}
+}
+
+@keyframes dimOut {
+  0% {opacity: 1;}
+  100% {opacity: .3;}
+}
+
+.dimOut {
+  -webkit-animation-name: fadeOut;
+          animation-name: fadeOut;
+}
+
+.fadeSlider {
+    -webkit-animation: dimOut .5s;
+    animation: dimOut .5s; 
+    opacity:.3;
+}

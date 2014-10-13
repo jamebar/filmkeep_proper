@@ -7,12 +7,11 @@
 
 
 @endif
-<div ng-controller="addReviewCtrl">
-    <input name="title" ng-model="review.title"/>
+<div ng-controller="addReviewCtrl" class="review-editor small-12 medium-6">
+    <form><input name="title" placeholder="title of movie" ng-model="review.title"/></form>
 
-    <relation-hint  reviews="reviews" type="hint_index"></relation-hint>
-    <p>%%left%%</p>
-    <p>%%right%%</p>
+    <relation-hint reviews="reviews" type="hint_index"></relation-hint>
+    
     <div ng-repeat="rating_type in rating_types">
         <p>%%rating_type.label%%</p>
         <slider
@@ -25,7 +24,9 @@
             precision="1"
             stretch="1"
             ng-change="sliding()"
-            ng-mousedown="setCurrent(this)"
+            ng-mousedown="setCurrent($index)"
+            ng-mouseup="hideHint()"
+            ng-class="{fadeSlider:fade_slider}"
             >
         </slider>
     </div>

@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>Filmkeep</title>
 	<link rel="stylesheet" href="/assets/css/styles.min.css">
+    <link rel="stylesheet" href="/assets/css/animate.min.css">
     <script src="/assets/js/vendor.js"></script>
     <script src="/assets/js/app.js"></script>
 

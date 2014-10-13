@@ -6,7 +6,8 @@
 angular.module('myApp', [
     'ui.router',
     'vr.directives.slider',
-    'Api'
+    'Api',
+    'ngAnimate'
     ], function($interpolateProvider){
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -17,8 +18,11 @@ angular.module('myApp', [
             $scope.hint_index = 0;
             var sortedReviews = [];
             $scope.curValue = 1000;
+            $scope.show_hint = false;
             $scope.left = "";
             $scope.right = "";
+            $scope.relation_top = window.event.clientY;
+
             ratingTypesApiService
                 .query(function(response){
                     $scope.rating_types = response.results;
@@ -27,36 +31,44 @@ angular.module('myApp', [
 
             reviewApiService
                 .query({num:'50'}, function(response){
-                    $scope.reviews =sortedReviews= response.results;
+                    $scope.reviews = sortedReviews = response.results;
                     
                 });
 
             
 
             $scope.sliding = function(){
+                
                 $scope.curValue = $scope.rating_types[$scope.hint_index].value;
                 var r = sortedReviews;
                 for(var i = 0;i<$scope.reviews.length;i++)
                 {
-                    
                     var next_val = i + 1;
                     if(next_val > r.length-1) next_val = r.length-1;
 
                     if($scope.curValue > r[i].ratings[$scope.hint_index].value && $scope.curValue < r[next_val].ratings[$scope.hint_index].value)
                     {
-                        $scope.left = r[i].film.title
-                        $scope.right = r[next_val].film.title;
+                        $scope.left_compare = r[i].film.title
+                        $scope.right_compare = r[next_val].film.title;
                     }
-                    
                 }
             }
 
             $scope.setCurrent = function(el){
-                $scope.hint_index = el.rating_type.sort_order - 1;
+
+                $scope.hint_index = el;
+                $scope.show_hint = true;
                 sortedReviews = _.sortBy($scope.reviews, function(r){
                     return r.ratings[$scope.hint_index].value;
                 })
+                $scope.relation_top = window.event.clientY + document.body.scrollTop -70;
+                $scope.fade_slider = true;
 
+            }
+
+            $scope.hideHint = function(el){
+                $scope.show_hint = false;
+                $scope.fade_slider = false;
             }
      
         }

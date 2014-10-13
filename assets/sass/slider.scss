@@ -2,7 +2,7 @@ slider {
         display:     block;
         position:    relative;
         height:      30px;
-        width:       500px;
+        width:       100%;
     }
 
     slider span.bar {
@@ -12,6 +12,7 @@ slider {
         left:       0;
         top:        25%;
         cursor:     pointer;
+        border-radius:3px;
     }
 
     slider span.bar.selection, slider span.bar.unselected {
@@ -29,10 +30,11 @@ slider {
     }
 
     slider span.pointer {
-        cursor:           pointer;
-        width:            15px;
-        top:              0;
-        bottom:           0;
+        cursor: pointer;
+        width: 30px;
+        border-radius: 15px;
+        top: 0;
+        bottom: 0;
         background-color: #00a;
     }
 
@@ -50,6 +52,7 @@ slider {
         text-shadow: none;
         top:         -1.3em;
         cursor:      pointer;
+        display:none !important;
     }
 
     slider span.bubble.selection, slider span.bubble.limit {
