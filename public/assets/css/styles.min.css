@@ -110,6 +110,15 @@ slider span.bubble.limit {
   left: 50%;
   margin-left: 50px;
 }
+.rating-type p {
+  margin-bottom: 0px;
+}
+.rating-type {
+  margin-bottom: 1em;
+}
+body {
+  padding-top: 70px;
+}
 .review-editor {
   margin: 0 auto;
 }
@@ -142,7 +151,7 @@ slider span.bubble.limit {
   -webkit-animation-name: fadeOut;
   animation-name: fadeOut;
 }
-.fadeSlider {
+.fadeSlider .pointer:not(.active) {
   -webkit-animation: dimOut .5s;
   animation: dimOut .5s;
   opacity: .3;

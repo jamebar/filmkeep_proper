@@ -62,7 +62,7 @@ angular.module('myApp', [
                 sortedReviews = _.sortBy($scope.reviews, function(r){
                     return r.ratings[$scope.hint_index].value;
                 })
-                $scope.relation_top = window.event.clientY + document.body.scrollTop -120;
+                $scope.relation_top = window.event.clientY + document.body.scrollTop -200;
                 $scope.fade_slider = true;
 
             }

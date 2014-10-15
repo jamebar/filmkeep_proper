@@ -2,7 +2,8 @@
 @charset 'UTF-8';
 
 @import 'slider';
-@import 'relation-hint';
+
+body { padding-top: 70px; }
 
 .review-editor{
     margin:0 auto;
@@ -33,8 +34,8 @@
   -webkit-animation-name: fadeOut;
           animation-name: fadeOut;
 }
-
-.fadeSlider {
+ 
+.fadeSlider .pointer:not(.active) {
     -webkit-animation: dimOut .5s;
     animation: dimOut .5s; 
     opacity:.3;
