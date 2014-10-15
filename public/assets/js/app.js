@@ -5,6 +5,7 @@
 
 angular.module('myApp', [
     'ui.router',
+    'ui.bootstrap',
     'vr.directives.slider',
     'Api',
     'ngAnimate'
@@ -55,13 +56,13 @@ angular.module('myApp', [
             }
 
             $scope.setCurrent = function(el){
-
+ 
                 $scope.hint_index = el;
                 $scope.show_hint = true;
                 sortedReviews = _.sortBy($scope.reviews, function(r){
                     return r.ratings[$scope.hint_index].value;
                 })
-                $scope.relation_top = window.event.clientY + document.body.scrollTop -70;
+                $scope.relation_top = window.event.clientY + document.body.scrollTop -120;
                 $scope.fade_slider = true;
 
             }
@@ -87,7 +88,6 @@ angular.module('myApp', [
 }])
 
 ;
-
 
 
 

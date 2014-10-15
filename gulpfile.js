@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
-sass = require('gulp-ruby-sass'),
+less = require('gulp-less'),
+path = require('path'),
 autoprefixer = require('gulp-autoprefixer'),
 minifycss = require('gulp-minify-css'),
 rename = require('gulp-rename'),
@@ -16,9 +17,8 @@ server = lr();
 
 
 gulp.task('styles', function() {
-	return gulp.src('assets/sass/styles.scss')
-    .pipe(plumber())
-	.pipe(sass({ style: 'expanded' }))
+	return gulp.src('assets/css/styles.less')
+	.pipe(less())
 	.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'ios 6', 'android 4'))
 	.pipe(rename({ suffix: '.min' }))
 	//.pipe(minifycss())
@@ -30,17 +30,19 @@ gulp.task('scripts', function() {
 	gulp.src([
         'assets/bower_components/jquery/dist/jquery.min.js',
         'assets/bower_components/lodash/dist/lodash.min.js',
-		'assets/bower_components/foundation/js/foundation.min.js',
-		'assets/bower_components/fastclick/lib/fastclick.js',
         'assets/bower_components/angular/angular.min.js',
+		'assets/bower_components/angular-bootstrap/ui-bootstrap.min.js',
+        'assets/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'assets/bower_components/angular-ui-router/release/angular-ui-router.min.js',
         'assets/bower_components/angular-resource/angular-resource.min.js',
         'assets/bower_components/angular-animate/angular-animate.min.js',
-        'assets/bower_components/angular-touch/angular-touch.min.js',
-        'assets/bower_components/venturocket-angular-slider/build/angular-slider.js'])
+        'assets/bower_components/angular-touch/angular-touch.min.js', 
+        'assets/bower_components/venturocket-angular-slider/build/angular-slider.js'
+        ])
         .pipe(plumber())
         .pipe(concat('vendor.js'))
-        .pipe(gulp.dest('public/assets/js'));
+        .pipe(gulp.dest('public/assets/js'))
+        .pipe(notify({ message: 'Scripts task completed.' }));
 
     gulp.src('assets/app_ui/js/**/*.js')
         .pipe(plumber())
@@ -54,8 +56,8 @@ gulp.task('watch', function() {
 		if (e) {
 			return console.log(e)
 		};
-
-		gulp.watch(['assets/sass/*.scss'], ['styles']);
+ 
+		gulp.watch(['assets/css/*.less'], ['styles']);
 		gulp.watch(['assets/**/*.js'], ['scripts']);
 		
 	});

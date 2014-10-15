@@ -7,7 +7,7 @@
 
 
 @endif
-<div ng-controller="addReviewCtrl" class="review-editor small-12 medium-6">
+<div ng-controller="addReviewCtrl" class="review-editor col-sm-6">
     <form><input name="title" placeholder="title of movie" ng-model="review.title"/></form>
 
     <relation-hint reviews="reviews" type="hint_index"></relation-hint>

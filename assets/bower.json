@@ -14,12 +14,12 @@
     "tests"
   ],
   "dependencies": {
-    "foundation": "~5.4.6",
     "angular": "~1.2.26",
     "angular-ui-router": "~0.2.11",
     "angular-resource": "~1.2.26",
     "venturocket-angular-slider": "~0.3.2",
     "lodash": "~2.4.1",
-    "angular-animate": "~1.2.26"
+    "angular-animate": "~1.2.26",
+    "angular-bootstrap": "~0.11.2"
   }
 }
