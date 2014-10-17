@@ -44,6 +44,29 @@ angular.module('myApp', [
             $scope.sliding = function(){
                 
                 $scope.curValue = $scope.rating_types[$scope.hint_index].value;
+                inBetween();
+            }
+
+            $scope.setCurrent = function(el){
+ 
+                $scope.hint_index = el;
+                $scope.$apply;
+                $scope.show_hint = true;
+                sortedReviews = _.sortBy($scope.reviews, function(r){
+                    return r.ratings[$scope.hint_index].value;
+                })
+                $scope.relation_top = window.event.clientY + document.body.scrollTop -200;
+                $scope.fade_slider = true;
+                inBetween();
+            }
+
+            $scope.hideHint = function(el){
+                $scope.show_hint = false;
+                $scope.fade_slider = false;
+            }
+
+            function inBetween()
+            {
                 var r = sortedReviews;
                 for(var i = 0;i<$scope.reviews.length;i++)
                 {
@@ -57,24 +80,6 @@ angular.module('myApp', [
                     }
                 }
             }
-
-            $scope.setCurrent = function(el){
- 
-                $scope.hint_index = el;
-                $scope.show_hint = true;
-                sortedReviews = _.sortBy($scope.reviews, function(r){
-                    return r.ratings[$scope.hint_index].value;
-                })
-                $scope.relation_top = window.event.clientY + document.body.scrollTop -200;
-                $scope.fade_slider = true;
-
-            }
-
-            $scope.hideHint = function(el){
-                $scope.show_hint = false;
-                $scope.fade_slider = false;
-            }
-
 
             // Instantiate the bloodhound suggestion engine
           var films = new Bloodhound({
