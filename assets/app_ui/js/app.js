@@ -8,7 +8,8 @@ angular.module('myApp', [
     'ui.bootstrap',
     'vr.directives.slider',
     'Api',
-    'ngAnimate'
+    'ngAnimate',
+    'siyfion.sfTypeahead'
     ], function($interpolateProvider){
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -23,6 +24,8 @@ angular.module('myApp', [
             $scope.left = "";
             $scope.right = "";
             $scope.relation_top = window.event.clientY;
+            $scope.review = {};
+
 
             ratingTypesApiService
                 .query(function(response){
@@ -35,7 +38,7 @@ angular.module('myApp', [
                     $scope.reviews = sortedReviews = response.results;
                     
                 });
-
+ 
             
 
             $scope.sliding = function(){
@@ -71,6 +74,42 @@ angular.module('myApp', [
                 $scope.show_hint = false;
                 $scope.fade_slider = false;
             }
+
+
+            // Instantiate the bloodhound suggestion engine
+          var films = new Bloodhound({
+            datumTokenizer: function(d) { return Bloodhound.tokenizers.whitespace(value); },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/api/tmdb/%QUERY',
+                filter: function(list) {
+                    return $.map(list.results, function(data) {
+                        return {
+                            value: data.title + " (" + data.release_date.substring(0,4) + ")",
+                            id:data.id
+                        };
+                    });
+                }
+            }
+          });
+
+          films.initialize();
+
+          $scope.typeaheadOptions = {
+            hint: true,
+            highlight: true,
+            minLength: 1,
+          };
+
+          $scope.typeaheadData = {
+            name:'films',
+            displayKey: 'value',
+            source: films.ttAdapter()
+          };
+
+          $scope.$on('typeahead:selected', function(a,b){
+            console.log("a", a, "b", b, "review", $scope.review);
+          })
      
         }
 ])

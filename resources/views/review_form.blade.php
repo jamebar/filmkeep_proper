@@ -1,8 +1,9 @@
 <div ng-controller="addReviewCtrl" class="review-editor col-sm-6">
     <form>
         <div class="form-group">
-            <input name="title" class="form-control" placeholder="title of movie" ng-model="review.title"/></form>
+            <input type="text" class="form-control" placeholder="search" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.title" sf-typeahead>
         </div>
+    </form>
     <relation-hint ></relation-hint>
     
     <div ng-repeat="rating_type in rating_types" class="rating-type">
