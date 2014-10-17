@@ -57,7 +57,7 @@ slider span.bubble.limit {
   user-select: none;
 }
 .relation-hint-container {
-  position: absolute;
+  position: fixed;
   width: 100%;
   left: 0px;
   z-index: 1000000;
@@ -97,24 +97,83 @@ slider span.bubble.limit {
   color: #fff;
   width: 150px;
   height: 50px;
+  line-height: 50px;
   border-radius: 5px;
   padding: 0em 1em;
   text-align: center;
-  line-height: 1em;
+}
+.relation-hint-container .hint-compare span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+.relation-hint-container .hint-compare:after {
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
 }
 .relation-hint-container .left-compare {
   left: 50%;
-  margin-left: -200px;
+  margin-left: -170px;
+}
+.relation-hint-container .left-compare:after {
+  border-width: 10px 0 10px 15px;
+  right: -14px;
+  top: 50%;
+  margin-top: -8px;
+  border-color: transparent transparent transparent #000000;
 }
 .relation-hint-container .right-compare {
   left: 50%;
-  margin-left: 50px;
+  margin-left: 20px;
+}
+.relation-hint-container .right-compare:after {
+  border-width: 10px 15px 10px 0;
+  border-color: transparent #000000 transparent transparent;
+  left: -14px;
+  top: 50%;
+  margin-top: -8px;
 }
 .rating-type p {
   margin-bottom: 0px;
 }
 .rating-type {
   margin-bottom: 1em;
+}
+.twitter-typeahead {
+  width: 100%;
+}
+.tt-query {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.tt-hint {
+  color: #ccc;
+}
+.tt-dropdown-menu {
+  width: 422px;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+  cursor: pointer;
+}
+.tt-suggestion.tt-cursor {
+  /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
+  color: #fff;
+  background-color: #0097cf;
+}
+.tt-suggestion p {
+  margin: 0;
 }
 body {
   padding-top: 70px;

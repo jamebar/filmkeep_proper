@@ -43,21 +43,22 @@ angular.module('myApp', [
 
             $scope.sliding = function(){
                 
-                $scope.curValue = $scope.rating_types[$scope.hint_index].value;
+                
                 inBetween();
             }
 
             $scope.setCurrent = function(el){
  
                 $scope.hint_index = el;
-                $scope.$apply;
+                
                 $scope.show_hint = true;
                 sortedReviews = _.sortBy($scope.reviews, function(r){
                     return r.ratings[$scope.hint_index].value;
                 })
-                $scope.relation_top = window.event.clientY + document.body.scrollTop -200;
-                $scope.fade_slider = true;
+                $scope.relation_top = window.event.clientY + document.body.scrollTop -50;
+                
                 inBetween();
+                $scope.fade_slider = true;
             }
 
             $scope.hideHint = function(el){
@@ -67,6 +68,7 @@ angular.module('myApp', [
 
             function inBetween()
             {
+                $scope.curValue = $scope.rating_types[$scope.hint_index].value;
                 var r = sortedReviews;
                 for(var i = 0;i<$scope.reviews.length;i++)
                 {
@@ -77,6 +79,20 @@ angular.module('myApp', [
                     {
                         $scope.left_compare = r[i].film.title
                         $scope.right_compare = r[next_val].film.title;
+                    }
+
+                    //check if last
+                    if($scope.curValue > r[$scope.reviews.length-1].ratings[$scope.hint_index].value)
+                    {
+                        $scope.left_compare = r[$scope.reviews.length-1].film.title;
+                        $scope.right_compare = '';
+                    }
+
+                    //check if first
+                    if($scope.curValue < r[0].ratings[$scope.hint_index].value)
+                    {
+                        $scope.left_compare = '';
+                        $scope.right_compare = r[0].film.title;
                     }
                 }
             }

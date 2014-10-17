@@ -53,7 +53,9 @@
         @endif
     	<div class="row">
     		<div class="col-md-12">
-    			@yield('content')
+    			@include('review_form')
+                @yield('content')
+
     		</div>
     	</div>
     </div>
@@ -62,6 +64,6 @@
             Filmkeep 2014
         </div>
     </div>
-    @include('review_form')
+    
 </body>
 </html>
