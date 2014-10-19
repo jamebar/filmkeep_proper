@@ -7,7 +7,7 @@
       'reviewApiService',
       function($resource) {
         return $resource(
-            '/api/reviews',
+            '/api/review/:review_id',
             {  }, // Query parameters
             {'query': { method: 'GET' }}
         );
