@@ -1,6 +1,9 @@
 <?php 
 
 use Filmkeep\Review;
+use Filmkeep\Film;
+use Filmkeep\Rating;
+use Filmkeep\TheMovieDb;
 
 class ReviewsController extends BaseController {
 
@@ -44,7 +47,64 @@ class ReviewsController extends BaseController {
 	 */
 	public function store()
 	{
-		//
+		//get full film info from tmdb.com
+        $TheMovieDb = new TheMovieDb();
+        $film =  \Input::get('film');
+        $tmdb_info = $TheMovieDb->getFilmTmdb($film['tmdb_id']);
+        
+        if(is_array($tmdb_info)){
+            $poster_path = (isset($tmdb_info['poster_path'])) ? $tmdb_info['poster_path'] : "";
+            $backdrop_path = (isset($tmdb_info['backdrop_path'])) ? $tmdb_info['backdrop_path'] : "";
+            $imdb_id = (isset($tmdb_info['imdb_id'])) ? $tmdb_info['imdb_id'] : "";
+            if(isset($tmdb_info['title']))
+            {
+                $title = $tmdb_info['title'];
+            }
+        }
+
+        $user_id = 1;//Auth::user()->id;
+
+        $review_data = array(
+            'user_id' => $user_id,
+            'notes' => Input::get('notes', ''),
+            
+        );
+
+        $film_data = array(
+            'tmdb_id' => $tmdb_info['id'],
+            'title' => $title,
+            'poster_path' => $poster_path,
+            'backdrop_path' => $backdrop_path,
+            'imdb_id' => $imdb_id
+        );
+
+        //add the film
+        $film = Film::firstOrCreate( $film_data );
+        $film_id = $film->id;
+
+        //add the review
+        $review_data['film_id'] = $film_id;
+        $review = Review::firstOrCreate( $review_data );
+        
+        
+
+        $ratings = Input::get('ratings');
+        
+        foreach($ratings as $rating)
+        {
+            Rating::create([
+                'review_id'=>$review->id,
+                'rating_type_id'=>$rating['rating_type_id'],
+                'value'=>$rating['value']
+            ]);
+           
+        }
+
+        $review['film'] = $film;
+        $review['ratings'] = $ratings;
+
+        return $review;
+            
 	}
 
 	/**
@@ -56,7 +116,7 @@ class ReviewsController extends BaseController {
 	 */
 	public function show($id)
 	{
-        $review = Review::find($id)->with('ratings','film')->first();
+        $review = Review::with('ratings','film')->find($id);
 
         return $review;
 	}

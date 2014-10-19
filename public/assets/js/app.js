@@ -19,55 +19,71 @@ angular.module('myApp', [
     function($q,$scope, ratingTypesApiService, reviewApiService) {
         $scope.hint_index = 0;
         var sortedReviews = [];
-        $scope.curValue = 1000;
         $scope.show_hint = false;
         $scope.left = "";
         $scope.right = "";
         $scope.relation_top = window.event.clientY;
-        var review_deferred = $q.defer(),
-            review_promise = review_deferred.promise,
-            rating_types_deferred = $q.defer(),
-            rating_types_promise = rating_types_deferred.promise;
         
-        //wait for review and rating_types to load, then assign the values from the review
-        $q.all({review:review_promise, rating_types:rating_types_promise})
-          .then(function(results) {
+        $scope.review = new reviewApiService();
 
-            var assigned_ratings = _.map(results.rating_types, function(val){
-                var ratings = results.review.ratings;
-                var match = _.find(ratings, function(r){
-                    return r.rating_type_id === val.id;
+        getRatingTypes().then(function(types){
+            $scope.rating_types = types;
+        })
+
+        
+
+        $scope.getReview = function(review_id)
+        {
+            var deferred = $q.defer();
+            reviewApiService
+                .get({review_id:review_id},function(response) {
+                
+                    deferred.resolve(response);
+
                 });
 
-                if(match){
-                    val.value = match.value;
-                   
-                }
-                else{
-                    val.value = 1000;
-                    val.new = true;
-                }
-                
+            //wait for review and rating_types to load, then assign the values from the review
+            deferred.promise
+              .then(function(results) {
 
-                return val;
+                var assigned_ratings = _.map($scope.rating_types, function(val){
+                    var ratings = results.ratings;
+                    var match = _.find(ratings, function(r){
+                        return r.rating_type_id === val.id;
+                    });
 
+                    if(match){
+                        val.value = match.value;
+                       
+                    }
+                    else{
+                        val.value = 1000;
+                        val.new = true;
+                    }
+                    
+     
+                    return val;
+
+                });
+
+                $scope.rating_types = assigned_ratings;
+                $scope.review = results;
             });
+        }
+         
+        function getRatingTypes()
+        {
+            var deferred = $q.defer();
 
-            $scope.rating_types = assigned_ratings;
-            $scope.review = results.review;
-        });
+            ratingTypesApiService
+                .query({user_id:1}, function(response) {
+                    deferred.resolve(response.results);
+                });
 
-        reviewApiService
-            .get({review_id:283},function(response) {
-                
-                review_deferred.resolve(response);
+            return deferred.promise;
+        }
 
-            });
-
-        ratingTypesApiService
-            .query({user_id:1}, function(response) {
-                rating_types_deferred.resolve(response.results);
-            });
+        
 
         reviewApiService
             .query({
@@ -78,8 +94,20 @@ angular.module('myApp', [
             });
 
         $scope.reviewSubmit = function() {
-            $scope.review.ratings = $scope.rating_types;
-            console.log('review', $scope.review);
+            //$scope.review.ratings = $scope.rating_types;
+            var ratings = [];
+            _.forEach($scope.rating_types, function(val){
+                var rt = {
+                    rating_type_id: val.id,
+                    value:val.value
+                }
+                ratings.push(rt);
+            });
+
+            $scope.review.ratings = ratings;
+            $scope.review.$save();
+
+            $scope.review = new reviewApiService();
         }
 
         $scope.sliding = function() {
@@ -93,10 +121,9 @@ angular.module('myApp', [
 
             $scope.show_hint = true;
             sortedReviews = _.sortBy($scope.reviews, function(r) {
-                return r.ratings[$scope.hint_index].value;
+                return r.ratings[$scope.hint_index] ? r.ratings[$scope.hint_index].value : 0;
             })
-            $scope.relation_top = window.event.clientY + document.body.scrollTop - 50;
-
+            $scope.relation_top = window.event.clientY  - 50;
             inBetween();
             $scope.fade_slider = true;
         }
@@ -110,6 +137,16 @@ angular.module('myApp', [
             $scope.curValue = $scope.rating_types[$scope.hint_index].value;
             var r = sortedReviews;
             for (var i = 0; i < $scope.reviews.length; i++) {
+                
+                //skip everything if this rating doesn't exist
+                if( r[i].ratings[$scope.hint_index] === undefined)
+                {
+                    $scope.right_compare = '';
+                    $scope.left_compare = '';
+                    continue;
+                }
+                    
+
                 var next_val = i + 1;
                 if (next_val > r.length - 1) next_val = r.length - 1;
 

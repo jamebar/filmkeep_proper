@@ -16,13 +16,13 @@ class TheMovieDb {
 	public function getFilmTrailer($tmdb_id)
 	{
 		
-       		if ( ! $film_trailer =  Cache::get("film_trailer-".$tmdb_id))
+       		if ( ! $film_trailer =  \Cache::get("film_trailer-".$tmdb_id))
 		{
 			
 			$film_trailer = $this->tmdb->getMovieTrailers($tmdb_id,'en');
 		
 			// Save into the cache for 1 month
-			Cache::put("film_trailer-".$tmdb_id, $film_trailer,  40320);
+			\Cache::put("film_trailer-".$tmdb_id, $film_trailer,  40320);
 		}
         	
 		
@@ -39,13 +39,13 @@ class TheMovieDb {
 	{
 
 		
-		if ( ! $film_info =  Cache::get("film_info-".$tmdb_id))
+		if ( ! $film_info =  \Cache::get("film_info-".$tmdb_id))
 		{
 			
 			$film_info = $this->tmdb->getMovie($tmdb_id, 'en');
 		
 			// Save into the cache for 1 month
-			Cache::put("film_info-".$tmdb_id, $film_info,  40320);
+			\Cache::put("film_info-".$tmdb_id, $film_info,  40320);
 		}
 
 		
@@ -58,13 +58,13 @@ class TheMovieDb {
 	{
 		
 		//get image path configuration
-		if ( ! $image_path_config =  Cache::get("image_path_config"))
+		if ( ! $image_path_config =  \Cache::get("image_path_config"))
 		{
 			
 			$image_path_config = $this->tmdb->getConfiguration();
 		
 			// Save into the cache for 2 week
-			Cache::put('image_path_config', $image_path_config, 20160);
+			\Cache::put('image_path_config', $image_path_config, 20160);
 		}
 		
 		

@@ -29,4 +29,8 @@
 
         <input type="submit" class="btn btn-primary" value="Add Review">
     </form>
+
+    <a ng-click="getReview(99)">get 99</a>
+
+    <a ng-click="getReview(285)">get 285</a>
 </div> 
