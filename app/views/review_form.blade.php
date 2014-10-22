@@ -1,9 +1,9 @@
 <div ng-controller="addReviewCtrl" class="review-editor col-sm-6">
     <form ng-submit="reviewSubmit()">
-        <div class="form-group">
-            <input ng-disabled="review.id" type="text" class="form-control" placeholder="Add a review" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.film" sf-typeahead>
+        <div class="form-group" ng-if="!review.id">
+            <input  type="text" class="form-control" placeholder="Add a review" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.film" sf-typeahead>
         </div>
-    
+        <h3>%%review.film.title%%</h3>
         <relation-hint ></relation-hint>
         
         <div ng-repeat="rating_type in rating_types track by $index" class="rating-type">
@@ -27,10 +27,7 @@
             <textarea class="form-control" ng-model="review.notes"></textarea>
         </div>
 
-        <input type="submit" class="btn btn-primary" value="Add Review">
+        <input type="submit" class="btn btn-primary" value="%%ae_button_label%% Review">
     </form>
 
-    <a ng-click="getReview(99)">get 99</a>
-
-    <a ng-click="getReview(285)">get 285</a>
 </div> 

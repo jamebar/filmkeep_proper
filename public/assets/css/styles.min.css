@@ -180,6 +180,7 @@ body {
 }
 .review-editor {
   margin: 0 auto;
+  padding: 2em;
 }
 .relation-hint-container.ng-hide-remove {
   -webkit-animation: fadeInUp .5s;

@@ -11,7 +11,7 @@
 
 
 </head>
-<body>
+<body ng-controller="appCtrl">
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
@@ -32,7 +32,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#" class="">Review</a></li>
+        <li><a  ng-click="newReview()" class="">Review</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
@@ -53,9 +53,15 @@
         @endif
     	<div class="row">
     		<div class="col-md-12">
-    			@include('review_form')
+    			
                 @yield('content')
-
+                <a ng-click="editReview(80)">edit 80</a>
+                <a ng-click="editReview(81)">edit 81</a>
+                <a ng-click="editReview(82)">edit 82</a>
+                <div  ui-view="page"></div>
+                <a ui-sref="hello({reviewId:12})">Show Review</a>
+               <a ng-click="newReview()">New Review</a>
+                
     		</div>
     	</div>
     </div>

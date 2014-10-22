@@ -79,13 +79,17 @@ class ReviewsController extends BaseController {
         );
 
         //add the film
-        $film = Film::firstOrCreate( $film_data );
+        $film = Film::firstOrNew( $film_data['tmdb_id'] );
+        $film->fill($film_data)->save();
+
         $film_id = $film->id;
 
         //add the review
         $review_data['film_id'] = $film_id;
-        $review = Review::firstOrCreate( $review_data );
-        
+        $review = Review::create( $review_data );
+        ##
+        ##need to add a check here to make sure they haven't already reviewed a film
+        ##
         
 
         $ratings = Input::get('ratings');
