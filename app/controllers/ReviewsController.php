@@ -79,14 +79,15 @@ class ReviewsController extends BaseController {
         );
 
         //add the film
-        $film = Film::firstOrNew( $film_data['tmdb_id'] );
+        $film = Film::firstOrNew( ['tmdb_id'=>$film_data['tmdb_id']] );
         $film->fill($film_data)->save();
 
         $film_id = $film->id;
 
         //add the review
         $review_data['film_id'] = $film_id;
-        $review = Review::create( $review_data );
+        $review = Review::firstOrNew( ['film_id'=>$film_id, 'user_id'=>$user_id] );
+        $review->fill($review_data)->save();
         ##
         ##need to add a check here to make sure they haven't already reviewed a film
         ##
@@ -146,7 +147,35 @@ class ReviewsController extends BaseController {
 	 */
 	public function update($id)
 	{
-		//
+    
+    $user_id = 1;//Auth::user()->id;
+
+    $review_data = array(
+        'notes' => Input::get('notes', ''),
+    );
+
+    $review = Review::find( $id );
+    $review->update($review_data);
+
+    
+    $ratings = Input::get('ratings');
+    
+    foreach($ratings as $rating)
+    {
+        $r = Rating::firstOrNew([
+            'review_id'=>$review->id,
+            'rating_type_id'=>$rating['rating_type_id'],
+            
+        ]);
+        $r->value = $rating['value'];
+        $r->save();
+       
+    }
+
+    $review['film'] = Input::get('film');
+    $review['ratings'] = $ratings;
+
+    return $review;
 	}
 
 	/**

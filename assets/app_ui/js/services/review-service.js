@@ -5,20 +5,35 @@ angular.module('ReviewService', ['Api'])
 .factory('ReviewService', [ '$q','ratingTypesApiService', 'reviewApiService',
     function ($q,ratingTypesApiService,reviewApiService) {
 
+     
         function Review(){
 
         }
 
         var types_deferred = $q.defer();
+        var reviews_deferred = $q.defer();
 
         ratingTypesApiService
             .query({user_id:1}, function(response) {
                 types_deferred.resolve(response.results);
             });
 
+        reviewApiService
+            .query({
+                num: '50'
+            }, function(response) {
+                
+                reviews_deferred.resolve(response.results);
+                //console.log(_reviews);
+            });
+
         Review.getRatingTypes = function(){
             
             return types_deferred.promise;
+        }
+
+        Review.getReviews = function(){
+            return reviews_deferred.promise;
         }
 
         Review.getReview = function(review_id)
@@ -56,6 +71,7 @@ angular.module('ReviewService', ['Api'])
 
                 });
 
+               
                 return {
                     review: results.review,
                     rating_types: assigned_ratings

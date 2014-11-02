@@ -11,7 +11,9 @@ angular.module('myApp', [
     'ngAnimate',
     'siyfion.sfTypeahead',
     'ae-review',
-    'review'
+    'review',
+    'filmkeep',
+    'feed'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -22,51 +24,85 @@ angular.module('myApp', [
   $rootScope.$stateParams = $stateParams; 
 }])
 
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+.config(['$locationProvider', function($locationProvider) {
 
-    //$urlRouterProvider.otherwise('/review');
+  $locationProvider.html5Mode(true);
 
-    
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal',
-    function($scope,msgBus,$modal) {
+.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService',
+    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService) {
+        $scope.review = new reviewApiService();
+        ReviewService.getRatingTypes().then(function(results){
+                $scope.rating_types = results;
+                
+            });
+
+        $scope.getReview = function(review) {
+            if (typeof review === 'object') {
+                console.log('didnt make api call');
+                $scope.review = review.review;
+                $scope.rating_types = review.rating_types;
+                showModal();
+
+            } else {
+                ReviewService.getReview(review).then(function(results) {
+                   // console.log(results);
+                    $scope.review = results.review;
+                    $scope.rating_types = results.rating_types;
+                    showModal();
+
+                })
+            }
+
+            $scope.ae_button_label = "Update";
+        }
+
+        function showModal(){
+            var modalInstance = $modal.open({
+                scope: $scope,
+                templateUrl: '/assets/templates/modal_review.tmpl.html',
+          
+            });
+        }
+        
 
         $scope.editReview = function(id){
-             openModal(id);
-            
-           
+            $scope.getReview(id);
+            //openModal(id);
+
         }
 
         $scope.newReview = function(){
+   
+            $scope.review = new reviewApiService();
+            showModal();
             
-
-            
-            openModal(false);
+                
         }
 
-        function openModal(id){
-            var modalInstance = $modal.open({
-                templateUrl: 'assets/templates/add_review.tmpl.html',
+        // function openModal(id){
+        //     var modalInstance = $modal.open({
+        //         templateUrl: 'assets/templates/add_review.tmpl.html',
               
-            });
+        //     });
 
-            modalInstance.opened.then(function () {
+        //     modalInstance.opened.then(function () {
                
-              if(id){
-                setTimeout(function(){
-                    msgBus.emitMsg('review:edit', {'id': id});
-                },500);
+        //       if(id){
+        //         setTimeout(function(){
+        //             msgBus.emitMsg('review:edit', {'id': id});
+        //         },500);
                
-              }
-              else
-              {
-                msgBus.emitMsg('review:new');
-              }
-            }, function () {
+        //       }
+        //       else
+        //       {
+        //         msgBus.emitMsg('review:new');
+        //       }
+        //     }, function () {
              
-            });
-        }
+        //     });
+        // }
         
     }
 ])

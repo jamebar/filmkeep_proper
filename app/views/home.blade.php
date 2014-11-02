@@ -5,7 +5,6 @@
 @if(Auth::check())
 <p>Welcome, {{Auth::user()->email}}<p>
 
-
 @endif
 
 

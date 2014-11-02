@@ -1,4 +1,4 @@
-<div ng-controller="addReviewCtrl" class="review-editor col-sm-6">
+<div class="review-editor col-sm-6">
     <form ng-submit="reviewSubmit()">
         <div class="form-group" ng-if="!review.id">
             <input  type="text" class="form-control" placeholder="Add a review" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.film" sf-typeahead>

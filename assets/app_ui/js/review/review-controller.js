@@ -5,12 +5,12 @@
   ])
 
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('hello', {
+    $stateProvider.state('review', {
       url: '/r/{reviewId}',
       title: 'Review',
       views: {
         'page' : {
-          templateUrl: 'assets/templates/review.tmpl.html',
+          templateUrl: '/assets/templates/review.tmpl.html',
           controller: 'ReviewCtrl'
         }
       }

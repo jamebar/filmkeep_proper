@@ -9,26 +9,85 @@ Route::get('/test', function(){
    return $t->searchTmdb($q);
 });
 
-Route::get('/', function(){
+Route::get('/', ['as' =>'home'], function(){
 	return View::make('home');
 });
 
-Route::get('/login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin']);
-Route::post('/login', 'Auth\AuthController@postLogin');
 
-Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
+/*
+* 
+* Routes within this group require that you are a guest
+*
+*
+*/
+Route::group(array('before' => 'guest'), function()
+{
+  Route::get('user/login', array('as' => 'login', 'uses' => 'Auth\AuthController@login'));
+  Route::get('user/join/{invite_code?}', array('as' => 'join',  'uses' => 'Auth\AuthController@join'));
+    Route::get('user/invite', array('as' => 'invite',  'uses' => 'Auth\AuthController@invite'));
+});
+/*
+* 
+* Login/Signup routes
+*
+*
+*/
+Route::post('user/join', array('uses' => 'Auth\AuthController@store'));
+Route::get('user/loginWithFacebook', array('as' => 'facebooklogin', 'uses' => 'Auth\AuthController@loginWithFacebook'));
+Route::get('user/loginWithGoogle', array('as' => 'googlelogin', 'uses' => 'Auth\AuthController@loginWithGoogle'));
+Route::post('user/login', function () {
+        $user = array(
+            'email' => Input::get('email'),
+            'password' => Input::get('password')
+        );
+        
+        if (Auth::attempt($user , true)) {
+            return Redirect::to('/' . Auth::user()->username)
+                ->with('flash_notice', 'You are successfully logged in.');
+        }
+        
+        // authentication failure! lets go back to the login page
+        return Redirect::route('login')
+            ->with('flash_error', 'Your username/password combination was incorrect.')
+            ->withInput();
+});
 
-Route::get('/register', ['as' => 'register', 'uses' => 'Auth\AuthController@getRegister']);
-Route::post('/register', 'Auth\AuthController@postRegister');
+/*
+* 
+* Routes for password reset
+*
+*
+*/
+Route::get('password/reset', array(
+  'uses' => 'PasswordController@remind',
+  'as' => 'password.remind'
+));
+Route::post('password/reset', array(
+  'uses' => 'PasswordController@request',
+  'as' => 'password.request'
+));
+Route::get('password/reset/{token}', array(
+  'uses' => 'PasswordController@reset',
+  'as' => 'password.reset'
+));
+Route::post('password/reset/{token}', array(
+  'uses' => 'PasswordController@update',
+  'as' => 'password.update'
+));
 
-Route::get('/loginFacebook', ['as'=>'loginFacebook', 'uses' => 'Auth\AuthController@getLoginFacebook']);
-//post('/auth/loginFacebook', ['uses' => 'Auth\AuthController@getLoginFacebook']);
+App::missing(function($exception)
+{
+    return View::make('home');
+});
 
-
-
+/*
+* API
+*
+*/
 Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
     $router->resource('review', 'ReviewsController');
+    $router->resource('user', 'UsersController');
     $router->resource('rating_types', 'RatingTypesController');
     $router->get('/tmdb/{query}', function($query){
         $t = new TheMovieDb();

@@ -7,6 +7,9 @@ angular.module('Api', ['ngResource'])
         return $resource(
             '/api/review/:review_id', {}, // Query parameters
             {
+                update: {
+                  method: 'PUT'
+                },
                 'query': {
                     method: 'GET'
                 }
@@ -20,6 +23,25 @@ angular.module('Api', ['ngResource'])
         return $resource(
             '/api/rating_types', {}, // Query parameters
             {
+                update: {
+                  method: 'PUT'
+                },
+                'query': {
+                    method: 'GET'
+                }
+            }
+        );
+    }
+)
+
+.factory('userApiService',
+    function($resource) {
+        return $resource(
+            '/api/user/:user_id', {}, // Query parameters
+            {
+                update: {
+                  method: 'PUT'
+                },
                 'query': {
                     method: 'GET'
                 }

@@ -55,13 +55,10 @@
     		<div class="col-md-12">
     			
                 @yield('content')
-                <a ng-click="editReview(80)">edit 80</a>
-                <a ng-click="editReview(81)">edit 81</a>
-                <a ng-click="editReview(82)">edit 82</a>
-                <div  ui-view="page"></div>
-                <a ui-sref="hello({reviewId:12})">Show Review</a>
-               <a ng-click="newReview()">New Review</a>
                 
+                <div  ui-view="page"></div>
+
+    
     		</div>
     	</div>
     </div>
