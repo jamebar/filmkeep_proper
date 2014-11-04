@@ -12,7 +12,7 @@ $activities = $feed->getActivities(0,25)['results'];
 $activities = $enricher->enrichActivities($activities);
 return  $activities;
 
-// return FeedManager::followUser(1, 101);
+// return FeedManager::followUser(1, 1);
 
   // Deleting activity
   // $client = new GetStream\Stream\Client('4j8dz2dp5vjn', '3gzp62asbcwjxjyfx7yvrbmctxykwrqc27ypxvnj7xyfu7uygz9rcrdshmvb4fey');
