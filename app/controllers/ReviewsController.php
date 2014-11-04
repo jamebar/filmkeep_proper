@@ -38,9 +38,14 @@ class ReviewsController extends BaseController {
         }
         
         $num = \Input::has('num') ? \Input::get('num') : 20;
+        $page = \Input::has('page') ? \Input::get('page') : 1;
+        $offset = $num * ($page -1);
         $sortBy = \Input::has('sort_by') ? \Input::get('sort_by') : 'id';
         $sortDirection = \Input::get('sort_direction');
-		    $review = $user->reviews()->with('ratings','ratings.rating_type','film')->take($num)->orderBy($sortBy, $sortDirection);
+		    $review = $user->reviews()->with('ratings','ratings.rating_type','film')->take($num)->offset($offset)->orderBy($sortBy, $sortDirection);
+
+        
+
         $total = $user->reviews()->count();
 
         return \Response::json(['status' => 200, 'results' => $review->get(), 'total'=>$total]);

@@ -1,8 +1,10 @@
 %%user.username%%
 
-<ul>
-    <li ng-repeat="user_review in user_reviews">
-        <p>%%user_review.film.title%%</p>
-        <img ng-src="%% user_review.poster%%" />
+<ul class="filmkeep-list">
+    <li dir-paginate="user_review in user_reviews | itemsPerPage: 10" total-items="total_reviews">
+       
+        <img title="%%user_review.film.title%%" ng-src="%% user_review.poster%%" />
     </li>
 </ul>
+
+<dir-pagination-controls on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>

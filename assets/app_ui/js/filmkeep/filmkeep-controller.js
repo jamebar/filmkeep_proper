@@ -1,7 +1,7 @@
 
   'use strict';
 
-  angular.module('filmkeep', [
+  angular.module('filmkeep', ['angularUtils.directives.dirPagination'
   ])
 
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
@@ -19,6 +19,14 @@
 
   .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','imageService',
     function ($scope,$stateParams,ReviewService,userApiService,reviewApiService,imageService) {
+        $scope.user_reviews = [];
+        $scope.total_reviews = 0;
+        $scope.reviews_per_page = 10; // this should match however many results your API puts on one page
+        getResultsPage(1);
+
+        $scope.pagination = {
+            current: 1
+        };
 
         userApiService
             .get({user_id:$stateParams.username,username:true},function(response) {
@@ -27,18 +35,25 @@
 
             });
 
-        reviewApiService
-            .query({
-                num: '10',
-                username:$stateParams.username
-            }, function(response) {
-                
-                $scope.user_reviews = _.map(response.results, function(r){ 
-                  r.poster = $scope.imageService.poster(r.film.poster_path,1);
-                  return r;
-                });
-                
-            });
+        $scope.pageChanged = function(newPage) {
+            getResultsPage(newPage);
+        };
+
+        function getResultsPage(pageNumber) {
+          reviewApiService
+              .query({
+                  num: $scope.reviews_per_page,
+                  page: pageNumber,
+                  username:$stateParams.username
+              }, function(response) {
+                  $scope.total_reviews = response.total;
+                  $scope.user_reviews = _.map(response.results, function(r){ 
+                    r.poster = $scope.imageService.poster(r.film.poster_path,1);
+                    return r;
+                  });
+                  
+              });
+        }
 
     }]) 
 

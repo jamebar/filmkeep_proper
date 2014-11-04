@@ -32,7 +32,7 @@ gulp.task('scripts', function() {
         'assets/bower_components/lodash/dist/lodash.min.js',
         'assets/bower_components/typeahead.js/dist/typeahead.bundle.min.js',
         'assets/bower_components/angular/angular.min.js',
-		'assets/bower_components/angular-bootstrap/ui-bootstrap.min.js',
+		    'assets/bower_components/angular-bootstrap/ui-bootstrap.min.js',
         'assets/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'assets/bower_components/angular-ui-router/release/angular-ui-router.min.js',
         'assets/bower_components/angular-resource/angular-resource.min.js',
@@ -40,7 +40,8 @@ gulp.task('scripts', function() {
         'assets/bower_components/angular-touch/angular-touch.min.js', 
         'assets/bower_components/venturocket-angular-slider/build/angular-slider.js',
         'assets/bower_components/angular-typeahead/angular-typeahead.min.js',
-        'assets/bower_components/moment/moment.js'
+        'assets/bower_components/moment/moment.js',
+        'assets/bower_components/angular-utils-pagination/dirPagination.js'
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))
