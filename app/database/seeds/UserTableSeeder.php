@@ -1,5 +1,5 @@
 <?php
-use App\User;
+use Filmkeep\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 

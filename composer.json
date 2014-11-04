@@ -7,7 +7,9 @@
 	"require": {
 		"laravel/framework": "~4.2",
         "artdarek/oauth-4-laravel": "dev-master",
-        "doxxon/laravel-mandrill-request": "dev-master"
+        "doxxon/laravel-mandrill-request": "dev-master",
+        "laracasts/validation": "~1.0",
+        "get-stream/stream-laravel": "~1.0"
 
 	},
 	"require-dev": {

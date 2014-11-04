@@ -54,7 +54,7 @@ var aeReview = angular.module('ae-review', [
                 scope.left = "";
                 scope.right = "";
                 scope.relation_top = window.event.clientY;
-                scope.ae_button_label = "Add";
+                scope.ae_button_label = scope.review.id ? "Update" : "Add";
                 
                 
                 ReviewService.getReviews().then(function(results){

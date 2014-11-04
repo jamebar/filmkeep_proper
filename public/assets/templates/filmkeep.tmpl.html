@@ -3,6 +3,6 @@
 <ul>
     <li ng-repeat="user_review in user_reviews">
         <p>%%user_review.film.title%%</p>
-        <p>%%user_review.film.poster_path%%</p>
+        <img ng-src="%% user_review.poster%%" />
     </li>
 </ul>

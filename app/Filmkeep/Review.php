@@ -1,10 +1,12 @@
 <?php namespace Filmkeep;
 
-use Illuminate\Database\Eloquent\Model;
 
-class Review extends Model {
+class Review extends \Eloquent {
+    use \GetStream\StreamLaravel\Eloquent\ActivityTrait;
 
-	protected $guarded = [];
+	  protected $guarded = [];
+    
+    public $activityLazyLoading = ['film','ratings'];
 
     public function film(){
          return $this->belongsTo('Filmkeep\Film');
@@ -17,4 +19,6 @@ class Review extends Model {
     public function ratings(){
         return $this->hasMany('Filmkeep\Rating');
     }
+
+    
 }

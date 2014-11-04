@@ -1,8 +1,8 @@
 <?php
-use App\Review;
-use App\Rating;
-use App\Rating_type;
-use App\Film;
+use Filmkeep\Review;
+use Filmkeep\Rating;
+use Filmkeep\Rating_type;
+use Filmkeep\Film;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 

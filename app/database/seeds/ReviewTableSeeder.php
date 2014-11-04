@@ -1,8 +1,8 @@
 <?php
-use App\Review;
-use App\Rating;
-use App\Rating_type;
-use App\Film;
+use Filmkeep\Review;
+use Filmkeep\Rating;
+use Filmkeep\Rating_type;
+use Filmkeep\Film;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,7 +17,7 @@ class ReviewTableSeeder extends Seeder {
     {
       $review = Review::create(array(
         'film_id' => $film->id,
-        'user_id' => 1,
+        'user_id' => 101,
         'notes' => $faker->text,
         'seen_at'=> $faker->iso8601('now'),
       ));

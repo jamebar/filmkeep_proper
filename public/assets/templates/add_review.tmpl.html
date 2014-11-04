@@ -3,7 +3,7 @@
         <div class="form-group" ng-if="!review.id">
             <input  type="text" class="form-control" placeholder="Add a review" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.film" sf-typeahead>
         </div>
-        <h3>%%review.film.title%%</h3>
+        <h3 ng-show="review.id">%%review.film.title%%</h3>
         <relation-hint ></relation-hint>
         
         <div ng-repeat="rating_type in rating_types track by $index" class="rating-type">

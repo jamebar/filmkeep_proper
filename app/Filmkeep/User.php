@@ -37,7 +37,7 @@ class User extends Model implements UserInterface, RemindableInterface {
 	}
 
     public function reviews(){
-         return $this->hasMany('App\Review');
+         return $this->hasMany('Filmkeep\Review');
     }
 
 

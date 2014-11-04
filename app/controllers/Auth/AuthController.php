@@ -39,11 +39,11 @@ class AuthController  extends \BaseController{
 
           if ( \Auth::check() ) {
             //add profile pic if doesn't exist
-            if ( strlen( $user->profile_pic ) < 2 ) {
-              $user->profile_pic = "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250";
+            if ( strlen( $user->avatar ) < 2 ) {
+              $user->avatar = "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250";
               $user->save();
             }
-            return \Redirect::to( '/'. \Auth::user()->username )
+            return \Redirect::to( '/fk/'. \Auth::user()->username )
             ->with( 'flash_notice', 'You are successfully logged in.' );
           }
         }
@@ -62,11 +62,12 @@ class AuthController  extends \BaseController{
             if ( Session::has( 'invite_info' ) ) {
               //session info exists, add new user with facebook info
               $user = new \User;
-              $user->name         = $result['name'];
+              $user->first_name         = $result['first_name'];
+              $user->last_name         = $result['last_name'];
               $user->username     = $result['username'];
               $user->email        = $result['email'];
               $user->facebook_id      = $result['id'];
-              $user->profile_pic    = "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250";
+              $user->avatar    = "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250";
               $user->save();
 
               //append id to username to assure it's unique
@@ -98,11 +99,12 @@ class AuthController  extends \BaseController{
 
 
             $new_user = array(
-              "name"        => $result['name'],
+              "first_name"        => $result['first_name'],
+              "last_name"        => $result['last_name'],
               "username"    => $result['username'],
               "email"       => $result['email'],
               "facebook_id"   => $result['id'],
-              "profile_pic"   => "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250"
+              "avatar"   => "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250"
 
             );
             \Session::put( 'new_user', $new_user );
@@ -236,14 +238,14 @@ class AuthController  extends \BaseController{
       'email'      => 'required|email',
       'password' => 'required|min:6'
     );
-    $validator = Validator::make( Input::all(), $rules );
+    $validator = \Validator::make( \Input::all(), $rules );
 
     // process the login
     if ( $validator->fails() ) {
 
-      return Redirect::route( 'join' )
+      return \Redirect::route( 'join' )
       ->withErrors( $validator )
-      ->withInput( Input::except( 'password' ) );
+      ->withInput( \Input::except( 'password' ) );
     } else {
 
       $user = User::where( 'email' , Input::get( 'email' ) )->first();
@@ -251,24 +253,24 @@ class AuthController  extends \BaseController{
       if ( !$user ) {
         // store
         $user = new User;
-        $user->name       = Input::get( 'fullname' );
-        $user->email      = Input::get( 'email' );
-        $user->password = Hash::make( Input::get( 'password' ) );
+        $user->name       = \Input::get( 'fullname' );
+        $user->email      = \Input::get( 'email' );
+        $user->password = Hash::make( \Input::get( 'password' ) );
         $user->save();
 
         //append id to username to assure it's unique
         $user->username = $user->name . "_" . $user->id;
         $user->save();
 
-        Auth::login( $user );
+        \Auth::login( $user );
 
         // redirect
-        Session::flash( 'flash_notice', 'Welcome to Filmkeep!' );
-        return Redirect::route( 'home' );
+        \Session::flash( 'flash_notice', 'Welcome to Filmkeep!' );
+        return \Redirect::route( 'home' );
       }
       else {
-        Session::flash( 'flash_error', 'A user with this email already exists.' );
-        return Redirect::route( 'join' );
+        \Session::flash( 'flash_error', 'A user with this email already exists.' );
+        return \Redirect::route( 'join' );
 
       }
 

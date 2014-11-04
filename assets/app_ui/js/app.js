@@ -13,7 +13,7 @@ angular.module('myApp', [
     'ae-review',
     'review',
     'filmkeep',
-    'feed'
+    'feed',
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -30,11 +30,12 @@ angular.module('myApp', [
 
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService) {
-        $scope.review = new reviewApiService();
+.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','imageService',
+    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService, imageService) {
+        $scope.imageService = imageService;
+        $scope.review_new = new reviewApiService();
         ReviewService.getRatingTypes().then(function(results){
-                $scope.rating_types = results;
+                $scope.rating_types_new = results;
                 
             });
 
@@ -76,6 +77,10 @@ angular.module('myApp', [
         $scope.newReview = function(){
    
             $scope.review = new reviewApiService();
+            ReviewService.getRatingTypes().then(function(results){
+                $scope.rating_types = results;
+                
+            });
             showModal();
             
                 
@@ -107,6 +112,23 @@ angular.module('myApp', [
     }
 ])
 
+.factory('imageService', [ function() {
+    var image_config = image_path_config;
+
+    var images = {};
+    
+    images.backdrop = function(path,size){
+      var s = size || 0;
+      return image_config.images.base_url + image_config.images.backdrop_sizes[s] +  path
+    }
+
+    images.poster = function(path,size){
+      var s = size || 0;
+      return image_config.images.base_url + image_config.images.poster_sizes[s] +  path
+    }
+
+    return images;
+}])
 
 
 .factory('msgBus', ['$rootScope', function($rootScope) {

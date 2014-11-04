@@ -182,15 +182,6 @@ body {
   margin: 0 auto;
   padding: 2em;
 }
-.relation-hint-container.ng-hide-remove {
-  -webkit-animation: fadeInUp .5s;
-  animation: fadeInUp .5s;
-}
-.relation-hint-container.ng-hide-add {
-  -webkit-animation: fadeOutDown .5s;
-  animation: fadeOutDown .5s;
-  display: block !important;
-}
 @-webkit-keyframes dimOut {
   0% {
     opacity: 1;
@@ -215,4 +206,26 @@ body {
   -webkit-animation: dimOut .5s;
   animation: dimOut .5s;
   opacity: .3;
+}
+
+.fade {
+    opacity: 0;
+    -webkit-transition: opacity 0s linear;
+    -o-transition: opacity 0s linear;
+    transition: opacity 0s linear
+}
+
+.modal.fade .modal-dialog {
+  -webkit-transition: -webkit-transform .3s ease-out;
+  -o-transition: -o-transform .3s ease-out;
+  transition: transform 0s ease-out;
+  -webkit-transform: none;
+  -o-transform: none;
+  transform: none;
+}
+
+.modal.in .modal-dialog {
+-webkit-transform: translate3d(0,0,0);
+-o-transform: translate3d(0,0,0);
+transform: translate3d(0,0,0);
 }

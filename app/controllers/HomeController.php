@@ -1,7 +1,7 @@
-<?php namespace App\Http\Controllers;
+<?php 
 
 
-class HomeController  {
+class HomeController  extends BaseController{
 
 	/*
 	|--------------------------------------------------------------------------
@@ -18,7 +18,7 @@ class HomeController  {
 
 	public function index()
 	{
-		
+		return View::make('home');
 	}
 
 }

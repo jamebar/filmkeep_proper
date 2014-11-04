@@ -1,11 +1,21 @@
 <?php 
-
+use Filmkeep\User;
 use Filmkeep\Review;
 use Filmkeep\Film;
 use Filmkeep\Rating;
 use Filmkeep\TheMovieDb;
+use Filmkeep\Forms\AddReview;
+
 
 class ReviewsController extends BaseController {
+
+  private $addReviewForm;
+
+
+  function __construct( AddReview $addReviewForm)
+  {
+    $this->addReviewForm = $addReviewForm;
+  }
 
 	/**
 	 * Display a listing of the resource.
@@ -15,17 +25,25 @@ class ReviewsController extends BaseController {
 	 */
 	public function index()
 	{
-        $user= \Input::get('user');
-        $num = \Input::get('num') ? \Input::get('num') : 20;
-        $sortBy = \Input::get('sort_by') ? \Input::get('sort_by') : 'id';
-        $sortDirection = \Input::get('sort_direction') ;
+        if(Input::has('username'))
+        {
+          $user = User::where('username', \Input::get('username') )->first();
 
-		$review = Review::with('ratings','ratings.rating_type','film')->take($num)->orderBy($sortBy, $sortDirection);
+          if(empty($user))
+            return \Response::json(['status' =>404]);
+
+        }
+        else{
+          $user = \Input::has('user_id') ? User::find(\Input::get('user_id')) : User::find(Auth::id());
+        }
         
-        if($user)
-            $review->where('user_id',$user);
+        $num = \Input::has('num') ? \Input::get('num') : 20;
+        $sortBy = \Input::has('sort_by') ? \Input::get('sort_by') : 'id';
+        $sortDirection = \Input::get('sort_direction');
+		    $review = $user->reviews()->with('ratings','ratings.rating_type','film')->take($num)->orderBy($sortBy, $sortDirection);
+        $total = $user->reviews()->count();
 
-        return \Response::json(['status' => 200, 'results' => $review->get()]);
+        return \Response::json(['status' => 200, 'results' => $review->get(), 'total'=>$total]);
 	}
 
 	/**
@@ -47,6 +65,9 @@ class ReviewsController extends BaseController {
 	 */
 	public function store()
 	{
+    //Validate
+    $this->addReviewForm->validate(\Input::all());
+
 		//get full film info from tmdb.com
         $TheMovieDb = new TheMovieDb();
         $film =  \Input::get('film');
@@ -62,12 +83,11 @@ class ReviewsController extends BaseController {
             }
         }
 
-        $user_id = 1;//Auth::user()->id;
+        $user_id = Auth::user()->id;
 
         $review_data = array(
             'user_id' => $user_id,
             'notes' => Input::get('notes', ''),
-            
         );
 
         $film_data = array(
@@ -147,8 +167,6 @@ class ReviewsController extends BaseController {
 	 */
 	public function update($id)
 	{
-    
-    $user_id = 1;//Auth::user()->id;
 
     $review_data = array(
         'notes' => Input::get('notes', ''),

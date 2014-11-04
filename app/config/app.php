@@ -123,6 +123,8 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
     'Artdarek\OAuth\OAuthServiceProvider',
+    'Laracasts\Validation\ValidationServiceProvider',
+    'GetStream\StreamLaravel\StreamLaravelServiceProvider',
 
 	),
 
@@ -191,7 +193,8 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 
-    'OAuth' => 'Artdarek\OAuth\Facade\OAuth',
+    'OAuth'           => 'Artdarek\OAuth\Facade\OAuth',
+    'FeedManager'     => 'GetStream\StreamLaravel\Facades\FeedManager',
 
 	),
 

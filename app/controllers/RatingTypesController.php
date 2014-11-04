@@ -13,9 +13,9 @@ class RatingTypesController extends BaseController{
 	{
         $rating_types = Rating_type::where('user_id', 0);
 
-        if( \Input::has('user_id') )
+        if( Auth::check() )
         {
-            $rating_types->orWhere('user_id', \Input::get('user_id'));
+            $rating_types->orWhere('user_id', Auth::user()->id);
         }
             
 

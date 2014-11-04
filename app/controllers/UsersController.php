@@ -45,7 +45,12 @@ class UsersController extends BaseController {
 	 */
 	public function show($id)
 	{
-		return User::find($id);
+
+    if(\Input::has('username'))
+		  return User::where('username', $id)->first();
+
+    return User::find($id);
+
 	}
 
 

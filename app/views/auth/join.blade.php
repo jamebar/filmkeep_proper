@@ -25,8 +25,8 @@
                 <h3>Join with social</h3>
                 <p>To get the most out of Filmkeep, connect with your social media account.</p>
                 <hr>
-                 <p><a class="button fb-btn  small-12" href="{{ route('facebooklogin') }}"><i class="fi-social-facebook"></i> Join with facebook</a>
-                 <a class="button google-btn  small-12" href="{{ route('googlelogin') }}"><i class="fi-social-google-plus"></i> Join with google</a></p>
+                 <p><a class="button fb-btn  small-12" target="_self" href="{{ route('facebooklogin') }}"><i class="fi-social-facebook"></i> Join with facebook</a>
+                 <a class="button google-btn  small-12" target="_self" href="{{ route('googlelogin') }}"><i class="fi-social-google-plus"></i> Join with google</a></p>
                  
             </div>
            <hr>
@@ -64,7 +64,7 @@
                 {{ Form::close() }}
 
                 <p>By creating an account, I accept Filmkeep's Terms of Service and Privacy Policy.</p>
-                <p>Already a member? <a href="{{ route('login') }}">Sign in here</a></p>
+                <p>Already a member? <a href="{{ route('login') }}" target="_self">Sign in here</a></p>
               </div> 
        
 @stop

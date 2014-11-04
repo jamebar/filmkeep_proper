@@ -14,7 +14,7 @@ angular.module('ReviewService', ['Api'])
         var reviews_deferred = $q.defer();
 
         ratingTypesApiService
-            .query({user_id:1}, function(response) {
+            .query({}, function(response) {
                 types_deferred.resolve(response.results);
             });
 

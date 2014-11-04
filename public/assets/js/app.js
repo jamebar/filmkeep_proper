@@ -13,7 +13,7 @@ angular.module('myApp', [
     'ae-review',
     'review',
     'filmkeep',
-    'feed'
+    'feed',
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -30,11 +30,12 @@ angular.module('myApp', [
 
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService) {
-        $scope.review = new reviewApiService();
+.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','imageService',
+    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService, imageService) {
+        $scope.imageService = imageService;
+        $scope.review_new = new reviewApiService();
         ReviewService.getRatingTypes().then(function(results){
-                $scope.rating_types = results;
+                $scope.rating_types_new = results;
                 
             });
 
@@ -76,6 +77,10 @@ angular.module('myApp', [
         $scope.newReview = function(){
    
             $scope.review = new reviewApiService();
+            ReviewService.getRatingTypes().then(function(results){
+                $scope.rating_types = results;
+                
+            });
             showModal();
             
                 
@@ -107,6 +112,23 @@ angular.module('myApp', [
     }
 ])
 
+.factory('imageService', [ function() {
+    var image_config = image_path_config;
+
+    var images = {};
+    
+    images.backdrop = function(path,size){
+      var s = size || 0;
+      return image_config.images.base_url + image_config.images.backdrop_sizes[s] +  path
+    }
+
+    images.poster = function(path,size){
+      var s = size || 0;
+      return image_config.images.base_url + image_config.images.poster_sizes[s] +  path
+    }
+
+    return images;
+}])
 
 
 .factory('msgBus', ['$rootScope', function($rootScope) {
@@ -180,7 +202,7 @@ var aeReview = angular.module('ae-review', [
                 scope.left = "";
                 scope.right = "";
                 scope.relation_top = window.event.clientY;
-                scope.ae_button_label = "Add";
+                scope.ae_button_label = scope.review.id ? "Update" : "Add";
                 
                 
                 ReviewService.getReviews().then(function(results){
@@ -380,31 +402,34 @@ var aeReview = angular.module('ae-review', [
       title: 'filmkeep',
       views: {
         'page' : {
-          templateUrl: 'assets/templates/filmkeep.tmpl.html',
+          templateUrl: '/assets/templates/filmkeep.tmpl.html',
           controller: 'FilmkeepCtrl'
         }
       }
     });
   }])
 
-  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService',
-    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService) {
+  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','imageService',
+    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService,imageService) {
 
         userApiService
-            .get({user_id:$stateParams.username},function(response) {
+            .get({user_id:$stateParams.username,username:true},function(response) {
             
-                $scope.user = response;
+                $scope.page_user = response;
 
             });
 
         reviewApiService
             .query({
                 num: '10',
-                user_id:5
+                username:$stateParams.username
             }, function(response) {
                 
-                $scope.user_reviews = response.results;
-                //console.log(_reviews);
+                $scope.user_reviews = _.map(response.results, function(r){ 
+                  r.poster = $scope.imageService.poster(r.film.poster_path,1);
+                  return r;
+                });
+                
             });
 
     }]) 
@@ -427,17 +452,24 @@ var aeReview = angular.module('ae-review', [
           templateUrl: '/assets/templates/review.tmpl.html',
           controller: 'ReviewCtrl'
         }
+      },
+      resolve: {
+        ReviewLoad: function($stateParams,ReviewService) {
+         
+          return ReviewService.getReview($stateParams.reviewId)
+          
+        }, 
       }
     });
   }])
 
-  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService',
-    function ($scope,$stateParams,ReviewService) {
+  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad',
+    function ($scope,$stateParams,ReviewService,ReviewLoad) {
 
-         ReviewService.getReview($stateParams.reviewId).then(function(results){
-                $scope.rating_types = results.rating_types;
-                $scope.review = results.review;
-            });
+            $scope.rating_types = ReviewLoad.rating_types;
+            ReviewLoad.review.backdrop = $scope.imageService.backdrop(ReviewLoad.review.film.backdrop_path,1);
+            $scope.review = ReviewLoad.review;
+            
 
             $scope.toPercent = function(num){
                 return num/2000 * 100;
@@ -520,7 +552,7 @@ angular.module('ReviewService', ['Api'])
         var reviews_deferred = $q.defer();
 
         ratingTypesApiService
-            .query({user_id:1}, function(response) {
+            .query({}, function(response) {
                 types_deferred.resolve(response.results);
             });
 

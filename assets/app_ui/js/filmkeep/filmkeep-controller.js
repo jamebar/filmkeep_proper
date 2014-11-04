@@ -10,31 +10,34 @@
       title: 'filmkeep',
       views: {
         'page' : {
-          templateUrl: 'assets/templates/filmkeep.tmpl.html',
+          templateUrl: '/assets/templates/filmkeep.tmpl.html',
           controller: 'FilmkeepCtrl'
         }
       }
     });
   }])
 
-  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService',
-    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService) {
+  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','imageService',
+    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService,imageService) {
 
         userApiService
-            .get({user_id:$stateParams.username},function(response) {
+            .get({user_id:$stateParams.username,username:true},function(response) {
             
-                $scope.user = response;
+                $scope.page_user = response;
 
             });
 
         reviewApiService
             .query({
                 num: '10',
-                user_id:5
+                username:$stateParams.username
             }, function(response) {
                 
-                $scope.user_reviews = response.results;
-                //console.log(_reviews);
+                $scope.user_reviews = _.map(response.results, function(r){ 
+                  r.poster = $scope.imageService.poster(r.film.poster_path,1);
+                  return r;
+                });
+                
             });
 
     }]) 

@@ -13,17 +13,24 @@
           templateUrl: '/assets/templates/review.tmpl.html',
           controller: 'ReviewCtrl'
         }
+      },
+      resolve: {
+        ReviewLoad: function($stateParams,ReviewService) {
+         
+          return ReviewService.getReview($stateParams.reviewId)
+          
+        }, 
       }
     });
   }])
 
-  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService',
-    function ($scope,$stateParams,ReviewService) {
+  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad',
+    function ($scope,$stateParams,ReviewService,ReviewLoad) {
 
-         ReviewService.getReview($stateParams.reviewId).then(function(results){
-                $scope.rating_types = results.rating_types;
-                $scope.review = results.review;
-            });
+            $scope.rating_types = ReviewLoad.rating_types;
+            ReviewLoad.review.backdrop = $scope.imageService.backdrop(ReviewLoad.review.film.backdrop_path,1);
+            $scope.review = ReviewLoad.review;
+            
 
             $scope.toPercent = function(num){
                 return num/2000 * 100;
