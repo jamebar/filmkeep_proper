@@ -17,8 +17,8 @@
     });
   }])
 
-  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','imageService',
-    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService,imageService) {
+  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService',
+    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService) {
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
         $scope.reviews_per_page = 10; // this should match however many results your API puts on one page
@@ -47,10 +47,7 @@
                   username:$stateParams.username
               }, function(response) {
                   $scope.total_reviews = response.total;
-                  $scope.user_reviews = _.map(response.results, function(r){ 
-                    r.poster = $scope.imageService.poster(r.film.poster_path,1);
-                    return r;
-                  });
+                  $scope.user_reviews = response.results;
                   
               });
         }

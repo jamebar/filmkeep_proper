@@ -28,7 +28,6 @@
     function ($scope,$stateParams,ReviewService,ReviewLoad) {
 
             $scope.rating_types = ReviewLoad.rating_types;
-            ReviewLoad.review.backdrop = $scope.imageService.backdrop(ReviewLoad.review.film.backdrop_path,1);
             $scope.review = ReviewLoad.review;
             
 

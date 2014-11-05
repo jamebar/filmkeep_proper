@@ -1,5 +1,5 @@
 <h3>%%review.film.title%%</h3>
-<img ng-src="%%review.backdrop%%"/>
+<img ng-src="%%review.film.backdrop_path | imageFilter :'backdrop':'1' %%"/>
 <a ng-click="editReview({review:review,rating_types:rating_types})">Edit</a>
 <div class="review-ratings" ng-repeat="rating_type in rating_types">
     <p>%%rating_type.label%%</p>

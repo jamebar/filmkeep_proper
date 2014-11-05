@@ -30,9 +30,9 @@ angular.module('myApp', [
 
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','imageService',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService, imageService) {
-        $scope.imageService = imageService;
+.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService',
+    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService) {
+        
         $scope.review_new = new reviewApiService();
         ReviewService.getRatingTypes().then(function(results){
                 $scope.rating_types_new = results;
@@ -112,23 +112,36 @@ angular.module('myApp', [
     }
 ])
 
-.factory('imageService', [ function() {
+.filter('imageFilter', [ function() {
+  return function(path, type, size)
+  {
     var image_config = image_path_config;
-
-    var images = {};
     
-    images.backdrop = function(path,size){
-      var s = size || 0;
-      return image_config.images.base_url + image_config.images.backdrop_sizes[s] +  path
-    }
+    var s = size || 0;
+    var t = type || 'poster';
 
-    images.poster = function(path,size){
-      var s = size || 0;
-      return image_config.images.base_url + image_config.images.poster_sizes[s] +  path
-    }
+    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
 
-    return images;
+  }
+    
 }])
+
+.filter('profileFilter', [ function() {
+  return function(path)
+  {
+    var p = path || '/assets/img/default-profile.jpg';
+    return p;
+
+  }
+    
+}])
+
+.filter('verb',function(){
+  return function(verb){
+    var keys = {'filmkeep\\review':'reviewed'};
+    return keys[verb];
+  }
+})
 
 
 .factory('msgBus', ['$rootScope', function($rootScope) {

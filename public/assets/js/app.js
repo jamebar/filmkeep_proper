@@ -30,9 +30,9 @@ angular.module('myApp', [
 
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','imageService',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService, imageService) {
-        $scope.imageService = imageService;
+.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService',
+    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService) {
+        
         $scope.review_new = new reviewApiService();
         ReviewService.getRatingTypes().then(function(results){
                 $scope.rating_types_new = results;
@@ -112,23 +112,36 @@ angular.module('myApp', [
     }
 ])
 
-.factory('imageService', [ function() {
+.filter('imageFilter', [ function() {
+  return function(path, type, size)
+  {
     var image_config = image_path_config;
-
-    var images = {};
     
-    images.backdrop = function(path,size){
-      var s = size || 0;
-      return image_config.images.base_url + image_config.images.backdrop_sizes[s] +  path
-    }
+    var s = size || 0;
+    var t = type || 'poster';
 
-    images.poster = function(path,size){
-      var s = size || 0;
-      return image_config.images.base_url + image_config.images.poster_sizes[s] +  path
-    }
+    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
 
-    return images;
+  }
+    
 }])
+
+.filter('profileFilter', [ function() {
+  return function(path)
+  {
+    var p = path || '/assets/img/default-profile.jpg';
+    return p;
+
+  }
+    
+}])
+
+.filter('verb',function(){
+  return function(verb){
+    var keys = {'filmkeep\\review':'reviewed'};
+    return keys[verb];
+  }
+})
 
 
 .factory('msgBus', ['$rootScope', function($rootScope) {
@@ -292,7 +305,7 @@ var aeReview = angular.module('ae-review', [
                         var next_val = i + 1;
                         if (next_val > r.length - 1) next_val = r.length - 1;
 
-                        if (scope.curValue > r[i].ratings[scope.hint_index].value && scope.curValue < r[next_val].ratings[scope.hint_index].value) {
+                        if (scope.curValue >= r[i].ratings[scope.hint_index].value && scope.curValue <= r[next_val].ratings[scope.hint_index].value) {
                             scope.left_compare = r[i].film.title
                             scope.right_compare = r[next_val].film.title;
                             //console.log(r[i].ratings[scope.hint_index].value - r[next_val].ratings[scope.hint_index].value );
@@ -386,10 +399,42 @@ var aeReview = angular.module('ae-review', [
     });
   }])
 
-.controller('feedCtrl', ['$scope', 
-  function($scope){
-    console.log("hello");
+.controller('feedCtrl', ['$scope', 'streamApiService',
+  function($scope, streamApiService){
+    $scope.loading = true;
+    streamApiService.getAggregated()
+            .then(
+              function(response){
+                $scope.feed_items = response;
+                console.log(response);
+                $scope.loading = false;
+            });
+
+
   }])
+
+.filter('fDate',function(){
+  return function(date){
+    moment.locale('en', {
+      relativeTime : {
+          future: "in %s",
+          past:   "%s ago",
+          s:  "seconds",
+          m:  "1min",
+          mm: "%dmins",
+          h:  "1h",
+          hh: "%dh",
+          d:  "1d",
+          dd: "%dd",
+          M:  "1m",
+          MM: "%dm",
+          y:  "1y",
+          yy: "%dy"
+      }
+    });
+    return moment(date).fromNow(true);
+  }
+})
 
   'use strict';
 
@@ -409,8 +454,8 @@ var aeReview = angular.module('ae-review', [
     });
   }])
 
-  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','imageService',
-    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService,imageService) {
+  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService',
+    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService) {
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
         $scope.reviews_per_page = 10; // this should match however many results your API puts on one page
@@ -439,10 +484,7 @@ var aeReview = angular.module('ae-review', [
                   username:$stateParams.username
               }, function(response) {
                   $scope.total_reviews = response.total;
-                  $scope.user_reviews = _.map(response.results, function(r){ 
-                    r.poster = $scope.imageService.poster(r.film.poster_path,1);
-                    return r;
-                  });
+                  $scope.user_reviews = response.results;
                   
               });
         }
@@ -482,7 +524,6 @@ var aeReview = angular.module('ae-review', [
     function ($scope,$stateParams,ReviewService,ReviewLoad) {
 
             $scope.rating_types = ReviewLoad.rating_types;
-            ReviewLoad.review.backdrop = $scope.imageService.backdrop(ReviewLoad.review.film.backdrop_path,1);
             $scope.review = ReviewLoad.review;
             
 
@@ -545,6 +586,81 @@ angular.module('Api', ['ngResource'])
                 }
             }
         );
+    }
+)
+
+.factory('streamApiService',
+    function($http, $q) {
+
+        return({
+            getAggregated: getAggregated,
+        });
+
+        function getAggregated() {
+ 
+            var request = $http({
+                method: "get",
+                url: "api/stream/",
+                params: {
+                    action: "get",
+                    type: "aggregated",
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function getFlat() {
+ 
+            var request = $http({
+                method: "get",
+                url: "api/stream/",
+                params: {
+                    action: "get",
+                    type: "flat"
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        // ---
+        // PRIVATE METHODS.
+        // ---
+
+
+        // I transform the error response, unwrapping the application dta from
+        // the API response payload.
+        function handleError( response ) {
+
+            // The API response from the server should be returned in a
+            // nomralized format. However, if the request was not handled by the
+            // server (or what not handles properly - ex. server error), then we
+            // may have to normalize it on our end, as best we can.
+            if (
+                ! angular.isObject( response.data ) ||
+                ! response.data.message
+                ) {
+
+                return( $q.reject( "An unknown error occurred." ) );
+
+            }
+
+            // Otherwise, use expected error message.
+            return( $q.reject( response.data.message ) );
+
+        }
+
+
+        // I transform the successful response, unwrapping the application data
+        // from the API response payload.
+        function handleSuccess( response ) {
+
+            return( response.data );
+
+        }
     }
 )
 

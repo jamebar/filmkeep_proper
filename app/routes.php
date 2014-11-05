@@ -9,7 +9,7 @@ Route::get('/test', function(){
 $enricher = new Enrich();
 $feed = FeedManager::getNewsFeeds(Auth::id())['aggregated'];
 $activities = $feed->getActivities(0,25)['results'];
-$activities = $enricher->enrichActivities($activities);
+$activities = $enricher->enrichAggregatedActivities($activities);
 return  $activities;
 
 // return FeedManager::followUser(1, 1);
@@ -129,6 +129,20 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
     $router->get('/tmdb/{query}', function($query){
         $t = new TheMovieDb();
         return $t->searchTmdb($query);
+    });
+
+    $router->get('/stream/', function(){
+        $type = Input::has('type') ? Input::get('type') : 'aggregated';
+        $enricher = new Enrich();
+        $feed = FeedManager::getNewsFeeds(Auth::id())[$type];
+        $activities = $feed->getActivities(0,25)['results'];
+
+        if($type === 'aggregated')
+          $activities = $enricher->enrichAggregatedActivities($activities);
+        else
+          $activities = $enricher->enrichActivities($activities);
+
+        return  $activities;
     });
 
 });

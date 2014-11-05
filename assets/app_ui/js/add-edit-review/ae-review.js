@@ -144,7 +144,7 @@ var aeReview = angular.module('ae-review', [
                         var next_val = i + 1;
                         if (next_val > r.length - 1) next_val = r.length - 1;
 
-                        if (scope.curValue > r[i].ratings[scope.hint_index].value && scope.curValue < r[next_val].ratings[scope.hint_index].value) {
+                        if (scope.curValue >= r[i].ratings[scope.hint_index].value && scope.curValue <= r[next_val].ratings[scope.hint_index].value) {
                             scope.left_compare = r[i].film.title
                             scope.right_compare = r[next_val].film.title;
                             //console.log(r[i].ratings[scope.hint_index].value - r[next_val].ratings[scope.hint_index].value );

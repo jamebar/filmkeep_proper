@@ -3,7 +3,7 @@
 <ul class="filmkeep-list">
     <li dir-paginate="user_review in user_reviews | itemsPerPage: 10" total-items="total_reviews">
        
-        <a href="/r/%%user_review.id%%" ><img title="%%user_review.film.title%%" ng-src="%% user_review.poster%%" /></a>
+        <a href="/r/%%user_review.id%%" ><img title="%%user_review.film.title%%" ng-src="%% user_review.film.poster_path | imageFilter :'poster':'1'%%" /></a>
     </li>
 </ul>
 

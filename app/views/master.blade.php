@@ -53,7 +53,7 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-    <div class="container">
+    <div class="container-fluid">
     	@if (Session::has('message'))
             <div id="flash_notice" data-alert data-options="animation_speed:500;" class="alert-box ">{{ Session::get('message') }} <a href="#" class="close">&times;</a></div>
         @endif
@@ -70,7 +70,7 @@
     </div>
     <div class="container footer">
         <div class="col-xs-12">
-            Filmkeep 2014
+            Filmkeep 2014  |  This product uses the TMDb API but is not endorsed or certified by TMDb.
         </div>
     </div>
     
