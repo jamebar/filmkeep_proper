@@ -98,10 +98,10 @@ angular.module('myApp', [
               return review;
             })
 
+            var me_review = _.remove(response, function(r){ return r.user_id === me.user.id});
+            response.unshift(me_review[0]);
             $scope.compares = response;
 
-      
-            console.log(response);
           });
         }
 
