@@ -2,8 +2,8 @@
 
 angular.module('ReviewService', ['Api'])
 
-.factory('ReviewService', [ '$q','ratingTypesApiService', 'reviewApiService',
-    function ($q,ratingTypesApiService,reviewApiService) {
+.factory('ReviewService', [ '$q','ratingTypesApiService', 'reviewApiService', 'compareApiService',
+    function ($q,ratingTypesApiService,reviewApiService, compareApiService) {
 
      
         function Review(){
@@ -12,6 +12,7 @@ angular.module('ReviewService', ['Api'])
 
         var types_deferred = $q.defer();
         var reviews_deferred = $q.defer();
+
 
         ratingTypesApiService
             .query({}, function(response) {
@@ -34,6 +35,10 @@ angular.module('ReviewService', ['Api'])
 
         Review.getReviews = function(){
             return reviews_deferred.promise;
+        }
+
+        Review.getCompares = function(film_id){
+            return compareApiService.getCompares(film_id);
         }
 
         Review.getReview = function(review_id)

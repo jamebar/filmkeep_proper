@@ -5,7 +5,8 @@
   ])
 
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('feedCtrl', {
+
+    $stateProvider.state('root.feed', {
       url: '/feed',
       title: 'feed',
       views: {
@@ -17,9 +18,10 @@
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'streamApiService',
-  function($scope, streamApiService){
+.controller('feedCtrl', ['$scope', 'streamApiService','me',
+  function($scope, streamApiService,me){
     $scope.loading = true;
+    $scope.me = me;
     streamApiService.getAggregated()
             .then(
               function(response){
@@ -28,8 +30,21 @@
                 $scope.loading = false;
             });
 
-
+    $scope.toPercent = function(num){
+        return num/2000 * 100;
+    }
   }])
+
+.directive('feedItems', [
+  function(){
+    return {
+      restrict: 'E',
+      templateUrl: '/assets/templates/feed/feed_items.tmpl.html',
+      link: function(scope,element,attr){
+
+      }
+    }
+}])
 
 .filter('fDate',function(){
   return function(date){

@@ -36,9 +36,22 @@ class User extends Model implements UserInterface, RemindableInterface {
 		$this->attributes['password'] = \Hash::make($password);
 	}
 
-    public function reviews(){
-         return $this->hasMany('Filmkeep\Review');
-    }
+  public function reviews(){
+       return $this->hasMany('Filmkeep\Review');
+  }
 
+  public function followers()
+  {
+   return $this->belongsToMany('User', 'followers', 'user_id', 'follower_id');
+  }
 
+  public function watchlist(){
+       return $this->hasOne('Filmkeep\Watchlist');
+  }
+
+  public function rating_types(){
+       return $this->hasMany('Filmkeep\Rating_type');
+  }
+
+  
 }

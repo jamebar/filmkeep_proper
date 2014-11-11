@@ -13,7 +13,7 @@
       var image_path_config = {{json_encode($image_path_config)}};
     </script>
 </head>
-<body ng-controller="appCtrl">
+<body >
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
       <div class="navbar-header">
@@ -29,26 +29,29 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="/fk/{{Auth::user()->username}}" target="_self">My Fimkeep</a></li>
-        
+        @if(Auth::check())
+        <li><a href="/feed" >Feed</a></li>
+        <li><a ui-sref='root.user.filmkeep({username: "{{Auth::user()->username}}" })'  >My Filmkeep</a></li>
+        @endif
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
+        
         @if(!Auth::check())
         <li><a href="/user/login" target="_self" class="btn">Log in</a></li>
         @endif
+        @if(Auth::check())
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img ng-src="%%'{{Auth::user()->avatar}}' | profileFilter%%" width="30" height="30"/></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
+            <li><a href=""><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
             <li class="divider"></li>
-            @if(Auth::check())
+            
             <li><a href="/user/logout" target="_self">Logout</a></li>
-            @endif
+            
           </ul>
         </li>
+        @endif
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -62,7 +65,7 @@
     			
                 @yield('content')
                 
-                <div  ui-view="page"></div>
+                <div ui-view></div>
 
     
     		</div>

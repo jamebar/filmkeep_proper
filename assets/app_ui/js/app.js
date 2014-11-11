@@ -14,6 +14,7 @@ angular.module('myApp', [
     'review',
     'filmkeep',
     'feed',
+    'watchlist'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -24,21 +25,32 @@ angular.module('myApp', [
   $rootScope.$stateParams = $stateParams; 
 }])
 
-.config(['$locationProvider', function($locationProvider) {
+.config(['$locationProvider','$stateProvider', function($locationProvider, $stateProvider) {
 
   $locationProvider.html5Mode(true);
 
+  $stateProvider.state('root', {
+    abstract: true,
+    templateUrl: '/assets/templates/app.tmpl.html',
+    controller: 'appCtrl',
+    resolve: {
+      me: function (meApiService) {
+          return meApiService.me();
+      } 
+    }
+  });
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService) {
-        
+.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me',
+    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me) {
+       
         $scope.review_new = new reviewApiService();
-        ReviewService.getRatingTypes().then(function(results){
-                $scope.rating_types_new = results;
-                
-            });
 
+        ReviewService.getRatingTypes().then(function(results){
+          $scope.rating_types_new = results;
+            
+        });
+      
         $scope.getReview = function(review) {
             if (typeof review === 'object') {
                 console.log('didnt make api call');
@@ -67,6 +79,31 @@ angular.module('myApp', [
             });
         }
         
+        $scope.compare = function(obj){
+          console.log(obj);
+          var modalInstance = $modal.open({
+                scope: $scope,
+                templateUrl: '/assets/templates/modal_compare.tmpl.html',
+          
+            });
+
+          ReviewService.getCompares(obj.film_id).then(function(response){
+            var actives = [me.user.id, obj.user_id];
+
+            _.forEach(response, function(review){
+
+              if( _.indexOf(actives, review.user.id) > -1)
+                review.active = true;
+
+              return review;
+            })
+
+            $scope.compares = response;
+
+      
+            console.log(response);
+          });
+        }
 
         $scope.editReview = function(id){
             $scope.getReview(id);
@@ -74,40 +111,28 @@ angular.module('myApp', [
 
         }
 
-        $scope.newReview = function(){
+        $scope.newReview = function(film){
    
+
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
                 $scope.rating_types = results;
                 
             });
+
+            if (typeof film === 'object') {
+              console.log(film);
+              $scope.review.film = film;
+            }
             showModal();
-            
                 
         }
 
-        // function openModal(id){
-        //     var modalInstance = $modal.open({
-        //         templateUrl: 'assets/templates/add_review.tmpl.html',
-              
-        //     });
+        $scope.toPercent = function(num){
+                return num/2000 * 100;
+            }
 
-        //     modalInstance.opened.then(function () {
-               
-        //       if(id){
-        //         setTimeout(function(){
-        //             msgBus.emitMsg('review:edit', {'id': id});
-        //         },500);
-               
-        //       }
-        //       else
-        //       {
-        //         msgBus.emitMsg('review:new');
-        //       }
-        //     }, function () {
-             
-        //     });
-        // }
+       
         
     }
 ])
@@ -126,6 +151,22 @@ angular.module('myApp', [
     
 }])
 
+.factory('followerFactory', ['meApiService',function(meApiService){
+  
+  var follower = {};
+
+  follower.isFollowing = function(user)
+  {
+    var me = meApiService.meData();
+    
+    var t = _.find(me.user.followers, {'id': user.id}) ? true : false;
+    console.log('me',me, 'user id', user.id, 'results',t);
+    return t;
+  }
+
+  return follower;
+}])
+
 .filter('profileFilter', [ function() {
   return function(path)
   {
@@ -138,7 +179,9 @@ angular.module('myApp', [
 
 .filter('verb',function(){
   return function(verb){
-    var keys = {'filmkeep\\review':'reviewed'};
+    var keys = {'filmkeep\\review':'reviewed',
+                'filmkeep\\watchlist':'added'
+                };
     return keys[verb];
   }
 })

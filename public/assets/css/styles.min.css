@@ -1,4 +1,7 @@
 @charset 'UTF-8';
+.round-corners {
+  border-radius: 5px;
+}
 slider {
   display: block;
   position: relative;
@@ -185,6 +188,76 @@ ul.filmkeep-list li {
   float: left;
   width: 150px;
   height: 250px;
+}
+.feed-item {
+  margin-top: 1em;
+  padding-left: 60px;
+}
+.feed-item .avatar {
+  margin-left: -60px;
+}
+.feed-item .activity-item {
+  float: left;
+}
+.feed-item .activity-item img {
+  display: block;
+}
+.navbar-nav > li > a {
+  line-height: 32px;
+  padding-bottom: 0px;
+  padding-top: 8px;
+}
+.pagination > li > a,
+.pagination > li > span {
+  border: none;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  border-radius: 5px;
+}
+ul.compare-avatars,
+ul.compare-avatars li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+ul.compare-avatars li {
+  float: left;
+  margin-right: .5em;
+}
+ul.compare-avatars li img {
+  opacity: .6;
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+  display: block;
+}
+ul.compare-avatars li.active img {
+  opacity: 1;
+  -webkit-filter: none;
+          filter: none;
+}
+.compare-container {
+  padding: 1em;
+}
+.compare0 .progress-bar {
+  background-color: #4FCEE0;
+}
+.compare1 .progress-bar {
+  background-color: #F3635E;
+}
+.compare2 .progress-bar {
+  background-color: #8FCC00;
+}
+.compare3 .progress-bar {
+  background-color: #CC27B2;
+}
+.progress-bar {
+  padding-left: 10px;
+  text-align: left;
 }
 body {
   padding-top: 70px;

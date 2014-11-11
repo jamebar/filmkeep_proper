@@ -5,39 +5,103 @@
   ])
 
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('filmkeep', {
-      url: '/fk/{username}',
+    $stateProvider.state('root.user', {
+      abstract:true,
+      url: '/u/{username}',
       title: 'filmkeep',
       views: {
         'page' : {
-          templateUrl: '/assets/templates/filmkeep.tmpl.html',
-          controller: 'FilmkeepCtrl'
+          templateUrl: '/assets/templates/user.tmpl.html',
+          controller: 'userCtrl'
+        }
+      },
+
+      resolve: {
+        page_user: function(userApiService, $stateParams, $q){
+          var deferred = $q.defer();
+          userApiService
+            .get({user_id:$stateParams.username,username:true}, function(response){
+              deferred.resolve(response);
+            });
+          return deferred.promise;
         }
       }
     });
+
+    $stateProvider.state('root.user.filmkeep', {
+      url: '/filmkeep',
+      title: 'filmkeep',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/filmkeep.tmpl.html',
+          controller: 'FilmkeepCtrl'
+        }
+      },
+    });
+
+    
   }])
 
-  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService',
-    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService) {
+  .controller('userCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
+    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
+        $scope.user_reviews = [];
+        $scope.total_reviews = 0;
+
+
+        page_user.following = followerFactory.isFollowing(page_user);
+        $scope.myPage = page_user.id === me.user.id;
+        $scope.page_user = page_user; 
+                
+
+
+
+        $scope.follow = function(page_user){
+
+          if(page_user.following){
+
+            //make change immediately, should be in callback, but it's too slow
+            page_user.following = false;
+            followApiService.unfollow(page_user.id).then(function(response){
+              me.user.followers = response.followers;
+            });
+
+          }else{
+
+            page_user.following = true;
+            followApiService.follow(page_user.id).then(function(response){
+              me.user.followers = response.followers;
+            });
+
+          }
+
+
+        }
+
+        
+
+    }]) 
+
+    .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
+    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
         $scope.reviews_per_page = 10; // this should match however many results your API puts on one page
         getResultsPage(1);
 
+        ReviewService.getRatingTypes().then(function(response){
+          $scope.rating_types = response;
+          
+        });
+
         $scope.pagination = {
             current: 1
         };
 
-        userApiService
-            .get({user_id:$stateParams.username,username:true},function(response) {
-            
-                $scope.page_user = response;
-
-            });
-
         $scope.pageChanged = function(newPage) {
             getResultsPage(newPage);
         };
+
+        
 
         function getResultsPage(pageNumber) {
           reviewApiService
@@ -53,6 +117,7 @@
         }
 
     }]) 
+  
 
   
   ;

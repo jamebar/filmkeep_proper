@@ -1,0 +1,52 @@
+ul.compare-avatars, ul.compare-avatars li{
+  margin:0;
+  padding:0;
+  list-style: none;
+}
+
+ul.compare-avatars{
+
+  li{
+    float:left;
+    margin-right:.5em;
+
+    img{
+      opacity: .6;
+      filter: grayscale(100%);
+      display: block;
+    }
+
+    &.active img{
+      opacity: 1;
+      filter: none;
+    }
+  }
+}
+
+.compare-container{
+  padding:1em;
+}
+
+.compare0 .progress-bar{
+  background-color:#4FCEE0;
+}
+
+
+.compare1 .progress-bar{
+  background-color:#F3635E;
+}
+
+
+.compare2 .progress-bar{
+  background-color:#8FCC00;
+}
+
+
+.compare3 .progress-bar{
+  background-color:#CC27B2;
+}
+
+.progress-bar{
+  padding-left:10px;
+  text-align: left;
+}

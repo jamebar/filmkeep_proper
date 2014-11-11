@@ -1,11 +1,15 @@
+
+<a ui-sref='root.user.filmkeep({username: review.user.username})'><img ng-src="%%review.user.avatar | profileFilter%%" width="100" height="100" class="round-corners"/></a>
+<a ui-sref='root.user.filmkeep({username: review.user.username})'>%%review.user.first_name + ' ' + review.user.last_name%%</a>
 <h3>%%review.film.title%%</h3>
 <img ng-src="%%review.film.backdrop_path | imageFilter :'backdrop':'1' %%"/>
-<a ng-click="editReview({review:review,rating_types:rating_types})">Edit</a>
+<a ng-click="editReview({review:review,rating_types:rating_types})" ng-if="me.user.id === review.user_id">Edit</a>
+<a ng-click="compare(review)" ng-if="review.reviewed === 'true' ">compare </a>
 <div class="review-ratings" ng-repeat="rating_type in rating_types">
     <p>%%rating_type.label%%</p>
     <div class="progress" >
       <div class="progress-bar" role="progressbar" aria-valuenow="%%rating_type.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating_type.value)%%%;">
-        <span class="sr-only">60% Complete</span>
+        
       </div>
     </div>
 </div>

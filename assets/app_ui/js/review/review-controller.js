@@ -5,7 +5,7 @@
   ])
 
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('review', {
+    $stateProvider.state('root.review', {
       url: '/r/{reviewId}',
       title: 'Review',
       views: {
@@ -24,18 +24,16 @@
     });
   }])
 
-  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad',
-    function ($scope,$stateParams,ReviewService,ReviewLoad) {
+  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,$stateParams,ReviewService,ReviewLoad,me) {
 
             $scope.rating_types = ReviewLoad.rating_types;
             $scope.review = ReviewLoad.review;
-            
-
+            $scope.me = me;
+            console.log($scope.review);
             $scope.toPercent = function(num){
                 return num/2000 * 100;
             }
-     
-
     }]) 
 
   

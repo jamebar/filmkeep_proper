@@ -10,5 +10,8 @@ class Rating_type extends Model {
          return $this->belongsTo('Filmkeep\User');
     }
 
+    public function ratings(){
+         return $this->hasMany('Filmkeep\Rating');
+    }
 
 }

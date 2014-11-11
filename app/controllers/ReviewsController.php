@@ -3,6 +3,7 @@ use Filmkeep\User;
 use Filmkeep\Review;
 use Filmkeep\Film;
 use Filmkeep\Rating;
+use Filmkeep\Follower;
 use Filmkeep\TheMovieDb;
 use Filmkeep\Forms\AddReview;
 
@@ -50,6 +51,20 @@ class ReviewsController extends BaseController {
 
         return \Response::json(['status' => 200, 'results' => $review->get(), 'total'=>$total]);
 	}
+
+  /*
+  * returns all the reviews of friends for comparison
+  */
+  public function compares()
+  {
+    $film_id = \Input::get('film_id');
+    $followers = Follower::where('user_id', Auth::user()->id)->lists('follower_id');
+    return Review::with('user','film','ratings','ratings.rating_type')
+                  ->where('film_id', $film_id)
+                  ->whereIn('user_id', $followers)
+                  ->take(30)
+                  ->get();
+  }
 
 	/**
 	 * Show the form for creating a new resource.
@@ -146,7 +161,11 @@ class ReviewsController extends BaseController {
 	 */
 	public function show($id)
 	{
-        $review = Review::with('ratings','film')->find($id);
+
+        $review = Review::with('ratings','film', 'user')->find($id);
+
+        $reviewed = Review::where('user_id', Auth::user()->id)->where('film_id', $review->film_id)->first();
+        $review['reviewed'] = is_null($reviewed) ? 'false' : 'true';
 
         return $review;
 	}

@@ -14,6 +14,7 @@ angular.module('myApp', [
     'review',
     'filmkeep',
     'feed',
+    'watchlist'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -24,21 +25,32 @@ angular.module('myApp', [
   $rootScope.$stateParams = $stateParams; 
 }])
 
-.config(['$locationProvider', function($locationProvider) {
+.config(['$locationProvider','$stateProvider', function($locationProvider, $stateProvider) {
 
   $locationProvider.html5Mode(true);
 
+  $stateProvider.state('root', {
+    abstract: true,
+    templateUrl: '/assets/templates/app.tmpl.html',
+    controller: 'appCtrl',
+    resolve: {
+      me: function (meApiService) {
+          return meApiService.me();
+      } 
+    }
+  });
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService) {
-        
+.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me',
+    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me) {
+       
         $scope.review_new = new reviewApiService();
-        ReviewService.getRatingTypes().then(function(results){
-                $scope.rating_types_new = results;
-                
-            });
 
+        ReviewService.getRatingTypes().then(function(results){
+          $scope.rating_types_new = results;
+            
+        });
+      
         $scope.getReview = function(review) {
             if (typeof review === 'object') {
                 console.log('didnt make api call');
@@ -67,6 +79,31 @@ angular.module('myApp', [
             });
         }
         
+        $scope.compare = function(obj){
+          console.log(obj);
+          var modalInstance = $modal.open({
+                scope: $scope,
+                templateUrl: '/assets/templates/modal_compare.tmpl.html',
+          
+            });
+
+          ReviewService.getCompares(obj.film_id).then(function(response){
+            var actives = [me.user.id, obj.user_id];
+
+            _.forEach(response, function(review){
+
+              if( _.indexOf(actives, review.user.id) > -1)
+                review.active = true;
+
+              return review;
+            })
+
+            $scope.compares = response;
+
+      
+            console.log(response);
+          });
+        }
 
         $scope.editReview = function(id){
             $scope.getReview(id);
@@ -74,40 +111,28 @@ angular.module('myApp', [
 
         }
 
-        $scope.newReview = function(){
+        $scope.newReview = function(film){
    
+
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
                 $scope.rating_types = results;
                 
             });
+
+            if (typeof film === 'object') {
+              console.log(film);
+              $scope.review.film = film;
+            }
             showModal();
-            
                 
         }
 
-        // function openModal(id){
-        //     var modalInstance = $modal.open({
-        //         templateUrl: 'assets/templates/add_review.tmpl.html',
-              
-        //     });
+        $scope.toPercent = function(num){
+                return num/2000 * 100;
+            }
 
-        //     modalInstance.opened.then(function () {
-               
-        //       if(id){
-        //         setTimeout(function(){
-        //             msgBus.emitMsg('review:edit', {'id': id});
-        //         },500);
-               
-        //       }
-        //       else
-        //       {
-        //         msgBus.emitMsg('review:new');
-        //       }
-        //     }, function () {
-             
-        //     });
-        // }
+       
         
     }
 ])
@@ -126,6 +151,22 @@ angular.module('myApp', [
     
 }])
 
+.factory('followerFactory', ['meApiService',function(meApiService){
+  
+  var follower = {};
+
+  follower.isFollowing = function(user)
+  {
+    var me = meApiService.meData();
+    
+    var t = _.find(me.user.followers, {'id': user.id}) ? true : false;
+    console.log('me',me, 'user id', user.id, 'results',t);
+    return t;
+  }
+
+  return follower;
+}])
+
 .filter('profileFilter', [ function() {
   return function(path)
   {
@@ -138,7 +179,9 @@ angular.module('myApp', [
 
 .filter('verb',function(){
   return function(verb){
-    var keys = {'filmkeep\\review':'reviewed'};
+    var keys = {'filmkeep\\review':'reviewed',
+                'filmkeep\\watchlist':'added'
+                };
     return keys[verb];
   }
 })
@@ -387,7 +430,8 @@ var aeReview = angular.module('ae-review', [
   ])
 
 .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('feedCtrl', {
+
+    $stateProvider.state('root.feed', {
       url: '/feed',
       title: 'feed',
       views: {
@@ -399,9 +443,10 @@ var aeReview = angular.module('ae-review', [
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'streamApiService',
-  function($scope, streamApiService){
+.controller('feedCtrl', ['$scope', 'streamApiService','me',
+  function($scope, streamApiService,me){
     $scope.loading = true;
+    $scope.me = me;
     streamApiService.getAggregated()
             .then(
               function(response){
@@ -410,8 +455,21 @@ var aeReview = angular.module('ae-review', [
                 $scope.loading = false;
             });
 
-
+    $scope.toPercent = function(num){
+        return num/2000 * 100;
+    }
   }])
+
+.directive('feedItems', [
+  function(){
+    return {
+      restrict: 'E',
+      templateUrl: '/assets/templates/feed/feed_items.tmpl.html',
+      link: function(scope,element,attr){
+
+      }
+    }
+}])
 
 .filter('fDate',function(){
   return function(date){
@@ -442,39 +500,103 @@ var aeReview = angular.module('ae-review', [
   ])
 
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('filmkeep', {
-      url: '/fk/{username}',
+    $stateProvider.state('root.user', {
+      abstract:true,
+      url: '/u/{username}',
       title: 'filmkeep',
       views: {
         'page' : {
-          templateUrl: '/assets/templates/filmkeep.tmpl.html',
-          controller: 'FilmkeepCtrl'
+          templateUrl: '/assets/templates/user.tmpl.html',
+          controller: 'userCtrl'
+        }
+      },
+
+      resolve: {
+        page_user: function(userApiService, $stateParams, $q){
+          var deferred = $q.defer();
+          userApiService
+            .get({user_id:$stateParams.username,username:true}, function(response){
+              deferred.resolve(response);
+            });
+          return deferred.promise;
         }
       }
     });
+
+    $stateProvider.state('root.user.filmkeep', {
+      url: '/filmkeep',
+      title: 'filmkeep',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/filmkeep.tmpl.html',
+          controller: 'FilmkeepCtrl'
+        }
+      },
+    });
+
+    
   }])
 
-  .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService',
-    function ($scope,$stateParams,ReviewService,userApiService,reviewApiService) {
+  .controller('userCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
+    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
+        $scope.user_reviews = [];
+        $scope.total_reviews = 0;
+
+
+        page_user.following = followerFactory.isFollowing(page_user);
+        $scope.myPage = page_user.id === me.user.id;
+        $scope.page_user = page_user; 
+                
+
+
+
+        $scope.follow = function(page_user){
+
+          if(page_user.following){
+
+            //make change immediately, should be in callback, but it's too slow
+            page_user.following = false;
+            followApiService.unfollow(page_user.id).then(function(response){
+              me.user.followers = response.followers;
+            });
+
+          }else{
+
+            page_user.following = true;
+            followApiService.follow(page_user.id).then(function(response){
+              me.user.followers = response.followers;
+            });
+
+          }
+
+
+        }
+
+        
+
+    }]) 
+
+    .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
+    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
         $scope.reviews_per_page = 10; // this should match however many results your API puts on one page
         getResultsPage(1);
 
+        ReviewService.getRatingTypes().then(function(response){
+          $scope.rating_types = response;
+          
+        });
+
         $scope.pagination = {
             current: 1
         };
 
-        userApiService
-            .get({user_id:$stateParams.username,username:true},function(response) {
-            
-                $scope.page_user = response;
-
-            });
-
         $scope.pageChanged = function(newPage) {
             getResultsPage(newPage);
         };
+
+        
 
         function getResultsPage(pageNumber) {
           reviewApiService
@@ -490,6 +612,7 @@ var aeReview = angular.module('ae-review', [
         }
 
     }]) 
+  
 
   
   ;
@@ -501,7 +624,7 @@ var aeReview = angular.module('ae-review', [
   ])
 
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('review', {
+    $stateProvider.state('root.review', {
       url: '/r/{reviewId}',
       title: 'Review',
       views: {
@@ -520,18 +643,16 @@ var aeReview = angular.module('ae-review', [
     });
   }])
 
-  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad',
-    function ($scope,$stateParams,ReviewService,ReviewLoad) {
+  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,$stateParams,ReviewService,ReviewLoad,me) {
 
             $scope.rating_types = ReviewLoad.rating_types;
             $scope.review = ReviewLoad.review;
-            
-
+            $scope.me = me;
+            console.log($scope.review);
             $scope.toPercent = function(num){
                 return num/2000 * 100;
             }
-     
-
     }]) 
 
   
@@ -573,6 +694,22 @@ angular.module('Api', ['ngResource'])
     }
 )
 
+.factory('watchlistApiService',
+    function($resource) {
+        return $resource(
+            '/api/watchlist/:watchlist_item_id', {}, // Query parameters
+            {
+                update: {
+                  method: 'PUT'
+                },
+                'query': {
+                    method: 'GET'
+                }
+            }
+        );
+    }
+)
+
 .factory('userApiService',
     function($resource) {
         return $resource(
@@ -600,7 +737,7 @@ angular.module('Api', ['ngResource'])
  
             var request = $http({
                 method: "get",
-                url: "api/stream/",
+                url: "/api/stream/",
                 params: {
                     action: "get",
                     type: "aggregated",
@@ -615,10 +752,215 @@ angular.module('Api', ['ngResource'])
  
             var request = $http({
                 method: "get",
-                url: "api/stream/",
+                url: "/api/stream/",
                 params: {
                     action: "get",
                     type: "flat"
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        // ---
+        // PRIVATE METHODS.
+        // ---
+
+
+        // I transform the error response, unwrapping the application dta from
+        // the API response payload.
+        function handleError( response ) {
+
+            // The API response from the server should be returned in a
+            // nomralized format. However, if the request was not handled by the
+            // server (or what not handles properly - ex. server error), then we
+            // may have to normalize it on our end, as best we can.
+            if (
+                ! angular.isObject( response.data ) ||
+                ! response.data.message
+                ) {
+
+                return( $q.reject( "An unknown error occurred." ) );
+
+            }
+
+            // Otherwise, use expected error message.
+            return( $q.reject( response.data.message ) );
+
+        }
+
+        function handleSuccess( response ) {
+
+            return( response.data );
+
+        }
+    }
+)
+
+.factory('compareApiService',
+    function($http, $q) {
+        var data;
+
+        return({
+            getCompares: getCompares
+        });
+
+        
+
+        function getCompares(film_id) {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/compares",
+                params: {
+                    action: "get",
+                    film_id: film_id
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        // ---
+        // PRIVATE METHODS.
+        // ---
+
+
+        // I transform the error response, unwrapping the application dta from
+        // the API response payload.
+        function handleError( response ) {
+
+            // The API response from the server should be returned in a
+            // nomralized format. However, if the request was not handled by the
+            // server (or what not handles properly - ex. server error), then we
+            // may have to normalize it on our end, as best we can.
+            if (
+                ! angular.isObject( response.data ) ||
+                ! response.data.message
+                ) {
+
+                return( $q.reject( "An unknown error occurred." ) );
+
+            }
+
+            // Otherwise, use expected error message.
+            return( $q.reject( response.data.message ) );
+
+        }
+
+        function handleSuccess( response ) {
+            return( response.data );
+
+        }
+})
+
+.factory('meApiService',
+    function($http, $q) {
+        var meData;
+
+        return({
+            me: me,
+            meData: getMeData
+        });
+
+        function getMeData(){
+          return meData;
+        }
+
+        function me() {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/me",
+                params: {
+                    action: "get",
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        // ---
+        // PRIVATE METHODS.
+        // ---
+
+
+        // I transform the error response, unwrapping the application dta from
+        // the API response payload.
+        function handleError( response ) {
+
+            // The API response from the server should be returned in a
+            // nomralized format. However, if the request was not handled by the
+            // server (or what not handles properly - ex. server error), then we
+            // may have to normalize it on our end, as best we can.
+            if (
+                ! angular.isObject( response.data ) ||
+                ! response.data.message
+                ) {
+
+                return( $q.reject( "An unknown error occurred." ) );
+
+            }
+
+            // Otherwise, use expected error message.
+            return( $q.reject( response.data.message ) );
+
+        }
+
+        function handleSuccess( response ) {
+            meData = response.data;
+            return( response.data );
+
+        }
+})
+
+.factory('followApiService',
+    function($http, $q) {
+
+        return({
+            follow: follow,
+            unfollow: unfollow,
+            getFollowers: getFollowers
+        });
+
+        function follow(follower_id) {
+ 
+            var request = $http({
+                method: "post",
+                url: "/api/follow/" + follower_id,
+                params: {
+                    action: "post",
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function unfollow(follower_id) {
+ 
+           var request = $http({
+                method: "post",
+                url: "/api/unfollow/" + follower_id,
+                params: {
+                    action: "post",
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function getFollowers() {
+ 
+           var request = $http({
+                method: "get",
+                url: "/api/followers",
+                params: {
+                    action: "get",
                 }
             });
 
@@ -671,8 +1013,8 @@ angular.module('Api', ['ngResource'])
 
 angular.module('ReviewService', ['Api'])
 
-.factory('ReviewService', [ '$q','ratingTypesApiService', 'reviewApiService',
-    function ($q,ratingTypesApiService,reviewApiService) {
+.factory('ReviewService', [ '$q','ratingTypesApiService', 'reviewApiService', 'compareApiService',
+    function ($q,ratingTypesApiService,reviewApiService, compareApiService) {
 
      
         function Review(){
@@ -681,6 +1023,7 @@ angular.module('ReviewService', ['Api'])
 
         var types_deferred = $q.defer();
         var reviews_deferred = $q.defer();
+
 
         ratingTypesApiService
             .query({}, function(response) {
@@ -703,6 +1046,10 @@ angular.module('ReviewService', ['Api'])
 
         Review.getReviews = function(){
             return reviews_deferred.promise;
+        }
+
+        Review.getCompares = function(film_id){
+            return compareApiService.getCompares(film_id);
         }
 
         Review.getReview = function(review_id)
@@ -756,3 +1103,51 @@ angular.module('ReviewService', ['Api'])
 
 
 ]);
+
+  'use strict';
+
+  angular.module('watchlist', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.user.watchlist', {
+      url: '/watchlist',
+      title: 'watchlist',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/watchlist.tmpl.html',
+          controller: 'WatchlistCtrl'
+        }
+      },
+      resolve: {
+        page_user: function(userApiService, $stateParams, $q){
+          var deferred = $q.defer();
+          userApiService
+            .get({user_id:$stateParams.username,username:true}, function(response){
+              deferred.resolve(response);
+            });
+          return deferred.promise;
+        }
+      }
+    });
+  }])
+
+  .controller('WatchlistCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
+    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
+        
+
+       
+        watchlistApiService
+            .query({
+                user_id: page_user.id,
+            }, function(response) {
+                console.log(response);
+                $scope.watchlist_items = response.results;
+                
+            });
+        
+
+    }]) 
+
+  
+  ;

@@ -1,9 +1,9 @@
 <?php
 
+use Filmkeep\Watchlist;
 use Filmkeep\User;
-use Filmkeep\Follower;
 
-class UsersController extends BaseController {
+class WatchlistController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -12,7 +12,9 @@ class UsersController extends BaseController {
 	 */
 	public function index()
 	{
-		
+    $user_id = \Input::get('user_id');
+		$watchlist = Watchlist::with('film')->where('user_id', $user_id)->orderBy('list_order', 'asc')->orderby('created_at','asc')->get();
+    return \Response::json(['status' => 200, 'results' => $watchlist]);
 	}
 
 
@@ -34,7 +36,13 @@ class UsersController extends BaseController {
 	 */
 	public function store()
 	{
-		//
+    $data = [
+      'film_id' => \Input::get('film_id'),
+      'user_id' => Auth::user()->id
+    ];
+
+    $results = Watchlist::firstOrCreate($data);
+		return $results;
 	}
 
 
@@ -46,17 +54,7 @@ class UsersController extends BaseController {
 	 */
 	public function show($id)
 	{
-
-    if(\Input::has('username'))
-    {
-      $user = User::with('followers')->where('username', $id)->first();
-      $user->total_followers = Follower::where('follower_id', $user->id)->count();
-      return $user;
-    }
-		  
-
-    return User::with('followers')->find($id);
-
+		//
 	}
 
 

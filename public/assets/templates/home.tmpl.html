@@ -1,9 +1,3 @@
-<a ng-click="editReview(80)">edit 80</a>
-<a ng-click="editReview(81)">edit 81</a>
-<a ng-click="editReview(82)">edit 82</a>
-<a ui-sref="review({reviewId:12})">Show Review</a>
-<a ng-click="newReview()">New Review</a>
-
 <div class="row">
   <div class="col-xs-12 col-md-4">
     <add-edit-review review="review_new" rating-types="rating_types_new"></add-edit-review>
@@ -11,18 +5,7 @@
   <div class="col-xs-12 col-md-8">
     <div class="preloader" ng-show="loading">Loading your feed...</div>
     <div ng-repeat="feed_item in feed_items">
-      <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60"/>
-      <span class="feed-date pull-right">%%feed_item.created_at | fDate %%</span>
-      <span class="feed-actor">
-        <a href="/fk/%%feed_item.activities[0].actor.username%%">%%feed_item.activities[0].actor.first_name%%</a>
-      </span> 
-      %% feed_item.verb | verb %% 
-      <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span>
-      <span ng-if="feed_item.activity_count===1">%%feed_item.activities[0].object.film.title%%</span>
-      <div>
-        <img ng-repeat="activity in feed_item.activities" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%"/>
-        <span ng-if="feed_item.activity_count===1"> %%activity.object.notes%%</span>
-      </div>
+      <feed-items></feed-items>
     </div>
   </div>
 </div>

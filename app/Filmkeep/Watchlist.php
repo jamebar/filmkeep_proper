@@ -1,12 +1,12 @@
 <?php namespace Filmkeep;
 
 
-class Review extends \Eloquent {
+class Watchlist extends \Eloquent {
     use \GetStream\StreamLaravel\Eloquent\ActivityTrait;
 
-	  protected $guarded = [];
+    protected $guarded = [];
     
-    public $activityLazyLoading = ['film','ratings','ratings.rating_type'];
+    public $activityLazyLoading = ['film','user'];
 
     public function film(){
          return $this->belongsTo('Filmkeep\Film');
@@ -14,10 +14,6 @@ class Review extends \Eloquent {
 
     public function user(){
         return $this->belongsTo('Filmkeep\User');
-    }
-
-    public function ratings(){
-        return $this->hasMany('Filmkeep\Rating');
     }
 
     

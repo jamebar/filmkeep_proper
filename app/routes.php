@@ -1,23 +1,35 @@
 <?php
 
+
 use Filmkeep\Review;
 use Filmkeep\TheMovieDb;
 use GetStream\StreamLaravel\Enrich;
+use Filmkeep\User;
+use Filmkeep\Follower;
+use Filmkeep\Watchlist;
+
 Route::get('/test', function(){
 
+  // $data = [
+  //     'film_id' => 417,
+  //     'user_id' => Auth::user()->id
+  //   ];
+
+  //   $results = Watchlist::firstOrCreate($data);
+  //   return $results;
   // Enriching
-$enricher = new Enrich();
-$feed = FeedManager::getNewsFeeds(Auth::id())['aggregated'];
-$activities = $feed->getActivities(0,25)['results'];
-$activities = $enricher->enrichAggregatedActivities($activities);
-return  $activities;
+// $enricher = new Enrich();
+// $feed = FeedManager::getNewsFeeds(Auth::id())['aggregated'];
+// $activities = $feed->getActivities(0,25)['results'];
+// $activities = $enricher->enrichAggregatedActivities($activities);
+// return  $activities;
 
 // return FeedManager::followUser(1, 1);
 
   // Deleting activity
   // $client = new GetStream\Stream\Client('4j8dz2dp5vjn', '3gzp62asbcwjxjyfx7yvrbmctxykwrqc27ypxvnj7xyfu7uygz9rcrdshmvb4fey');
   // $user_feed_1 = $client->feed('user:101');
-  // $user_feed_1->removeActivity("482ea2c2-63da-11e4-8080-800031b13700");
+  // $user_feed_1->removeActivity("0c846400-6713-11e4-8080-80012c455820");
 
   // $user_feed_1 = $client->feed('user:101');
 
@@ -112,10 +124,6 @@ Route::post('password/reset/{token}', array(
   'as' => 'password.update'
 ));
 
-// App::missing(function($exception)
-// {
-//     return View::make('home');
-// });
 
 /*
 * API
@@ -123,26 +131,28 @@ Route::post('password/reset/{token}', array(
 */
 Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
+    $router->get('compares', 'ReviewsController@compares');
     $router->resource('review', 'ReviewsController');
     $router->resource('user', 'UsersController');
+    $router->resource('watchlist', 'WatchlistController');
     $router->resource('rating_types', 'RatingTypesController');
+    $router->get('followers', 'FollowerController@getFollowers');
+    $router->post('follow/{follower_id}', 'FollowerController@follow');
+    $router->post('unfollow/{follower_id}', 'FollowerController@unfollow');
+
     $router->get('/tmdb/{query}', function($query){
         $t = new TheMovieDb();
         return $t->searchTmdb($query);
     });
 
-    $router->get('/stream/', function(){
-        $type = Input::has('type') ? Input::get('type') : 'aggregated';
-        $enricher = new Enrich();
-        $feed = FeedManager::getNewsFeeds(Auth::id())[$type];
-        $activities = $feed->getActivities(0,25)['results'];
+    $router->get('/stream/', 'StreamController@index');
 
-        if($type === 'aggregated')
-          $activities = $enricher->enrichAggregatedActivities($activities);
-        else
-          $activities = $enricher->enrichActivities($activities);
+    $router->get('/me', function(){
+      if(Auth::guest())
+        return Response::json(['response'=>'false']);
 
-        return  $activities;
+      $user = User::with('followers')->where('id',Auth::user()->id)->first();
+      return Response::json(['user'=> $user, 'response'=>'success']);
     });
 
 });
