@@ -22,11 +22,24 @@
   function($scope, streamApiService,me){
     $scope.loading = true;
     $scope.me = me;
+
+    $scope.$on('watchist::addremove', function(event, film_id) {
+
+        _.forEach($scope.feed_items, function(feed_item){
+          _.forEach(feed_item.activities, function(activity){
+            if(activity.object.film_id === film_id)
+            {
+              activity.object.on_watchlist = activity.object.on_watchlist === 'true' ? 'false' : 'true';
+            }
+            
+          })
+        })
+    });
+
     streamApiService.getAggregated()
             .then(
               function(response){
                 $scope.feed_items = response;
-                console.log(response);
                 $scope.loading = false;
             });
 

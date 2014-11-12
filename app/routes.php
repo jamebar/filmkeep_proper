@@ -134,11 +134,14 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
     $router->get('compares', 'ReviewsController@compares');
     $router->resource('review', 'ReviewsController');
     $router->resource('user', 'UsersController');
-    $router->resource('watchlist', 'WatchlistController');
+
     $router->resource('rating_types', 'RatingTypesController');
     $router->get('followers', 'FollowerController@getFollowers');
     $router->post('follow/{follower_id}', 'FollowerController@follow');
     $router->post('unfollow/{follower_id}', 'FollowerController@unfollow');
+
+    $router->get('watchlist', 'WatchlistController@index');
+    $router->post('watchlist/add-remove', 'WatchlistController@addRemove');
 
     $router->get('/tmdb/{query}', function($query){
         $t = new TheMovieDb();

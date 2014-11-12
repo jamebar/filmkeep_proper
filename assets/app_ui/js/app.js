@@ -41,8 +41,8 @@ angular.module('myApp', [
   });
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me) {
+.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService',
+    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService) {
        
         $scope.review_new = new reviewApiService();
 
@@ -80,7 +80,7 @@ angular.module('myApp', [
         }
         
         $scope.compare = function(obj){
-          console.log(obj);
+          $scope.showcompare = false;
           var modalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_compare.tmpl.html',
@@ -98,10 +98,14 @@ angular.module('myApp', [
               return review;
             })
 
+            response = _.sortBy(response, function(r) { return r.active });
+
             var me_review = _.remove(response, function(r){ return r.user_id === me.user.id});
             response.unshift(me_review[0]);
             $scope.compares = response;
 
+            $scope.showcompare = true;
+            
           });
         }
 
@@ -129,10 +133,22 @@ angular.module('myApp', [
         }
 
         $scope.toPercent = function(num){
-                return num/2000 * 100;
-            }
+            return num/2000 * 100;
+        }
 
-       
+        $scope.watchlist = function(obj)
+        {
+          //obj.on_watchlist = obj.on_watchlist === 'true' ? 'false' : 'true';
+
+          $scope.$broadcast('watchist::addremove', obj.film_id);
+
+          watchlistApiService
+            .addRemoveWatchlist(obj.film_id).then(function(response) {
+
+                console.log(response);
+                
+            });
+        }
         
     }
 ])

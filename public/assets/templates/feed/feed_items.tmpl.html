@@ -27,7 +27,7 @@
             <a ng-click="newReview(activity.object.film)" ng-if="activity.object.reviewed === 'false'">review</a>
             <a ng-click="compare(activity.object)" ng-if="activity.object.reviewed === 'true' && activity.actor.id !== me.user.id">compare</a>
             <a ng-click="editReview({review:activity.object, rating_types: rating_types_new})" ng-if="activity.actor.id === me.user.id">edit</a>
-            <a><span ng-class="{'glyphicon-plus': activity.object.on_watchlist === 'false','glyphicon-minus-sign': activity.object.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+            <a ng-click="watchlist(activity.object)"><span ng-class="{'glyphicon-plus': activity.object.on_watchlist === 'false','glyphicon-minus-sign': activity.object.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
           <span ng-if="feed_item.activity_count===1">%%activity.object.notes%%</span>
       </div>
     </div>
@@ -50,7 +50,7 @@
           <a ui-sref='root.film({filmId: feed_item.activities[0].object.film.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a>
 
           <a ng-click="newReview(activity.object.film)" ng-if="activity.object.reviewed === 'false'">Review </a>
-          <a><span ng-class="{'glyphicon-plus': activity.object.on_watchlist === 'false','glyphicon-minus-sign': activity.object.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+          <a ng-click="watchlist(activity.object)"><span ng-class="{'glyphicon-plus': activity.object.on_watchlist === 'false','glyphicon-minus-sign': activity.object.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
       </div>
     </div>
 

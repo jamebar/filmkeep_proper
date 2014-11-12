@@ -35,20 +35,79 @@ angular.module('Api', ['ngResource'])
 )
 
 .factory('watchlistApiService',
-    function($resource) {
-        return $resource(
-            '/api/watchlist/:watchlist_item_id', {}, // Query parameters
-            {
-                update: {
-                  method: 'PUT'
-                },
-                'query': {
-                    method: 'GET'
+    function($http, $q) {
+        var data;
+
+        return({
+            getWatchlist: getWatchlist,
+            addRemoveWatchlist: addRemoveWatchlist
+        });
+
+        
+
+        function getWatchlist(user_id) {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/watchlist",
+                params: {
+                    action: "get",
+                    user_id: user_id
                 }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function addRemoveWatchlist(film_id) {
+ 
+            var request = $http({
+                method: "post",
+                url: "/api/watchlist/add-remove",
+                params: {
+                    action: "post",
+                    film_id: film_id
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        // ---
+        // PRIVATE METHODS.
+        // ---
+
+
+        // I transform the error response, unwrapping the application dta from
+        // the API response payload.
+        function handleError( response ) {
+
+            // The API response from the server should be returned in a
+            // nomralized format. However, if the request was not handled by the
+            // server (or what not handles properly - ex. server error), then we
+            // may have to normalize it on our end, as best we can.
+            if (
+                ! angular.isObject( response.data ) ||
+                ! response.data.message
+                ) {
+
+                return( $q.reject( "An unknown error occurred." ) );
+
             }
-        );
-    }
-)
+
+            // Otherwise, use expected error message.
+            return( $q.reject( response.data.message ) );
+
+        }
+
+        function handleSuccess( response ) {
+            return( response.data );
+
+        }
+})
+
 
 .factory('userApiService',
     function($resource) {

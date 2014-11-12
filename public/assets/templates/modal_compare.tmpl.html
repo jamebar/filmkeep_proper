@@ -1,17 +1,20 @@
-<div class="compare-container ">
-  <ul class="compare-avatars clearfix">
-    <li ng-repeat="review in compares | limitTo: 6" ng-class="{active:review.active}"><a ng-click="review.active = !review.active"><img ng-src="%%review.user.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" width="50" height="50" /></a> %%review.user.first_name%%</li>
-  </ul>
+<div class="compare-container">
+  <div class="preloader" ng-hide="showcompare">loading <img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
+  <span ng-show="showcompare">
+    <ul class="compare-avatars clearfix">
+      <li ng-repeat="review in compares | limitTo: 6" ng-class="{active:review.active}"><a ng-click="review.active = !review.active"><img ng-src="%%review.user.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" width="50" height="50" /></a> %%review.user.first_name%%</li>
+    </ul>
 
-  <div class="clearfix">
-      <div ng-repeat="(rIndex,rating) in compares[0].ratings">
-        <p>%%rating.rating_type.label%%</p>
-        <div class="progress compare%%$index%%" ng-repeat="comp in compares | filter: {active:'true'} | limitTo:6" ng-if="comp.ratings[rIndex].rating_type_id === rating.rating_type_id">
-          <div class="progress-bar" role="progressbar"  aria-valuenow="%%comp.ratings[rIndex].value%%" aria-valuemin="0" aria-valuemax="2000" ng-style="{width: toPercent(comp.ratings[rIndex].value) + '%'}">
-            %%comp.user.first_name%%
+    <div class="clearfix">
+        <div ng-repeat="(rIndex,rating) in compares[0].ratings">
+          <p>%%rating.rating_type.label%%</p>
+          <div class="progress compare%%$index%%" ng-repeat="comp in compares | filter: {active:'true'} | limitTo:6" ng-if="comp.ratings[rIndex].rating_type_id === rating.rating_type_id">
+            <div class="progress-bar" role="progressbar"  aria-valuenow="%%comp.ratings[rIndex].value%%" aria-valuemin="0" aria-valuemax="2000" ng-style="{width: toPercent(comp.ratings[rIndex].value) + '%'}">
+              %%comp.user.first_name%%
+            </div>
           </div>
         </div>
-      </div>
+    </div>
   </div>
   
 </div>

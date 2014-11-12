@@ -19,79 +19,33 @@ class WatchlistController extends \BaseController {
 
 
 	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-
-	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function addRemove()
 	{
-    $data = [
-      'film_id' => \Input::get('film_id'),
-      'user_id' => Auth::user()->id
-    ];
+   
+    $film_id = \Input::get('film_id');
+    $user_id = \Auth::user()->id;
+    $action = 'added';
 
-    $results = Watchlist::firstOrCreate($data);
-		return $results;
+    $results = Watchlist::where('film_id', $film_id)->where('user_id', $user_id)->first();
+
+    if ( ! is_null($results))
+    {
+      $results->delete();
+      $action = 'removed';
+    }
+    else
+    {
+      $results = Watchlist::create(['user_id'=>$user_id, 'film_id'=>$film_id]);
+    }
+
+
+		return Response::json(['action'=>$action]);
 	}
 
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
 
 
 }

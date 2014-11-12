@@ -230,7 +230,7 @@ ul.compare-avatars li {
   margin-right: .5em;
 }
 ul.compare-avatars li img {
-  opacity: .6;
+  opacity: .3;
   -webkit-filter: grayscale(100%);
           filter: grayscale(100%);
   display: block;

@@ -29,14 +29,10 @@
 
   .controller('WatchlistCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
     function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
-        
-
-       
+    
         watchlistApiService
-            .query({
-                user_id: page_user.id,
-            }, function(response) {
-                console.log(response);
+            .getWatchlist(page_user.id).then(function(response) {
+
                 $scope.watchlist_items = response.results;
                 
             });

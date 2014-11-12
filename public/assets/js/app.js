@@ -41,8 +41,8 @@ angular.module('myApp', [
   });
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me) {
+.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService',
+    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService) {
        
         $scope.review_new = new reviewApiService();
 
@@ -80,7 +80,7 @@ angular.module('myApp', [
         }
         
         $scope.compare = function(obj){
-          console.log(obj);
+          $scope.showcompare = false;
           var modalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_compare.tmpl.html',
@@ -98,10 +98,14 @@ angular.module('myApp', [
               return review;
             })
 
+            response = _.sortBy(response, function(r) { return r.active });
+
             var me_review = _.remove(response, function(r){ return r.user_id === me.user.id});
             response.unshift(me_review[0]);
             $scope.compares = response;
 
+            $scope.showcompare = true;
+            
           });
         }
 
@@ -129,10 +133,22 @@ angular.module('myApp', [
         }
 
         $scope.toPercent = function(num){
-                return num/2000 * 100;
-            }
+            return num/2000 * 100;
+        }
 
-       
+        $scope.watchlist = function(obj)
+        {
+          //obj.on_watchlist = obj.on_watchlist === 'true' ? 'false' : 'true';
+
+          $scope.$broadcast('watchist::addremove', obj.film_id);
+
+          watchlistApiService
+            .addRemoveWatchlist(obj.film_id).then(function(response) {
+
+                console.log(response);
+                
+            });
+        }
         
     }
 ])
@@ -426,6 +442,89 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
+  angular.module('feed', [
+  ])
+
+.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+
+    $stateProvider.state('root.feed', {
+      url: '/feed',
+      title: 'feed',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/home.tmpl.html',
+          controller: 'feedCtrl'
+        }
+      } 
+    });
+  }])
+
+.controller('feedCtrl', ['$scope', 'streamApiService','me',
+  function($scope, streamApiService,me){
+    $scope.loading = true;
+    $scope.me = me;
+
+    $scope.$on('watchist::addremove', function(event, film_id) {
+
+        _.forEach($scope.feed_items, function(feed_item){
+          _.forEach(feed_item.activities, function(activity){
+            if(activity.object.film_id === film_id)
+            {
+              activity.object.on_watchlist = activity.object.on_watchlist === 'true' ? 'false' : 'true';
+            }
+            
+          })
+        })
+    });
+
+    streamApiService.getAggregated()
+            .then(
+              function(response){
+                $scope.feed_items = response;
+                $scope.loading = false;
+            });
+
+    $scope.toPercent = function(num){
+        return num/2000 * 100;
+    }
+  }])
+
+.directive('feedItems', [
+  function(){
+    return {
+      restrict: 'E',
+      templateUrl: '/assets/templates/feed/feed_items.tmpl.html',
+      link: function(scope,element,attr){
+
+      }
+    }
+}])
+
+.filter('fDate',function(){
+  return function(date){
+    moment.locale('en', {
+      relativeTime : {
+          future: "in %s",
+          past:   "%s ago",
+          s:  "seconds",
+          m:  "1min",
+          mm: "%dmins",
+          h:  "1h",
+          hh: "%dh",
+          d:  "1d",
+          dd: "%dd",
+          M:  "1m",
+          MM: "%dm",
+          y:  "1y",
+          yy: "%dy"
+      }
+    });
+    return moment(date).fromNow(true);
+  }
+})
+
+  'use strict';
+
   angular.module('filmkeep', ['angularUtils.directives.dirPagination'
   ])
 
@@ -550,76 +649,6 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
-  angular.module('feed', [
-  ])
-
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-
-    $stateProvider.state('root.feed', {
-      url: '/feed',
-      title: 'feed',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/home.tmpl.html',
-          controller: 'feedCtrl'
-        }
-      } 
-    });
-  }])
-
-.controller('feedCtrl', ['$scope', 'streamApiService','me',
-  function($scope, streamApiService,me){
-    $scope.loading = true;
-    $scope.me = me;
-    streamApiService.getAggregated()
-            .then(
-              function(response){
-                $scope.feed_items = response;
-                console.log(response);
-                $scope.loading = false;
-            });
-
-    $scope.toPercent = function(num){
-        return num/2000 * 100;
-    }
-  }])
-
-.directive('feedItems', [
-  function(){
-    return {
-      restrict: 'E',
-      templateUrl: '/assets/templates/feed/feed_items.tmpl.html',
-      link: function(scope,element,attr){
-
-      }
-    }
-}])
-
-.filter('fDate',function(){
-  return function(date){
-    moment.locale('en', {
-      relativeTime : {
-          future: "in %s",
-          past:   "%s ago",
-          s:  "seconds",
-          m:  "1min",
-          mm: "%dmins",
-          h:  "1h",
-          hh: "%dh",
-          d:  "1d",
-          dd: "%dd",
-          M:  "1m",
-          MM: "%dm",
-          y:  "1y",
-          yy: "%dy"
-      }
-    });
-    return moment(date).fromNow(true);
-  }
-})
-
-  'use strict';
-
   angular.module('review', [
   ])
 
@@ -695,20 +724,79 @@ angular.module('Api', ['ngResource'])
 )
 
 .factory('watchlistApiService',
-    function($resource) {
-        return $resource(
-            '/api/watchlist/:watchlist_item_id', {}, // Query parameters
-            {
-                update: {
-                  method: 'PUT'
-                },
-                'query': {
-                    method: 'GET'
+    function($http, $q) {
+        var data;
+
+        return({
+            getWatchlist: getWatchlist,
+            addRemoveWatchlist: addRemoveWatchlist
+        });
+
+        
+
+        function getWatchlist(user_id) {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/watchlist",
+                params: {
+                    action: "get",
+                    user_id: user_id
                 }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function addRemoveWatchlist(film_id) {
+ 
+            var request = $http({
+                method: "post",
+                url: "/api/watchlist/add-remove",
+                params: {
+                    action: "post",
+                    film_id: film_id
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        // ---
+        // PRIVATE METHODS.
+        // ---
+
+
+        // I transform the error response, unwrapping the application dta from
+        // the API response payload.
+        function handleError( response ) {
+
+            // The API response from the server should be returned in a
+            // nomralized format. However, if the request was not handled by the
+            // server (or what not handles properly - ex. server error), then we
+            // may have to normalize it on our end, as best we can.
+            if (
+                ! angular.isObject( response.data ) ||
+                ! response.data.message
+                ) {
+
+                return( $q.reject( "An unknown error occurred." ) );
+
             }
-        );
-    }
-)
+
+            // Otherwise, use expected error message.
+            return( $q.reject( response.data.message ) );
+
+        }
+
+        function handleSuccess( response ) {
+            return( response.data );
+
+        }
+})
+
 
 .factory('userApiService',
     function($resource) {
@@ -1134,14 +1222,10 @@ angular.module('ReviewService', ['Api'])
 
   .controller('WatchlistCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
     function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
-        
-
-       
+    
         watchlistApiService
-            .query({
-                user_id: page_user.id,
-            }, function(response) {
-                console.log(response);
+            .getWatchlist(page_user.id).then(function(response) {
+
                 $scope.watchlist_items = response.results;
                 
             });
