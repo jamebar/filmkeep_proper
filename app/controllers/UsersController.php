@@ -59,6 +59,20 @@ class UsersController extends BaseController {
 
 	}
 
+  /**
+   * Search for users.
+   *
+   * @param  string $query
+   * @return Response
+   */
+  public function search()
+  {
+      $query = \Input::get('query');
+      $users = User::where('first_name', 'LIKE', '%'.$query.'%')->orWhere('last_name', 'LIKE', '%'.$query.'%')->take(3)->get();     
+      return Response::json(['results'=>$users, 'query'=>$query]);
+
+  }
+
 
 	/**
 	 * Show the form for editing the specified resource.

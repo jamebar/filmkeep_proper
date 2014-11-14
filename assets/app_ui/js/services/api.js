@@ -119,6 +119,9 @@ angular.module('Api', ['ngResource'])
                 },
                 'query': {
                     method: 'GET'
+                },
+                'search':{
+                    method: 'GET'
                 }
             }
         );

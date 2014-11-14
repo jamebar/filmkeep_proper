@@ -132,7 +132,9 @@ Route::post('password/reset/{token}', array(
 Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
     $router->get('compares', 'ReviewsController@compares');
+    $router->get('review/search', 'ReviewsController@search');
     $router->resource('review', 'ReviewsController');
+    $router->get('user/search', 'UsersController@search');
     $router->resource('user', 'UsersController');
 
     $router->resource('rating_types', 'RatingTypesController');

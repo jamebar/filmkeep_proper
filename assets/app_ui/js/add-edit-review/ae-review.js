@@ -7,15 +7,12 @@ var aeReview = angular.module('ae-review', [
     'vr.directives.slider',
     'Api',
     'ngAnimate',
-    'siyfion.sfTypeahead',
     'ReviewService'
 ])
 
 
 .controller('addReviewCtrl', ['$q', '$scope', 'ratingTypesApiService', 'reviewApiService', 'msgBus', 'ReviewService',
     function($q, $scope, ratingTypesApiService, reviewApiService, msgBus, ReviewService) {
-
-        
 
         // msgBus.onMsg('review:new', function(event, data) {
         //     $scope.review = new reviewApiService();
@@ -30,10 +27,6 @@ var aeReview = angular.module('ae-review', [
         //   console.log(data.id);
         //   $scope.getReview(data.id);
         // }, $scope);
-
-
-
-
 
     }
 ])

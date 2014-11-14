@@ -10,11 +10,12 @@ angular.module('myApp', [
     'Api',
     'ngAnimate',
     'siyfion.sfTypeahead',
+    'search',
     'ae-review',
     'review',
     'filmkeep',
     'feed',
-    'watchlist'
+    'watchlist',
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');

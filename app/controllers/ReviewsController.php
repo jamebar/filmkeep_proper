@@ -52,6 +52,23 @@ class ReviewsController extends BaseController {
         return \Response::json(['status' => 200, 'results' => $review->get(), 'total'=>$total]);
 	}
 
+  /**
+   * Search for reviews.
+   *
+   * @param  string $query
+   * @return Response
+   */
+  public function search()
+  {
+      $query = \Input::get('query');
+      $reviews = Review::with('film','user')->whereHas('film', function($q) use ($query)
+      {
+          $q->where('title', 'LIKE', '%'.$query.'%');
+
+      })->take(3)->get();
+      return Response::json(['results'=>$reviews, 'query'=>$query]);
+  }
+
   /*
   * returns all the reviews of friends for comparison
   */
