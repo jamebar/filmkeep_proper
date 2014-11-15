@@ -4,8 +4,8 @@
   angular.module('search', [
 ])
 
-  .directive('searchz', ['$document',
-    function($document){
+  .directive('search', ['$document','$filter','$state',
+    function($document,$filter,$state){
         return {
             restrict: 'E',
             scope:{},
@@ -25,9 +25,13 @@
                         url: '/api/user/search?query=%QUERY',
                         filter: function(list) {
                             return $.map(list.results, function(data) {
+                                if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
+                                
+                                
                                 return {
                                     name: data.first_name + ' ' + data.last_name,
-                                    avatar: data.avatar
+                                    avatar: $filter('profileFilter')(data.avatar),
+                                    username: data.username
                                 };
                             });
                         }
@@ -44,8 +48,10 @@
                         filter: function(list) {
                             return $.map(list.results, function(data) {
                                 return {
-                                    title: data.title + " (" + data.release_date.substring(0, 4) + ")",
-                                    tmdb_id: data.id
+                                    title: data.title ,
+                                    tmdb_id: data.id,
+                                    poster: $filter('imageFilter')(data.poster_path,'poster',0),
+                                    release_date: data.release_date.substring(0, 4)
                                 };
                             });
                         }
@@ -78,10 +84,23 @@
                     displayKey: 'title',
                     source: films.ttAdapter(),
                     templates: {
-                      header: '<h3 class="search-title">Films</h3>'
+                      header: '<h3 class="search-title">Films</h3>',
+                      suggestion: function (context) {
+                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+'<span>'+context.release_date + '</span></div>'
+                      }
                     }
                 }
                 ]
+
+                scope.$on('typeahead:autocompleted', searchComplete);
+                scope.$on('typeahead:selected', searchComplete);
+                
+                function searchComplete(event, suggestion, dataset){
+                  if(dataset === 'people'){
+                  $state.go('root.user.filmkeep', {username: suggestion.username});
+                    
+                  }
+                }
 
                 
 

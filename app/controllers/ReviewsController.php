@@ -43,8 +43,26 @@ class ReviewsController extends BaseController {
         $offset = $num * ($page -1);
         $sortBy = \Input::has('sort_by') ? \Input::get('sort_by') : 'id';
         $sortDirection = \Input::get('sort_direction');
-		    $review = $user->reviews()->with('ratings','ratings.rating_type','film')->take($num)->offset($offset)->orderBy($sortBy, $sortDirection);
 
+        if(\Input::has('sort_by_rating_type') && \Input::get('sort_by_rating_type') !== 'null')
+        {
+          $sortByRatingType = \Input::get('sort_by_rating_type');
+		      $review = $user->reviews()
+                        ->with('ratings','ratings.rating_type','film')
+                        ->join('ratings', 'reviews.id', '=', 'ratings.review_id')
+                        ->select('ratings.*','reviews.*')
+                        ->where('rating_type_id', '=', $sortByRatingType)
+                        ->orderBy('ratings.value', $sortDirection)
+                        ->take($num)
+                        ->offset($offset);
+        }
+        else{
+          $review = $user->reviews()
+                        ->with('ratings','ratings.rating_type','film')
+                        ->take($num)
+                        ->offset($offset)
+                        ->orderBy($sortBy, $sortDirection);
+        }
         
 
         $total = $user->reviews()->count();

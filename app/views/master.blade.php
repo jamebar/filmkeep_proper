@@ -28,6 +28,7 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
       <ul class="nav navbar-nav">
         @if(Auth::check())
         <li><a href="/feed" >Feed</a></li>
@@ -62,6 +63,7 @@
         @endif
     	<div class="row">
     		<div class="col-md-12">
+          <search></search>
                @yield('content')
                 
                 <div ui-view></div>

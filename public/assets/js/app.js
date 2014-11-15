@@ -439,8 +439,8 @@ var aeReview = angular.module('ae-review', [
   angular.module('search', [
 ])
 
-  .directive('searchz', ['$document',
-    function($document){
+  .directive('search', ['$document','$filter','$state',
+    function($document,$filter,$state){
         return {
             restrict: 'E',
             scope:{},
@@ -460,9 +460,13 @@ var aeReview = angular.module('ae-review', [
                         url: '/api/user/search?query=%QUERY',
                         filter: function(list) {
                             return $.map(list.results, function(data) {
+                                if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
+                                
+                                
                                 return {
                                     name: data.first_name + ' ' + data.last_name,
-                                    avatar: data.avatar
+                                    avatar: $filter('profileFilter')(data.avatar),
+                                    username: data.username
                                 };
                             });
                         }
@@ -479,8 +483,10 @@ var aeReview = angular.module('ae-review', [
                         filter: function(list) {
                             return $.map(list.results, function(data) {
                                 return {
-                                    title: data.title + " (" + data.release_date.substring(0, 4) + ")",
-                                    tmdb_id: data.id
+                                    title: data.title ,
+                                    tmdb_id: data.id,
+                                    poster: $filter('imageFilter')(data.poster_path,'poster',0),
+                                    release_date: data.release_date.substring(0, 4)
                                 };
                             });
                         }
@@ -513,10 +519,23 @@ var aeReview = angular.module('ae-review', [
                     displayKey: 'title',
                     source: films.ttAdapter(),
                     templates: {
-                      header: '<h3 class="search-title">Films</h3>'
+                      header: '<h3 class="search-title">Films</h3>',
+                      suggestion: function (context) {
+                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+'<span>'+context.release_date + '</span></div>'
+                      }
                     }
                 }
                 ]
+
+                scope.$on('typeahead:autocompleted', searchComplete);
+                scope.$on('typeahead:selected', searchComplete);
+                
+                function searchComplete(event, suggestion, dataset){
+                  if(dataset === 'people'){
+                  $state.go('root.user.filmkeep', {username: suggestion.username});
+                    
+                  }
+                }
 
                 
 
@@ -657,14 +676,10 @@ var aeReview = angular.module('ae-review', [
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
 
-
         page_user.following = followerFactory.isFollowing(page_user);
         $scope.myPage = page_user.id === me.user.id;
         $scope.page_user = page_user; 
                 
-
-
-
         $scope.follow = function(page_user){
 
           if(page_user.following){
@@ -684,10 +699,7 @@ var aeReview = angular.module('ae-review', [
 
           }
 
-
         }
-
-        
 
     }]) 
 
@@ -695,7 +707,10 @@ var aeReview = angular.module('ae-review', [
     function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
-        $scope.reviews_per_page = 10; // this should match however many results your API puts on one page
+        $scope.reviews_per_page = 20; // this should match however many results your API puts on one page
+        
+        $scope.sort_by = 'created_at'
+        $scope.sort_by_rating_type = 'null';
         getResultsPage(1);
 
         ReviewService.getRatingTypes().then(function(response){
@@ -711,14 +726,24 @@ var aeReview = angular.module('ae-review', [
             getResultsPage(newPage);
         };
 
-        
+        $scope.sortByRatingType = function(type_id){
+          $scope.sort_by_rating_type = type_id;
+          // getResultsPage(1);
+          if($scope.pagination.current === 1)
+            getResultsPage(1);
+          else
+            $scope.pagination.current = 1;
+          
+        }
 
         function getResultsPage(pageNumber) {
           reviewApiService
               .query({
                   num: $scope.reviews_per_page,
                   page: pageNumber,
-                  username:$stateParams.username
+                  username: $stateParams.username,
+                  sort_by: $scope.sort_by,
+                  sort_by_rating_type: $scope.sort_by_rating_type
               }, function(response) {
                   $scope.total_reviews = response.total;
                   $scope.user_reviews = response.results;
@@ -1296,16 +1321,7 @@ angular.module('ReviewService', ['Api'])
           controller: 'WatchlistCtrl'
         }
       },
-      resolve: {
-        page_user: function(userApiService, $stateParams, $q){
-          var deferred = $q.defer();
-          userApiService
-            .get({user_id:$stateParams.username,username:true}, function(response){
-              deferred.resolve(response);
-            });
-          return deferred.promise;
-        }
-      }
+      
     });
   }])
 

@@ -47,14 +47,10 @@
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
 
-
         page_user.following = followerFactory.isFollowing(page_user);
         $scope.myPage = page_user.id === me.user.id;
         $scope.page_user = page_user; 
                 
-
-
-
         $scope.follow = function(page_user){
 
           if(page_user.following){
@@ -74,10 +70,7 @@
 
           }
 
-
         }
-
-        
 
     }]) 
 
@@ -85,7 +78,10 @@
     function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
-        $scope.reviews_per_page = 10; // this should match however many results your API puts on one page
+        $scope.reviews_per_page = 20; // this should match however many results your API puts on one page
+        
+        $scope.sort_by = 'created_at'
+        $scope.sort_by_rating_type = 'null';
         getResultsPage(1);
 
         ReviewService.getRatingTypes().then(function(response){
@@ -101,14 +97,24 @@
             getResultsPage(newPage);
         };
 
-        
+        $scope.sortByRatingType = function(type_id){
+          $scope.sort_by_rating_type = type_id;
+          // getResultsPage(1);
+          if($scope.pagination.current === 1)
+            getResultsPage(1);
+          else
+            $scope.pagination.current = 1;
+          
+        }
 
         function getResultsPage(pageNumber) {
           reviewApiService
               .query({
                   num: $scope.reviews_per_page,
                   page: pageNumber,
-                  username:$stateParams.username
+                  username: $stateParams.username,
+                  sort_by: $scope.sort_by,
+                  sort_by_rating_type: $scope.sort_by_rating_type
               }, function(response) {
                   $scope.total_reviews = response.total;
                   $scope.user_reviews = response.results;
