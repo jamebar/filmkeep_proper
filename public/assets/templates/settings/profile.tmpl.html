@@ -1,0 +1,53 @@
+<form ng-submit="saveUser()" class="user-form form-horizontal" name="userform">
+    <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+    <input style="display:none" type="text" name="fakeusernameremembered"/>
+    <input style="display:none" type="password" name="fakepasswordremembered"/>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">first name</label>
+                <div class="col-sm-10">              
+                  <input class="form-control" name="first_name" ng-model="current_user.first_name" placeholder="first name" required/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">last name</label>
+                <div class="col-sm-10">
+                  <input class="form-control" name="last_name" ng-model="current_user.last_name" placeholder="last name" required/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">username</label>
+                <div class="col-sm-10">
+                  <input class="form-control" name="username" ng-model="current_user.username" placeholder="username" required/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">email</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="email" name="email" ng-model="current_user.email" placeholder="email" required/>
+                </div>
+            </div>
+
+            
+            <div class="form-group">
+                <label class="col-sm-2 control-label">password name</label>
+                <div class="col-sm-10">
+                  <input class="form-control" type="password" id="pw1" name="password" ng-model="current_user.password" placeholder="password" ng-minlength=8 />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">password confirmation</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="password"  id='pw2' name="passwordConfirmation" ng-model="current_user.passwordConfirmation" ng-minlength=8 pw-check="pw1" placeholder="password confirmation" />
+                   <div class="msg-block" ng-show="userform.$error"><span class="msg-error" ng-show="userform.passwordConfirmation.$error.pwmatch">
+                      Passwords don't match.
+                  </span></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-submit" value="Save" />
+            </div>
+        </div>
+    </div>
+</form>

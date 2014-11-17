@@ -46,7 +46,7 @@ var aeReview = angular.module('ae-review', [
                 scope.show_hint = false;
                 scope.left = "";
                 scope.right = "";
-                scope.relation_top = window.event.clientY;
+                // scope.relation_top = window.event.clientY;
                 scope.ae_button_label = scope.review.id ? "Update" : "Add";
                 
                 

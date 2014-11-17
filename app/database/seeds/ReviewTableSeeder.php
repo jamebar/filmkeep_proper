@@ -34,6 +34,29 @@ class ReviewTableSeeder extends Seeder {
       }
 
     }
+
+    foreach(Film::all() as $film)
+    {
+      $review = Review::create(array(
+        'film_id' => $film->id,
+        'user_id' => 1,
+        'notes' => $faker->text,
+        'seen_at'=> $faker->iso8601('now'),
+      ));
+
+
+      foreach(Rating_type::all() as $rating_type)
+      {
+        $r = new Rating([
+            'rating_type_id' => $rating_type->id,
+            'value'=> $faker->numberBetween(1,2000)
+            ]);
+
+        $review->ratings()->save($r);
+      }
+
+    }
+
   }
  
 }

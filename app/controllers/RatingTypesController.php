@@ -1,6 +1,7 @@
 <?php 
 
 use Filmkeep\Rating_type;
+use Filmkeep\User;
 
 class RatingTypesController extends BaseController{
 
@@ -39,7 +40,11 @@ class RatingTypesController extends BaseController{
 	 */
 	public function store()
 	{
-		//
+    $user = User::find(Auth::user()->id);
+
+    $type = new Rating_type(['label'=> Input::get('label')]);
+    return $user->rating_types()->save($type);
+
 	}
 
 	/**
@@ -83,7 +88,13 @@ class RatingTypesController extends BaseController{
 	 */
 	public function destroy($id)
 	{
-		//
+		Rating_type::where('id', $id)->where('user_id', Auth::user()->id)->first()->delete();
+
+    $rating_types = Rating_type::where('user_id', 0)->orWhere('user_id', Auth::user()->id);
+
+    return \Response::json(['status' => 200, 'results'=>$rating_types->get()]);
+
+    //and delete all ratings that have to do with it
 	}
 
 }

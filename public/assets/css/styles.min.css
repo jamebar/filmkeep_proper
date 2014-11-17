@@ -189,6 +189,9 @@ ul.filmkeep-list li {
   width: 150px;
   height: 250px;
 }
+ul.filmkeep-list li img {
+  width: 100%;
+}
 .feed-item {
   margin-top: 1em;
   padding-left: 60px;

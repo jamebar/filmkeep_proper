@@ -38,7 +38,7 @@
     <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" />
     <span class="feed-date pull-right">%%feed_item.created_at | fDate %%</span>
     <span class="feed-actor">
-        <a ui-sref='root.user({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.first_name%% %%feed_item.activities[0].actor.last_name%%</a>
+        <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.first_name%% %%feed_item.activities[0].actor.last_name%%</a>
     </span>
     %% feed_item.verb | verb %%
     <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span>

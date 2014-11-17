@@ -20,8 +20,9 @@
         page_user: function(userApiService, $stateParams, $q){
           var deferred = $q.defer();
           userApiService
-            .get({user_id:$stateParams.username,username:true}, function(response){
+            .get({id:$stateParams.username,username:true}, function(response){
               deferred.resolve(response);
+
             });
           return deferred.promise;
         }

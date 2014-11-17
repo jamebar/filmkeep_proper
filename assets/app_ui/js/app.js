@@ -16,6 +16,8 @@ angular.module('myApp', [
     'filmkeep',
     'feed',
     'watchlist',
+    'settings',
+    'AlertBox'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -54,7 +56,7 @@ angular.module('myApp', [
       
         $scope.getReview = function(review) {
             if (typeof review === 'object') {
-                console.log('didnt make api call');
+                // console.log('didnt make api call');
                 $scope.review = review.review;
                 $scope.rating_types = review.rating_types;
                 showModal();
@@ -126,7 +128,7 @@ angular.module('myApp', [
             });
 
             if (typeof film === 'object') {
-              console.log(film);
+              // console.log(film);
               $scope.review.film = film;
             }
             showModal();
@@ -146,7 +148,7 @@ angular.module('myApp', [
           watchlistApiService
             .addRemoveWatchlist(obj.film_id).then(function(response) {
 
-                console.log(response);
+                // console.log(response);
                 
             });
         }
@@ -177,7 +179,7 @@ angular.module('myApp', [
     var me = meApiService.meData();
     
     var t = _.find(me.user.followers, {'id': user.id}) ? true : false;
-    console.log('me',me, 'user id', user.id, 'results',t);
+    // console.log('me',me, 'user id', user.id, 'results',t);
     return t;
   }
 

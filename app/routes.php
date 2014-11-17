@@ -31,8 +31,8 @@ Route::get('/test', function(){
   // $user_feed_1 = $client->feed('user:101');
   // $user_feed_1->removeActivity("0c846400-6713-11e4-8080-80012c455820");
 
-  // $user_feed_1 = $client->feed('user:101');
-
+//   $user_feed_1 = $client->feed('user:101');
+// return $user_feed_1.following(0, 10);
   // $data = [
   //     "actor"=>"101",
   //     "verb"=>"review",

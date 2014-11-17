@@ -16,6 +16,8 @@ angular.module('myApp', [
     'filmkeep',
     'feed',
     'watchlist',
+    'settings',
+    'AlertBox'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -54,7 +56,7 @@ angular.module('myApp', [
       
         $scope.getReview = function(review) {
             if (typeof review === 'object') {
-                console.log('didnt make api call');
+                // console.log('didnt make api call');
                 $scope.review = review.review;
                 $scope.rating_types = review.rating_types;
                 showModal();
@@ -126,7 +128,7 @@ angular.module('myApp', [
             });
 
             if (typeof film === 'object') {
-              console.log(film);
+              // console.log(film);
               $scope.review.film = film;
             }
             showModal();
@@ -146,7 +148,7 @@ angular.module('myApp', [
           watchlistApiService
             .addRemoveWatchlist(obj.film_id).then(function(response) {
 
-                console.log(response);
+                // console.log(response);
                 
             });
         }
@@ -177,7 +179,7 @@ angular.module('myApp', [
     var me = meApiService.meData();
     
     var t = _.find(me.user.followers, {'id': user.id}) ? true : false;
-    console.log('me',me, 'user id', user.id, 'results',t);
+    // console.log('me',me, 'user id', user.id, 'results',t);
     return t;
   }
 
@@ -267,7 +269,7 @@ var aeReview = angular.module('ae-review', [
                 scope.show_hint = false;
                 scope.left = "";
                 scope.right = "";
-                scope.relation_top = window.event.clientY;
+                // scope.relation_top = window.event.clientY;
                 scope.ae_button_label = scope.review.id ? "Update" : "Add";
                 
                 
@@ -532,7 +534,7 @@ var aeReview = angular.module('ae-review', [
                 
                 function searchComplete(event, suggestion, dataset){
                   if(dataset === 'people'){
-                  $state.go('root.user.filmkeep', {username: suggestion.username});
+                    $state.go('root.user.filmkeep', {username: suggestion.username});
                     
                   }
                 }
@@ -649,8 +651,9 @@ var aeReview = angular.module('ae-review', [
         page_user: function(userApiService, $stateParams, $q){
           var deferred = $q.defer();
           userApiService
-            .get({user_id:$stateParams.username,username:true}, function(response){
+            .get({id:$stateParams.username,username:true}, function(response){
               deferred.resolve(response);
+
             });
           return deferred.promise;
         }
@@ -757,6 +760,79 @@ var aeReview = angular.module('ae-review', [
   
   ;
 
+angular.module('AlertBox', [])
+    .service('AlertService', [ '$timeout', function($timeout) {
+
+        this.delay = 4000;
+        
+        this.alerts = [];
+        this.warnings = [];
+        this.notices = []
+
+        this.setCloseDelay = function(delay) {
+            this.delay = delay;
+        }
+        
+        this.removeMessage = function(msgType, message, delay) {
+            var tracked = this[msgType + 's'];
+            if (angular.isDefined(delay)) {
+                $timeout(
+                    function() {
+                        var index = tracked.indexOf(message);
+                        if (index > -1) {
+                            tracked.splice(index,1);
+                        }
+                    }, 
+                    this.delay
+                );
+            } else {
+                var index = tracked.indexOf(message);
+                if (index > -1) {
+                    tracked.splice(index,1);
+                }
+            }
+        };
+        
+        this.Message = function(msgType, message) {
+            var key = msgType + 's';
+            this[key].push(message);
+            this.removeMessage(msgType, message, this.delay);
+        };
+        
+        this.Alert = function(message) { this.Message('alert', message); }
+        this.Warning = function(message) { this.Message('warning', message); }
+        this.Notice = function(message) { this.Message('notice', message); }
+
+    } ] )
+    .directive('alertBox', [ 'AlertService', function(AlertService) {
+        return {
+            restrict: 'E',
+            
+            compile: function(element, attrs) {
+                attrs.boxClass = attrs.boxClass || "alert-box";
+                attrs.alertClass = attrs.alertClass || "alert";
+                attrs.noticeClass = attrs.noticeClass || "alert-success";
+                attrs.warningClass = attrs.warningClass || "alert-warning";
+            },
+            
+            scope: {
+                alertClass : "@",
+                warningClass : "@",
+                noticeClass : "@",
+                boxClass : "@"
+            },
+            
+            controller: function($scope) {
+                $scope.alerts = AlertService.alerts;
+                $scope.warnings = AlertService.warnings;
+                $scope.notices = AlertService.notices;
+            },
+            template:  '<div ng-repeat="alert in alerts track by $index" ng-class="[boxClass, alertClass]">{{alert}}</div> \
+                        <div ng-repeat="warning in warnings track by $index" ng-class="[boxClass, warningClass]">{{warning}}</div> \
+                        <div ng-repeat="notice in notices track by $index" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
+        };
+
+    } ] );
 
   'use strict';
 
@@ -821,10 +897,15 @@ angular.module('Api', ['ngResource'])
 .factory('ratingTypesApiService',
     function($resource) {
         return $resource(
-            '/api/rating_types', {}, // Query parameters
+            '/api/rating_types/:id', {}, // Query parameters
             {
-                update: {
-                  method: 'PUT'
+                'update': {
+                  method: 'PUT', 
+                  params: {id: '@id'},
+                },
+                'delete': {
+                  method: 'DELETE', 
+                  params: {id: '@id'},
                 },
                 'query': {
                     method: 'GET'
@@ -912,10 +993,11 @@ angular.module('Api', ['ngResource'])
 .factory('userApiService',
     function($resource) {
         return $resource(
-            '/api/user/:user_id', {}, // Query parameters
+            '/api/user/:id', {}, // Query parameters
             {
-                update: {
-                  method: 'PUT'
+                'update': {
+                  method: 'PUT', 
+                  params: {id: '@id'},
                 },
                 'query': {
                     method: 'GET'
@@ -1245,6 +1327,10 @@ angular.module('ReviewService', ['Api'])
             
             return types_deferred.promise;
         }
+        Review.setRatingTypes = function(types){
+            // console.log('types deffere', types_deferred)
+            types_deferred.resolve(types);
+        }
 
         Review.getReviews = function(){
             return reviews_deferred.promise;
@@ -1305,6 +1391,153 @@ angular.module('ReviewService', ['Api'])
 
 
 ]);
+
+  'use strict';
+
+  angular.module('settings', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.settings', {
+      abstract: true,
+      url: '/settings',
+      title: 'Settings',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/settings/settings.tmpl.html',
+          controller: 'settingsCtrl'
+        }
+      },
+    });
+
+    $stateProvider.state('root.settings.profile', {
+      url: '/profile',
+      title: 'Settings - profile',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/settings/profile.tmpl.html',
+          controller: 'settingsProfileCtrl'
+        }
+      },
+    });
+    $stateProvider.state('root.settings.filmeters', {
+      url: '/filmeters',
+      title: 'Settings - filmeters',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/settings/filmeters.tmpl.html',
+          controller: 'settingsFilmetersCtrl'
+        }
+      },
+    });
+    $stateProvider.state('root.settings.invites', {
+      url: '/invites',
+      title: 'Settings - invites',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/settings/invites.tmpl.html',
+          controller: 'settingsInvitesCtrl'
+        }
+      },
+    });
+
+  }])
+
+  .controller('settingsCtrl', ['$scope','me','userApiService','AlertService','$state',
+    function ($scope, me,userApiService,AlertService,$state) {
+      $scope.tabs = [
+        {title: 'Profile', state:'root.settings.profile', active:false},
+        {title: 'Filmeters', state:'root.settings.filmeters', active:false},
+        {title: 'Invites', state:'root.settings.invites', active:false}
+      ];
+
+      _.forEach($scope.tabs, function(tab){
+        if($state.includes(tab.state))
+          tab.active = true;
+      });
+
+      $scope.gotoTab = function(dest){
+        $state.go(dest);
+      }
+
+  }]) 
+
+  .controller('settingsProfileCtrl', ['$scope','me','userApiService','AlertService',
+    function ($scope, me,userApiService,AlertService) {
+        $scope.current_user = new userApiService();
+        _.assign($scope.current_user, me.user);
+
+        $scope.saveUser = function(){
+          $scope.current_user.$update(function(response){
+              AlertService.Notice("Your changes have been saved");
+              _.assign(me.user, response);
+          },function(response_headers){
+              AlertService.Warning(response_headers.data);
+          });
+        }
+
+  }]) 
+
+  .controller('settingsInvitesCtrl', ['$scope','me','userApiService','AlertService',
+    function ($scope, me,userApiService,AlertService) {
+
+  }]) 
+
+  .controller('settingsFilmetersCtrl', ['$scope','me','userApiService','AlertService','ratingTypesApiService','ReviewService',
+    function ($scope, me,userApiService,AlertService,ratingTypesApiService,ReviewService) {
+        $scope.newcriteria = new ratingTypesApiService();
+        ReviewService.getRatingTypes().then(function(results){
+          $scope.types = results;
+            
+        });
+
+        $scope.filterCommon = function(element) {
+          return element.user_id === 0 ? true : false;
+        };
+
+        $scope.filterCustom = function(element) {
+          return element.user_id !== 0 ? true : false;
+        };
+
+        $scope.saveFilmeter = function(){
+          $scope.newcriteria.$save(function(response){
+            $scope.types.push(response);
+            $scope.newcriteria = new ratingTypesApiService();
+
+          });
+        }
+
+        $scope.deleteFilmeter = function(meter){
+          var filmeter = new ratingTypesApiService();
+        
+          filmeter.id = meter.id;
+          filmeter.$delete(function(response){
+            $scope.types  = response.results;
+
+          });
+        }
+
+  }]) 
+
+  .directive('pwCheck', [function () {
+        return {
+            require: 'ngModel',
+            link: function (scope, elem, attrs, ctrl) {
+                var firstPassword = '#' + attrs.pwCheck;
+                elem.add(firstPassword).on('keyup', function () {
+                    scope.$apply(function () {
+                        var v = elem.val()===$(firstPassword).val();
+                        ctrl.$setValidity('pwmatch', v);
+                    });
+                });
+            }
+        }
+    }])
+   
+
+  
+  ;
+
 
   'use strict';
 

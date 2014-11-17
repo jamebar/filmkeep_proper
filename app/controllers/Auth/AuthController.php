@@ -248,18 +248,29 @@ class AuthController  extends \BaseController{
       ->withInput( \Input::except( 'password' ) );
     } else {
 
-      $user = User::where( 'email' , Input::get( 'email' ) )->first();
+      $user = \User::where( 'email' , \Input::get( 'email' ) )->first();
 
       if ( !$user ) {
-        // store
-        $user = new User;
-        $user->name       = \Input::get( 'fullname' );
+        // store\
+        $name = explode(" ", \Input::get( 'fullname' ));
+        $user = new \User;
+        $user->first_name       = $name[0];
+        $user->last_name       = isset($name[1]) ? $name[1] : '' ;
         $user->email      = \Input::get( 'email' );
-        $user->password = Hash::make( \Input::get( 'password' ) );
+        $user->password = \Hash::make( \Input::get( 'password' ) );
         $user->save();
 
-        //append id to username to assure it's unique
-        $user->username = $user->name . "_" . $user->id;
+
+        //search for username to assure uniqueness
+        $possibleUsername = strtolower($user->first_name . $user->last_name);
+        $searchUser = \User::where('username', $possibleUsername)->first();
+
+        if(is_null($searchUser)){
+          $user->username = $possibleUsername;
+        }else{
+          //append id to username to assure it's unique
+          $user->username = $possibleUsername . $user->id;
+        }
         $user->save();
 
         \Auth::login( $user );

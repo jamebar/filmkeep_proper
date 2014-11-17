@@ -16,7 +16,7 @@ class CreateRatingsTable extends Migration {
 		{
 			$table->increments('id');
             $table->integer('rating_type_id')->unsigned();
-            $table->foreign('rating_type_id')->references('id')->on('rating_types');
+            $table->foreign('rating_type_id')->references('id')->on('rating_types')->onDelete('cascade');
             $table->integer('review_id')->unsigned();
             $table->foreign('review_id')->references('id')->on('reviews');
             $table->float('value');

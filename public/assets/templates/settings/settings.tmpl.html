@@ -1,0 +1,10 @@
+Settings
+<tabset >
+  <tab ng-repeat="tab in tabs" ng-click="gotoTab(tab.state)" heading="%%tab.title%%" active="tab.active" disabled="tab.disabled">
+    </tab>
+  <!-- <tab heading="Profile" ng-click="gotoTab('root.settings.profile')" active="profile"></tab>
+  <tab heading="Custom Filmeters" ng-click="gotoTab('root.settings.filmeters')" active="filmeters"></tab>
+  <tab heading="Invites" ng-click="gotoTab('root.settings.invites')" active="invites"></tab> -->
+</tabset>
+<div ui-view="page-child"></div>
+

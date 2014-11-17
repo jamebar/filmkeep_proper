@@ -31,7 +31,7 @@
 
       <ul class="nav navbar-nav">
         @if(Auth::check())
-        <li><a href="/feed" >Feed</a></li>
+        <li><a ui-sref='root.feed'>Feed</a></li>
         <li><a ui-sref='root.user.filmkeep({username: "{{Auth::user()->username}}" })'  >My Filmkeep</a></li>
         @endif
       </ul>
@@ -43,9 +43,9 @@
         @endif
         @if(Auth::check())
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img ng-src="%%'{{Auth::user()->avatar}}' | profileFilter%%" width="30" height="30"/></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img ng-src="%%'{{Auth::user()->avatar}}' | profileFilter%%" width="30" height="30" onerror="this.src = '/assets/img/default-profile.jpg';"/></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href=""><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+            <li><a ui-sref="root.settings.profile"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
             <li class="divider"></li>
             
             <li><a href="/user/logout" target="_self">Logout</a></li>
@@ -58,9 +58,12 @@
   </div><!-- /.container-fluid -->
 </nav>
     <div class="container-fluid">
+      <!--Error messages from backend pages -->
     	@if (Session::has('message'))
             <div id="flash_notice" data-alert data-options="animation_speed:500;" class="alert-box ">{{ Session::get('message') }} <a href="#" class="close">&times;</a></div>
         @endif
+      <!--Error messages from angular -->
+      <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>
     	<div class="row">
     		<div class="col-md-12">
           <search></search>

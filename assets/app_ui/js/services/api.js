@@ -21,10 +21,15 @@ angular.module('Api', ['ngResource'])
 .factory('ratingTypesApiService',
     function($resource) {
         return $resource(
-            '/api/rating_types', {}, // Query parameters
+            '/api/rating_types/:id', {}, // Query parameters
             {
-                update: {
-                  method: 'PUT'
+                'update': {
+                  method: 'PUT', 
+                  params: {id: '@id'},
+                },
+                'delete': {
+                  method: 'DELETE', 
+                  params: {id: '@id'},
                 },
                 'query': {
                     method: 'GET'
@@ -112,10 +117,11 @@ angular.module('Api', ['ngResource'])
 .factory('userApiService',
     function($resource) {
         return $resource(
-            '/api/user/:user_id', {}, // Query parameters
+            '/api/user/:id', {}, // Query parameters
             {
-                update: {
-                  method: 'PUT'
+                'update': {
+                  method: 'PUT', 
+                  params: {id: '@id'},
                 },
                 'query': {
                     method: 'GET'

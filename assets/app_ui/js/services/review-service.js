@@ -32,6 +32,10 @@ angular.module('ReviewService', ['Api'])
             
             return types_deferred.promise;
         }
+        Review.setRatingTypes = function(types){
+            // console.log('types deffere', types_deferred)
+            types_deferred.resolve(types);
+        }
 
         Review.getReviews = function(){
             return reviews_deferred.promise;

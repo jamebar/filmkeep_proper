@@ -34,7 +34,7 @@ class UsersController extends BaseController {
 	 */
 	public function store()
 	{
-		//
+		return Response::json(['results'=>'store']);
 	}
 
 
@@ -94,7 +94,28 @@ class UsersController extends BaseController {
 	 */
 	public function update($id)
 	{
-		//
+    $rules = array(
+      'email' => 'required|unique:users,email,' . Input::get('id'),
+      'username' => 'required|unique:users,username,' . Input::get('id')
+      );
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails())
+    {
+      return Response::make($validator->messages(), 400);
+      
+    }
+    $user = User::find( Auth::user()->id);
+    $user->email = Input::get('email');
+    $user->username = Input::get('username');
+    $user->first_name = Input::get('first_name');
+    $user->last_name = Input::get('last_name');
+
+    if(\Input::has('password'))
+      $user->password = Hash::make(Input::get('password'));
+
+    $user->save();
+
+    return Response::json($user);
 	}
 
 
