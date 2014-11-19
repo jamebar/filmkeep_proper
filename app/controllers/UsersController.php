@@ -49,11 +49,11 @@ class UsersController extends BaseController {
 
     if(\Input::has('username'))
     {
-      $user = User::with('followers')->where('username', $id)->first();
+      $user = User::with('followers')->where('username', $id)->select(array('id', 'username','first_name','last_name','avatar'))->first();
       $user->total_followers = Follower::where('follower_id', $user->id)->count();
       return $user;
     }
-		  
+
 
     return User::with('followers')->find($id);
 

@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav navbar-right">
         
         @if(!Auth::check())
-        <li><a href="/user/login" target="_self" class="btn">Log in</a></li>
+        <li><a href="/users/login" target="_self" class="btn">Log in</a></li>
         @endif
         @if(Auth::check())
         <li class="dropdown">
@@ -48,7 +48,7 @@
             <li><a ui-sref="root.settings.profile"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
             <li class="divider"></li>
             
-            <li><a href="/user/logout" target="_self">Logout</a></li>
+            <li><a href="/users/logout" target="_self">Logout</a></li>
             
           </ul>
         </li>

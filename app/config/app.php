@@ -125,6 +125,7 @@ return array(
     'Artdarek\OAuth\OAuthServiceProvider',
     'Laracasts\Validation\ValidationServiceProvider',
     'GetStream\StreamLaravel\StreamLaravelServiceProvider',
+    'Zizaco\Confide\ServiceProvider',
 
 	),
 
@@ -195,6 +196,7 @@ return array(
 
     'OAuth'           => 'Artdarek\OAuth\Facade\OAuth',
     'FeedManager'     => 'GetStream\StreamLaravel\Facades\FeedManager',
+    'Confide'         => 'Zizaco\Confide\Facade',
 
 	),
 

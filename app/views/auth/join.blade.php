@@ -25,9 +25,7 @@
                 <h3>Join with social</h3>
                 <p>To get the most out of Filmkeep, connect with your social media account.</p>
                 <hr>
-                 <p><a class="button fb-btn  small-12" target="_self" href="{{ route('facebooklogin') }}"><i class="fi-social-facebook"></i> Join with facebook</a>
-                 <a class="button google-btn  small-12" target="_self" href="{{ route('googlelogin') }}"><i class="fi-social-google-plus"></i> Join with google</a></p>
-                 
+                 <p>
             </div>
            <hr>
             <div id="join-email">
@@ -38,33 +36,49 @@
                 <p>{{ $message }}</p>
                 @endforeach
 
-                {{ Form::open(array('route'=>'join')) }}
+                <form method="POST" action="{{{ URL::to('users') }}}" accept-charset="UTF-8">
+                    <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input class="form-control" placeholder="Name" type="text" name="name" id="name" value="{{{ Input::old('name') }}}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">{{{ Lang::get('confide::confide.e_mail') }}} <small>{{ Lang::get('confide::confide.signup.confirmation_required') }}</small></label>
+                            <input class="form-control" placeholder="{{{ Lang::get('confide::confide.e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">{{{ Lang::get('confide::confide.password') }}}</label>
+                            <input class="form-control" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
+                        </div>
+                        <div class="form-group">
+                            <label for="password_confirmation">{{{ Lang::get('confide::confide.password_confirmation') }}}</label>
+                            <input class="form-control" placeholder="{{{ Lang::get('confide::confide.password_confirmation') }}}" type="password" name="password_confirmation" id="password_confirmation">
+                        </div>
 
-                <!-- fullname field -->
-                <p>
-                    
-                    {{ Form::text('fullname', '' , array('placeholder' => 'First and last name') ) }}
-                </p>
+                        @if (Session::get('error'))
+                            <div class="alert alert-error alert-danger">
+                                @if (is_array(Session::get('error')))
+                                    {{ head(Session::get('error')) }}
+                                @endif
+                            </div>
+                        @endif
 
-                <!-- email field -->
-                <p>
-                    
-                    {{ Form::text('email', '' , array('placeholder' => 'Email') ) }}
-                </p>
+                        @if (Session::get('notice'))
+                            <div class="alert">{{ Session::get('notice') }}</div>
+                        @endif
 
-                <!-- password field -->
-                <p>
-                    
-                    {{ Form::password('password',  array('placeholder' => 'password')) }}
-                </p>
+                        <div class="form-actions form-group">
+                          <button type="submit" class="btn btn-primary">{{{ Lang::get('confide::confide.signup.submit') }}}</button>
+                        </div>
 
-                <!-- submit button -->
-                <p>{{ Form::submit('Create Account', $attributes = array('class' => 'button small-12')) }}</p>
+                    </fieldset>
+                </form>
 
-                {{ Form::close() }}
 
                 <p>By creating an account, I accept Filmkeep's Terms of Service and Privacy Policy.</p>
                 <p>Already a member? <a href="{{ route('login') }}" target="_self">Sign in here</a></p>
-              </div> 
+            </div> 
        
 @stop

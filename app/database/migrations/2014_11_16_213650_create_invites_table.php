@@ -15,11 +15,9 @@ class CreateInvitesTable extends Migration {
 		Schema::create('invites', function(Blueprint $table)
     {
       $table->increments('id');
-      $table->integer('referrer_user_id');
-      $table->integer('redeemer_user_id');
-      $table->string('email');
       $table->string('code');
-      $table->tinyInteger('redeemed');
+      $table->string('email');
+      $table->timestamp('claimed_at')->nullable();
       $table->timestamps();
     });
 	}

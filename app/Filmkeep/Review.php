@@ -13,7 +13,7 @@ class Review extends \Eloquent {
     }
 
     public function user(){
-        return $this->belongsTo('Filmkeep\User');
+        return $this->belongsTo('Filmkeep\User')->select(array('id', 'username','name','avatar'));
     }
 
     public function ratings(){

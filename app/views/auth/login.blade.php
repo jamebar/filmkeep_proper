@@ -13,29 +13,42 @@
 <h3>Member Sign-in</h3>
        
     <hr>
-    <p><a class="button fb-btn medium-12 small-12" target="_self" href="{{ route('facebooklogin') }}"><i class="fi-social-facebook"></i> Login with facebook</a>
 
-    <a class="button google-btn medium-12 small-12" target="_self" href="{{ route('googlelogin') }}"><i class="fi-social-google-plus"></i> Login with google</a></p>
     <hr>
 
-    {{ Form::open(array('route'=>'login')) }}
+   <form role="form" method="POST" action="{{{ URL::to('/users/login') }}}" accept-charset="UTF-8">
+      <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
+      <fieldset>
+          <div class="form-group">
+              <label for="email">{{{ Lang::get('confide::confide.username_e_mail') }}}</label>
+              <input class="form-control" tabindex="1" placeholder="{{{ Lang::get('confide::confide.username_e_mail') }}}" type="text" name="email" id="email" value="{{{ Input::old('email') }}}">
+          </div>
+          <div class="form-group">
+          <label for="password">
+              {{{ Lang::get('confide::confide.password') }}}
+          </label>
+          <input class="form-control" tabindex="2" placeholder="{{{ Lang::get('confide::confide.password') }}}" type="password" name="password" id="password">
+         
+          </div>
+          <div class="checkbox">
+              <label for="remember">
+                  <input type="hidden" name="remember" value="0">
+                  <input tabindex="4" type="checkbox" name="remember" id="remember" value="1"> {{{ Lang::get('confide::confide.login.remember') }}}
+              </label>
+          </div>
+          @if (Session::get('error'))
+              <div class="alert alert-error alert-danger">{{{ Session::get('error') }}}</div>
+          @endif
 
-    <!-- username field -->
-    <p>
-        
-        {{ Form::text('email', '' , array('placeholder' => 'email' ) ) }}
-    </p>
+          @if (Session::get('notice'))
+              <div class="alert">{{{ Session::get('notice') }}}</div>
+          @endif
+          <div class="form-group">
+              <button tabindex="3" type="submit" class="btn btn-default">{{{ Lang::get('confide::confide.login.submit') }}}</button>
+          </div>
+      </fieldset>
+  </form>
 
-    <!-- password field -->
-    <p>
-        
-        {{ Form::password('password',  array('placeholder' => 'password') ) }}
-    </p>
-
-    <!-- submit button -->
-    <p>{{ Form::submit('Login', $attributes = array('class' => 'button small-12')) }}</p>
-
-    {{ Form::close() }}
     <p> <a href="{{ route('password.remind') }}" target="_self" class="">Forgot your password?</a></p>
     <p>Don't have an account yet? <a href="{{ route('join') }}"  target="_self" class="">Signup</a></p>
            

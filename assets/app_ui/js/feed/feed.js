@@ -18,10 +18,16 @@
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'streamApiService','me',
-  function($scope, streamApiService,me){
+.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService',
+  function($scope, streamApiService,me,ReviewService,reviewApiService){
     $scope.loading = true;
     $scope.me = me;
+    $scope.review_new = new reviewApiService();
+
+    ReviewService.getRatingTypes().then(function(results){
+      $scope.rating_types_new = results;
+        
+    });
 
     $scope.$on('watchist::addremove', function(event, film_id) {
 

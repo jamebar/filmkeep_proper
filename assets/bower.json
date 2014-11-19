@@ -24,6 +24,7 @@
     "typeahead.js": "~0.10.5",
     "angular-typeahead": "~0.2.1",
     "moment": "~2.8.3",
-    "angular-utils-pagination": "~0.3.1"
+    "angular-utils-pagination": "~0.3.1",
+    "angular-confirm-click": "~0.0.4"
   }
 }

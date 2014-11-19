@@ -44,85 +44,18 @@ Route::get('/test', function(){
 });
 
 
+// Confide routes
+Route::get('users/create', ['as'=>'join', 'uses'=>'AuthController@create']);
+Route::post('users', 'AuthController@store');
+Route::get('users/login', ['as'=>'login', 'uses'=>'AuthController@login']);
+Route::post('users/login', 'AuthController@doLogin');
+Route::get('users/confirm/{code}', 'AuthController@confirm');
+Route::get('users/forgot_password', ['as'=>'password.remind', 'uses'=>'AuthController@forgotPassword']);
+Route::post('users/forgot_password', 'AuthController@doForgotPassword');
+Route::get('users/reset_password/{token}', 'AuthController@resetPassword');
+Route::post('users/reset_password', 'AuthController@doResetPassword');
+Route::get('users/logout', 'AuthController@logout');
 
-/*
-* 
-* Routes within this group require authentication
-*
-*
-*/
-Route::group(array('before' => 'Auth'), function()
-{
-
-  Route::get('user/logout', array('as' => 'logout', function () {
-      Auth::logout();
-
-      return Redirect::route('login')
-          ->with('flash_notice', 'You are successfully logged out.');
-  }));
-
-});
-
-/*
-* 
-* Routes within this group require that you are a guest
-*
-*
-*/
-Route::group(array('before' => 'guest'), function()
-{
-  Route::get('user/login', array('as' => 'login', 'uses' => 'Auth\AuthController@login'));
-  Route::get('user/join/{invite_code?}', array('as' => 'join',  'uses' => 'Auth\AuthController@join'));
-    Route::get('user/invite', array('as' => 'invite',  'uses' => 'Auth\AuthController@invite'));
-});
-/*
-* 
-* Login/Signup routes
-*
-*
-*/
-Route::post('user/join', array('uses' => 'Auth\AuthController@store'));
-Route::get('user/loginWithFacebook', array('as' => 'facebooklogin', 'uses' => 'Auth\AuthController@loginWithFacebook'));
-Route::get('user/loginWithGoogle', array('as' => 'googlelogin', 'uses' => 'Auth\AuthController@loginWithGoogle'));
-Route::post('user/login', function () {
-        $user = array(
-            'email' => Input::get('email'),
-            'password' => Input::get('password')
-        );
-        
-        if (Auth::attempt($user , true)) {
-            return Redirect::to('/' . Auth::user()->username)
-                ->with('flash_notice', 'You are successfully logged in.');
-        }
-        
-        // authentication failure! lets go back to the login page
-        return Redirect::route('login')
-            ->with('flash_error', 'Your username/password combination was incorrect.')
-            ->withInput();
-});
-
-/*
-* 
-* Routes for password reset
-*
-*
-*/
-Route::get('password/reset', array(
-  'uses' => 'PasswordController@remind',
-  'as' => 'password.remind'
-));
-Route::post('password/reset', array(
-  'uses' => 'PasswordController@request',
-  'as' => 'password.request'
-));
-Route::get('password/reset/{token}', array(
-  'uses' => 'PasswordController@reset',
-  'as' => 'password.reset'
-));
-Route::post('password/reset/{token}', array(
-  'uses' => 'PasswordController@update',
-  'as' => 'password.update'
-));
 
 
 /*
@@ -156,10 +89,13 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
       if(Auth::guest())
         return Response::json(['response'=>'false']);
 
-      $user = User::with('followers')->where('id',Auth::user()->id)->first();
+      $user = User::with('followers')->where('id',Auth::user()->id)->select(array('id', 'username','name','email','avatar','created_at'))->first();
       return Response::json(['user'=> $user, 'response'=>'success']);
     });
 
 });
 
 Route::any('{all}', ['as' =>'home', 'uses'=> 'HomeController@index'])->where('all', '.*');
+//
+
+App::bind('confide.user_validator', 'Filmkeep\Validators\UserValidator');

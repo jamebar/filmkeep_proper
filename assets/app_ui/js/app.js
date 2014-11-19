@@ -47,29 +47,18 @@ angular.module('myApp', [
 .controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService',
     function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService) {
        
-        $scope.review_new = new reviewApiService();
-
-        ReviewService.getRatingTypes().then(function(results){
-          $scope.rating_types_new = results;
-            
-        });
+        
       
         $scope.getReview = function(review) {
-            if (typeof review === 'object') {
-                // console.log('didnt make api call');
-                $scope.review = review.review;
-                $scope.rating_types = review.rating_types;
-                showModal();
-
-            } else {
-                ReviewService.getReview(review).then(function(results) {
+            
+                ReviewService.getReview(review.review.id).then(function(results) {
                    // console.log(results);
                     $scope.review = results.review;
                     $scope.rating_types = results.rating_types;
                     showModal();
 
                 })
-            }
+           
 
             $scope.ae_button_label = "Update";
         }

@@ -12,11 +12,12 @@ angular.module('ReviewService', ['Api'])
 
         var types_deferred = $q.defer();
         var reviews_deferred = $q.defer();
-
+        var _types_data = null;
 
         ratingTypesApiService
             .query({}, function(response) {
                 types_deferred.resolve(response.results);
+             
             });
 
         reviewApiService
@@ -29,11 +30,10 @@ angular.module('ReviewService', ['Api'])
             });
 
         Review.getRatingTypes = function(){
-            
             return types_deferred.promise;
         }
         Review.setRatingTypes = function(types){
-            // console.log('types deffere', types_deferred)
+            types_deferred = $q.defer()
             types_deferred.resolve(types);
         }
 

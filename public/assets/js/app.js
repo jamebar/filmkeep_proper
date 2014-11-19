@@ -47,29 +47,18 @@ angular.module('myApp', [
 .controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService',
     function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService) {
        
-        $scope.review_new = new reviewApiService();
-
-        ReviewService.getRatingTypes().then(function(results){
-          $scope.rating_types_new = results;
-            
-        });
+        
       
         $scope.getReview = function(review) {
-            if (typeof review === 'object') {
-                // console.log('didnt make api call');
-                $scope.review = review.review;
-                $scope.rating_types = review.rating_types;
-                showModal();
-
-            } else {
-                ReviewService.getReview(review).then(function(results) {
+            
+                ReviewService.getReview(review.review.id).then(function(results) {
                    // console.log(results);
                     $scope.review = results.review;
                     $scope.rating_types = results.rating_types;
                     showModal();
 
                 })
-            }
+           
 
             $scope.ae_button_label = "Update";
         }
@@ -566,10 +555,16 @@ var aeReview = angular.module('ae-review', [
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'streamApiService','me',
-  function($scope, streamApiService,me){
+.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService',
+  function($scope, streamApiService,me,ReviewService,reviewApiService){
     $scope.loading = true;
     $scope.me = me;
+    $scope.review_new = new reviewApiService();
+
+    ReviewService.getRatingTypes().then(function(results){
+      $scope.rating_types_new = results;
+        
+    });
 
     $scope.$on('watchist::addremove', function(event, film_id) {
 
@@ -865,7 +860,7 @@ angular.module('AlertBox', [])
             $scope.rating_types = ReviewLoad.rating_types;
             $scope.review = ReviewLoad.review;
             $scope.me = me;
-            console.log($scope.review);
+            // console.log($scope.review);
             $scope.toPercent = function(num){
                 return num/2000 * 100;
             }
@@ -1307,11 +1302,12 @@ angular.module('ReviewService', ['Api'])
 
         var types_deferred = $q.defer();
         var reviews_deferred = $q.defer();
-
+        var _types_data = null;
 
         ratingTypesApiService
             .query({}, function(response) {
                 types_deferred.resolve(response.results);
+             
             });
 
         reviewApiService
@@ -1324,11 +1320,10 @@ angular.module('ReviewService', ['Api'])
             });
 
         Review.getRatingTypes = function(){
-            
             return types_deferred.promise;
         }
         Review.setRatingTypes = function(types){
-            // console.log('types deffere', types_deferred)
+            types_deferred = $q.defer()
             types_deferred.resolve(types);
         }
 
@@ -1513,7 +1508,7 @@ angular.module('ReviewService', ['Api'])
           filmeter.id = meter.id;
           filmeter.$delete(function(response){
             $scope.types  = response.results;
-
+            ReviewService.setRatingTypes(response.results);
           });
         }
 

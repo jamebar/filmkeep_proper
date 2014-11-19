@@ -120,7 +120,7 @@
           filmeter.id = meter.id;
           filmeter.$delete(function(response){
             $scope.types  = response.results;
-
+            ReviewService.setRatingTypes(response.results);
           });
         }
 
