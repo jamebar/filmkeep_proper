@@ -49,7 +49,7 @@ class UsersController extends BaseController {
 
     if(\Input::has('username'))
     {
-      $user = User::with('followers')->where('username', $id)->select(array('id', 'username','first_name','last_name','avatar'))->first();
+      $user = User::with('followers')->where('username', $id)->select(array('id', 'username','name','avatar'))->first();
       $user->total_followers = Follower::where('follower_id', $user->id)->count();
       return $user;
     }
@@ -68,7 +68,7 @@ class UsersController extends BaseController {
   public function search()
   {
       $query = \Input::get('query');
-      $users = User::where('first_name', 'LIKE', '%'.$query.'%')->orWhere('last_name', 'LIKE', '%'.$query.'%')->take(3)->get();     
+      $users = User::where('name', 'LIKE', '%'.$query.'%')->take(3)->get();     
       return Response::json(['results'=>$users, 'query'=>$query]);
 
   }
@@ -107,8 +107,7 @@ class UsersController extends BaseController {
     $user = User::find( Auth::user()->id);
     $user->email = Input::get('email');
     $user->username = Input::get('username');
-    $user->first_name = Input::get('first_name');
-    $user->last_name = Input::get('last_name');
+    $user->name = Input::get('name');
 
     if(\Input::has('password'))
       $user->password = Hash::make(Input::get('password'));

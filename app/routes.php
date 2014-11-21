@@ -78,6 +78,8 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
     $router->get('watchlist', 'WatchlistController@index');
     $router->post('watchlist/add-remove', 'WatchlistController@addRemove');
 
+    $router->get('film', 'FilmController@index');
+
     $router->get('/tmdb/{query}', function($query){
         $t = new TheMovieDb();
         return $t->searchTmdb($query);

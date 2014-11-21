@@ -5,7 +5,7 @@
     <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" />
     <span class="feed-date pull-right">%%feed_item.created_at | fDate %%</span>
     <span class="feed-actor">
-        <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.first_name%% %%feed_item.activities[0].actor.last_name%%</a>
+        <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
     </span>
     %% feed_item.verb | verb %%
     <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span>
@@ -38,7 +38,7 @@
     <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" />
     <span class="feed-date pull-right">%%feed_item.created_at | fDate %%</span>
     <span class="feed-actor">
-        <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.first_name%% %%feed_item.activities[0].actor.last_name%%</a>
+        <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
     </span>
     %% feed_item.verb | verb %%
     <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span>
@@ -47,7 +47,7 @@
     
     <div class="clearfix">
       <div ng-repeat="activity in feed_item.activities" class="activity-item">
-          <a ui-sref='root.film({filmId: feed_item.activities[0].object.film.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a>
+          <a ui-sref='root.film({filmId: activity.object.film.tmdb_id, filmSlug: slugify(activity.object.film.title) })'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a>
 
           <a ng-click="newReview(activity.object.film)" ng-if="activity.object.reviewed === 'false'">Review </a>
           <a ng-click="watchlist(activity.object)"><span ng-class="{'glyphicon-plus': activity.object.on_watchlist === 'false','glyphicon-minus-sign': activity.object.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>

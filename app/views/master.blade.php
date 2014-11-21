@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/assets/css/styles.min.css">
     <link rel="stylesheet" href="/assets/css/animate.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
     <script src="/assets/js/vendor.js"></script>
     <script src="/assets/js/app.js"></script>
 
@@ -14,7 +16,7 @@
     </script>
 </head>
 <body >
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" scroll-position="scroll"  style="background:rgba(50, 50, 50, %%(scroll/300) +.4%%)">
     <div class="container">
       <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -64,16 +66,14 @@
         @endif
       <!--Error messages from angular -->
       <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>
-    	<div class="row">
-    		<div class="col-md-12">
+    	
           <search></search>
                @yield('content')
                 
                 <div ui-view></div>
 
     
-    		</div>
-    	</div>
+    		
     </div>
     <div class="container footer">
         <div class="col-xs-12">

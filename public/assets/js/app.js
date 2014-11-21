@@ -17,7 +17,9 @@ angular.module('myApp', [
     'feed',
     'watchlist',
     'settings',
-    'AlertBox'
+    'AlertBox',
+    'film',
+    'slugifier',
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -208,6 +210,25 @@ angular.module('myApp', [
         }
     };
     return msgBus;
+}])
+
+.directive('scrollPosition', ['$window', function ($window) {
+  return {
+    scope: {
+      scroll: '=scrollPosition'
+    },
+    link: function(scope, element, attrs) {
+      scope.scroll = 0;
+      function update() {
+        scope.scroll = $window.pageYOffset;
+        scope.$apply();
+      }
+      $window.addEventListener('scroll', update, false);
+      scope.$on('$destroy', function() {
+        $window.removeEventListener('scroll', update, false);
+      });
+    }
+  };
 }])
 ;
 /*global _ */
@@ -455,7 +476,7 @@ var aeReview = angular.module('ae-review', [
                                 
                                 
                                 return {
-                                    name: data.first_name + ' ' + data.last_name,
+                                    name: data.name,
                                     avatar: $filter('profileFilter')(data.avatar),
                                     username: data.username
                                 };
@@ -512,7 +533,7 @@ var aeReview = angular.module('ae-review', [
                     templates: {
                       header: '<h3 class="search-title">Films</h3>',
                       suggestion: function (context) {
-                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+'<span>'+context.release_date + '</span></div>'
+                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+' <span> '+context.release_date + '</span></div>'
                       }
                     }
                 }
@@ -526,6 +547,12 @@ var aeReview = angular.module('ae-review', [
                     $state.go('root.user.filmkeep', {username: suggestion.username});
                     
                   }
+
+                  if(dataset === 'films'){
+                    $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
+                    
+                  }
+
                 }
 
                 
@@ -555,8 +582,8 @@ var aeReview = angular.module('ae-review', [
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService',
-  function($scope, streamApiService,me,ReviewService,reviewApiService){
+.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService','Slug',
+  function($scope, streamApiService,me,ReviewService,reviewApiService,Slug){
     $scope.loading = true;
     $scope.me = me;
     $scope.review_new = new reviewApiService();
@@ -565,6 +592,11 @@ var aeReview = angular.module('ae-review', [
       $scope.rating_types_new = results;
         
     });
+
+    $scope.slugify = function(input) {
+        // console.log('slugified');
+        return Slug.slugify(input);
+    };
 
     $scope.$on('watchist::addremove', function(event, film_id) {
 
@@ -624,6 +656,42 @@ var aeReview = angular.module('ae-review', [
     return moment(date).fromNow(true);
   }
 })
+
+  'use strict';
+
+  angular.module('film', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.film', {
+      url: '/f/{filmId}_{filmSlug}',
+      title: 'Film',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/film.tmpl.html',
+          controller: 'FilmCtrl'
+        }
+      },
+      resolve: {
+        FilmLoad: function($stateParams,filmApiService) {
+         
+          return filmApiService.getFilm($stateParams.filmId);
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('FilmCtrl', ['$scope', '$stateParams','me','FilmLoad',
+    function ($scope,$stateParams,me,FilmLoad) {
+            console.log($stateParams.filmId)
+           $scope.film = FilmLoad.film;
+           $scope.follower_reviews = FilmLoad.follower_reviews;
+    }]) 
+
+  
+  ;
+
 
   'use strict';
 
@@ -1191,6 +1259,62 @@ angular.module('Api', ['ngResource'])
 
         function handleSuccess( response ) {
             meData = response.data;
+            return( response.data );
+
+        }
+})
+
+.factory('filmApiService',
+    function($http, $q) {
+
+        return({
+            getFilm: getFilm,
+            
+        });
+
+        function getFilm(tmdb_id) {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/film",
+                params: {
+                    action: "get",
+                    tmdb_id: tmdb_id
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        // ---
+        // PRIVATE METHODS.
+        // ---
+
+
+        // I transform the error response, unwrapping the application dta from
+        // the API response payload.
+        function handleError( response ) {
+
+            // The API response from the server should be returned in a
+            // nomralized format. However, if the request was not handled by the
+            // server (or what not handles properly - ex. server error), then we
+            // may have to normalize it on our end, as best we can.
+            if (
+                ! angular.isObject( response.data ) ||
+                ! response.data.message
+                ) {
+
+                return( $q.reject( "An unknown error occurred." ) );
+
+            }
+
+            // Otherwise, use expected error message.
+            return( $q.reject( response.data.message ) );
+
+        }
+
+        function handleSuccess( response ) {
             return( response.data );
 
         }

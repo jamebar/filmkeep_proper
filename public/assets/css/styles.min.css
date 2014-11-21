@@ -1,6 +1,11 @@
 @charset 'UTF-8';
+/*Constants*/
 .round-corners {
   border-radius: 5px;
+}
+.row-full-width {
+  margin-left: -15px;
+  margin-right: -15px;
 }
 slider {
   display: block;
@@ -222,6 +227,17 @@ ul.filmkeep-list li img {
 .pagination > .active > span:focus {
   border-radius: 5px;
 }
+.progress {
+  box-shadow: none;
+  background-color: #d47d55;
+}
+.progress-bar {
+  box-shadow: none;
+  background-color: #c8bba1;
+}
+.navbar-inverse {
+  border: none;
+}
 ul.compare-avatars,
 ul.compare-avatars li {
   margin: 0;
@@ -263,7 +279,21 @@ ul.compare-avatars li.active img {
   text-align: left;
 }
 body {
-  padding-top: 70px;
+  background-color: #f4e8d0;
+  font-family: 'Lato', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  color: #7b7171;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Volkhov', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+h2 {
+  font-style: italic;
+  font-weight: bold;
 }
 .review-editor {
   margin: 0 auto;
@@ -293,4 +323,83 @@ body {
   -webkit-animation: dimOut .5s;
   animation: dimOut .5s;
   opacity: .3;
+}
+.film-cover-wrapper {
+  background-size: cover;
+}
+.film-cover {
+  width: 100%;
+  background-color: rgba(123, 113, 113, 0.6);
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  position: relative;
+  min-height: 200px;
+}
+.fc-info {
+  margin-top: 200px;
+}
+.fc-content {
+  float: left;
+}
+.fc-profile {
+  float: left;
+  border-right: 1px solid #fff;
+  padding-right: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+}
+.fc-profile a {
+  color: #f4e8d0;
+}
+.fc-profile img {
+  display: block;
+}
+.film-cover h2 {
+  color: #f4e8d0;
+}
+@media only screen and (min-width: 40em) {
+  .film-cover {
+    min-height: 325px;
+  }
+  .film-cover h2 {
+    font-size: 3em;
+    line-height: .7em;
+  }
+}
+.theme-beige {
+  background: #f4e8d0;
+  color: #7b7171;
+}
+.theme-red {
+  background: #d2544c;
+  color: #f4e8d0;
+}
+.theme-orange {
+  background: #d47d55;
+  color: #f4e8d0;
+}
+.theme-toast {
+  background: #c8bba1;
+}
+.full-width-section {
+  padding: 2em;
+  padding-left: .5em;
+  padding-right: .5em;
+  min-height: 100px;
+}
+@media only screen and (min-width: 40.063em) {
+  .full-width-section {
+    padding-left: 2em;
+    padding-right: 2em;
+  }
+}
+search {
+  z-index: 10;
+  position: absolute;
+  top: 70px;
+  width: 100%;
+  left: 0;
+  padding-left: 1em;
+  padding-right: 1em;
 }

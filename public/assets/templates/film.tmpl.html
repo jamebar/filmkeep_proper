@@ -1,0 +1,4 @@
+<h3>%%film.title%%</h3>
+<img ng-src="%%film.backdrop_path | imageFilter :'backdrop':'1' %%"/>
+<p>%%film.summary%%</p>
+<div ng-repeat="reviews in follower_reviews">%%reviews.user.name%%</div>

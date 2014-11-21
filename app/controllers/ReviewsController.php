@@ -132,6 +132,8 @@ class ReviewsController extends BaseController {
             $poster_path = (isset($tmdb_info['poster_path'])) ? $tmdb_info['poster_path'] : "";
             $backdrop_path = (isset($tmdb_info['backdrop_path'])) ? $tmdb_info['backdrop_path'] : "";
             $imdb_id = (isset($tmdb_info['imdb_id'])) ? $tmdb_info['imdb_id'] : "";
+            $overview = (isset($tmdb_info['overview'])) ? $tmdb_info['overview'] : "";
+
             if(isset($tmdb_info['title']))
             {
                 $title = $tmdb_info['title'];
@@ -150,7 +152,8 @@ class ReviewsController extends BaseController {
             'title' => $title,
             'poster_path' => $poster_path,
             'backdrop_path' => $backdrop_path,
-            'imdb_id' => $imdb_id
+            'imdb_id' => $imdb_id,
+            'summary' => $overview
         );
 
         //add the film

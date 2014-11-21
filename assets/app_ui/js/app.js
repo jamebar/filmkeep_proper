@@ -17,7 +17,9 @@ angular.module('myApp', [
     'feed',
     'watchlist',
     'settings',
-    'AlertBox'
+    'AlertBox',
+    'film',
+    'slugifier',
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -208,5 +210,24 @@ angular.module('myApp', [
         }
     };
     return msgBus;
+}])
+
+.directive('scrollPosition', ['$window', function ($window) {
+  return {
+    scope: {
+      scroll: '=scrollPosition'
+    },
+    link: function(scope, element, attrs) {
+      scope.scroll = 0;
+      function update() {
+        scope.scroll = $window.pageYOffset;
+        scope.$apply();
+      }
+      $window.addEventListener('scroll', update, false);
+      scope.$on('$destroy', function() {
+        $window.removeEventListener('scroll', update, false);
+      });
+    }
+  };
 }])
 ;

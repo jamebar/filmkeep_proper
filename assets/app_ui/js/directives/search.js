@@ -29,7 +29,7 @@
                                 
                                 
                                 return {
-                                    name: data.first_name + ' ' + data.last_name,
+                                    name: data.name,
                                     avatar: $filter('profileFilter')(data.avatar),
                                     username: data.username
                                 };
@@ -86,7 +86,7 @@
                     templates: {
                       header: '<h3 class="search-title">Films</h3>',
                       suggestion: function (context) {
-                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+'<span>'+context.release_date + '</span></div>'
+                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+' <span> '+context.release_date + '</span></div>'
                       }
                     }
                 }
@@ -100,6 +100,12 @@
                     $state.go('root.user.filmkeep', {username: suggestion.username});
                     
                   }
+
+                  if(dataset === 'films'){
+                    $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
+                    
+                  }
+
                 }
 
                 

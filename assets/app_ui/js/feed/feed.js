@@ -18,8 +18,8 @@
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService',
-  function($scope, streamApiService,me,ReviewService,reviewApiService){
+.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService','Slug',
+  function($scope, streamApiService,me,ReviewService,reviewApiService,Slug){
     $scope.loading = true;
     $scope.me = me;
     $scope.review_new = new reviewApiService();
@@ -28,6 +28,11 @@
       $scope.rating_types_new = results;
         
     });
+
+    $scope.slugify = function(input) {
+        // console.log('slugified');
+        return Slug.slugify(input);
+    };
 
     $scope.$on('watchist::addremove', function(event, film_id) {
 

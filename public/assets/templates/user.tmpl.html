@@ -1,5 +1,5 @@
 <a ui-sref='root.user.filmkeep({username: page_user.username})'><img ng-src="%%page_user.avatar | profileFilter%%" width="60" height="60"/></a>
-<a ui-sref='root.user.filmkeep({username: page_user.username})'>%%page_user.username%%</a>
+<a ui-sref='root.user.filmkeep({username: page_user.username})'>%%page_user.name%%</a>
 <a ng-hide="myPage" ng-click="follow(page_user)">%% page_user.following ? "unfollow" : "follow" %%</a>
 %%page_user.total_followers%% followers
 <a ui-sref='root.user.watchlist({username: page_user.username})'>watchlist</a>

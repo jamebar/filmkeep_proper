@@ -22,7 +22,7 @@ class CreateFilmsTable extends Migration {
             $table->string('release_date');
             $table->string('poster_path');
             $table->string('backdrop_path');
-            $table->string('summary');
+            $table->text('summary');
 			$table->timestamps();
 		});
 	}

@@ -41,7 +41,8 @@ gulp.task('scripts', function() {
         'assets/bower_components/venturocket-angular-slider/build/angular-slider.js',
         'assets/bower_components/angular-typeahead/angular-typeahead.min.js',
         'assets/bower_components/moment/moment.js',
-        'assets/bower_components/angular-utils-pagination/dirPagination.js'
+        'assets/bower_components/angular-utils-pagination/dirPagination.js',
+        'assets/bower_components/angular-slugify/angular-slugify.js',
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))
