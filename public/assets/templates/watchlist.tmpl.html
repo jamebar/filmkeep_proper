@@ -1,4 +1,5 @@
 <h3>Watchlist</h3>
+<p ng-if="watchlist_items.length < 1">There are no items on this watchlist yet</p>
 <span ng-repeat="film in watchlist_items">
-  <img ng-src="%%film.film.poster_path | imageFilter:'poster':'1'%%" />
+  <a ui-sref='root.film({filmId: film.film.tmdb_id, filmSlug: slugify(film.film.title) })'><img ng-src="%%film.film.poster_path | imageFilter:'poster':'1'%%" /></a>
 </span>

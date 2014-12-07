@@ -30,7 +30,7 @@ angular.module('myApp', [
   $rootScope.$stateParams = $stateParams; 
 }])
 
-.config(['$locationProvider','$stateProvider', function($locationProvider, $stateProvider) {
+.config(['$locationProvider','$stateProvider','$urlRouterProvider', function($locationProvider, $stateProvider,$urlRouterProvider) {
 
   $locationProvider.html5Mode(true);
 
@@ -46,8 +46,8 @@ angular.module('myApp', [
   });
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService) {
+.controller('appCtrl', ['$sce','$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
+    function($sce,$scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
        
         
       
@@ -103,6 +103,27 @@ angular.module('myApp', [
           });
         }
 
+        function trailerModal(){
+          var modalInstance = $modal.open({
+              scope: $scope,
+              templateUrl: '/assets/templates/modal_trailer.tmpl.html',
+        
+          });
+        }
+        $scope.slugify = function(input) {
+        
+            return Slug.slugify(input);
+        };
+
+        $scope.getTrailer = function(tmdb_id){
+          filmApiService.getTrailer(tmdb_id).then(function(response){
+            if(angular.isDefined(response.youtube)){
+              $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/' + response.youtube[0].source);
+              trailerModal();
+            }
+            
+          })
+        }
         $scope.editReview = function(id){
             $scope.getReview(id);
             //openModal(id);
@@ -132,12 +153,11 @@ angular.module('myApp', [
 
         $scope.watchlist = function(obj)
         {
-          //obj.on_watchlist = obj.on_watchlist === 'true' ? 'false' : 'true';
-
-          $scope.$broadcast('watchist::addremove', obj.film_id);
+          var film_id = angular.isDefined(obj.film_id) ? obj.film_id : obj.id;
+          $scope.$broadcast('watchlist::addremove', film_id);
 
           watchlistApiService
-            .addRemoveWatchlist(obj.film_id).then(function(response) {
+            .addRemoveWatchlist(film_id).then(function(response) {
 
                 // console.log(response);
                 
@@ -146,6 +166,18 @@ angular.module('myApp', [
         
     }
 ])
+.directive('closeMe', [ '$timeout', function($timeout) {
+  return {
+    restrict: 'A',
+    link: function(scope, element,attrs) {
+        var delay = attrs.closeMe || 3000;
+        
+        $timeout(function(){
+            element.remove();
+        }, delay);
+    }
+  }
+}])
 
 .filter('imageFilter', [ function() {
   return function(path, type, size)
@@ -168,10 +200,12 @@ angular.module('myApp', [
   follower.isFollowing = function(user)
   {
     var me = meApiService.meData();
+
+    if(!angular.isDefined(me.user))
+      return false;
     
-    var t = _.find(me.user.followers, {'id': user.id}) ? true : false;
-    // console.log('me',me, 'user id', user.id, 'results',t);
-    return t;
+     console.log(me)
+    return _.find(me.user.followers, {'id': user.id}) ? true : false;
   }
 
   return follower;

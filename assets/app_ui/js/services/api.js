@@ -1,4 +1,3 @@
-'use strict';
 
 angular.module('Api', ['ngResource'])
 
@@ -266,7 +265,7 @@ angular.module('Api', ['ngResource'])
 
 .factory('meApiService',
     function($http, $q) {
-        var meData;
+        var meData = {};
 
         return({
             me: me,
@@ -286,7 +285,6 @@ angular.module('Api', ['ngResource'])
                     action: "get",
                 }
             });
-
             return( request.then( handleSuccess, handleError ) );
 
         }
@@ -330,7 +328,7 @@ angular.module('Api', ['ngResource'])
 
         return({
             getFilm: getFilm,
-            
+            getTrailer: getTrailer
         });
 
         function getFilm(tmdb_id) {
@@ -338,6 +336,21 @@ angular.module('Api', ['ngResource'])
             var request = $http({
                 method: "get",
                 url: "/api/film",
+                params: {
+                    action: "get",
+                    tmdb_id: tmdb_id
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function getTrailer(tmdb_id) {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/tmdb/trailer/" + tmdb_id,
                 params: {
                     action: "get",
                     tmdb_id: tmdb_id

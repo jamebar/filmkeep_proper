@@ -30,7 +30,7 @@ angular.module('myApp', [
   $rootScope.$stateParams = $stateParams; 
 }])
 
-.config(['$locationProvider','$stateProvider', function($locationProvider, $stateProvider) {
+.config(['$locationProvider','$stateProvider','$urlRouterProvider', function($locationProvider, $stateProvider,$urlRouterProvider) {
 
   $locationProvider.html5Mode(true);
 
@@ -46,8 +46,8 @@ angular.module('myApp', [
   });
 }])
 
-.controller('appCtrl', ['$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService',
-    function($scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService) {
+.controller('appCtrl', ['$sce','$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
+    function($sce,$scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
        
         
       
@@ -103,6 +103,27 @@ angular.module('myApp', [
           });
         }
 
+        function trailerModal(){
+          var modalInstance = $modal.open({
+              scope: $scope,
+              templateUrl: '/assets/templates/modal_trailer.tmpl.html',
+        
+          });
+        }
+        $scope.slugify = function(input) {
+        
+            return Slug.slugify(input);
+        };
+
+        $scope.getTrailer = function(tmdb_id){
+          filmApiService.getTrailer(tmdb_id).then(function(response){
+            if(angular.isDefined(response.youtube)){
+              $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/' + response.youtube[0].source);
+              trailerModal();
+            }
+            
+          })
+        }
         $scope.editReview = function(id){
             $scope.getReview(id);
             //openModal(id);
@@ -132,12 +153,11 @@ angular.module('myApp', [
 
         $scope.watchlist = function(obj)
         {
-          //obj.on_watchlist = obj.on_watchlist === 'true' ? 'false' : 'true';
-
-          $scope.$broadcast('watchist::addremove', obj.film_id);
+          var film_id = angular.isDefined(obj.film_id) ? obj.film_id : obj.id;
+          $scope.$broadcast('watchlist::addremove', film_id);
 
           watchlistApiService
-            .addRemoveWatchlist(obj.film_id).then(function(response) {
+            .addRemoveWatchlist(film_id).then(function(response) {
 
                 // console.log(response);
                 
@@ -146,6 +166,18 @@ angular.module('myApp', [
         
     }
 ])
+.directive('closeMe', [ '$timeout', function($timeout) {
+  return {
+    restrict: 'A',
+    link: function(scope, element,attrs) {
+        var delay = attrs.closeMe || 3000;
+        
+        $timeout(function(){
+            element.remove();
+        }, delay);
+    }
+  }
+}])
 
 .filter('imageFilter', [ function() {
   return function(path, type, size)
@@ -168,10 +200,12 @@ angular.module('myApp', [
   follower.isFollowing = function(user)
   {
     var me = meApiService.meData();
+
+    if(!angular.isDefined(me.user))
+      return false;
     
-    var t = _.find(me.user.followers, {'id': user.id}) ? true : false;
-    // console.log('me',me, 'user id', user.id, 'results',t);
-    return t;
+     console.log(me)
+    return _.find(me.user.followers, {'id': user.id}) ? true : false;
   }
 
   return follower;
@@ -581,9 +615,27 @@ var aeReview = angular.module('ae-review', [
       } 
     });
   }])
+// .run(['$rootScope','$state','meApiService', function ($rootScope,$state, meApiService) {
+//   $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams){
+//     var me = meApiService.meData();
+//     // console.log(toState.name === 'root.feed');
+//     if(toState.name === 'root.feed'){
+//       if(!angular.isDefined(me.user)){
+//         console.log('logged out', me.user)
+//         // window.location.href = '/users/login';
+//         // event.preventDefault();
+//       }
+//     }
 
-.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService','Slug',
-  function($scope, streamApiService,me,ReviewService,reviewApiService,Slug){
+//   })
+
+// }])
+.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService',
+  function($scope, streamApiService,me,ReviewService,reviewApiService){
+    if(!angular.isDefined(me.user)){
+      window.location.href = '/users/login';
+    }
+
     $scope.loading = true;
     $scope.me = me;
     $scope.review_new = new reviewApiService();
@@ -593,12 +645,9 @@ var aeReview = angular.module('ae-review', [
         
     });
 
-    $scope.slugify = function(input) {
-        // console.log('slugified');
-        return Slug.slugify(input);
-    };
+    
 
-    $scope.$on('watchist::addremove', function(event, film_id) {
+    $scope.$on('watchlist::addremove', function(event, film_id) {
 
         _.forEach($scope.feed_items, function(feed_item){
           _.forEach(feed_item.activities, function(activity){
@@ -614,6 +663,7 @@ var aeReview = angular.module('ae-review', [
     streamApiService.getAggregated()
             .then(
               function(response){
+                console.log(response)
                 $scope.feed_items = response;
                 $scope.loading = false;
             });
@@ -653,7 +703,9 @@ var aeReview = angular.module('ae-review', [
           yy: "%dy"
       }
     });
-    return moment(date).fromNow(true);
+    // var now = moment.utc();
+    // console.log('now', date)
+    return moment.utc(date).fromNow(true);
   }
 })
 
@@ -684,9 +736,19 @@ var aeReview = angular.module('ae-review', [
 
   .controller('FilmCtrl', ['$scope', '$stateParams','me','FilmLoad',
     function ($scope,$stateParams,me,FilmLoad) {
-            console.log($stateParams.filmId)
-           $scope.film = FilmLoad.film;
-           $scope.follower_reviews = FilmLoad.follower_reviews;
+        FilmLoad.film.film_id = FilmLoad.film.id;
+        $scope.film = FilmLoad.film;
+        $scope.follower_reviews = FilmLoad.follower_reviews;
+
+        
+
+
+        $scope.$on('watchlist::addremove', function(event, film_id) {
+
+          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
+                
+        });
+
     }]) 
 
   
@@ -743,7 +805,12 @@ var aeReview = angular.module('ae-review', [
         $scope.total_reviews = 0;
 
         page_user.following = followerFactory.isFollowing(page_user);
-        $scope.myPage = page_user.id === me.user.id;
+
+        if(angular.isDefined(me.user))
+          $scope.myPage = page_user.id === me.user.id;
+
+        $scope.showFollow = angular.isDefined(me.user) && !$scope.myPage;
+
         $scope.page_user = page_user; 
                 
         $scope.follow = function(page_user){
@@ -769,8 +836,8 @@ var aeReview = angular.module('ae-review', [
 
     }]) 
 
-    .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
-    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
+    .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory',
+    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory  ) {
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
         $scope.reviews_per_page = 20; // this should match however many results your API puts on one page
@@ -932,12 +999,17 @@ angular.module('AlertBox', [])
             $scope.toPercent = function(num){
                 return num/2000 * 100;
             }
+
+            $scope.$on('watchlist::addremove', function(event, film_id) {
+
+              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
+                    
+            });
     }]) 
 
   
   ;
 
-'use strict';
 
 angular.module('Api', ['ngResource'])
 
@@ -1205,7 +1277,7 @@ angular.module('Api', ['ngResource'])
 
 .factory('meApiService',
     function($http, $q) {
-        var meData;
+        var meData = {};
 
         return({
             me: me,
@@ -1225,7 +1297,6 @@ angular.module('Api', ['ngResource'])
                     action: "get",
                 }
             });
-
             return( request.then( handleSuccess, handleError ) );
 
         }
@@ -1269,7 +1340,7 @@ angular.module('Api', ['ngResource'])
 
         return({
             getFilm: getFilm,
-            
+            getTrailer: getTrailer
         });
 
         function getFilm(tmdb_id) {
@@ -1277,6 +1348,21 @@ angular.module('Api', ['ngResource'])
             var request = $http({
                 method: "get",
                 url: "/api/film",
+                params: {
+                    action: "get",
+                    tmdb_id: tmdb_id
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function getTrailer(tmdb_id) {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/tmdb/trailer/" + tmdb_id,
                 params: {
                     action: "get",
                     tmdb_id: tmdb_id
@@ -1684,7 +1770,6 @@ angular.module('ReviewService', ['Api'])
             .getWatchlist(page_user.id).then(function(response) {
 
                 $scope.watchlist_items = response.results;
-                
             });
         
 

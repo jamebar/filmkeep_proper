@@ -1,5 +1,6 @@
 <?php 
 use Filmkeep\User;
+use Filmkeep\Watchlist;
 use Filmkeep\Review;
 use Filmkeep\Film;
 use Filmkeep\Rating;
@@ -51,9 +52,36 @@ class FilmController extends BaseController {
                       ->take(10)
                       ->get();
         $response['follower_reviews'] = $follower_reviews;
+        $response['film']['reviewed'] = $this->isReviewed($film);
+        $response['film']['on_watchlist'] = $this->onWatchlist($film);
       }
       return Response::json($response);
     }
     
+  }
+
+  private function isReviewed($film)
+  {
+    
+          $review = Review::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($film)
+          {
+              $q->where('tmdb_id', '=', $film['tmdb_id']);
+
+          })->first();
+          return is_null($review) ? 'false' : 'true';
+
+  }
+
+  private function onWatchlist($film)
+  {
+    
+          $watchlist = Watchlist::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($film)
+          {
+              $q->where('tmdb_id', '=', $film['tmdb_id']);
+
+          })->first();
+          return is_null($watchlist) ? 'false' : 'true';
+
+
   }
 }

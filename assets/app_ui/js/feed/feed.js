@@ -17,9 +17,27 @@
       } 
     });
   }])
+// .run(['$rootScope','$state','meApiService', function ($rootScope,$state, meApiService) {
+//   $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams){
+//     var me = meApiService.meData();
+//     // console.log(toState.name === 'root.feed');
+//     if(toState.name === 'root.feed'){
+//       if(!angular.isDefined(me.user)){
+//         console.log('logged out', me.user)
+//         // window.location.href = '/users/login';
+//         // event.preventDefault();
+//       }
+//     }
 
-.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService','Slug',
-  function($scope, streamApiService,me,ReviewService,reviewApiService,Slug){
+//   })
+
+// }])
+.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService',
+  function($scope, streamApiService,me,ReviewService,reviewApiService){
+    if(!angular.isDefined(me.user)){
+      window.location.href = '/users/login';
+    }
+
     $scope.loading = true;
     $scope.me = me;
     $scope.review_new = new reviewApiService();
@@ -29,12 +47,9 @@
         
     });
 
-    $scope.slugify = function(input) {
-        // console.log('slugified');
-        return Slug.slugify(input);
-    };
+    
 
-    $scope.$on('watchist::addremove', function(event, film_id) {
+    $scope.$on('watchlist::addremove', function(event, film_id) {
 
         _.forEach($scope.feed_items, function(feed_item){
           _.forEach(feed_item.activities, function(activity){
@@ -50,6 +65,7 @@
     streamApiService.getAggregated()
             .then(
               function(response){
+                console.log(response)
                 $scope.feed_items = response;
                 $scope.loading = false;
             });
@@ -89,6 +105,8 @@
           yy: "%dy"
       }
     });
-    return moment(date).fromNow(true);
+    // var now = moment.utc();
+    // console.log('now', date)
+    return moment.utc(date).fromNow(true);
   }
 })

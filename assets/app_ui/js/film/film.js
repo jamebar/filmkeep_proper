@@ -26,9 +26,19 @@
 
   .controller('FilmCtrl', ['$scope', '$stateParams','me','FilmLoad',
     function ($scope,$stateParams,me,FilmLoad) {
-            console.log($stateParams.filmId)
-           $scope.film = FilmLoad.film;
-           $scope.follower_reviews = FilmLoad.follower_reviews;
+        FilmLoad.film.film_id = FilmLoad.film.id;
+        $scope.film = FilmLoad.film;
+        $scope.follower_reviews = FilmLoad.follower_reviews;
+
+        
+
+
+        $scope.$on('watchlist::addremove', function(event, film_id) {
+
+          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
+                
+        });
+
     }]) 
 
   

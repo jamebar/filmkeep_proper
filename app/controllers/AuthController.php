@@ -44,7 +44,8 @@ class AuthController extends Controller
                 );
             }
 
-            return Redirect::action('AuthController@login')
+            Auth::login($user);
+            return Redirect::route('home')
                 ->with('notice', Lang::get('confide::confide.alerts.account_created'));
         } else {
             $error = $user->errors()->all(':message');
@@ -63,7 +64,7 @@ class AuthController extends Controller
     public function login()
     {
         if (Confide::user()) {
-            return Redirect::to('/');
+            return Redirect::to('/feed');
         } else {
             return View::make('auth.login');
         }
@@ -80,7 +81,7 @@ class AuthController extends Controller
         $input = Input::all();
 
         if ($repo->login($input)) {
-            return Redirect::intended('/');
+            return Redirect::intended('/feed');
         } else {
             if ($repo->isThrottled($input)) {
                 $err_msg = Lang::get('confide::confide.alerts.too_many_attempts');

@@ -34,6 +34,12 @@
             $scope.toPercent = function(num){
                 return num/2000 * 100;
             }
+
+            $scope.$on('watchlist::addremove', function(event, film_id) {
+
+              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
+                    
+            });
     }]) 
 
   

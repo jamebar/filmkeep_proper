@@ -49,7 +49,12 @@
         $scope.total_reviews = 0;
 
         page_user.following = followerFactory.isFollowing(page_user);
-        $scope.myPage = page_user.id === me.user.id;
+
+        if(angular.isDefined(me.user))
+          $scope.myPage = page_user.id === me.user.id;
+
+        $scope.showFollow = angular.isDefined(me.user) && !$scope.myPage;
+
         $scope.page_user = page_user; 
                 
         $scope.follow = function(page_user){
@@ -75,8 +80,8 @@
 
     }]) 
 
-    .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
-    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
+    .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory',
+    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory  ) {
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
         $scope.reviews_per_page = 20; // this should match however many results your API puts on one page

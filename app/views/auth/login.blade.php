@@ -1,20 +1,8 @@
 @extends('master_auth')
 
 @section('content')
+<div class="login-box">
 	<h1>Login</h1>
-
-	@if ($errors->any())
-		<ul>
-			@foreach ($errors->all() as $error)
-				<li>{{$error}}</li>
-			@endforeach
-		</ul>
-	@endif
-<h3>Member Sign-in</h3>
-       
-    <hr>
-
-    <hr>
 
    <form role="form" method="POST" action="{{{ URL::to('/users/login') }}}" accept-charset="UTF-8">
       <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
@@ -36,20 +24,14 @@
                   <input tabindex="4" type="checkbox" name="remember" id="remember" value="1"> {{{ Lang::get('confide::confide.login.remember') }}}
               </label>
           </div>
-          @if (Session::get('error'))
-              <div class="alert alert-error alert-danger">{{{ Session::get('error') }}}</div>
-          @endif
-
-          @if (Session::get('notice'))
-              <div class="alert">{{{ Session::get('notice') }}}</div>
-          @endif
+          
           <div class="form-group">
-              <button tabindex="3" type="submit" class="btn btn-default">{{{ Lang::get('confide::confide.login.submit') }}}</button>
+              <button tabindex="3" type="submit" class="btn btn-primary">{{{ Lang::get('confide::confide.login.submit') }}}</button>
           </div>
       </fieldset>
   </form>
 
     <p> <a href="{{ route('password.remind') }}" target="_self" class="">Forgot your password?</a></p>
     <p>Don't have an account yet? <a href="{{ route('join') }}"  target="_self" class="">Signup</a></p>
-           
+</div>         
 @stop

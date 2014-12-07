@@ -8,11 +8,22 @@
 @import 'feed-item';
 @import 'bootstrap-override';
 @import 'compare';
+@import 'forms';
 
 body { 
+  // background:url(/assets/img/bg/bg-jimmy-stewart-800.jpg) top center no-repeat;
+  background-size:cover;
   background-color: @filmkeep-beige;
   font-family: 'Lato',"Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   color: @brown-dark;
+}
+.container-fluid{
+
+}
+.body-bg{
+  background-image:url(/assets/img/bg/bg-jimmy-stewart-800.jpg) ;
+  background-repeat: no-repeat;
+  background-position: top center;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -26,7 +37,9 @@ h2{
     margin:0 auto;
     padding:2em;
 }
-
+.padding-top{
+  padding-top:70px;
+}
 // .relation-hint-container.ng-hide-remove {
 //     -webkit-animation: fadeInUp .5s;
 //     animation: fadeInUp .5s;
@@ -74,7 +87,7 @@ h2{
 }
 
 .fc-info{
-  margin-top:200px;
+  margin-top:80px;
 }
 .fc-content{
   float:left;
@@ -94,12 +107,22 @@ h2{
     display: block;
   }
 }
+
+.fc-poster{
+  float:left;
+  padding-right: 1em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+}
 .film-cover h2 {
   color: @filmkeep-beige;
 }
 
 @media only screen and (min-width: 40em)
 {
+  .fc-info{
+    margin-top:200px;
+  }
   .film-cover {
     min-height: 325px;
   }
@@ -149,13 +172,63 @@ h2{
 
 
 search{
-  z-index: 10;
-  position: absolute;
-  top: 70px;
-  width: 100%;
-  left: 0;
-  padding-left: 1em;
-  padding-right: 1em;
-
+  display: inline-block;
+  width:300px;
+  margin-top:10px;
   
+  float:left;
+  input{
+      padding: 5px 10px;
+      height: auto;
+      width:100%;
+      color:#fff;
+
+  }
+
+  .tt-hint{
+    background-color:rgba(0,0,0,.3) !important;
+    color:#aaa;
+    border-radius: 3px !important;
+  }
+   
+}
+
+.login-logo{
+  margin:4em auto;
+  width:320px;
+}
+.login-box{
+  width:320px;
+  margin:4em auto;
+  color:@filmkeep-beige;
+
+  a{
+    color:@filmkeep-orange;
+  }
+}
+
+.navbar-brand{
+  background:url(/assets/img/filmkeep_logo_top.png) no-repeat;
+  height: 24px;
+  width: 198px;
+  background-size: contain;
+  margin-top: 13px;
+  margin-right: 1em;
+}
+
+
+.video-container {
+  position:relative;
+  padding-bottom:56.25%;
+  padding-top:30px;
+  height:0;
+  overflow:hidden;
+}
+
+.video-container iframe, .video-container object, .video-container embed {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
 }

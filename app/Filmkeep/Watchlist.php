@@ -16,5 +16,17 @@ class Watchlist extends \Eloquent {
         return $this->belongsTo('Filmkeep\User')->select(array('id', 'username','name','avatar'));
     }
 
+    public function onWatchlist($tmdb_id)
+    {
+      
+            $watchlist = $this::where('user_id', \Auth::user()->id)->whereHas('film', function($q) use ($tmdb_id)
+            {
+                $q->where('tmdb_id', '=', $tmdb_id);
+
+            })->first();
+            return is_null($watchlist) ? 'false' : 'true';
+
+
+    }
     
 }

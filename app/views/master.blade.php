@@ -17,7 +17,7 @@
 </head>
 <body >
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" scroll-position="scroll"  style="background:rgba(50, 50, 50, %%(scroll/300) +.4%%)">
-    <div class="container">
+    <div class="container-fluid">
       <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
         <span class="sr-only">Toggle navigation</span>
@@ -25,21 +25,22 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/" target="_self">Filmkeep</a>
+      <a class="navbar-brand" href="/" target="_self" ></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <search></search>
 
       <ul class="nav navbar-nav">
+        
+      </ul>
+      
+      <ul class="nav navbar-nav navbar-right">
         @if(Auth::check())
         <li><a ui-sref='root.feed'>Feed</a></li>
         <li><a ui-sref='root.user.filmkeep({username: "{{Auth::user()->username}}" })'  >My Filmkeep</a></li>
         @endif
-      </ul>
-      
-      <ul class="nav navbar-nav navbar-right">
-        
         @if(!Auth::check())
         <li><a href="/users/login" target="_self" class="btn">Log in</a></li>
         @endif
@@ -48,6 +49,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img ng-src="%%'{{Auth::user()->avatar}}' | profileFilter%%" width="30" height="30" onerror="this.src = '/assets/img/default-profile.jpg';"/></a>
           <ul class="dropdown-menu" role="menu">
             <li><a ui-sref="root.settings.profile"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+            <li><a ui-sref='root.user.watchlist({username: "{{Auth::user()->username}}" })'><span class="glyphicon glyphicon-list"></span> Watchlist</a></li>
             <li class="divider"></li>
             
             <li><a href="/users/logout" target="_self">Logout</a></li>
@@ -67,7 +69,7 @@
       <!--Error messages from angular -->
       <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>
     	
-          <search></search>
+          
                @yield('content')
                 
                 <div ui-view></div>

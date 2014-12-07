@@ -9,6 +9,7 @@
           </div>
           <div class="fc-content">
             <h2>%%review.film.title%%</h2>
+            <a ng-click="watchlist(review.film)"><span ng-class="{'glyphicon-plus': review.film.on_watchlist === 'false','glyphicon-ok': review.film.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
           </div>
         </div>
      
@@ -17,6 +18,7 @@
 
 <div class="full-width-section theme-beige row-full-width">
   <a ng-click="editReview({review:review,rating_types:rating_types})" ng-if="me.user.id === review.user_id">Edit</a>
+  <a ng-click="getTrailer(review.film.tmdb_id)">Trailer</a>
   <a ng-click="compare(review)" ng-if="review.reviewed === 'true' ">compare </a>
 </div>
 

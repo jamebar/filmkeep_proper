@@ -25,7 +25,6 @@
             .getWatchlist(page_user.id).then(function(response) {
 
                 $scope.watchlist_items = response.results;
-                
             });
         
 

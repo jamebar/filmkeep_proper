@@ -6,6 +6,9 @@
   </ul>
 </span>
 <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" ></dir-pagination-controls>
+
+<p ng-if="user_reviews.length < 1 && !myPage">%%page_user.name%% hasn't reviewed any films yet</p>
+<p ng-if="user_reviews.length < 1 && myPage">you haven't reviewed any films yet</p>
 <div class="clearfix">
   <ul class="filmkeep-list">
       <li dir-paginate="user_review in user_reviews | itemsPerPage: reviews_per_page" total-items="total_reviews" current-page="pagination.current">

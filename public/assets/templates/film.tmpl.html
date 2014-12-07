@@ -1,4 +1,21 @@
-<h3>%%film.title%%</h3>
-<img ng-src="%%film.backdrop_path | imageFilter :'backdrop':'1' %%"/>
-<p>%%film.summary%%</p>
+<div class="film-cover-wrapper row-full-width " style="background-image:url(%%film.backdrop_path | imageFilter :'backdrop':'1' %%)">
+  <div class="film-cover full-width-section">
+        <div class="fc-info">
+          <div class="fc-poster hidden-xs hidden-sm">
+            <img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" />
+          </div>
+          <div class="fc-content">
+            <h2>%%film.title%%</h2>
+            <a ng-click="newReview(film)" ng-show="film.reviewed == 'false'"><span class="glyphicon glyphicon-tasks"></span> Review this</a>
+            <a ng-click="watchlist(film)"><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+          </div>
+        </div>
+  </div>
+</div>
+
+<div class="full-width-section theme-beige row-full-width">
+  <a ng-click="getTrailer(film.tmdb_id)">Trailer</a>
+  <p>%%film.summary%%</p>
+</div>
+
 <div ng-repeat="reviews in follower_reviews">%%reviews.user.name%%</div>

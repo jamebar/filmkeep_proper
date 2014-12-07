@@ -80,6 +80,11 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
     $router->get('film', 'FilmController@index');
 
+    $router->get('/tmdb/trailer/{tmdb_id}', function($tmdb_id){
+        $t = new TheMovieDb();
+        return $t->getFilmTrailer($tmdb_id);
+    });
+    
     $router->get('/tmdb/{query}', function($query){
         $t = new TheMovieDb();
         return $t->searchTmdb($query);
@@ -91,7 +96,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
       if(Auth::guest())
         return Response::json(['response'=>'false']);
 
-      $user = User::with('followers')->where('id',Auth::user()->id)->select(array('id', 'username','name','email','avatar','created_at'))->first();
+      $user = User::with('followers')->where('id',Auth::user()->id)->first();
       return Response::json(['user'=> $user, 'response'=>'success']);
     });
 

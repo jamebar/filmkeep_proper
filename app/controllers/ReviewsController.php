@@ -6,6 +6,7 @@ use Filmkeep\Rating;
 use Filmkeep\Follower;
 use Filmkeep\TheMovieDb;
 use Filmkeep\Forms\AddReview;
+use Filmkeep\Watchlist;
 
 
 class ReviewsController extends BaseController {
@@ -31,12 +32,15 @@ class ReviewsController extends BaseController {
           $user = User::where('username', \Input::get('username') )->first();
 
           if(empty($user))
-            return \Response::json(['status' =>404]);
+            return App::abort(404);
 
         }
         else{
           $user = \Input::has('user_id') ? User::find(\Input::get('user_id')) : User::find(Auth::id());
         }
+
+        if(!$user)
+          return App::abort(401);
         
         $num = \Input::has('num') ? \Input::get('num') : 20;
         $page = \Input::has('page') ? \Input::get('page') : 1;
@@ -202,9 +206,13 @@ class ReviewsController extends BaseController {
 
         $review = Review::with('ratings','film', 'user')->find($id);
 
-        $reviewed = Review::where('user_id', Auth::user()->id)->where('film_id', $review->film_id)->first();
-        $review['reviewed'] = is_null($reviewed) ? 'false' : 'true';
-
+        if(Auth::check())
+        {
+          $reviewed = Review::where('user_id', Auth::user()->id)->where('film_id', $review->film_id)->first();
+          $review['reviewed'] = is_null($reviewed) ? 'false' : 'true';
+          $w = new Watchlist();
+          $review['film']['on_watchlist'] = $w->onWatchlist($review['film']['tmdb_id']);
+        }
         return $review;
 	}
 
