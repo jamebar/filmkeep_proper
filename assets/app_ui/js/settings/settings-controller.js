@@ -37,16 +37,6 @@
         }
       },
     });
-    $stateProvider.state('root.settings.invites', {
-      url: '/invites',
-      title: 'Settings - invites',
-      views: {
-        'page-child' : {
-          templateUrl: '/assets/templates/settings/invites.tmpl.html',
-          controller: 'settingsInvitesCtrl'
-        }
-      },
-    });
 
   }])
 
@@ -54,8 +44,7 @@
     function ($scope, me,userApiService,AlertService,$state) {
       $scope.tabs = [
         {title: 'Profile', state:'root.settings.profile', active:false},
-        {title: 'Filmeters', state:'root.settings.filmeters', active:false},
-        {title: 'Invites', state:'root.settings.invites', active:false}
+        {title: 'Filmeters', state:'root.settings.filmeters', active:false}
       ];
 
       _.forEach($scope.tabs, function(tab){

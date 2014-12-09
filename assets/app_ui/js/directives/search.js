@@ -98,7 +98,6 @@
                 function searchComplete(event, suggestion, dataset){
                   if(dataset === 'people'){
                     $state.go('root.user.filmkeep', {username: suggestion.username});
-                    
                   }
 
                   if(dataset === 'films'){

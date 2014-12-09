@@ -17,13 +17,21 @@ server = lr();
 
 
 gulp.task('styles', function() {
-	return gulp.src('assets/css/styles.less')
+	gulp.src('assets/css/styles.less')
 	.pipe(less())
 	.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'ios 6', 'android 4'))
 	.pipe(rename({ suffix: '.min' }))
 	//.pipe(minifycss())
 	.pipe(gulp.dest('public/assets/css'))
 	.pipe(notify({ message: 'Style task completed.' }));
+
+  gulp.src([
+    'assets/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css',
+    ])
+  .pipe(minifycss())
+  .pipe(plumber())
+  .pipe(concat('vendor.css'))
+  .pipe(gulp.dest('public/assets/css'));
 });
 
 gulp.task('scripts', function() {
@@ -43,6 +51,7 @@ gulp.task('scripts', function() {
         'assets/bower_components/moment/moment.js',
         'assets/bower_components/angular-utils-pagination/dirPagination.js',
         'assets/bower_components/angular-slugify/angular-slugify.js',
+        'assets/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js',
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))

@@ -4,8 +4,9 @@
 	<meta charset="UTF-8">
 	<title>Filmkeep</title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/assets/css/styles.min.css">
+    <link rel="stylesheet" href="/assets/css/vendor.css">
     <link rel="stylesheet" href="/assets/css/animate.min.css">
+  <link rel="stylesheet" href="/assets/css/styles.min.css">
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
     <script src="/assets/js/vendor.js"></script>
@@ -16,15 +17,38 @@
     </script>
 </head>
 <body >
+  <div class="navmenu navmenu-inverse navmenu-fixed-left offcanvas">
+      <a class="navmenu-brand" href="/" onClick="$('.navmenu').offcanvas('hide')">Filmkeep</a>
+      <ul class="nav navmenu-nav">
+        @if(Auth::check())
+        <li><a ui-sref='root.feed' onClick="$('.navmenu').offcanvas('hide')">Feed</a></li>
+        <li><a ui-sref='root.user.filmkeep({username: "{{Auth::user()->username}}" })' onClick="$('.navmenu').offcanvas('hide')" >My Filmkeep</a></li>
+        <li><a ui-sref='root.user.watchlist({username: "{{Auth::user()->username}}" })' onClick="$('.navmenu').offcanvas('hide')">Watchlist</a></li>
+        @endif
+      </ul>
+       <hr>
+      <ul class="nav navmenu-nav">
+        @if(Auth::check())
+        <li><a ui-sref="root.settings.profile" onClick="$('.navmenu').offcanvas('hide')"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+        <li><a href="/users/logout" target="_self">Logout</a></li>
+        @endif
+      </ul>
+      
+    </div>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" scroll-position="scroll"  style="background:rgba(50, 50, 50, %%(scroll/300) +.4%%)">
     <div class="container-fluid">
       <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
+      @if(Auth::check())
+      <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navmenu" data-canvas="body">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+      @else
+        <ul class="nav nav-pills pull-right visible-xs-inline-block">
+          <li role="button" class="navbar-btn "><a href="/users/login" target="_self">log in</a></li>
+        </ul>
+      @endif
       <a class="navbar-brand" href="/" target="_self" ></a>
     </div>
 
@@ -32,9 +56,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <search></search>
 
-      <ul class="nav navbar-nav">
-        
-      </ul>
+     
       
       <ul class="nav navbar-nav navbar-right">
         @if(Auth::check())
@@ -46,7 +68,7 @@
         @endif
         @if(Auth::check())
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img ng-src="%%'{{Auth::user()->avatar}}' | profileFilter%%" width="30" height="30" onerror="this.src = '/assets/img/default-profile.jpg';"/></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img class="round-corners" ng-src="%%'{{Auth::user()->avatar}}' | profileFilter%%" width="30" height="30" onerror="this.src = '/assets/img/default-profile.jpg';"/></a>
           <ul class="dropdown-menu" role="menu">
             <li><a ui-sref="root.settings.profile"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
             <li><a ui-sref='root.user.watchlist({username: "{{Auth::user()->username}}" })'><span class="glyphicon glyphicon-list"></span> Watchlist</a></li>

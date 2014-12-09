@@ -579,7 +579,6 @@ var aeReview = angular.module('ae-review', [
                 function searchComplete(event, suggestion, dataset){
                   if(dataset === 'people'){
                     $state.go('root.user.filmkeep', {username: suggestion.username});
-                    
                   }
 
                   if(dataset === 'films'){
@@ -890,6 +889,53 @@ var aeReview = angular.module('ae-review', [
   
   ;
 
+
+  'use strict';
+
+  angular.module('review', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.review', {
+      url: '/r/{reviewId}',
+      title: 'Review',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/review.tmpl.html',
+          controller: 'ReviewCtrl'
+        }
+      },
+      resolve: {
+        ReviewLoad: function($stateParams,ReviewService) {
+         
+          return ReviewService.getReview($stateParams.reviewId)
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,$stateParams,ReviewService,ReviewLoad,me) {
+
+            $scope.rating_types = ReviewLoad.rating_types;
+            $scope.review = ReviewLoad.review;
+            $scope.me = me;
+            // console.log($scope.review);
+            $scope.toPercent = function(num){
+                return num/2000 * 100;
+            }
+
+            $scope.$on('watchlist::addremove', function(event, film_id) {
+
+              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
+                    
+            });
+    }]) 
+
+  
+  ;
+
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {
 
@@ -963,53 +1009,6 @@ angular.module('AlertBox', [])
         };
 
     } ] );
-
-  'use strict';
-
-  angular.module('review', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.review', {
-      url: '/r/{reviewId}',
-      title: 'Review',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/review.tmpl.html',
-          controller: 'ReviewCtrl'
-        }
-      },
-      resolve: {
-        ReviewLoad: function($stateParams,ReviewService) {
-         
-          return ReviewService.getReview($stateParams.reviewId)
-          
-        }, 
-      }
-    });
-  }])
-
-  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad','me',
-    function ($scope,$stateParams,ReviewService,ReviewLoad,me) {
-
-            $scope.rating_types = ReviewLoad.rating_types;
-            $scope.review = ReviewLoad.review;
-            $scope.me = me;
-            // console.log($scope.review);
-            $scope.toPercent = function(num){
-                return num/2000 * 100;
-            }
-
-            $scope.$on('watchlist::addremove', function(event, film_id) {
-
-              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
-                    
-            });
-    }]) 
-
-  
-  ;
-
 
 angular.module('Api', ['ngResource'])
 
@@ -1635,16 +1634,6 @@ angular.module('ReviewService', ['Api'])
         }
       },
     });
-    $stateProvider.state('root.settings.invites', {
-      url: '/invites',
-      title: 'Settings - invites',
-      views: {
-        'page-child' : {
-          templateUrl: '/assets/templates/settings/invites.tmpl.html',
-          controller: 'settingsInvitesCtrl'
-        }
-      },
-    });
 
   }])
 
@@ -1652,8 +1641,7 @@ angular.module('ReviewService', ['Api'])
     function ($scope, me,userApiService,AlertService,$state) {
       $scope.tabs = [
         {title: 'Profile', state:'root.settings.profile', active:false},
-        {title: 'Filmeters', state:'root.settings.filmeters', active:false},
-        {title: 'Invites', state:'root.settings.invites', active:false}
+        {title: 'Filmeters', state:'root.settings.filmeters', active:false}
       ];
 
       _.forEach($scope.tabs, function(tab){
