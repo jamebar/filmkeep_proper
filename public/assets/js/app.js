@@ -629,8 +629,8 @@ var aeReview = angular.module('ae-review', [
 //   })
 
 // }])
-.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService',
-  function($scope, streamApiService,me,ReviewService,reviewApiService){
+.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService',
+  function($scope, streamApiService,me,ReviewService,reviewApiService,watchlistApiService){
     if(!angular.isDefined(me.user)){
       window.location.href = '/users/login';
     }
@@ -644,7 +644,10 @@ var aeReview = angular.module('ae-review', [
         
     });
 
-    
+    watchlistApiService
+            .getWatchlist(me.user.id).then(function(response) {
+                $scope.watchlist_items = response.results;
+            });
 
     $scope.$on('watchlist::addremove', function(event, film_id) {
 

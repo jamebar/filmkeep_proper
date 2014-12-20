@@ -1,10 +1,25 @@
 <div class="row padding-top">
 
-  <!-- <div class="col-xs-12 col-md-4">
-
-    <add-edit-review review="review_new" rating-types="rating_types_new"></add-edit-review>
-  </div> -->
-  <div class="col-xs-12 col-md-12">
+  <div class="col-xs-12 col-md-4">
+    <div class="sidebar-item friends-sidebar clearfix">
+      <h3>Friends</h3>
+       <ul>
+        <li ng-repeat="friend in me.user.followers | limitTo: 10">
+          <a ui-sref='root.user.filmkeep({username: friend.username })'><img ng-src="%%friend.avatar | profileFilter%%" /> <p>%%friend.name%%</p></a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-item watchlist-sidebar clearfix">
+      <a ui-sref='root.user.watchlist({username: me.user.username})'><h3>Watchlist</h3></a>
+      <ul>
+        <li ng-repeat="witem in watchlist_items | limitTo: 6">
+          <a ui-sref='root.film({filmId: witem.film.tmdb_id, filmSlug: slugify(witem.film.title) })'><img ng-src="%%witem.film.poster_path | imageFilter:'poster':'1'%%" /></a>
+        </li>
+      </ul>
+    </div>
+    <!-- <add-edit-review review="review_new" rating-types="rating_types_new"></add-edit-review> -->
+  </div>
+  <div class="col-xs-12 col-md-8">
     <div class="preloader" ng-show="loading">loading feed <img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
     <div ng-repeat="feed_item in feed_items">
       <feed-items></feed-items>

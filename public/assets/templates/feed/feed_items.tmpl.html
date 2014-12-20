@@ -2,7 +2,7 @@
 
   <!-- REVIEW FEED ITEM -->
   <div class="feed-item clearfix" ng-switch-when="filmkeep\review">
-    <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" />
+    <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" />
     <span class="feed-date pull-right">%%feed_item.updated_at.date | fDate %%</span>
     <span class="feed-actor">
         <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
@@ -12,30 +12,39 @@
     <a ui-sref='root.review({reviewId: feed_item.activities[0].object.id})' ng-if="feed_item.activity_count===1">%%feed_item.activities[0].object.film.title%%</a>
     
     <div class="clearfix">
-      <div ng-repeat="activity in feed_item.activities" class="activity-item">
-          <a ui-sref='root.review({reviewId: activity.object.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a>
-          
-            <!-- <div ng-repeat="rating in activity.object.ratings">
+      <div ng-repeat="activity in feed_item.activities" class="activity-item activity-review">
+        <div class="feed-review-cover" style="background-image:url(%%activity.object.film.backdrop_path | imageFilter :'backdrop':'1' %%)">
+          <div class="cover"></div>
+        </div>
+          <div class="feed-review-wrapper clearfix">
+            <div class="feed-review-poster pull-left">
+              <a ui-sref='root.review({reviewId: activity.object.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a>
+              
+              <a class="action" href="" ng-click="getTrailer(activity.object.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
+              <a class="action" href=""  ng-click="newReview(activity.object.film)" ng-if="activity.object.reviewed === 'false'"><span class="glyphicon glyphicon-tasks visible-xs-inline-block"></span> <span class="hidden-xs">review</span> </a> 
+              <a class="action" href=""  ng-click="compare(activity.object)" ng-if="activity.object.reviewed === 'true' && activity.actor.id !== me.user.id">compare</a> 
+              <a class="action" href=""  ng-click="editReview({review:activity.object, rating_types: rating_types_new})" ng-if="activity.actor.id === me.user.id"><span class="glyphicon glyphicon-pencil visible-xs-inline-block" ></span><span class="hidden-xs">edit</span></a> 
+              <a class="action" href=""  ng-click="watchlist(activity.object)"><span ng-class="{'glyphicon-plus': activity.object.on_watchlist === 'false','glyphicon-ok': activity.object.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+            </div>
+            <div class="feed-review-ratings pull-left" ng-if="feed_item.activity_count===1">
+              <div ng-repeat="rating in activity.object.ratings | limitTo: 5">
                 <p>%%rating.rating_type.label%%</p>
                 <div class="progress" >
                   <div class="progress-bar" role="progressbar" aria-valuenow="%%rating.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating.value)%%%;">
                     
                   </div>
                 </div>
-            </div> -->
-            <a class="action" href="" ng-click="getTrailer(activity.object.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
-            <a class="action" href=""  ng-click="newReview(activity.object.film)" ng-if="activity.object.reviewed === 'false'"><span class="glyphicon glyphicon-tasks visible-xs-inline-block"></span> <span class="hidden-xs">review</span> </a> 
-            <a class="action" href=""  ng-click="compare(activity.object)" ng-if="activity.object.reviewed === 'true' && activity.actor.id !== me.user.id">compare</a> 
-            <a class="action" href=""  ng-click="editReview({review:activity.object, rating_types: rating_types_new})" ng-if="activity.actor.id === me.user.id"><span class="glyphicon glyphicon-pencil visible-xs-inline-block" ></span><span class="hidden-xs">edit</span></a> 
-            <a class="action" href=""  ng-click="watchlist(activity.object)"><span ng-class="{'glyphicon-plus': activity.object.on_watchlist === 'false','glyphicon-ok': activity.object.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
-          <span ng-if="feed_item.activity_count===1">%%activity.object.notes%%</span>
+              </div>
+            </div>
+          </div>
+          <div class="feed-review-notes" ng-if="feed_item.activity_count===1">%%activity.object.notes%%</div>
       </div>
     </div>
   </div>
 
 <!-- WATCHLIST FEED ITEM -->
   <div class="feed-item clearfix" ng-switch-when="filmkeep\watchlist">
-    <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" />
+    <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" />
     <span class="feed-date pull-right">%%feed_item.updated_at.date | fDate %%</span>
     <span class="feed-actor">
         <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
