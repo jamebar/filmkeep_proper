@@ -1,5 +1,5 @@
 <div class="padding-top">
-  <a ui-sref='root.user.filmkeep({username: page_user.username})'><img ng-src="%%page_user.avatar | profileFilter%%" width="60" height="60"/></a>
+  <avatar class="avatar large" info="page_user"></avatar>
   <a ui-sref='root.user.filmkeep({username: page_user.username})'>%%page_user.name%%</a>
   <a ng-show="showFollow" ng-click="follow(page_user)"><span class="glyphicon glyphicon-ok" ng-show="page_user.following"></span> %% page_user.following ? "following" : "follow" %%</a>
   %%page_user.total_followers%% followers

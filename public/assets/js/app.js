@@ -119,20 +119,33 @@ angular.module('myApp', [
           filmApiService.getTrailer(tmdb_id).then(function(response){
             if(angular.isDefined(response.youtube)){
               $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/' + response.youtube[0].source);
+              $scope.current_trailer = response.youtube[0].source;
+              $scope.trailer_sources = response.youtube;
+              // console.log($scope.trailer_sources);
               trailerModal();
             }
             
           })
         }
+
+        $scope.loadTrailer = function(id){
+          $scope.current_trailer = id;
+          $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/' + id);
+        }
+
         $scope.editReview = function(id){
             $scope.getReview(id);
             //openModal(id);
 
         }
 
+        $scope.addNewReview = function(){
+          showModal();
+        }
+
         $scope.newReview = function(film){
    
-
+          console.log("new review");
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
                 $scope.rating_types = results;
@@ -191,6 +204,38 @@ angular.module('myApp', [
         var labels = scope.label.split("|");
         scope.labelLeft = labels[0];
         scope.labelRight = labels.length>0 ? labels[1] : false;
+        
+    }
+  }
+    
+}])
+
+.directive('avatar', [ function() {
+  return {
+    restrict: 'E',
+    scope: {  
+      user: '=info'
+    },
+    templateUrl: '/assets/templates/avatar.tmpl.html',
+    link: function(scope, element,attrs) {
+        
+        if(scope.user.avatar.length<2)
+        {
+          scope.initials = getInitials(scope.user.name)
+        }
+
+        function getInitials(name)
+        {
+          var temp_name = name.split(' ');
+          var initials = '';
+          _.forEach(temp_name, function(n){
+            initials += n.charAt(0);
+          })
+          return initials;
+        }
+        // var labels = scope.label.split("|");
+        // scope.labelLeft = labels[0];
+        // scope.labelRight = labels.length>0 ? labels[1] : false;
         
     }
   }
@@ -600,6 +645,7 @@ var aeReview = angular.module('ae-review', [
                 scope.$on('typeahead:selected', searchComplete);
                 
                 function searchComplete(event, suggestion, dataset){
+
                   if(dataset === 'people'){
                     $state.go('root.user.filmkeep', {username: suggestion.username});
                   }
@@ -608,6 +654,7 @@ var aeReview = angular.module('ae-review', [
                     $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
                     
                   }
+                  scope.search.query = null;
 
                 }
 
@@ -1665,6 +1712,9 @@ angular.module('ReviewService', ['Api'])
 
   .controller('settingsCtrl', ['$scope','me','userApiService','AlertService','$state',
     function ($scope, me,userApiService,AlertService,$state) {
+      $scope.current_user = new userApiService();
+        _.assign($scope.current_user, me.user);
+        
       $scope.tabs = [
         {title: 'Profile', state:'root.settings.profile', active:false},
         {title: 'Filmeters', state:'root.settings.filmeters', active:false}
@@ -1683,8 +1733,7 @@ angular.module('ReviewService', ['Api'])
 
   .controller('settingsProfileCtrl', ['$scope','me','userApiService','AlertService',
     function ($scope, me,userApiService,AlertService) {
-        $scope.current_user = new userApiService();
-        _.assign($scope.current_user, me.user);
+        
 
         $scope.saveUser = function(){
           $scope.current_user.$update(function(response){

@@ -42,6 +42,9 @@
 
   .controller('settingsCtrl', ['$scope','me','userApiService','AlertService','$state',
     function ($scope, me,userApiService,AlertService,$state) {
+      $scope.current_user = new userApiService();
+        _.assign($scope.current_user, me.user);
+        
       $scope.tabs = [
         {title: 'Profile', state:'root.settings.profile', active:false},
         {title: 'Filmeters', state:'root.settings.filmeters', active:false}
@@ -60,8 +63,7 @@
 
   .controller('settingsProfileCtrl', ['$scope','me','userApiService','AlertService',
     function ($scope, me,userApiService,AlertService) {
-        $scope.current_user = new userApiService();
-        _.assign($scope.current_user, me.user);
+        
 
         $scope.saveUser = function(){
           $scope.current_user.$update(function(response){

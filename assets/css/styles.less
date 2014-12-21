@@ -108,7 +108,7 @@ a{
 
 .fc-profile {
   float: left;
-  border-right: 1px solid #fff;
+  border-right: 1px solid rgba(255,255,255,.4);
   padding-right: 1em;
   margin-right: 1em;
   margin-bottom: 1em;
@@ -220,6 +220,7 @@ search{
   }
 }
 
+
 .navbar-brand{
   background:url(/assets/img/filmkeep-logo-f.png) no-repeat;
   height: 24px;
@@ -268,14 +269,97 @@ a.action{
 }
 
 
+.avatar-pic{
+  width:60px;
+  height:60px;
+  border-radius:30px;
+}
+
+.large .avatar-pic{
+  width:90px;
+  height:90px;
+  border-radius: 45px;
+}
+
+.initials{
+  font-family: 'Volkhov',"Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  background:@filmkeep-red;
+  color:@filmkeep-beige;
+  height:60px;
+  width:60px;
+  line-height: 60px;
+  border-radius: 30px;
+  text-align: center;
+  font-size: 24px;
+  display: inline-block;
+  text-transform: uppercase;
+
+  &:hover{
+    background:darken(@filmkeep-red, 10%);
+  }
+}
 
 .footer{
+  margin-top:4em;
   padding:2em;
   background:#1e424d;
   color:@filmkeep-beige;
-  margin-top:2em;
+
   min-height: 200px;
   p{
     color:#497888;
+  }
+}
+
+.settings-panel{
+  padding:2em;
+  background:#fff;
+
+  input.form-control {
+    background:#ececec;
+  }
+}
+
+.filmeter{
+  padding:1em;
+  border-bottom:1px solid #ececec;
+  margin-bottom: 1em;
+}
+
+.criteria-actions a{
+  margin-left:1em;
+}
+
+.trailer-list{
+  padding:1em;
+  
+  a{
+    border:1px solid #fff;
+    padding:1em;
+    display: inline-block;
+
+    &.selected{
+      border-color:@filmkeep-beige;
+    }
+  }
+}
+
+.trailer-review{
+  height:90px;
+  width:150px;
+  background-size: cover;
+  border-radius:5px;
+  a{
+    background-color: rgba(123,113,113,.6);
+    border-radius:5px;
+    width:100%;
+    height:100%;
+    display: inline-block;
+    text-align: center;
+    color:@filmkeep-beige;
+    line-height: 90px;
+    &:hover{
+      background-color: rgba(123,113,113,0);
+    }
   }
 }

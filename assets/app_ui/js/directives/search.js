@@ -96,6 +96,7 @@
                 scope.$on('typeahead:selected', searchComplete);
                 
                 function searchComplete(event, suggestion, dataset){
+
                   if(dataset === 'people'){
                     $state.go('root.user.filmkeep', {username: suggestion.username});
                   }
@@ -104,6 +105,7 @@
                     $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
                     
                   }
+                  scope.search.query = null;
 
                 }
 

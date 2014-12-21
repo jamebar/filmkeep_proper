@@ -1,15 +1,14 @@
-<p>Create custom criteria. These will show up for you to use on all reviews, including past ones.</p>
-<h4>Preset filmeters, these can't be changed</h4>
+<!-- <h4>Preset filmeters, these can't be changed</h4>
 <div ng-repeat="type in types | filter: filterCommon">
   %%type.label%%
-</div>
-<h4>Your custom filmeters</h4>
-<div ng-repeat="type in types | filter: filterCustom" class="clearfix">
+</div> -->
+<h3>Your custom filmeters</h3>
+<p>Create custom criteria. These will show up for you to use on all reviews, including past ones.</p>
+<div ng-repeat="type in types | filter: filterCustom" class="clearfix filmeter">
   %%type.label%% <div class="criteria-actions pull-right"><span class="glyphicon glyphicon-pencil"></span> <a ng-click="deleteFilmeter(type)"><span class="glyphicon glyphicon-trash"></span></a></div>
 </div>
 
 <form ng-submit="saveFilmeter()">
-  
-    <input class="form-control" ng-model="newcriteria.label"/>
+    <input class="form-control" ng-model="newcriteria.label" placeholder="Create your own filmeter"/>
     <!-- <input type="submit" class="btn btn-submit" value="Save" /> -->
 </form>

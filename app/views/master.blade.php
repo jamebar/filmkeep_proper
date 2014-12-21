@@ -62,6 +62,8 @@
         @if(Auth::check())
         <li><a ui-sref='root.feed'>Feed</a></li>
         <li><a ui-sref='root.user.filmkeep({username: "{{Auth::user()->username}}" })'  >My Filmkeep</a></li>
+        <li><a ui-sref='root.user.watchlist({username: "{{Auth::user()->username}}" })'>Watchlist</a></li>
+        <!-- <li><a ng-click="newReview()">Add Review</a></li> -->
         @endif
         @if(!Auth::check())
         <li><a href="/users/login" target="_self" class="btn">Log in</a></li>
@@ -71,7 +73,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img class="round-corners" ng-src="%%'{{Auth::user()->avatar}}' | profileFilter%%" width="30" height="30" onerror="this.src = '/assets/img/default-profile.jpg';"/></a>
           <ul class="dropdown-menu" role="menu">
             <li><a ui-sref="root.settings.profile"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-            <li><a ui-sref='root.user.watchlist({username: "{{Auth::user()->username}}" })'><span class="glyphicon glyphicon-list"></span> Watchlist</a></li>
+            
             <li class="divider"></li>
             
             <li><a href="/users/logout" target="_self">Logout</a></li>

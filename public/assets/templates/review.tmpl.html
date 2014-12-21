@@ -3,13 +3,16 @@
     
         <div class="fc-info">
           <div class="fc-profile">
-            <a ui-sref='root.user.filmkeep({username: review.user.username})'><img ng-src="%%review.user.avatar | profileFilter%%" width="100" height="100" class="round-corners"/>
-            </a>
-            <a ui-sref='root.user.filmkeep({username: review.user.username})'>%%review.user.name%%</a>
+            
+            <avatar class="avatar large" info="review.user"></avatar>
+           
+            <!-- <a ui-sref='root.user.filmkeep({username: review.user.username})'>%%review.user.name%%</a> -->
           </div>
           <div class="fc-content">
             <h2>%%review.film.title%%</h2>
             <a ng-click="watchlist(review.film)"><span ng-class="{'glyphicon-plus': review.film.on_watchlist === 'false','glyphicon-ok': review.film.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+            <a ng-click="editReview({review:review,rating_types:rating_types})" ng-if="me.user.id === review.user_id">edit</a>
+            <a ng-click="compare(review)" ng-if="review.reviewed === 'true' ">compare </a>
           </div>
         </div>
      
@@ -17,12 +20,12 @@
 </div>
 
 <div class="full-width-section theme-beige row-full-width">
-  <a ng-click="editReview({review:review,rating_types:rating_types})" ng-if="me.user.id === review.user_id">Edit</a>
   
-  <a ng-click="compare(review)" ng-if="review.reviewed === 'true' ">compare </a>
   <div class="row">
     <div class="col-xs-12 col-sm-3">
-      <a ng-click="getTrailer(review.film.tmdb_id)">Trailer</a>
+      <div class="trailer-review" style="background-image:url(%%review.film.backdrop_path | imageFilter :'backdrop':'1' %%)">
+        <a ng-click="getTrailer(review.film.tmdb_id)">Trailer</a>
+      </div>
     </div>
     <div class="col-xs-12 col-sm-9">
       <p>%%review.film.summary%%</p>

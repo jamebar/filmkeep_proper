@@ -1,11 +1,25 @@
 <div class="padding-top">
-    
-  <tabset >
-    <tab ng-repeat="tab in tabs" ng-click="gotoTab(tab.state)" heading="%%tab.title%%" active="tab.active" disabled="tab.disabled">
-      </tab>
-    <!-- <tab heading="Profile" ng-click="gotoTab('root.settings.profile')" active="profile"></tab>
-    <tab heading="Custom Filmeters" ng-click="gotoTab('root.settings.filmeters')" active="filmeters"></tab>
-    <tab heading="Invites" ng-click="gotoTab('root.settings.invites')" active="invites"></tab> -->
-  </tabset>
-  <div ui-view="page-child"></div>
+  <style>
+  body{
+    background-image:url(/assets/img/bg/bg-jimmy-stewart-800.jpg) ;
+    background-repeat: no-repeat;
+    background-position: top center;
+
+  }
+  </style>
+  <div class="row">
+    <div class="col-xs-12 col-md-6 col-md-offset-3">
+        <avatar class="avatar large" info="current_user"></avatar>
+        <tabset>
+          <tab ng-repeat="tab in tabs" ng-click="gotoTab(tab.state)" heading="%%tab.title%%" active="tab.active" disabled="tab.disabled">
+            </tab>
+          <!-- <tab heading="Profile" ng-click="gotoTab('root.settings.profile')" active="profile"></tab>
+          <tab heading="Custom Filmeters" ng-click="gotoTab('root.settings.filmeters')" active="filmeters"></tab>
+          <tab heading="Invites" ng-click="gotoTab('root.settings.invites')" active="invites"></tab> -->
+        </tabset>
+      <div class="settings-panel">
+        <div ui-view="page-child"></div>
+      </div>
+    </div>
+  </div>
 </div>

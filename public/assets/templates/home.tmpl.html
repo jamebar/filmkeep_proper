@@ -1,3 +1,6 @@
+<style>
+.navbar {background-color:#323232 !important;}
+</style>
 <div class="row padding-top">
 
   <div class="col-xs-12 col-md-4">
@@ -9,7 +12,8 @@
        <ul>
         <li ng-repeat="friend in me.user.followers | limitTo: 10">
           <span ng-if="me.user.id !== friend.id">
-            <a ui-sref='root.user.filmkeep({username: friend.username })'><img ng-src="%%friend.avatar | profileFilter%%" /> <p>%%friend.name%%</p></a>
+            <avatar info="friend"></avatar>
+            
           </span>
         </li>
       </ul>

@@ -2,7 +2,8 @@
 
   <!-- REVIEW FEED ITEM -->
   <div class="feed-item clearfix" ng-switch-when="filmkeep\review">
-    <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" />
+    <!-- <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" /> -->
+    <avatar class="avatar" info="feed_item.activities[0].actor"></avatar>
     <span class="feed-date pull-right">%%feed_item.updated_at.date | fDate %%</span>
     <span class="feed-actor">
         <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
@@ -44,7 +45,8 @@
 
 <!-- WATCHLIST FEED ITEM -->
   <div class="feed-item clearfix" ng-switch-when="filmkeep\watchlist">
-    <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" />
+    <!-- <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" /> -->
+    <avatar class="avatar" info="feed_item.activities[0].actor"></avatar>
     <span class="feed-date pull-right">%%feed_item.updated_at.date | fDate %%</span>
     <span class="feed-actor">
         <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
@@ -67,7 +69,8 @@
 
   <!-- FOLLOWER FEED ITEM -->
   <div class="feed-item clearfix" ng-switch-when="filmkeep\follower">
-    <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" />
+    <!-- <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" /> -->
+    <avatar class="avatar" info="feed_item.activities[0].actor"></avatar>
     <span class="feed-date pull-right">%%feed_item.updated_at.date | fDate %%</span>
     <span class="feed-actor">
         <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
