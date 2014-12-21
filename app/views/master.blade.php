@@ -99,9 +99,10 @@
     
     		
     </div>
-    <div class="container footer">
+    <div class="container-fluid footer">
         <div class="col-xs-12">
-            Filmkeep 2014  |  This product uses the TMDb API but is not endorsed or certified by TMDb.
+            <h4>Filmkeep 2014</h4>
+            <p>This product uses the TMDb API but is not endorsed or certified by TMDb.<p>
         </div>
     </div>
     

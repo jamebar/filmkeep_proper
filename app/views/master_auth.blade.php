@@ -18,7 +18,13 @@
     <div class="container">
       @if (Session::get('error'))
           <div class="alert-box alert alert-error alert-danger" close-me="3000">
-              {{{ Session::get('error') }}}
+              @if(is_array(Session::get('error')))
+                @foreach(Session::get('error') as $error)
+                {{{ $error }}}
+                @endforeach
+              @else
+                {{{Session::get('error')}}}
+              @endif
           </div>
       @endif
 
@@ -36,11 +42,11 @@
           </div>
       </div>
     </div>
-    <div class="container footer">
+    <!-- <div class="container-fluid footer">
         <div class="col-xs-12">
             Filmkeep 2014
         </div>
-    </div>
+    </div> -->
     
 </body>
 </html>

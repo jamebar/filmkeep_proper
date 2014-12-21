@@ -3,9 +3,14 @@
   <div class="col-xs-12 col-md-4">
     <div class="sidebar-item friends-sidebar clearfix">
       <h3>Friends</h3>
+      <span ng-show="me.user.followers ==0">
+        <p>You have not added any followers. To follow a friend's activity, click on "Follow" on a user's Filmkeep page.</p>
+        <p>Get started by searching for a friend in the search in the header.</p></span>
        <ul>
         <li ng-repeat="friend in me.user.followers | limitTo: 10">
-          <a ui-sref='root.user.filmkeep({username: friend.username })'><img ng-src="%%friend.avatar | profileFilter%%" /> <p>%%friend.name%%</p></a>
+          <span ng-if="me.user.id !== friend.id">
+            <a ui-sref='root.user.filmkeep({username: friend.username })'><img ng-src="%%friend.avatar | profileFilter%%" /> <p>%%friend.name%%</p></a>
+          </span>
         </li>
       </ul>
     </div>
@@ -16,11 +21,13 @@
           <a ui-sref='root.film({filmId: witem.film.tmdb_id, filmSlug: slugify(witem.film.title) })'><img ng-src="%%witem.film.poster_path | imageFilter:'poster':'1'%%" /></a>
         </li>
       </ul>
+      <p ng-show="watchlist_items.length ==0">Your watchlist is empty.  You can add any film to your watchlist, just look for the "watchlist" button next to any film poster.</p>
     </div>
     <!-- <add-edit-review review="review_new" rating-types="rating_types_new"></add-edit-review> -->
   </div>
   <div class="col-xs-12 col-md-8">
     <div class="preloader" ng-show="loading">loading feed <img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
+    <p ng-show="feed_items.length ==0">Your feed is currently empty, the activity of those you follow, and your own review activity will show up here.</p>
     <div ng-repeat="feed_item in feed_items">
       <feed-items></feed-items>
     </div>

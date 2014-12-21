@@ -38,17 +38,25 @@ class FollowerController extends \BaseController {
    *
    * @return Response
    */
-  public function unfollow($follow_id)
+  public function unfollow($follower_id)
   {
-    if(!$follow_id)
+    if(!$follower_id)
       return Response::json(['response'=>'failed']);
 
     $user = Auth::user();
 
-    Follower::where('user_id',$user->id)->where('follower_id', $follow_id)->delete();
+    $follow = Follower::where('user_id',$user->id)->where('follower_id', $follower_id)->first();
+    $follow_id = $follow->id;
+    $follow->delete();
+
+    $api_key = \Config::get('stream-laravel::api_key');
+    $api_secret = \Config::get('stream-laravel::api_secret');
+    $client = new GetStream\Stream\Client($api_key, $api_secret );
+    $user_feed = $client->feed("user:{$user->id}");
+    $user_feed->removeActivity("Filmkeep\Follower:{$follow_id}", true);
 
     //follow the feed
-    FeedManager::unfollowUser($user->id, $follow_id);
+    FeedManager::unfollowUser($user->id, $follower_id);
 
     return User::with('followers')->where('id',Auth::user()->id)->first();
 

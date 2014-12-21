@@ -19,7 +19,7 @@ slider {
 slider span.bar {
   height: 50%;
   z-index: 0;
-  background: #eee;
+  background: #d47d55;
   left: 0;
   top: 25%;
   cursor: pointer;
@@ -40,7 +40,7 @@ slider span.pointer {
   border-radius: 15px;
   top: 0;
   bottom: 0;
-  background-color: #00a;
+  background-color: #f4e8d0;
 }
 slider span.bubble {
   font-size: 0.7em;
@@ -212,21 +212,12 @@ ul.filmkeep-list li img {
 }
 .feed-item .activity-item {
   float: left;
-  width: 100%;
 }
 .feed-item .activity-item img {
   display: block;
 }
-@media only screen and (min-width: 40em) {
-  .feed-item {
-    padding-left: 60px;
-  }
-  .feed-item img {
-    margin-bottom: 0em;
-  }
-  .feed-item .avatar {
-    margin-left: -60px;
-  }
+.feed-actor {
+  text-transform: capitalize;
 }
 .feed-review-poster {
   margin-right: 1em;
@@ -242,6 +233,12 @@ ul.filmkeep-list li img {
   background: #f4e8d0;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
+  margin-left: 0;
+  margin-top: 0;
+}
+.activity-review .feed-review-ratings p {
+  margin-bottom: 0px;
+  margin-top: 5px;
 }
 .feed-review-wrapper {
   padding: 25px;
@@ -258,19 +255,34 @@ ul.filmkeep-list li img {
   padding: 25px;
   text-align: center;
 }
+@media only screen and (min-width: 40em) {
+  .feed-item {
+    padding-left: 60px;
+  }
+  .feed-item img {
+    margin-bottom: 0em;
+  }
+  .feed-item .avatar {
+    margin-left: -60px;
+  }
+  .activity-review {
+    margin-left: -31px;
+    margin-top: -20px;
+  }
+}
 .btn {
   border-radius: 0 !important;
   border: none !important;
   box-shadow: none !important;
 }
 .btn-primary {
-  background-color: #d2544c;
+  background-color: #7fb5b7;
   padding: 1em;
   width: 100%;
   color: #f4e8d0;
 }
 .btn-primary:hover {
-  background-color: #d76760;
+  background-color: #8fbec0;
 }
 .navbar-nav > li > a {
   line-height: 32px;
@@ -328,6 +340,11 @@ ul.filmkeep-list li img {
 .navbar-inverse .navbar-toggle {
   border: none;
 }
+.modal.fade .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  -ms-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
 ul.compare-avatars,
 ul.compare-avatars li {
   margin: 0;
@@ -368,7 +385,8 @@ ul.compare-avatars li.active img {
   padding-left: 10px;
   text-align: left;
 }
-input {
+input,
+textarea {
   border-radius: 0 !important;
   border: none !important;
   box-shadow: none !important;
@@ -432,7 +450,9 @@ a:hover {
 }
 .review-editor {
   margin: 0 auto;
-  padding: 2em;
+  padding: 1em 3em 3em;
+  background: #d2544c;
+  color: #f4e8d0;
 }
 .padding-top {
   padding-top: 70px;
@@ -582,8 +602,8 @@ search .tt-hint {
   .navbar-brand {
     background: url(/assets/img/filmkeep_logo_top.png) no-repeat;
     background-size: contain;
-    height: 24px;
-    width: 198px;
+    height: 20px;
+    width: 170px;
   }
 }
 .video-container {
@@ -609,4 +629,14 @@ a.action {
 a.action:hover {
   color: rgba(0, 0, 0, 0.6);
   text-decoration: none;
+}
+.footer {
+  padding: 2em;
+  background: #1e424d;
+  color: #f4e8d0;
+  margin-top: 2em;
+  min-height: 200px;
+}
+.footer p {
+  color: #497888;
 }

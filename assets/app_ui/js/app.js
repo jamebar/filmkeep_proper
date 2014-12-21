@@ -179,6 +179,24 @@ angular.module('myApp', [
   }
 }])
 
+.directive('ratingTypeLabel', [ function() {
+  return {
+    restrict: 'A',
+    scope: {
+      label: '='
+    },
+    template: '<span>%%labelLeft%%<span ng-show="labelRight" class="pull-right">%%labelRight%%</span><span ng-show="rating_type.new">(New)</span>',
+    link: function(scope, element,attrs) {
+        
+        var labels = scope.label.split("|");
+        scope.labelLeft = labels[0];
+        scope.labelRight = labels.length>0 ? labels[1] : false;
+        
+    }
+  }
+    
+}])
+
 .filter('imageFilter', [ function() {
   return function(path, type, size)
   {
@@ -192,6 +210,7 @@ angular.module('myApp', [
   }
     
 }])
+
 
 .factory('followerFactory', ['meApiService',function(meApiService){
   
@@ -224,7 +243,8 @@ angular.module('myApp', [
 .filter('verb',function(){
   return function(verb){
     var keys = {'filmkeep\\review':'reviewed',
-                'filmkeep\\watchlist':'added'
+                'filmkeep\\watchlist':'added',
+                'filmkeep\\follower':'started following'
                 };
     return keys[verb];
   }

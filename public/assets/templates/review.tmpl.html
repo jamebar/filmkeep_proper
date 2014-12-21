@@ -18,13 +18,24 @@
 
 <div class="full-width-section theme-beige row-full-width">
   <a ng-click="editReview({review:review,rating_types:rating_types})" ng-if="me.user.id === review.user_id">Edit</a>
-  <a ng-click="getTrailer(review.film.tmdb_id)">Trailer</a>
+  
   <a ng-click="compare(review)" ng-if="review.reviewed === 'true' ">compare </a>
+  <div class="row">
+    <div class="col-xs-12 col-sm-3">
+      <a ng-click="getTrailer(review.film.tmdb_id)">Trailer</a>
+    </div>
+    <div class="col-xs-12 col-sm-9">
+      <p>%%review.film.summary%%</p>
+    </div>
+    <!-- <div class="col-xs-12 col-sm-9"></div> -->
+
+  </div>
+  
 </div>
 
 <div class="full-width-section theme-red row-full-width">
   <div class="review-ratings" ng-repeat="rating_type in rating_types">
-    <p>%%rating_type.label%%</p>
+    <p label="rating_type.label" rating-type-label></p>
     <div class="progress" >
       <div class="progress-bar" role="progressbar" aria-valuenow="%%rating_type.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating_type.value)%%%;">
         
@@ -38,9 +49,9 @@
   <p>%%review.notes%%</p>
 </div>
 
-<div class="full-width-section theme-toast row-full-width">
+<!-- <div class="full-width-section theme-toast row-full-width">
   <h3>Comments</h3>
   <p></p>
-</div>
+</div> -->
 
 

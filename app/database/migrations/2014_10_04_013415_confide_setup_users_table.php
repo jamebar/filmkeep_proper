@@ -13,6 +13,9 @@ class ConfideSetupUsersTable extends Migration
         Schema::create('users', function ($table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('avatar');
+            $table->string('facebook_id');
+            $table->string('google_id');
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');

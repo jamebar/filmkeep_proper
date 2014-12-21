@@ -179,6 +179,24 @@ angular.module('myApp', [
   }
 }])
 
+.directive('ratingTypeLabel', [ function() {
+  return {
+    restrict: 'A',
+    scope: {
+      label: '='
+    },
+    template: '<span>%%labelLeft%%<span ng-show="labelRight" class="pull-right">%%labelRight%%</span><span ng-show="rating_type.new">(New)</span>',
+    link: function(scope, element,attrs) {
+        
+        var labels = scope.label.split("|");
+        scope.labelLeft = labels[0];
+        scope.labelRight = labels.length>0 ? labels[1] : false;
+        
+    }
+  }
+    
+}])
+
 .filter('imageFilter', [ function() {
   return function(path, type, size)
   {
@@ -192,6 +210,7 @@ angular.module('myApp', [
   }
     
 }])
+
 
 .factory('followerFactory', ['meApiService',function(meApiService){
   
@@ -224,7 +243,8 @@ angular.module('myApp', [
 .filter('verb',function(){
   return function(verb){
     var keys = {'filmkeep\\review':'reviewed',
-                'filmkeep\\watchlist':'added'
+                'filmkeep\\watchlist':'added',
+                'filmkeep\\follower':'started following'
                 };
     return keys[verb];
   }
@@ -321,7 +341,6 @@ var aeReview = angular.module('ae-review', [
                         scope.reviews = results;
                     })
 
-                
                 scope.reviewSubmit = function() {
                     //scope.review.ratings = scope.rating_types;
                     var ratings = [];
@@ -338,7 +357,9 @@ var aeReview = angular.module('ae-review', [
                     if(scope.review.id)
                       scope.review.$update({review_id:scope.review.id});
                     else
-                      scope.review.$save();
+                      scope.review.$save().then(function(){
+                        console.log('review returned');
+                      });
 
                     // var newReview = new reviewApiService();
                     // newReview
@@ -354,7 +375,9 @@ var aeReview = angular.module('ae-review', [
                     //console.log('hint_index',el);
                     scope.hint_index = el;
 
-                    scope.show_hint = true;
+                    if(scope.reviews.length>0)
+                      scope.show_hint = true;
+
                     sortedReviews = _.sortBy(scope.reviews, function(r) {
                         return r.ratings[scope.hint_index] ? r.ratings[scope.hint_index].value : 0;
                     })
@@ -363,12 +386,12 @@ var aeReview = angular.module('ae-review', [
                     scope.relation_top = window.event.clientY ;
                     // console.log(scope.relation_top);
                     inBetween();
-                    scope.fade_slider = true;
+                    // scope.fade_slider = true;
                 }
 
                 scope.hideHint = function(el) {
                     scope.show_hint = false;
-                    scope.fade_slider = false;
+                    // scope.fade_slider = false;
                 }
 
                 function getOffsetTop( elem )
@@ -892,53 +915,6 @@ var aeReview = angular.module('ae-review', [
   
   ;
 
-
-  'use strict';
-
-  angular.module('review', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.review', {
-      url: '/r/{reviewId}',
-      title: 'Review',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/review.tmpl.html',
-          controller: 'ReviewCtrl'
-        }
-      },
-      resolve: {
-        ReviewLoad: function($stateParams,ReviewService) {
-         
-          return ReviewService.getReview($stateParams.reviewId)
-          
-        }, 
-      }
-    });
-  }])
-
-  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad','me',
-    function ($scope,$stateParams,ReviewService,ReviewLoad,me) {
-
-            $scope.rating_types = ReviewLoad.rating_types;
-            $scope.review = ReviewLoad.review;
-            $scope.me = me;
-            // console.log($scope.review);
-            $scope.toPercent = function(num){
-                return num/2000 * 100;
-            }
-
-            $scope.$on('watchlist::addremove', function(event, film_id) {
-
-              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
-                    
-            });
-    }]) 
-
-  
-  ;
-
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {
 
@@ -1012,6 +988,53 @@ angular.module('AlertBox', [])
         };
 
     } ] );
+
+  'use strict';
+
+  angular.module('review', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.review', {
+      url: '/r/{reviewId}',
+      title: 'Review',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/review.tmpl.html',
+          controller: 'ReviewCtrl'
+        }
+      },
+      resolve: {
+        ReviewLoad: function($stateParams,ReviewService) {
+         
+          return ReviewService.getReview($stateParams.reviewId)
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,$stateParams,ReviewService,ReviewLoad,me) {
+
+            $scope.rating_types = ReviewLoad.rating_types;
+            $scope.review = ReviewLoad.review;
+            $scope.me = me;
+            // console.log($scope.review);
+            $scope.toPercent = function(num){
+                return num/2000 * 100;
+            }
+
+            $scope.$on('watchlist::addremove', function(event, film_id) {
+
+              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
+                    
+            });
+    }]) 
+
+  
+  ;
+
 
 angular.module('Api', ['ngResource'])
 

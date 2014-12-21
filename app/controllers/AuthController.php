@@ -27,6 +27,7 @@ class AuthController extends Controller
      */
     public function store()
     {
+
         $repo = App::make('UserRepository');
         $user = $repo->signup(Input::all());
 

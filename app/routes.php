@@ -27,9 +27,11 @@ Route::get('/test', function(){
 // return FeedManager::followUser(1, 1);
 
   // Deleting activity
-  // $client = new GetStream\Stream\Client('4j8dz2dp5vjn', '3gzp62asbcwjxjyfx7yvrbmctxykwrqc27ypxvnj7xyfu7uygz9rcrdshmvb4fey');
-  // $user_feed_1 = $client->feed('user:101');
-  // $user_feed_1->removeActivity("0c846400-6713-11e4-8080-80012c455820");
+  $api_key = Config::get('stream-laravel::api_key');
+  $api_secret = Config::get('stream-laravel::api_secret');
+  $client = new GetStream\Stream\Client($api_key, $api_secret );
+  $user_feed_1 = $client->feed('user:101');
+  return $user_feed_1->removeActivity("Filmkeep\Follower:27", true);
 
 //   $user_feed_1 = $client->feed('user:101');
 // return $user_feed_1.following(0, 10);

@@ -43,14 +43,19 @@ class FilmController extends BaseController {
     {
       $film_id = $film->id;
       $response = ['film'=>$film];
+
       if(Auth::check())
       {
+        $follower_reviews = [];
         $followers = Follower::where('user_id', Auth::user()->id)->lists('follower_id');
-        $follower_reviews =  Review::with('user','film','ratings','ratings.rating_type')
-                      ->where('film_id', $film_id)
-                      ->whereIn('user_id', $followers)
-                      ->take(10)
-                      ->get();
+        if(count($followers))
+        {
+          $follower_reviews =  Review::with('user','film','ratings','ratings.rating_type')
+                    ->where('film_id', $film_id)
+                    ->whereIn('user_id', $followers)
+                    ->take(10)
+                    ->get();
+        }
         $response['follower_reviews'] = $follower_reviews;
         $response['film']['reviewed'] = $this->isReviewed($film);
         $response['film']['on_watchlist'] = $this->onWatchlist($film);

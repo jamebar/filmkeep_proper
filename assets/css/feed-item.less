@@ -2,6 +2,7 @@
   margin-top:1em;
   padding-left:0px;
 
+
   img{
     margin-bottom: 1em;
   }
@@ -11,7 +12,6 @@
 
   .activity-item{
     float:left;
-    width:100%;
     img{
       display: block;
 
@@ -19,22 +19,8 @@
   }
 }
 
-@media only screen and (min-width: 40em)
-{
-  .feed-item{
-    padding-left:60px;
-
-    img{
-      margin-bottom: 0em;
-
-    }
-   
-
-    .avatar{
-      margin-left:-60px;
-    }
-  }
-
+.feed-actor{
+  text-transform: capitalize;
 }
 
 .feed-review-poster{
@@ -55,6 +41,15 @@
   background:@filmkeep-beige;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
+  margin-left: 0;
+  margin-top: 0;
+    
+  .feed-review-ratings{
+    p{
+      margin-bottom: 0px;
+      margin-top:5px;
+    }
+  }
 }
 
 .feed-review-wrapper{
@@ -77,4 +72,26 @@
 .feed-review-notes{
   padding:25px;
   text-align: center;
+}
+
+@media only screen and (min-width: 40em)
+{
+  .feed-item{
+    padding-left:60px;
+
+    img{
+      margin-bottom: 0em;
+
+    }
+
+    .avatar{
+      margin-left:-60px;
+    }
+  }
+
+  .activity-review{
+    margin-left: -31px;
+    margin-top: -20px;
+  }
+
 }

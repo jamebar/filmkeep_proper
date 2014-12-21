@@ -28,7 +28,7 @@
             </div>
             <div class="feed-review-ratings pull-left" ng-if="feed_item.activity_count===1">
               <div ng-repeat="rating in activity.object.ratings | limitTo: 5">
-                <p>%%rating.rating_type.label%%</p>
+                <p label="rating.rating_type.label" rating-type-label></p>
                 <div class="progress" >
                   <div class="progress-bar" role="progressbar" aria-valuenow="%%rating.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating.value)%%%;">
                     
@@ -62,6 +62,24 @@
           <a class="action" href=""  ng-click="watchlist(activity.object)"><span ng-class="{'glyphicon-plus': activity.object.on_watchlist === 'false','glyphicon-ok': activity.object.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
       </div>
     </div>
+
+  </div>
+
+  <!-- FOLLOWER FEED ITEM -->
+  <div class="feed-item clearfix" ng-switch-when="filmkeep\follower">
+    <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" />
+    <span class="feed-date pull-right">%%feed_item.updated_at.date | fDate %%</span>
+    <span class="feed-actor">
+        <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
+    </span>
+    %% feed_item.verb | verb %%
+    <!-- <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span> -->
+    
+    <span ng-repeat="activity in feed_item.activities" >
+        <a ui-sref='root.user.filmkeep({username: activity.object.target.username})'>%%activity.object.target.name%%</a>
+        <span ng-hide="$last">, </span>
+    </span>
+    
 
   </div>
 

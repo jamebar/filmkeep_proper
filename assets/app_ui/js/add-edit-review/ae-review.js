@@ -54,7 +54,6 @@ var aeReview = angular.module('ae-review', [
                         scope.reviews = results;
                     })
 
-                
                 scope.reviewSubmit = function() {
                     //scope.review.ratings = scope.rating_types;
                     var ratings = [];
@@ -71,7 +70,9 @@ var aeReview = angular.module('ae-review', [
                     if(scope.review.id)
                       scope.review.$update({review_id:scope.review.id});
                     else
-                      scope.review.$save();
+                      scope.review.$save().then(function(){
+                        console.log('review returned');
+                      });
 
                     // var newReview = new reviewApiService();
                     // newReview
@@ -87,7 +88,9 @@ var aeReview = angular.module('ae-review', [
                     //console.log('hint_index',el);
                     scope.hint_index = el;
 
-                    scope.show_hint = true;
+                    if(scope.reviews.length>0)
+                      scope.show_hint = true;
+
                     sortedReviews = _.sortBy(scope.reviews, function(r) {
                         return r.ratings[scope.hint_index] ? r.ratings[scope.hint_index].value : 0;
                     })
@@ -96,12 +99,12 @@ var aeReview = angular.module('ae-review', [
                     scope.relation_top = window.event.clientY ;
                     // console.log(scope.relation_top);
                     inBetween();
-                    scope.fade_slider = true;
+                    // scope.fade_slider = true;
                 }
 
                 scope.hideHint = function(el) {
                     scope.show_hint = false;
-                    scope.fade_slider = false;
+                    // scope.fade_slider = false;
                 }
 
                 function getOffsetTop( elem )
