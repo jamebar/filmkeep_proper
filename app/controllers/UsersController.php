@@ -51,6 +51,7 @@ class UsersController extends BaseController {
     {
       $user = User::with('followers')->where('username', $id)->select(array('id', 'username','name','avatar'))->first();
       $user->total_followers = Follower::where('follower_id', $user->id)->count();
+      $user->total_following = Follower::where('user_id', $user->id)->count();
       $user->total_reviews = $user->reviews? $user->reviews->count() : 0;
       $user->total_watchlist = $user->watchlist? $user->watchlist->count() : 0;
       return $user;
