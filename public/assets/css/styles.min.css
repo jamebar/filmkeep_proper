@@ -194,11 +194,36 @@ ul.filmkeep-list li {
 }
 ul.filmkeep-list li {
   float: left;
-  width: 150px;
-  height: 250px;
+  box-sizing: border-box;
+  position: relative;
+  background-size: cover;
+  width: 33%;
+}
+ul.filmkeep-list li .filler {
+  padding-top: 150%;
 }
 ul.filmkeep-list li img {
   width: 100%;
+}
+@media only screen and (min-width: 40em) {
+  ul.filmkeep-list li {
+    width: 25%;
+  }
+}
+@media only screen and (min-width: 50em) {
+  ul.filmkeep-list li {
+    width: 20%;
+  }
+}
+@media only screen and (min-width: 65em) {
+  ul.filmkeep-list li {
+    width: 16.6%;
+  }
+}
+@media only screen and (min-width: 80em) {
+  ul.filmkeep-list li {
+    width: 14.2%;
+  }
 }
 .feed-item {
   margin-top: 1em;
@@ -441,6 +466,9 @@ body {
   font-family: 'Lato', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   color: #7b7171;
 }
+.page-child {
+  margin-top: 1em;
+}
 .body-bg {
   background-image: url(/assets/img/bg/bg-jimmy-stewart-800.jpg);
   background-repeat: no-repeat;
@@ -674,6 +702,14 @@ a.action:hover {
 .initials:hover {
   background: #bc382f;
 }
+.large .initials {
+  height: 90px;
+  width: 90px;
+  line-height: 60px;
+  border-radius: 45px;
+  line-height: 90px;
+  font-size: 30px;
+}
 .footer {
   margin-top: 4em;
   padding: 2em;
@@ -701,31 +737,58 @@ a.action:hover {
 }
 .trailer-list {
   padding: 1em;
+  background: #333;
 }
 .trailer-list a {
-  border: 1px solid #fff;
+  border: 1px solid #333;
   padding: 1em;
   display: inline-block;
 }
 .trailer-list a.selected {
-  border-color: #f4e8d0;
+  border-color: #666;
+}
+.no-trailer {
+  padding: 3em;
+  text-align: center;
 }
 .trailer-review {
-  height: 90px;
-  width: 150px;
+  height: 100px;
+  width: 100%;
   background-size: cover;
   border-radius: 5px;
 }
 .trailer-review a {
-  background-color: rgba(123, 113, 113, 0.6);
+  background-color: rgba(123, 113, 113, 0.7);
   border-radius: 5px;
   width: 100%;
   height: 100%;
   display: inline-block;
   text-align: center;
+  text-transform: uppercase;
   color: #f4e8d0;
   line-height: 90px;
 }
 .trailer-review a:hover {
-  background-color: rgba(123, 113, 113, 0);
+  background-color: rgba(123, 113, 113, 0.5);
+}
+.stats {
+  width: 100%;
+  max-width: 400px;
+}
+.stats .stat {
+  width: 33%;
+  text-align: center;
+  float: left;
+}
+.stats .stat em {
+  font-style: none;
+}
+.stats .stat span {
+  font-size: 60px;
+  display: block;
+  line-height: 51px;
+}
+.page-user-actions {
+  margin-left: 1em;
+  display: inline-block;
 }

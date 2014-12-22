@@ -6,11 +6,47 @@ ul.filmkeep-list, ul.filmkeep-list li{
 
 ul.filmkeep-list li{
   float:left;
-  width:150px;
-  height:250px;
+  box-sizing: border-box;
+  position: relative;
+  background-size: cover;
+
+  width:33%;
+
+  .filler{
+    padding-top: 150%;
+  }
+  a{
+  }
 
   img{
     width:100%;
   }
 
+}
+
+@media only screen and (min-width: 40em)
+{
+  ul.filmkeep-list li{
+    width:25%;
+  }
+}
+
+@media only screen and (min-width: 50em)
+{
+  ul.filmkeep-list li{
+    width:20%;
+  }
+}
+@media only screen and (min-width: 65em)
+{
+  ul.filmkeep-list li{
+    width:16.6%;
+  }
+}
+
+@media only screen and (min-width: 80em)
+{
+  ul.filmkeep-list li{
+    width:14.2%;
+  }
 }

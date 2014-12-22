@@ -1,10 +1,29 @@
-<div class="padding-top">
-  <avatar class="avatar large" info="page_user"></avatar>
-  <a ui-sref='root.user.filmkeep({username: page_user.username})'>%%page_user.name%%</a>
-  <a ng-show="showFollow" ng-click="follow(page_user)"><span class="glyphicon glyphicon-ok" ng-show="page_user.following"></span> %% page_user.following ? "following" : "follow" %%</a>
-  %%page_user.total_followers%% followers
-  <a ui-sref='root.user.watchlist({username: page_user.username})'>watchlist</a>
-
-
-  <div ui-view="page-child"></div>
+<div class="padding-top ">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <avatar class="avatar large pull-left" info="page_user"></avatar>
+      <div class="page-user-actions">
+        <h3><a ui-sref='root.user.filmkeep({username: page_user.username})'>%%page_user.name%%</a></h3>
+        <a ng-show="showFollow" ng-click="follow(page_user)"><span class="glyphicon glyphicon-ok" ng-show="page_user.following"></span> %% page_user.following ? "following" : "follow" %%</a>
+        <a ui-sref='root.user.watchlist({username: page_user.username})'>watchlist</a>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <div class="pull-right stats">
+        <div class="stat">
+          <span>%%page_user.total_reviews%%</span>
+          <em>reviews</em>
+        </div>
+        <div class="stat">
+          <span>%%page_user.total_followers%%</span>
+          <em>followers</em>
+        </div>
+        <div class="stat">
+          <span>%%page_user.total_watchlist%%</span>
+          <em>on watchlist</em>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ui-view="page-child" class="page-child clearfix" autoscroll="true"></div>
 </div>

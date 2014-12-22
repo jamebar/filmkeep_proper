@@ -21,7 +21,7 @@
             <div class="feed-review-poster pull-left">
               <a ui-sref='root.review({reviewId: activity.object.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a>
               
-              <a class="action" href="" ng-click="getTrailer(activity.object.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
+              <a class="action" href="" tooltip="Watch Trailer" ng-click="getTrailer(activity.object.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
               <a class="action" href=""  ng-click="newReview(activity.object.film)" ng-if="activity.object.reviewed === 'false'"><span class="glyphicon glyphicon-tasks visible-xs-inline-block"></span> <span class="hidden-xs">review</span> </a> 
               <a class="action" href=""  ng-click="compare(activity.object)" ng-if="activity.object.reviewed === 'true' && activity.actor.id !== me.user.id">compare</a> 
               <a class="action" href=""  ng-click="editReview({review:activity.object, rating_types: rating_types_new})" ng-if="activity.actor.id === me.user.id"><span class="glyphicon glyphicon-pencil visible-xs-inline-block" ></span><span class="hidden-xs">edit</span></a> 
@@ -59,7 +59,7 @@
     <div class="clearfix">
       <div ng-repeat="activity in feed_item.activities" class="activity-item">
           <a  href=""  ui-sref='root.film({filmId: activity.object.film.tmdb_id, filmSlug: slugify(activity.object.film.title) })'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a>
-          <a class="action" href=""  ng-click="getTrailer(activity.object.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
+          <a class="action" href=""  tooltip="Watch Trailer" ng-click="getTrailer(activity.object.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
           <a class="action" href=""  ng-click="newReview(activity.object.film)" ng-if="activity.object.reviewed === 'false'"><span class="glyphicon glyphicon-tasks visible-xs-inline-block"></span> <span class="hidden-xs">review</span> </a>
           <a class="action" href=""  ng-click="watchlist(activity.object)"><span ng-class="{'glyphicon-plus': activity.object.on_watchlist === 'false','glyphicon-ok': activity.object.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
       </div>
@@ -79,8 +79,8 @@
     <!-- <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span> -->
     
     <span ng-repeat="activity in feed_item.activities" >
-        <a ui-sref='root.user.filmkeep({username: activity.object.target.username})'>%%activity.object.target.name%%</a>
-        <span ng-hide="$last">, </span>
+        <a ui-sref='root.user.filmkeep({username: activity.object.target.username})'>%%activity.object.target.name%%<span ng-hide="$last">, </span></a>
+        
     </span>
     
 

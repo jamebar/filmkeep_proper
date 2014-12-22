@@ -14,8 +14,18 @@
 </div>
 
 <div class="full-width-section theme-beige row-full-width">
-  <a ng-click="getTrailer(film.tmdb_id)">Trailer</a>
-  <p>%%film.summary%%</p>
+   <div class="row">
+    <div class="col-xs-12 col-sm-2">
+      <div class="trailer-review" style="background-image:url(%%film.backdrop_path | imageFilter :'backdrop':'0' %%)">
+        <a ng-click="getTrailer(film.tmdb_id)">Trailer</a>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-10">
+      <p>%%film.summary%%</p>
+    </div>
+    <!-- <div class="col-xs-12 col-sm-9"></div> -->
+
+  </div>
 </div>
 
 <div ng-repeat="reviews in follower_reviews">%%reviews.user.name%%</div>

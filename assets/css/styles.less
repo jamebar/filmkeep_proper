@@ -21,6 +21,9 @@ body {
 .container-fluid{
 
 }
+.page-child{
+  margin-top:1em;
+}
 .body-bg{
   background-image:url(/assets/img/bg/bg-jimmy-stewart-800.jpg) ;
   background-repeat: no-repeat;
@@ -299,6 +302,15 @@ a.action{
   }
 }
 
+.large .initials{
+  height:90px;
+  width:90px;
+  line-height: 60px;
+  border-radius:45px;
+  line-height: 90px;
+  font-size: 30px;
+}
+
 .footer{
   margin-top:4em;
   padding:2em;
@@ -332,34 +344,65 @@ a.action{
 
 .trailer-list{
   padding:1em;
-  
+  background: #333;
+
   a{
-    border:1px solid #fff;
+    border:1px solid #333;
     padding:1em;
     display: inline-block;
 
     &.selected{
-      border-color:@filmkeep-beige;
+      border-color:#666;
     }
   }
 }
-
+.no-trailer{
+  padding:3em;
+  text-align: center;
+}
 .trailer-review{
-  height:90px;
-  width:150px;
+  height:100px;
+  width:100%;
   background-size: cover;
   border-radius:5px;
   a{
-    background-color: rgba(123,113,113,.6);
+    background-color: rgba(123,113,113,.7);
     border-radius:5px;
     width:100%;
     height:100%;
     display: inline-block;
     text-align: center;
+    text-transform: uppercase;
     color:@filmkeep-beige;
     line-height: 90px;
     &:hover{
-      background-color: rgba(123,113,113,0);
+      background-color: rgba(123,113,113,.5);
     }
   }
+}
+
+.stats{
+  width:100%;
+  max-width: 400px;
+
+  .stat{
+    width:33%;
+     text-align: center;
+     float:left;
+     em{
+      font-style: none;
+     }
+    span{
+      font-size:60px;
+      display: block;
+      line-height: 51px;
+
+
+    }
+  }
+}
+
+.page-user-actions{
+  margin-left:1em;
+  display: inline-block;
 }

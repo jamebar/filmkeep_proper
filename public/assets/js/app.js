@@ -117,13 +117,12 @@ angular.module('myApp', [
 
         $scope.getTrailer = function(tmdb_id){
           filmApiService.getTrailer(tmdb_id).then(function(response){
-            if(angular.isDefined(response.youtube)){
+            if(angular.isDefined(response.youtube) && response.youtube.length>0){
               $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/' + response.youtube[0].source);
               $scope.current_trailer = response.youtube[0].source;
               $scope.trailer_sources = response.youtube;
-              // console.log($scope.trailer_sources);
-              trailerModal();
             }
+            trailerModal();
             
           })
         }

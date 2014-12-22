@@ -96,7 +96,7 @@
           
                @yield('content')
                 
-                <div ui-view></div>
+                <div ui-view autoscroll="true"></div>
 
     
     		

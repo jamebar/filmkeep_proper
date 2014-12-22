@@ -1,19 +1,19 @@
-<h3>Filmkeep</h3>
-<span class="dropdown">
+
+<!-- <span class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">%%rating_types[0].label%% <span class="glyphicon glyphicon-chevron-down"></span></a>
   <ul class="dropdown-menu" role="menu" >
+    <li><a ng-click="sortByRatingType(1)"></span>Latest Added</a></li>
     <li ng-repeat="type in rating_types"><a ng-click="sortByRatingType(type.id)"></span>%%type.label%%</a></li>
   </ul>
-</span>
+</span> -->
 <dir-pagination-controls on-page-change="pageChanged(newPageNumber)" ></dir-pagination-controls>
 
 <p ng-if="user_reviews.length < 1 && !myPage">%%page_user.name%% hasn't reviewed any films yet</p>
 <p ng-if="user_reviews.length < 1 && myPage">you haven't reviewed any films yet</p>
 <div class="clearfix">
   <ul class="filmkeep-list">
-      <li dir-paginate="user_review in user_reviews | itemsPerPage: reviews_per_page" total-items="total_reviews" current-page="pagination.current">
-         
-          <a href="/r/%%user_review.id%%" ><img title="%%user_review.film.title%%" ng-src="%% user_review.film.poster_path | imageFilter :'poster':'1'%%" onerror="this.src = '/assets/img/default-profile.jpg';" /></a>
+      <li dir-paginate="user_review in user_reviews | itemsPerPage: reviews_per_page" total-items="total_reviews" current-page="pagination.current" style="background-image:url(%% user_review.film.poster_path | imageFilter :'poster':'1'%%);">
+          <a href="/r/%%user_review.id%%" ><div class="filler"></div></a>
       </li>
   </ul>
 </div>
