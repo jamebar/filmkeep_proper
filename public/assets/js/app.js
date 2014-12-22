@@ -116,6 +116,9 @@ angular.module('myApp', [
         };
 
         $scope.getTrailer = function(tmdb_id){
+          $scope.trailer_source = false;
+          $scope.trailer_sources = [];
+          
           filmApiService.getTrailer(tmdb_id).then(function(response){
             if(angular.isDefined(response.youtube) && response.youtube.length>0){
               $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/' + response.youtube[0].source);

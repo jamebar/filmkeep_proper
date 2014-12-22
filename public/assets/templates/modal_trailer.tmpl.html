@@ -1,7 +1,7 @@
 <div class="video-container" ng-show="trailer_source"><iframe width="100%"  ng-src="%%trailer_source%%" frameborder="0" allowfullscreen></iframe></div>
 <div ng-hide="trailer_source" class="no-trailer">I'm sorry, we don't have a trailer for this film</div>
 <div class="trailer-list" ng-show="trailer_sources.length > 1">
-  <span ng-repeat="trailer in trailer_sources">
+  <span ng-repeat="trailer in trailer_sources | limitTo:3">
     <a ng-click="loadTrailer(trailer.source)" ng-class="{selected: $parent.current_trailer == trailer.source}">%%trailer.name%%</a>
   </span>
 </div>

@@ -78,11 +78,11 @@
     %% feed_item.verb | verb %%
     <!-- <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span> -->
     
-    <span ng-repeat="activity in feed_item.activities" >
+    <span ng-repeat="activity in feed_item.activities | limitTo:3" >
         <a ui-sref='root.user.filmkeep({username: activity.object.target.username})'>%%activity.object.target.name%%<span ng-hide="$last">, </span></a>
-        
     </span>
-    
+    <span ng-show="feed_item.activities.length > 3"> and %%feed_item.activities.length - 3%% others
+    </span>
 
   </div>
 

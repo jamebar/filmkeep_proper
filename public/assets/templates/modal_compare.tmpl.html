@@ -2,7 +2,8 @@
   <div class="preloader" ng-hide="showcompare">loading <img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
   <span ng-show="showcompare">
     <ul class="compare-avatars clearfix">
-      <li ng-repeat="review in compares | limitTo: 6" ng-class="{active:review.active}"><a ng-click="review.active = !review.active"><img ng-src="%%review.user.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" width="50" height="50" /></a> %%review.user.name%%</li>
+      <li ng-repeat="review in compares | limitTo: 6" ng-class="{active:review.active}">
+        <a ng-click="review.active = !review.active"><img ng-src="%%review.user.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" width="50" height="50" /></a> %%review.user.name%%</li>
     </ul>
 
     <div class="clearfix">
