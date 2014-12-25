@@ -5,13 +5,13 @@
 	<title>Filmkeep</title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/vendor.css">
-    <link rel="stylesheet" href="/assets/css/animate.min.css">
+    <!-- <link rel="stylesheet" href="/assets/css/animate.min.css"> -->
   <link rel="stylesheet" href="/assets/css/styles.min.css">
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
     <script src="/assets/js/vendor.js"></script>
     <script src="/assets/js/app.js"></script>
-
+    <base href="/" />
     <script>
       var image_path_config = {{json_encode($image_path_config)}};
     </script>
@@ -88,7 +88,7 @@
     <div class="container-fluid">
       <!--Error messages from backend pages -->
     	@if (Session::has('message'))
-            <div id="flash_notice" data-alert data-options="animation_speed:500;" class="alert-box ">{{ Session::get('message') }} <a href="#" class="close">&times;</a></div>
+            <div id="flash_notice" data-alert data-options="animation_speed:500;" class="alert-box success fadeOutUp animated" close-me="3000">{{ Session::get('message') }} </div>
         @endif
       <!--Error messages from angular -->
       <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>

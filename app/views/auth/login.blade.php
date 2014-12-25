@@ -2,7 +2,9 @@
 
 @section('content')
 <div class="login-box">
-	<h1>Login</h1>
+	
+  <a href="/users/loginfacebook" target="_self" class="social-btn facebook "><span class="icon-social-facebook"></span> Sign in with Facebook</a>
+  <hr>
 
    <form role="form" method="POST" action="{{{ URL::to('/users/login') }}}" accept-charset="UTF-8">
       <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">

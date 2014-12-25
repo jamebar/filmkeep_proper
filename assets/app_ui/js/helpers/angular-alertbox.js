@@ -67,7 +67,7 @@ angular.module('AlertBox', [])
             },
             template:  '<div ng-repeat="alert in alerts track by $index" ng-class="[boxClass, alertClass]">{{alert}}</div> \
                         <div ng-repeat="warning in warnings track by $index" ng-class="[boxClass, warningClass]">{{warning}}</div> \
-                        <div ng-repeat="notice in notices track by $index" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
+                        <div ng-repeat="notice in notices track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
         };
 
     } ] );

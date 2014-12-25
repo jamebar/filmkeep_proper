@@ -24,10 +24,11 @@
     });
   }])
 
-  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad','me',
-    function ($scope,$stateParams,ReviewService,ReviewLoad,me) {
+  .controller('ReviewCtrl', ['$scope','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
 
             $scope.rating_types = ReviewLoad.rating_types;
+            console.log($scope.rating_types);
             $scope.review = ReviewLoad.review;
             $scope.me = me;
             // console.log($scope.review);
@@ -40,6 +41,12 @@
               $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
                     
             });
+
+            $rootScope.$on('review::updated',function(e,review){
+              console.log(e,review);
+              $scope.review.notes = review.notes;
+            })
+
     }]) 
 
   

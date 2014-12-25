@@ -208,20 +208,33 @@ slider {
     background-color: #fff;
     border: 1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+    border-radius: 3px;
     box-shadow: 0 5px 10px rgba(0,0,0,.2);
+
+    h3{
+      padding-left:1em;
+    }
 }
 
 .tt-suggestion {
     padding: 3px 20px;
-    font-size: 18px;
+    font-size: 17px;
     line-height: 24px;
     cursor:pointer;
+
+    img{
+      margin-right: 5px;
+    }
+
+    span{
+      font-size:.8em;
+    }
+
 }
 
 .tt-suggestion.tt-cursor { /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
     color: #fff;
-    background-color: #0097cf;
+    background-color: @filmkeep-red;
 
 }
 

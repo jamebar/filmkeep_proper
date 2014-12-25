@@ -26,6 +26,7 @@
 
   .controller('FilmCtrl', ['$scope', '$stateParams','me','FilmLoad',
     function ($scope,$stateParams,me,FilmLoad) {
+        $scope.me = me;
         FilmLoad.film.film_id = FilmLoad.film.id;
         $scope.film = FilmLoad.film;
         $scope.follower_reviews = FilmLoad.follower_reviews;

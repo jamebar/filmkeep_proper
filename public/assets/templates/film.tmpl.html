@@ -6,8 +6,11 @@
           </div>
           <div class="fc-content">
             <h2>%%film.title%%</h2>
-            <a ng-click="newReview(film)" ng-show="film.reviewed == 'false'"><span class="glyphicon glyphicon-tasks"></span> Review this</a>
-            <a ng-click="watchlist(film)"><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+            <div class="film-actions">
+              <a class="visible-xs-inline" ng-click="getTrailer(review.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
+              <a ng-click="newReview(film)" ng-show="film.reviewed == 'false'"><span class="glyphicon glyphicon-tasks"></span> Review this</a>
+              <a ng-click="watchlist(film)"  ng-if="me.user.id"><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+            </div>
           </div>
         </div>
   </div>
@@ -16,9 +19,11 @@
 <div class="full-width-section theme-beige row-full-width">
    <div class="row">
     <div class="col-xs-12 col-sm-2">
-      <div class="trailer-review" style="background-image:url(%%film.backdrop_path | imageFilter :'backdrop':'0' %%)">
+      
+      <div class="trailer-review hidden-xs" style="background-image:url(%%film.backdrop_path | imageFilter :'backdrop':'0' %%)">
         <a ng-click="getTrailer(film.tmdb_id)">Trailer</a>
       </div>
+      
     </div>
     <div class="col-xs-12 col-sm-10">
       <p>%%film.summary%%</p>
@@ -28,4 +33,4 @@
   </div>
 </div>
 
-<div ng-repeat="reviews in follower_reviews">%%reviews.user.name%%</div>
+<!-- <div ng-repeat="reviews in follower_reviews">%%reviews.user.name%%</div> -->

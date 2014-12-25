@@ -1,4 +1,63 @@
 @charset 'UTF-8';
+html {
+  height: 100%;
+}
+body {
+  background-size: cover;
+  background-color: white;
+  font-family: 'Lato', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  color: #7b7171;
+  min-height: 600px;
+}
+body,
+input,
+select,
+textarea,
+button {
+  -webkit-font-smoothing: antialiased;
+}
+.page-child {
+  margin-top: 1em;
+}
+.body-bg {
+  background-image: url(/assets/img/bg/bg-jimmy-stewart-800.jpg);
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-attachment: fixed;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Volkhov', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+h2 {
+  font-style: italic;
+  font-weight: bold;
+}
+hr {
+  opacity: .4;
+}
+a {
+  color: #d2544c;
+  cursor: pointer;
+}
+a:hover {
+  color: #d76760;
+}
+a:hover,
+a:active,
+a:focus {
+  text-decoration: none;
+}
+.space-bottom {
+  margin-top: 4em;
+}
+.min-content-height {
+  min-height: 600px;
+}
 /*Constants*/
 .round-corners {
   border-radius: 5px;
@@ -169,19 +228,28 @@ slider span.bubble.limit {
   background-color: #fff;
   border: 1px solid #ccc;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
+  border-radius: 3px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+.tt-dropdown-menu h3 {
+  padding-left: 1em;
 }
 .tt-suggestion {
   padding: 3px 20px;
-  font-size: 18px;
+  font-size: 17px;
   line-height: 24px;
   cursor: pointer;
+}
+.tt-suggestion img {
+  margin-right: 5px;
+}
+.tt-suggestion span {
+  font-size: .8em;
 }
 .tt-suggestion.tt-cursor {
   /* UPDATE: newer versions use .tt-suggestion.tt-cursor */
   color: #fff;
-  background-color: #0097cf;
+  background-color: #d2544c;
 }
 .tt-suggestion p {
   margin: 0;
@@ -295,6 +363,9 @@ ul.filmkeep-list li img {
     margin-top: -20px;
   }
 }
+label {
+  font-weight: 400;
+}
 .btn {
   border-radius: 0 !important;
   border: none !important;
@@ -305,6 +376,10 @@ ul.filmkeep-list li img {
   padding: 1em;
   width: 100%;
   color: #f4e8d0;
+}
+.btn-primary:active,
+.btn-primary:focus {
+  background-color: #7fb5b7;
 }
 .btn-primary:hover {
   background-color: #8fbec0;
@@ -343,11 +418,23 @@ ul.filmkeep-list li img {
 .alert-box {
   width: 100%;
   position: fixed;
-  top: 0px;
+  top: 50px;
   left: 0px;
   text-align: center;
   z-index: 10000;
   border-radius: 0px;
+  color: #f4e8d0;
+  border: none;
+}
+.alert-box.no-header {
+  top: 0px !important;
+}
+.alert-box.success {
+  background-color: #7fb5b7;
+}
+.alert-box.warning,
+.alert-box.alert-error {
+  background-color: #d2544c;
 }
 .navbar-inverse .navbar-nav > li > a {
   color: #f4e8d0;
@@ -412,6 +499,9 @@ ul.compare-avatars li.active img {
 .compare-container {
   padding: 1em;
 }
+.compare-container .progress {
+  background-color: #ececec;
+}
 .compare0 .progress-bar {
   background-color: #4FCEE0;
 }
@@ -460,39 +550,46 @@ textarea {
 .friends-sidebar img {
   width: 60px;
 }
-body {
-  background-size: cover;
-  background-color: white;
-  font-family: 'Lato', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-  color: #7b7171;
+.info-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
 }
-.page-child {
-  margin-top: 1em;
+.info-section {
+  padding: 4em;
+  text-align: center;
+  color: #f4e8d0;
 }
-.body-bg {
+.info-section h2 {
+  font-size: 30px;
+}
+@media only screen and (min-width: 40.063em) {
+  .info-section h2 {
+    font-size: 50px;
+  }
+}
+.sign-up {
+  max-width: 250px;
+  margin-top: 2em;
+  border-radius: 3px !important;
+}
+.section1 {
   background-image: url(/assets/img/bg/bg-jimmy-stewart-800.jpg);
   background-repeat: no-repeat;
   background-position: top center;
+  background-size: cover;
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Volkhov', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+.section1 h2 {
+  margin-top: 2em;
 }
-h2 {
-  font-style: italic;
-  font-weight: bold;
-}
-a {
+.section2 {
+  background-color: #f4e8d0;
   color: #d2544c;
-  cursor: pointer;
 }
-a:hover {
-  color: #d76760;
-  text-decoration: none;
+.section3 {
+  background-color: #d2544c;
+}
+.section4 {
+  background-color: #c8bba1;
 }
 .review-editor {
   margin: 0 auto;
@@ -626,15 +723,45 @@ search .tt-hint {
 }
 .login-logo {
   margin: 4em auto;
-  width: 320px;
+  max-width: 320px;
+}
+.login-logo img {
+  width: 100%;
 }
 .login-box {
-  width: 320px;
+  max-width: 400px;
   margin: 4em auto;
   color: #f4e8d0;
 }
+.login-box h2 {
+  text-align: center;
+}
 .login-box a {
   color: #d47d55;
+}
+.preloader {
+  font-size: 1em;
+}
+.preloader img {
+  height: 60px;
+}
+a.social-btn {
+  padding: 0px 15px;
+  width: 100%;
+  color: #fff;
+  display: block;
+  text-align: center;
+}
+a.social-btn span {
+  font-size: 3em;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+.facebook {
+  background-color: #3B5998;
+}
+.facebook:hover {
+  background-color: #4162a7;
 }
 .navbar-brand {
   background: url(/assets/img/filmkeep-logo-f.png) no-repeat;
@@ -711,7 +838,6 @@ a.action:hover {
   font-size: 30px;
 }
 .footer {
-  margin-top: 4em;
   padding: 2em;
   background: #1e424d;
   color: #f4e8d0;
@@ -791,4 +917,89 @@ a.action:hover {
 .page-user-actions {
   margin-left: 1em;
   display: inline-block;
+}
+.setting-profile-info {
+  color: #f4e8d0;
+  margin-bottom: 1.5em;
+}
+.setting-profile-info img {
+  margin-right: 1em;
+}
+.film-actions a {
+  position: relative;
+  margin-right: .6em;
+  display: inline-block;
+  color: #f4e8d0;
+}
+.film-actions a:hover {
+  color: #7fb5b7;
+}
+.film-actions a:after {
+  content: '.';
+  display: inline-block;
+  padding: 0px;
+  top: -3px;
+  position: absolute;
+  right: -0.5em;
+}
+.film-actions a:last-child:after {
+  display: none;
+}
+.animated {
+  -webkit-animation-duration: .3s;
+  animation-duration: .3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+@-webkit-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+.ng-enter.fadeInDown {
+  -webkit-animation-name: fadeInDown;
+  animation-name: fadeInDown;
+}
+@-webkit-keyframes fadeOutUp {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+}
+@keyframes fadeOutUp {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+  }
+}
+.ng-leave.fadeOutUp {
+  -webkit-animation-name: fadeOutUp;
+  animation-name: fadeOutUp;
 }

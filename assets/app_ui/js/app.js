@@ -44,13 +44,28 @@ angular.module('myApp', [
       } 
     }
   });
-}])
 
-.controller('appCtrl', ['$sce','$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
-    function($sce,$scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
-       
-        
+  $stateProvider.state('home', {
+    url: '/',
+    templateUrl: '/assets/templates/info.tmpl.html',
+    controller: 'homeCtrl',
+    
+  });
+}])
+.controller('homeCtrl', ['$scope',
+    function($scope) {
       
+    }
+  
+])
+.controller('appCtrl', ['$sce','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
+    function($sce,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
+       var reviewModalInstance;
+
+       $rootScope.$on('modal::close', function(){
+        reviewModalInstance.close();
+       });
+
         $scope.getReview = function(review) {
             
                 ReviewService.getReview(review.review.id).then(function(results) {
@@ -58,15 +73,13 @@ angular.module('myApp', [
                     $scope.review = results.review;
                     $scope.rating_types = results.rating_types;
                     showModal();
-
                 })
            
-
             $scope.ae_button_label = "Update";
         }
 
         function showModal(){
-            var modalInstance = $modal.open({
+            reviewModalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_review.tmpl.html',
           
@@ -147,17 +160,15 @@ angular.module('myApp', [
 
         $scope.newReview = function(film){
    
-          console.log("new review");
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
-                $scope.rating_types = results;
-                
+                $scope.rating_types = _.map(results, function(r){ r.value = 1000; return r });
             });
 
             if (typeof film === 'object') {
-              // console.log(film);
               $scope.review.film = film;
             }
+
             showModal();
                 
         }
@@ -260,21 +271,19 @@ angular.module('myApp', [
 
 
 .factory('followerFactory', ['meApiService',function(meApiService){
-  
-  var follower = {};
-
-  follower.isFollowing = function(user)
-  {
-    var me = meApiService.meData();
-
-    if(!angular.isDefined(me.user))
-      return false;
-    
-     console.log(me)
-    return _.find(me.user.followers, {'id': user.id}) ? true : false;
+  return {
+    isFollowing : function(user)
+    {
+      var me = meApiService.meData();
+      console.log(me, user.id)
+      if(!angular.isDefined(me.user))
+        return false;
+      
+       
+      return _.find(me.user.followers, {'id': user.id}) ? true : false;
+    }
   }
 
-  return follower;
 }])
 
 .filter('profileFilter', [ function() {

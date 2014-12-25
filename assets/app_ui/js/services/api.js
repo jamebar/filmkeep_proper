@@ -269,11 +269,26 @@ angular.module('Api', ['ngResource'])
 
         return({
             me: me,
-            meData: getMeData
+            meData: getMeData,
+            isAuthorized: isAuthorized
         });
 
         function getMeData(){
+          console.log('medata',meData)
           return meData;
+        }
+
+        function isAuthorized() {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/user/isauthorized",
+                params: {
+                    action: "get",
+                }
+            });
+            return( request.then( handleSuccess, handleError ) );
+
         }
 
         function me() {
@@ -285,7 +300,10 @@ angular.module('Api', ['ngResource'])
                     action: "get",
                 }
             });
-            return( request.then( handleSuccess, handleError ) );
+            return( request.then( function(response){
+              meData = response.data;
+              return( response.data );
+            } ) );
 
         }
 
@@ -317,7 +335,7 @@ angular.module('Api', ['ngResource'])
         }
 
         function handleSuccess( response ) {
-            meData = response.data;
+            
             return( response.data );
 
         }

@@ -44,13 +44,28 @@ angular.module('myApp', [
       } 
     }
   });
-}])
 
-.controller('appCtrl', ['$sce','$scope','msgBus','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
-    function($sce,$scope,msgBus,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
-       
-        
+  $stateProvider.state('home', {
+    url: '/',
+    templateUrl: '/assets/templates/info.tmpl.html',
+    controller: 'homeCtrl',
+    
+  });
+}])
+.controller('homeCtrl', ['$scope',
+    function($scope) {
       
+    }
+  
+])
+.controller('appCtrl', ['$sce','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
+    function($sce,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
+       var reviewModalInstance;
+
+       $rootScope.$on('modal::close', function(){
+        reviewModalInstance.close();
+       });
+
         $scope.getReview = function(review) {
             
                 ReviewService.getReview(review.review.id).then(function(results) {
@@ -58,15 +73,13 @@ angular.module('myApp', [
                     $scope.review = results.review;
                     $scope.rating_types = results.rating_types;
                     showModal();
-
                 })
            
-
             $scope.ae_button_label = "Update";
         }
 
         function showModal(){
-            var modalInstance = $modal.open({
+            reviewModalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_review.tmpl.html',
           
@@ -147,17 +160,15 @@ angular.module('myApp', [
 
         $scope.newReview = function(film){
    
-          console.log("new review");
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
-                $scope.rating_types = results;
-                
+                $scope.rating_types = _.map(results, function(r){ r.value = 1000; return r });
             });
 
             if (typeof film === 'object') {
-              // console.log(film);
               $scope.review.film = film;
             }
+
             showModal();
                 
         }
@@ -260,21 +271,19 @@ angular.module('myApp', [
 
 
 .factory('followerFactory', ['meApiService',function(meApiService){
-  
-  var follower = {};
-
-  follower.isFollowing = function(user)
-  {
-    var me = meApiService.meData();
-
-    if(!angular.isDefined(me.user))
-      return false;
-    
-     console.log(me)
-    return _.find(me.user.followers, {'id': user.id}) ? true : false;
+  return {
+    isFollowing : function(user)
+    {
+      var me = meApiService.meData();
+      console.log(me, user.id)
+      if(!angular.isDefined(me.user))
+        return false;
+      
+       
+      return _.find(me.user.followers, {'id': user.id}) ? true : false;
+    }
   }
 
-  return follower;
 }])
 
 .filter('profileFilter', [ function() {
@@ -364,8 +373,8 @@ var aeReview = angular.module('ae-review', [
 
     }
 ])
-.directive('addEditReview', ['$document','$compile','$timeout','ratingTypesApiService', 'reviewApiService', 'msgBus','ReviewService',
-    function($document,$compile,$timeout,ratingTypesApiService, reviewApiService,msgBus, ReviewService){
+.directive('addEditReview', ['$rootScope','$document','$modal','$compile','$timeout','ratingTypesApiService', 'reviewApiService', 'msgBus','ReviewService','AlertService',
+    function($rootScope,$document,$modal,$compile,$timeout,ratingTypesApiService, reviewApiService,msgBus, ReviewService,AlertService){
         return {
             restrict: 'E',
             scope:{
@@ -402,10 +411,16 @@ var aeReview = angular.module('ae-review', [
                     scope.review.ratings = ratings;
 
                     if(scope.review.id)
-                      scope.review.$update({review_id:scope.review.id});
+                      scope.review.$update({review_id:scope.review.id}).then(function(){
+                        $rootScope.$broadcast('modal::close');
+                        $rootScope.$broadcast('review::updated', scope.review);
+                        AlertService.Notice("Your review of " + scope.review.film.title + " has been updated");
+                      });
                     else
                       scope.review.$save().then(function(){
-                        console.log('review returned');
+                        $rootScope.$broadcast('modal::close');
+                        $rootScope.$broadcast('review::created', scope.review);
+                        AlertService.Notice("Your review of " + scope.review.film.title + " has been created");
                       });
 
                     // var newReview = new reviewApiService();
@@ -637,7 +652,7 @@ var aeReview = angular.module('ae-review', [
                     templates: {
                       header: '<h3 class="search-title">Films</h3>',
                       suggestion: function (context) {
-                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+' <span> '+context.release_date + '</span></div>'
+                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+' <span class="release-date">('+context.release_date + ')</span></div>'
                       }
                     }
                 }
@@ -683,29 +698,21 @@ var aeReview = angular.module('ae-review', [
           templateUrl: '/assets/templates/home.tmpl.html',
           controller: 'feedCtrl'
         }
-      } 
+      },
+      resolve: {
+        isAuthorized: function (meApiService) {
+            return meApiService.isAuthorized();
+        } 
+      },
+      onEnter: function(isAuthorized){
+        if(isAuthorized == 0)
+          window.location.href = '/users/login';
+      }
     });
   }])
-// .run(['$rootScope','$state','meApiService', function ($rootScope,$state, meApiService) {
-//   $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams){
-//     var me = meApiService.meData();
-//     // console.log(toState.name === 'root.feed');
-//     if(toState.name === 'root.feed'){
-//       if(!angular.isDefined(me.user)){
-//         console.log('logged out', me.user)
-//         // window.location.href = '/users/login';
-//         // event.preventDefault();
-//       }
-//     }
 
-//   })
-
-// }])
 .controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService',
   function($scope, streamApiService,me,ReviewService,reviewApiService,watchlistApiService){
-    if(!angular.isDefined(me.user)){
-      window.location.href = '/users/login';
-    }
 
     $scope.loading = true;
     $scope.me = me;
@@ -734,10 +741,22 @@ var aeReview = angular.module('ae-review', [
         })
     });
 
+    $scope.$on('review::updated', function(event, review) {
+
+        _.forEach($scope.feed_items, function(feed_item){
+          _.forEach(feed_item.activities, function(activity){
+            // if(activity.object.film_id === film_id)
+            // {
+            //   activity.object.on_watchlist = activity.object.on_watchlist === 'true' ? 'false' : 'true';
+            // }
+            
+          })
+        })
+    });
+
     streamApiService.getAggregated()
             .then(
               function(response){
-                console.log(response)
                 $scope.feed_items = response;
                 $scope.loading = false;
             });
@@ -810,6 +829,7 @@ var aeReview = angular.module('ae-review', [
 
   .controller('FilmCtrl', ['$scope', '$stateParams','me','FilmLoad',
     function ($scope,$stateParams,me,FilmLoad) {
+        $scope.me = me;
         FilmLoad.film.film_id = FilmLoad.film.id;
         $scope.film = FilmLoad.film;
         $scope.follower_reviews = FilmLoad.follower_reviews;
@@ -1033,7 +1053,7 @@ angular.module('AlertBox', [])
             },
             template:  '<div ng-repeat="alert in alerts track by $index" ng-class="[boxClass, alertClass]">{{alert}}</div> \
                         <div ng-repeat="warning in warnings track by $index" ng-class="[boxClass, warningClass]">{{warning}}</div> \
-                        <div ng-repeat="notice in notices track by $index" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
+                        <div ng-repeat="notice in notices track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
         };
 
     } ] );
@@ -1063,10 +1083,11 @@ angular.module('AlertBox', [])
     });
   }])
 
-  .controller('ReviewCtrl', ['$scope', '$stateParams','ReviewService','ReviewLoad','me',
-    function ($scope,$stateParams,ReviewService,ReviewLoad,me) {
+  .controller('ReviewCtrl', ['$scope','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
 
             $scope.rating_types = ReviewLoad.rating_types;
+            console.log($scope.rating_types);
             $scope.review = ReviewLoad.review;
             $scope.me = me;
             // console.log($scope.review);
@@ -1079,6 +1100,12 @@ angular.module('AlertBox', [])
               $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
                     
             });
+
+            $rootScope.$on('review::updated',function(e,review){
+              console.log(e,review);
+              $scope.review.notes = review.notes;
+            })
+
     }]) 
 
   
@@ -1355,11 +1382,26 @@ angular.module('Api', ['ngResource'])
 
         return({
             me: me,
-            meData: getMeData
+            meData: getMeData,
+            isAuthorized: isAuthorized
         });
 
         function getMeData(){
+          console.log('medata',meData)
           return meData;
+        }
+
+        function isAuthorized() {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/user/isauthorized",
+                params: {
+                    action: "get",
+                }
+            });
+            return( request.then( handleSuccess, handleError ) );
+
         }
 
         function me() {
@@ -1371,7 +1413,10 @@ angular.module('Api', ['ngResource'])
                     action: "get",
                 }
             });
-            return( request.then( handleSuccess, handleError ) );
+            return( request.then( function(response){
+              meData = response.data;
+              return( response.data );
+            } ) );
 
         }
 
@@ -1403,7 +1448,7 @@ angular.module('Api', ['ngResource'])
         }
 
         function handleSuccess( response ) {
-            meData = response.data;
+            
             return( response.data );
 
         }
@@ -1687,6 +1732,15 @@ angular.module('ReviewService', ['Api'])
           controller: 'settingsCtrl'
         }
       },
+      resolve: {
+        isAuthorized: function (meApiService) {
+            return meApiService.isAuthorized();
+        } 
+      },
+      onEnter: function(isAuthorized){
+        if(isAuthorized == 0)
+          window.location.href = '/users/login';
+      }
     });
 
     $stateProvider.state('root.settings.profile', {
@@ -1714,6 +1768,7 @@ angular.module('ReviewService', ['Api'])
 
   .controller('settingsCtrl', ['$scope','me','userApiService','AlertService','$state',
     function ($scope, me,userApiService,AlertService,$state) {
+
       $scope.current_user = new userApiService();
         _.assign($scope.current_user, me.user);
         

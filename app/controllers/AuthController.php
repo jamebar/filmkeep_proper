@@ -1,6 +1,6 @@
 <?php
 
-
+use Filmkeep\User;
 
 /**
  * AuthController Class
@@ -10,6 +10,9 @@
 class AuthController extends Controller
 {
 
+    function isAuthorized(){
+      return Auth::check() ? 1 : 0;
+    }
     /**
      * Displays the form for account creation
      *
@@ -20,6 +23,94 @@ class AuthController extends Controller
         return View::make('auth.join');
     }
 
+    /**
+     * Login user with facebook
+     *
+     * @return void
+     */
+    public function loginWithFacebook() {
+
+        // get data from input
+        $code = Input::get( 'code' );
+
+        // get fb service
+        $fb = OAuth::consumer( 'Facebook' );
+
+        // check if code is valid
+
+        // if code is provided get user data and sign in
+        if ( !empty( $code ) ) {
+
+            // This was a callback request from facebook, get the token
+            $token = $fb->requestAccessToken( $code );
+
+            // Send a request with it
+            $result = json_decode( $fb->request( '/me' ), true );
+
+            $user = User::where('facebook_id' , $result['id'] )->orWhere('email', $result['email'])->first();
+
+            //If user is found in DB, log them in and update the profile pic
+            if($user)
+            {
+              Auth::login( $user , true);
+              
+              if (Auth::check())
+              {
+                
+                $user->facebook_id = $result['id'];
+
+                //add profile pic if doesn't exist
+                if( strlen($user->avatar) < 2)
+                {
+                  $user->avatar = "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250";
+                  
+                }
+                $user->save();
+                return Redirect::to('/feed')
+                            ->with('message', 'Welcome back ' . $user->name);
+              }
+            }
+            else
+            {
+                $random_password = md5(uniqid(mt_rand(), true));
+                $repo = App::make('UserRepository');
+                $input = [
+                  'name' => $result['name'],
+                  'email'=> $result['email'],
+                  'facebook_id' => $result['id'],
+                  'confirmed' => 1,
+                  'password'=> $random_password, //we set random password so confide doesn't fail
+                  'password_confirmation'=> $random_password, //we set random password so confide doesn't fail
+                  'avatar' => "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250"
+                ];
+                $user = $repo->signup($input);
+                
+                if ($user->id) {
+                  Auth::login($user);
+                  return Redirect::to('/feed')
+                  ->with('message', 'Welcome to Filmkeep, ' . $user->name);
+                } else {
+                $error = $user->errors()->all(':message');
+
+                return Redirect::action('AuthController@create')
+                    ->withInput(Input::except('password'))
+                    ->with('error', $error);
+        }
+                
+
+            }
+            
+        }
+        // if not ask for permission first
+        else {
+            // get fb authorization
+            $url = $fb->getAuthorizationUri();
+
+            // return to facebook login url
+             return Redirect::to( (string)$url );
+        }
+
+    }
     /**
      * Stores new account
      *
@@ -46,7 +137,7 @@ class AuthController extends Controller
             }
 
             Auth::login($user);
-            return Redirect::route('home')
+            return Redirect::to('/feed')
                 ->with('notice', Lang::get('confide::confide.alerts.account_created'));
         } else {
             $error = $user->errors()->all(':message');
@@ -198,4 +289,6 @@ class AuthController extends Controller
 
         return Redirect::to('/');
     }
+
+
 }

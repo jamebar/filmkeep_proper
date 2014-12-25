@@ -3,3 +3,4 @@
 <span ng-repeat="film in watchlist_items">
   <a ui-sref='root.film({filmId: film.film.tmdb_id, filmSlug: slugify(film.film.title) })'><img ng-src="%%film.film.poster_path | imageFilter:'poster':'1'%%" /></a>
 </span>
+<div class="space-bottom"></div>

@@ -15,6 +15,15 @@
           controller: 'settingsCtrl'
         }
       },
+      resolve: {
+        isAuthorized: function (meApiService) {
+            return meApiService.isAuthorized();
+        } 
+      },
+      onEnter: function(isAuthorized){
+        if(isAuthorized == 0)
+          window.location.href = '/users/login';
+      }
     });
 
     $stateProvider.state('root.settings.profile', {
@@ -42,6 +51,7 @@
 
   .controller('settingsCtrl', ['$scope','me','userApiService','AlertService','$state',
     function ($scope, me,userApiService,AlertService,$state) {
+
       $scope.current_user = new userApiService();
         _.assign($scope.current_user, me.user);
         

@@ -1,11 +1,14 @@
-<div class="padding-top ">
+<style>
+.navbar {background-color:#323232 !important;}
+</style>
+<div class="padding-top min-content-height">
   <div class="row">
     <div class="col-xs-12 col-sm-6">
       <avatar class="avatar large pull-left" info="page_user"></avatar>
       <div class="page-user-actions">
         <h3><a ui-sref='root.user.filmkeep({username: page_user.username})'>%%page_user.name%%</a></h3>
         <a ng-show="showFollow" ng-click="follow(page_user)"><span class="glyphicon glyphicon-ok" ng-show="page_user.following"></span> %% page_user.following ? "following" : "follow" %%</a>
-        <a ui-sref='root.user.watchlist({username: page_user.username})'>watchlist</a>
+        <!-- <a ui-sref='root.user.watchlist({username: page_user.username})'>watchlist</a> -->
       </div>
     </div>
     <div class="col-xs-12 col-sm-6">

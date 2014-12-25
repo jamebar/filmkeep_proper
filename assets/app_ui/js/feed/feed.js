@@ -14,29 +14,21 @@
           templateUrl: '/assets/templates/home.tmpl.html',
           controller: 'feedCtrl'
         }
-      } 
+      },
+      resolve: {
+        isAuthorized: function (meApiService) {
+            return meApiService.isAuthorized();
+        } 
+      },
+      onEnter: function(isAuthorized){
+        if(isAuthorized == 0)
+          window.location.href = '/users/login';
+      }
     });
   }])
-// .run(['$rootScope','$state','meApiService', function ($rootScope,$state, meApiService) {
-//   $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams){
-//     var me = meApiService.meData();
-//     // console.log(toState.name === 'root.feed');
-//     if(toState.name === 'root.feed'){
-//       if(!angular.isDefined(me.user)){
-//         console.log('logged out', me.user)
-//         // window.location.href = '/users/login';
-//         // event.preventDefault();
-//       }
-//     }
 
-//   })
-
-// }])
 .controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService',
   function($scope, streamApiService,me,ReviewService,reviewApiService,watchlistApiService){
-    if(!angular.isDefined(me.user)){
-      window.location.href = '/users/login';
-    }
 
     $scope.loading = true;
     $scope.me = me;
@@ -65,10 +57,22 @@
         })
     });
 
+    $scope.$on('review::updated', function(event, review) {
+
+        _.forEach($scope.feed_items, function(feed_item){
+          _.forEach(feed_item.activities, function(activity){
+            // if(activity.object.film_id === film_id)
+            // {
+            //   activity.object.on_watchlist = activity.object.on_watchlist === 'true' ? 'false' : 'true';
+            // }
+            
+          })
+        })
+    });
+
     streamApiService.getAggregated()
             .then(
               function(response){
-                console.log(response)
                 $scope.feed_items = response;
                 $scope.loading = false;
             });

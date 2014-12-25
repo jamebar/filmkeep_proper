@@ -30,8 +30,8 @@ var aeReview = angular.module('ae-review', [
 
     }
 ])
-.directive('addEditReview', ['$document','$compile','$timeout','ratingTypesApiService', 'reviewApiService', 'msgBus','ReviewService',
-    function($document,$compile,$timeout,ratingTypesApiService, reviewApiService,msgBus, ReviewService){
+.directive('addEditReview', ['$rootScope','$document','$modal','$compile','$timeout','ratingTypesApiService', 'reviewApiService', 'msgBus','ReviewService','AlertService',
+    function($rootScope,$document,$modal,$compile,$timeout,ratingTypesApiService, reviewApiService,msgBus, ReviewService,AlertService){
         return {
             restrict: 'E',
             scope:{
@@ -68,10 +68,16 @@ var aeReview = angular.module('ae-review', [
                     scope.review.ratings = ratings;
 
                     if(scope.review.id)
-                      scope.review.$update({review_id:scope.review.id});
+                      scope.review.$update({review_id:scope.review.id}).then(function(){
+                        $rootScope.$broadcast('modal::close');
+                        $rootScope.$broadcast('review::updated', scope.review);
+                        AlertService.Notice("Your review of " + scope.review.film.title + " has been updated");
+                      });
                     else
                       scope.review.$save().then(function(){
-                        console.log('review returned');
+                        $rootScope.$broadcast('modal::close');
+                        $rootScope.$broadcast('review::created', scope.review);
+                        AlertService.Notice("Your review of " + scope.review.film.title + " has been created");
                       });
 
                     // var newReview = new reviewApiService();

@@ -1,3 +1,6 @@
+label{
+  font-weight: 400;
+}
 .btn{
   border-radius: 0 !important;
   border:none !important;
@@ -6,6 +9,9 @@
 
 .btn-primary{
   background-color:@filmkeep-blue;
+  &:active, &:focus{
+    background-color:@filmkeep-blue;
+  }
   padding:1em;
   width:100%;
   color:@filmkeep-beige;
@@ -50,12 +56,24 @@
 .alert-box{
   width:100%;
   position:fixed;
-  top:0px;
+  top:50px;
   left:0px;
   text-align:center;
   z-index: 10000;
   border-radius: 0px;
+  color:@filmkeep-beige;  
+  border:none;
 }
+.alert-box.no-header{
+  top:0px !important;
+}
+.alert-box.success{
+  background-color:@filmkeep-blue;
+}
+.alert-box.warning,.alert-box.alert-error{
+  background-color:@filmkeep-red;
+}
+
 
 .navbar-inverse .navbar-nav>li>a{
   color:@filmkeep-beige;

@@ -45,10 +45,11 @@ class UserRepository
         $this->save($user);
 
         //have user follow itself
-        Follower::firstOrCreate(['user_id'=>$user->id, 'follower_id'=>$user->id]);
+        // Follower::firstOrCreate(['user_id'=>$user->id, 'follower_id'=>$user->id]);
 
         //follow the feed
-        FeedManager::followUser($user->id, $user->id);
+        if($user->id)
+          FeedManager::followUser($user->id, $user->id);
 
         if (!is_null($username_check) && $user->id)
         {

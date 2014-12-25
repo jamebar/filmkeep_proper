@@ -27,11 +27,11 @@ Route::get('/test', function(){
 // return FeedManager::followUser(1, 1);
 
   // Deleting activity
-  $api_key = Config::get('stream-laravel::api_key');
-  $api_secret = Config::get('stream-laravel::api_secret');
-  $client = new GetStream\Stream\Client($api_key, $api_secret );
-  $user_feed_1 = $client->feed('user:101');
-  return $user_feed_1->removeActivity("Filmkeep\Follower:27", true);
+  // $api_key = Config::get('stream-laravel::api_key');
+  // $api_secret = Config::get('stream-laravel::api_secret');
+  // $client = new GetStream\Stream\Client($api_key, $api_secret );
+  // $user_feed_1 = $client->feed('user:101');
+  // return $user_feed_1->removeActivity("Filmkeep\Follower:27", true);
 
 //   $user_feed_1 = $client->feed('user:101');
 // return $user_feed_1.following(0, 10);
@@ -58,7 +58,7 @@ Route::get('users/reset_password/{token}', 'AuthController@resetPassword');
 Route::post('users/reset_password', 'AuthController@doResetPassword');
 Route::get('users/logout', 'AuthController@logout');
 
-
+Route::get('users/loginfacebook', 'AuthController@loginWithFacebook');
 
 /*
 * API
@@ -69,6 +69,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
     $router->get('compares', 'ReviewsController@compares');
     $router->get('review/search', 'ReviewsController@search');
     $router->resource('review', 'ReviewsController');
+    $router->get('user/isauthorized', 'AuthController@isAuthorized');
     $router->get('user/search', 'UsersController@search');
     $router->resource('user', 'UsersController');
 
@@ -102,9 +103,11 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
       return Response::json(['user'=> $user, 'response'=>'success']);
     });
 
+
 });
 
-Route::any('{all}', ['as' =>'home', 'uses'=> 'HomeController@index'])->where('all', '.*');
+Route::any('/', ['as' =>'home', 'uses'=> 'HomeController@index']);
+Route::any('{all}', ['uses'=> 'HomeController@index'])->where('all', '.*');
 //
 
 App::bind('confide.user_validator', 'Filmkeep\Validators\UserValidator');

@@ -1,0 +1,57 @@
+html{
+  height: 100%;
+}
+body { 
+  // background:url(/assets/img/bg/bg-jimmy-stewart-800.jpg) top center no-repeat;
+  background-size:cover;
+  background-color: white;
+  font-family: 'Lato',"Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  color: @brown-dark;
+  min-height: 600px;
+}
+body, input, select, textarea, button {
+-webkit-font-smoothing: antialiased;
+}
+.container-fluid{
+
+}
+.page-child{
+  margin-top:1em;
+}
+.body-bg{
+  background-image:url(/assets/img/bg/bg-jimmy-stewart-800.jpg) ;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-attachment: fixed;
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Volkhov',"Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+h2{
+  font-style: italic;
+  font-weight: bold;
+}
+hr{
+  opacity:.4;
+}
+a{
+  color:@filmkeep-red;
+  cursor: pointer;
+  &:hover{
+    color:lighten(@filmkeep-red,5%);
+    
+  }
+  &:hover, &:active, &:focus{
+    text-decoration: none;
+  }
+}
+
+.space-bottom{
+  margin-top:4em;
+}
+
+.min-content-height{
+  min-height: 600px;
+}
