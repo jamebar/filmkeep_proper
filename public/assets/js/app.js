@@ -1151,7 +1151,6 @@ angular.module('AlertBox', [])
     function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
             msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
             $scope.rating_types = ReviewLoad.rating_types;
-            console.log($scope.rating_types);
             $scope.review = ReviewLoad.review;
             $scope.me = me;
             // console.log($scope.review);
@@ -1851,9 +1850,9 @@ angular.module('ReviewService', ['Api'])
 
   }]) 
 
-  .controller('settingsProfileCtrl', ['$scope','me','userApiService','AlertService',
-    function ($scope, me,userApiService,AlertService) {
-        
+  .controller('settingsProfileCtrl', ['$scope','me','userApiService','AlertService','msgBus',
+    function ($scope, me,userApiService,AlertService,msgBus) {
+        msgBus.emitMsg('pagetitle::change', "Settings: Profile");
 
         $scope.saveUser = function(){
           $scope.current_user.$update(function(response){
@@ -1866,13 +1865,15 @@ angular.module('ReviewService', ['Api'])
 
   }]) 
 
-  .controller('settingsInvitesCtrl', ['$scope','me','userApiService','AlertService',
-    function ($scope, me,userApiService,AlertService) {
+  .controller('settingsInvitesCtrl', ['$scope','me','userApiService','AlertService','msgBus',
+    function ($scope, me,userApiService,AlertService,msgBus) {
+
 
   }]) 
 
-  .controller('settingsFilmetersCtrl', ['$scope','me','userApiService','AlertService','ratingTypesApiService','ReviewService',
-    function ($scope, me,userApiService,AlertService,ratingTypesApiService,ReviewService) {
+  .controller('settingsFilmetersCtrl', ['$scope','me','userApiService','AlertService','ratingTypesApiService','ReviewService','msgBus',
+    function ($scope, me,userApiService,AlertService,ratingTypesApiService,ReviewService,msgBus) {
+        msgBus.emitMsg('pagetitle::change', "Settings: Filmeters");
         $scope.newcriteria = new ratingTypesApiService();
         ReviewService.getRatingTypes().then(function(results){
           $scope.types = results;

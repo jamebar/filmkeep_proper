@@ -28,7 +28,6 @@
     function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
             msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
             $scope.rating_types = ReviewLoad.rating_types;
-            console.log($scope.rating_types);
             $scope.review = ReviewLoad.review;
             $scope.me = me;
             // console.log($scope.review);

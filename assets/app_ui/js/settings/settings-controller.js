@@ -71,9 +71,9 @@
 
   }]) 
 
-  .controller('settingsProfileCtrl', ['$scope','me','userApiService','AlertService',
-    function ($scope, me,userApiService,AlertService) {
-        
+  .controller('settingsProfileCtrl', ['$scope','me','userApiService','AlertService','msgBus',
+    function ($scope, me,userApiService,AlertService,msgBus) {
+        msgBus.emitMsg('pagetitle::change', "Settings: Profile");
 
         $scope.saveUser = function(){
           $scope.current_user.$update(function(response){
@@ -86,13 +86,15 @@
 
   }]) 
 
-  .controller('settingsInvitesCtrl', ['$scope','me','userApiService','AlertService',
-    function ($scope, me,userApiService,AlertService) {
+  .controller('settingsInvitesCtrl', ['$scope','me','userApiService','AlertService','msgBus',
+    function ($scope, me,userApiService,AlertService,msgBus) {
+
 
   }]) 
 
-  .controller('settingsFilmetersCtrl', ['$scope','me','userApiService','AlertService','ratingTypesApiService','ReviewService',
-    function ($scope, me,userApiService,AlertService,ratingTypesApiService,ReviewService) {
+  .controller('settingsFilmetersCtrl', ['$scope','me','userApiService','AlertService','ratingTypesApiService','ReviewService','msgBus',
+    function ($scope, me,userApiService,AlertService,ratingTypesApiService,ReviewService,msgBus) {
+        msgBus.emitMsg('pagetitle::change', "Settings: Filmeters");
         $scope.newcriteria = new ratingTypesApiService();
         ReviewService.getRatingTypes().then(function(results){
           $scope.types = results;

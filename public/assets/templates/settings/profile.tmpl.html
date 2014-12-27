@@ -28,20 +28,23 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">password</label>
                 <div class="col-sm-10">
-                  <input class="form-control" type="password" id="pw1" name="password" ng-model="current_user.password" placeholder="password" ng-minlength=8 />
+                  <input class="form-control" type="password" id="pw1" name="password" ng-model="current_user.password" placeholder="password" ng-minlength=6 />
+                  <div class="msg-block" ng-show="userform.$error"><span class="msg-error" ng-show="userform.password.$error.minlength">
+                      Must be at least 6 characters.
+                  </span></div>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">password confirmation</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="password"  id='pw2' name="passwordConfirmation" ng-model="current_user.passwordConfirmation" ng-minlength=8 pw-check="pw1" placeholder="please retype your password" />
-                   <div class="msg-block" ng-show="userform.$error"><span class="msg-error" ng-show="userform.passwordConfirmation.$error.pwmatch">
+                    <input class="form-control" type="password"  id='pw2' name="password_confirmation" ng-model="current_user.password_confirmation" ng-minlength=6 pw-check="pw1" placeholder="please retype your password" />
+                   <div class="msg-block" ng-show="userform.$error"><span class="msg-error" ng-show="userform.password_confirmation.$error.pwmatch">
                       Passwords don't match.
                   </span></div>
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Save" />
+                <input type="submit" class="btn btn-primary" ng-disabled="!userform.$valid" value="Save" />
             </div>
         </div>
     </div>

@@ -490,6 +490,25 @@ label {
 .nav > li > a:focus {
   background: none;
 }
+.btn-primary.disabled,
+.btn-primary[disabled],
+fieldset[disabled] .btn-primary,
+.btn-primary.disabled:hover,
+.btn-primary[disabled]:hover,
+fieldset[disabled] .btn-primary:hover,
+.btn-primary.disabled:focus,
+.btn-primary[disabled]:focus,
+fieldset[disabled] .btn-primary:focus,
+.btn-primary.disabled:active,
+.btn-primary[disabled]:active,
+fieldset[disabled] .btn-primary:active,
+.btn-primary.disabled.active,
+.btn-primary[disabled].active,
+fieldset[disabled] .btn-primary.active {
+  background-color: #ccc;
+  border-color: #ccc;
+  color: #333;
+}
 ul.compare-avatars,
 ul.compare-avatars li {
   margin: 0;
@@ -1046,4 +1065,7 @@ a.action:hover {
 .ng-leave.fadeOutUp {
   -webkit-animation-name: fadeOutUp;
   animation-name: fadeOutUp;
+}
+.msg-error {
+  color: #d2544c;
 }

@@ -99,10 +99,11 @@ class UsersController extends BaseController {
 	{
     $rules = array(
       'email' => 'required|unique:users,email,' . Input::get('id'),
-      'username' => 'required|unique:users,username,' . Input::get('id')
+      'username' => 'required|unique:users,username,' . Input::get('id'),
+      'password' => 'sometimes|required|min:4'
       );
-        $validator = Validator::make(Input::all(), $rules);
-        if ($validator->fails())
+    $validator = Validator::make(Input::all(), $rules);
+    if ($validator->fails())
     {
       return Response::make($validator->messages(), 400);
       
@@ -113,7 +114,10 @@ class UsersController extends BaseController {
     $user->name = Input::get('name');
 
     if(\Input::has('password'))
-      $user->password = Hash::make(Input::get('password'));
+      $user->password =  Input::get('password');
+
+    if(\Input::has('password_confirmation'))
+      $user->password_confirmation =  Input::get('password_confirmation');
 
     $user->save();
 

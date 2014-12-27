@@ -48,7 +48,7 @@
         <span class="icon-bar"></span>
       </button>
       <ul class="nav nav-pills pull-right visible-xs-inline-block">
-        <li role="button" class="navbar-btn "><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span></a></li>
+        <li role="button" class="navbar-btn "><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span> Review</a></li>
       </ul>
       @else
         <ul class="nav nav-pills pull-right visible-xs-inline-block">
@@ -80,7 +80,10 @@
             
           </ul>
         </li>
+        @else
+        <li ><a href="/users/login" target="_self">log in</a></li>
         @endif
+
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
