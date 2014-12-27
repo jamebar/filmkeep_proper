@@ -27,9 +27,9 @@
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService',
-  function($scope, streamApiService,me,ReviewService,reviewApiService,watchlistApiService){
-
+.controller('feedCtrl', ['$scope', 'msgBus','streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService',
+  function($scope, msgBus,streamApiService,me,ReviewService,reviewApiService,watchlistApiService){
+    msgBus.emitMsg('pagetitle::change', 'My Feed' );
     $scope.loading = true;
     $scope.me = me;
     $scope.review_new = new reviewApiService();

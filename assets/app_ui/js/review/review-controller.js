@@ -24,9 +24,9 @@
     });
   }])
 
-  .controller('ReviewCtrl', ['$scope','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
-    function ($scope,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
-
+  .controller('ReviewCtrl', ['$scope','msgBus','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
+            msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
             $scope.rating_types = ReviewLoad.rating_types;
             console.log($scope.rating_types);
             $scope.review = ReviewLoad.review;

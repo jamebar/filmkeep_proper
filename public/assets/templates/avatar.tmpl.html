@@ -1,4 +1,9 @@
-<a ui-sref="root.user.filmkeep({username: user.username })" tooltip="%%user.name%%" style="display:inline-block">
+<a ng-if="!disabled" ui-sref="root.user.filmkeep({username: user.username })" tooltip="%%user.name%%" tooltip-trigger="mouseenter" style="display:inline-block">
   <img ng-hide="initials" ng-src="%%user.avatar | profileFilter%%" class="avatar-pic"/> 
   <span ng-show="initials" class="initials">%%initials%%</span>
 </a>
+
+<span ng-if="disabled" >
+  <img ng-hide="initials" ng-src="%%user.avatar | profileFilter%%" class="avatar-pic"/> 
+  <span ng-show="initials" class="initials">%%initials%%</span>
+</span>

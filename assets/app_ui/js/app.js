@@ -34,6 +34,7 @@ angular.module('myApp', [
 
   $locationProvider.html5Mode(true);
 
+
   $stateProvider.state('root', {
     abstract: true,
     templateUrl: '/assets/templates/app.tmpl.html',
@@ -58,13 +59,35 @@ angular.module('myApp', [
     }
   
 ])
-.controller('appCtrl', ['$sce','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
-    function($sce,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
+
+.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService',
+    function($scope,$rootScope,msgBus,meApiService) {
+      // console.log(me);
+      
+      msgBus.onMsg('user::loaded', function(e, data){
+        $scope.header_user = data;
+      });
+
+      msgBus.onMsg('pagetitle::change', function(e, data){
+        $scope.page_title = data;
+      });
+
+      $scope.newReview = function(){
+        msgBus.emitMsg('review::new');
+      }
+      
+    }
+  
+])
+.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
+    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
        var reviewModalInstance;
 
        $rootScope.$on('modal::close', function(){
         reviewModalInstance.close();
        });
+
+       msgBus.emitMsg('user::loaded', me.user);
 
         $scope.getReview = function(review) {
             
@@ -88,6 +111,7 @@ angular.module('myApp', [
         
         $scope.compare = function(obj){
           $scope.showcompare = false;
+          $scope.cancompare = true;
           var modalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_compare.tmpl.html',
@@ -95,6 +119,12 @@ angular.module('myApp', [
             });
 
           ReviewService.getCompares(obj.film_id).then(function(response){
+
+            if(response == 'false')
+            {
+              $scope.cancompare = false;
+              return false;
+            }
             var actives = [me.user.id, obj.user_id];
 
             _.forEach(response, function(review){
@@ -158,6 +188,8 @@ angular.module('myApp', [
           showModal();
         }
 
+        
+
         $scope.newReview = function(film){
    
             $scope.review = new reviewApiService();
@@ -189,6 +221,10 @@ angular.module('myApp', [
                 
             });
         }
+
+        msgBus.onMsg('review::new', function(e, data){
+          $scope.newReview();
+        });
         
     }
 ])
@@ -227,16 +263,25 @@ angular.module('myApp', [
   return {
     restrict: 'E',
     scope: {  
-      user: '=info'
+      user: '=info',
     },
     templateUrl: '/assets/templates/avatar.tmpl.html',
     link: function(scope, element,attrs) {
-        
-        if(scope.user.avatar.length<2)
-        {
-          scope.initials = getInitials(scope.user.name)
-        }
+       
+        scope.disabled = attrs.disableClick || false;
 
+        scope.$watch('user', function(old, newV){
+          setInitials();
+        })
+
+        function setInitials()
+        {
+          if(angular.isDefined(scope.user) && scope.user.avatar.length<2)
+          {
+            scope.initials = getInitials(scope.user.name)
+          }
+        }
+        
         function getInitials(name)
         {
           var temp_name = name.split(' ');
@@ -275,7 +320,7 @@ angular.module('myApp', [
     isFollowing : function(user)
     {
       var me = meApiService.meData();
-      console.log(me, user.id)
+      // console.log(me, user.id)
       if(!angular.isDefined(me.user))
         return false;
       

@@ -21,7 +21,7 @@
             <div class="feed-review-poster pull-left">
               <a ui-sref='root.review({reviewId: activity.object.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a>
               
-              <a class="action" href="" tooltip="Watch Trailer" ng-click="getTrailer(activity.object.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
+              <a class="action" href="" tooltip="Watch Trailer" tooltip-trigger="mouseenter" ng-click="getTrailer(activity.object.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
               <a class="action" href=""  ng-click="newReview(activity.object.film)" ng-if="activity.object.reviewed === 'false'"><span class="glyphicon glyphicon-tasks visible-xs-inline-block"></span> <span class="hidden-xs">review</span> </a> 
               <a class="action" href=""  ng-click="compare(activity.object)" ng-if="activity.object.reviewed === 'true' && activity.actor.id !== me.user.id">compare</a> 
               <a class="action" href=""  ng-click="editReview({review:activity.object, rating_types: rating_types_new})" ng-if="activity.actor.id === me.user.id"><span class="glyphicon glyphicon-pencil visible-xs-inline-block" ></span><span class="hidden-xs">edit</span></a> 

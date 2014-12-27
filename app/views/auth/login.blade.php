@@ -3,7 +3,8 @@
 @section('content')
 <div class="login-box">
 	
-  <a href="/users/loginfacebook" target="_self" class="social-btn facebook "><span class="icon-social-facebook"></span> Sign in with Facebook</a>
+ <a href="/users/loginfacebook" target="_self" class="social-btn facebook "><i class="icon-social-facebook"></i> <span>Sign-in with Facebook</span></a>
+  <a href="/users/logingoogle" target="_self" class="social-btn google "><i class="icon-social-google-plus"></i> <span>Sign-in with Google Plus</span></a>
   <hr>
 
    <form role="form" method="POST" action="{{{ URL::to('/users/login') }}}" accept-charset="UTF-8">

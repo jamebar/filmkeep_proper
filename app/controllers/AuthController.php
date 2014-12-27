@@ -95,7 +95,7 @@ class AuthController extends Controller
                 return Redirect::action('AuthController@create')
                     ->withInput(Input::except('password'))
                     ->with('error', $error);
-        }
+                }
                 
 
             }
@@ -111,6 +111,90 @@ class AuthController extends Controller
         }
 
     }
+
+    public function loginWithGoogle() {
+
+        // get data from input
+        $code = Input::get( 'code' );
+
+        // get google service
+        $googleService = OAuth::consumer( 'Google' );
+
+        // check if code is valid
+
+        // if code is provided get user data and sign in
+        if ( !empty( $code ) ) {
+
+            // This was a callback request from google, get the token
+            $token = $googleService->requestAccessToken( $code );
+
+            // Send a request with it
+            $result = json_decode( $googleService->request( 'https://www.googleapis.com/oauth2/v1/userinfo' ), true );
+
+            $user = User::where('google_id' , $result['id'] )->orWhere('email', $result['email'])->first();
+            //If user is found in DB, log them in and update the profile pic
+            if($user)
+            {
+              Auth::login( $user , true);
+              
+              if (Auth::check())
+              {
+                
+                $user->google_id = $result['id'];
+
+                //add profile pic if doesn't exist
+                if( strlen($user->avatar) < 2)
+                {
+                  $user->avatar = $result['picture'];
+                  
+                }
+                $user->save();
+                return Redirect::to('/feed')
+                            ->with('message', 'Welcome back ' . $user->name);
+              }
+            }
+            else
+            {
+                $random_password = md5(uniqid(mt_rand(), true));
+                $repo = App::make('UserRepository');
+                $input = [
+                  'name' => $result['name'],
+                  'email'=> $result['email'],
+                  'google_id' => $result['id'],
+                  'confirmed' => 1,
+                  'password'=> $random_password, //we set random password so confide doesn't fail
+                  'password_confirmation'=> $random_password, //we set random password so confide doesn't fail
+                  'avatar' => $result['picture']
+                ];
+
+                $user = $repo->signup($input);
+                if ($user->id) {
+                  Auth::login($user);
+                  return Redirect::to('/feed')
+                  ->with('message', 'Welcome to Filmkeep, ' . $user->name);
+                } else {
+                $error = $user->errors()->all(':message');
+
+                return Redirect::action('AuthController@create')
+                    ->withInput(Input::except('password'))
+                    ->with('error', $error);
+                }
+                
+
+            }
+            
+
+        }
+        // if not ask for permission first
+        else {
+            // get googleService authorization
+            $url = $googleService->getAuthorizationUri();
+
+            // return to google login url
+            return Redirect::to( (string)$url );
+        }
+    }
+
     /**
      * Stores new account
      *
@@ -121,7 +205,6 @@ class AuthController extends Controller
 
         $repo = App::make('UserRepository');
         $user = $repo->signup(Input::all());
-
         if ($user->id) {
             if (Config::get('confide::signup_email')) {
                 Mail::queueOn(

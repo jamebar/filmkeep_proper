@@ -34,6 +34,7 @@ angular.module('myApp', [
 
   $locationProvider.html5Mode(true);
 
+
   $stateProvider.state('root', {
     abstract: true,
     templateUrl: '/assets/templates/app.tmpl.html',
@@ -58,13 +59,35 @@ angular.module('myApp', [
     }
   
 ])
-.controller('appCtrl', ['$sce','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
-    function($sce,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
+
+.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService',
+    function($scope,$rootScope,msgBus,meApiService) {
+      // console.log(me);
+      
+      msgBus.onMsg('user::loaded', function(e, data){
+        $scope.header_user = data;
+      });
+
+      msgBus.onMsg('pagetitle::change', function(e, data){
+        $scope.page_title = data;
+      });
+
+      $scope.newReview = function(){
+        msgBus.emitMsg('review::new');
+      }
+      
+    }
+  
+])
+.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
+    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
        var reviewModalInstance;
 
        $rootScope.$on('modal::close', function(){
         reviewModalInstance.close();
        });
+
+       msgBus.emitMsg('user::loaded', me.user);
 
         $scope.getReview = function(review) {
             
@@ -88,6 +111,7 @@ angular.module('myApp', [
         
         $scope.compare = function(obj){
           $scope.showcompare = false;
+          $scope.cancompare = true;
           var modalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_compare.tmpl.html',
@@ -95,6 +119,12 @@ angular.module('myApp', [
             });
 
           ReviewService.getCompares(obj.film_id).then(function(response){
+
+            if(response == 'false')
+            {
+              $scope.cancompare = false;
+              return false;
+            }
             var actives = [me.user.id, obj.user_id];
 
             _.forEach(response, function(review){
@@ -158,6 +188,8 @@ angular.module('myApp', [
           showModal();
         }
 
+        
+
         $scope.newReview = function(film){
    
             $scope.review = new reviewApiService();
@@ -189,6 +221,10 @@ angular.module('myApp', [
                 
             });
         }
+
+        msgBus.onMsg('review::new', function(e, data){
+          $scope.newReview();
+        });
         
     }
 ])
@@ -227,16 +263,25 @@ angular.module('myApp', [
   return {
     restrict: 'E',
     scope: {  
-      user: '=info'
+      user: '=info',
     },
     templateUrl: '/assets/templates/avatar.tmpl.html',
     link: function(scope, element,attrs) {
-        
-        if(scope.user.avatar.length<2)
-        {
-          scope.initials = getInitials(scope.user.name)
-        }
+       
+        scope.disabled = attrs.disableClick || false;
 
+        scope.$watch('user', function(old, newV){
+          setInitials();
+        })
+
+        function setInitials()
+        {
+          if(angular.isDefined(scope.user) && scope.user.avatar.length<2)
+          {
+            scope.initials = getInitials(scope.user.name)
+          }
+        }
+        
         function getInitials(name)
         {
           var temp_name = name.split(' ');
@@ -275,7 +320,7 @@ angular.module('myApp', [
     isFollowing : function(user)
     {
       var me = meApiService.meData();
-      console.log(me, user.id)
+      // console.log(me, user.id)
       if(!angular.isDefined(me.user))
         return false;
       
@@ -373,8 +418,8 @@ var aeReview = angular.module('ae-review', [
 
     }
 ])
-.directive('addEditReview', ['$rootScope','$document','$modal','$compile','$timeout','ratingTypesApiService', 'reviewApiService', 'msgBus','ReviewService','AlertService',
-    function($rootScope,$document,$modal,$compile,$timeout,ratingTypesApiService, reviewApiService,msgBus, ReviewService,AlertService){
+.directive('addEditReview', ['$rootScope','$filter','$document','$modal','$compile','$timeout','ratingTypesApiService', 'reviewApiService', 'msgBus','ReviewService','AlertService',
+    function($rootScope,$filter,$document,$modal,$compile,$timeout,ratingTypesApiService, reviewApiService,msgBus, ReviewService,AlertService){
         return {
             restrict: 'E',
             scope:{
@@ -411,18 +456,28 @@ var aeReview = angular.module('ae-review', [
                     scope.review.ratings = ratings;
 
                     if(scope.review.id)
+                    {
                       scope.review.$update({review_id:scope.review.id}).then(function(){
                         $rootScope.$broadcast('modal::close');
                         $rootScope.$broadcast('review::updated', scope.review);
                         AlertService.Notice("Your review of " + scope.review.film.title + " has been updated");
                       });
+                    }
                     else
-                      scope.review.$save().then(function(){
-                        $rootScope.$broadcast('modal::close');
-                        $rootScope.$broadcast('review::created', scope.review);
-                        AlertService.Notice("Your review of " + scope.review.film.title + " has been created");
-                      });
-
+                    {
+                      if(angular.isDefined(scope.review.film))
+                      {
+                        scope.review.$save().then(function(){
+                          $rootScope.$broadcast('modal::close');
+                          $rootScope.$broadcast('review::created', scope.review);
+                          AlertService.Notice("Your review of " + scope.review.film.title + " has been created");
+                        });
+                      }
+                      else{
+                        AlertService.Alert("Whoops, you must choose a film before saving.");
+                      }
+                    }
+                      
                     // var newReview = new reviewApiService();
                     // newReview
                     // scope.review = new reviewApiService();
@@ -521,7 +576,8 @@ var aeReview = angular.module('ae-review', [
                             return $.map(list.results, function(data) {
                                 return {
                                     title: data.title + " (" + data.release_date.substring(0, 4) + ")",
-                                    tmdb_id: data.id
+                                    tmdb_id: data.id,
+                                    poster: $filter('imageFilter')(data.poster_path,'poster',0)
                                 };
                             });
                         }
@@ -539,7 +595,12 @@ var aeReview = angular.module('ae-review', [
                 scope.typeaheadData = {
                     name: 'films',
                     displayKey: 'title',
-                    source: films.ttAdapter()
+                    source: films.ttAdapter(),
+                    templates: {
+                      suggestion: function (context) {
+                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+' <span class="release-date">('+context.release_date + ')</span></div>'
+                      }
+                    }
                 };
 
                 scope.$on('typeahead:selected', function(a, b) {
@@ -711,9 +772,9 @@ var aeReview = angular.module('ae-review', [
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService',
-  function($scope, streamApiService,me,ReviewService,reviewApiService,watchlistApiService){
-
+.controller('feedCtrl', ['$scope', 'msgBus','streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService',
+  function($scope, msgBus,streamApiService,me,ReviewService,reviewApiService,watchlistApiService){
+    msgBus.emitMsg('pagetitle::change', 'My Feed' );
     $scope.loading = true;
     $scope.me = me;
     $scope.review_new = new reviewApiService();
@@ -827,8 +888,9 @@ var aeReview = angular.module('ae-review', [
     });
   }])
 
-  .controller('FilmCtrl', ['$scope', '$stateParams','me','FilmLoad',
-    function ($scope,$stateParams,me,FilmLoad) {
+  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
+    function ($scope,msgBus,$stateParams,me,FilmLoad) {
+        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
         $scope.me = me;
         FilmLoad.film.film_id = FilmLoad.film.id;
         $scope.film = FilmLoad.film;
@@ -893,8 +955,9 @@ var aeReview = angular.module('ae-review', [
     
   }])
 
-  .controller('userCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
-    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
+  .controller('userCtrl', ['$scope', 'msgBus', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
+    function ($scope, msgBus,$stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
+        
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
 
@@ -930,8 +993,9 @@ var aeReview = angular.module('ae-review', [
 
     }]) 
 
-    .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory',
-    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory  ) {
+    .controller('FilmkeepCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory',
+    function ($scope, msgBus,$stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory  ) {
+        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Filmkeep" );
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
         $scope.reviews_per_page = 20; // this should match however many results your API puts on one page
@@ -1051,8 +1115,8 @@ angular.module('AlertBox', [])
                 $scope.warnings = AlertService.warnings;
                 $scope.notices = AlertService.notices;
             },
-            template:  '<div ng-repeat="alert in alerts track by $index" ng-class="[boxClass, alertClass]">{{alert}}</div> \
-                        <div ng-repeat="warning in warnings track by $index" ng-class="[boxClass, warningClass]">{{warning}}</div> \
+            template:  '<div ng-repeat="alert in alerts track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, alertClass]">{{alert}}</div> \
+                        <div ng-repeat="warning in warnings track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, warningClass]">{{warning}}</div> \
                         <div ng-repeat="notice in notices track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
         };
 
@@ -1083,9 +1147,9 @@ angular.module('AlertBox', [])
     });
   }])
 
-  .controller('ReviewCtrl', ['$scope','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
-    function ($scope,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
-
+  .controller('ReviewCtrl', ['$scope','msgBus','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
+            msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
             $scope.rating_types = ReviewLoad.rating_types;
             console.log($scope.rating_types);
             $scope.review = ReviewLoad.review;
@@ -1387,7 +1451,6 @@ angular.module('Api', ['ngResource'])
         });
 
         function getMeData(){
-          console.log('medata',meData)
           return meData;
         }
 
@@ -1405,7 +1468,7 @@ angular.module('Api', ['ngResource'])
         }
 
         function me() {
- 
+            
             var request = $http({
                 method: "get",
                 url: "/api/me",
@@ -1883,9 +1946,10 @@ angular.module('ReviewService', ['Api'])
     });
   }])
 
-  .controller('WatchlistCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
-    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
-    
+  .controller('WatchlistCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
+    function ($scope,msgBus, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
+        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Watchlist" );
+
         watchlistApiService
             .getWatchlist(page_user.id).then(function(response) {
 

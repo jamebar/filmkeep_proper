@@ -43,6 +43,16 @@ Route::get('/test', function(){
   // ];
 
   // return $user_feed_1->addActivity($data);
+//   $payload = array(
+//     'message' => array(
+//         'subject' => 'Transactional email via Mandrill',
+//         'html' => 'It works!',
+//         'from_email' => 'james@lemonblock.com',
+//         'to' => array(array('email'=>'james@lemonblock.com'))
+//     )
+// );
+
+// $response = Mandrill::request('messages/send', $payload);
 });
 
 
@@ -59,6 +69,7 @@ Route::post('users/reset_password', 'AuthController@doResetPassword');
 Route::get('users/logout', 'AuthController@logout');
 
 Route::get('users/loginfacebook', 'AuthController@loginWithFacebook');
+Route::get('users/logingoogle', 'AuthController@loginWithGoogle');
 
 /*
 * API

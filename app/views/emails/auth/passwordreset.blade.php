@@ -1,4 +1,4 @@
-<h1>{{ Lang::get('confide::confide.email.password_reset.subject') }}</h1>
+<h1>Filmkeep Password Reset</h1>
 
 <p>{{ Lang::get('confide::confide.email.password_reset.greetings', array( 'name' => $user['name'])) }},</p>
 
@@ -8,3 +8,4 @@
 </a>
 
 <p>{{ Lang::get('confide::confide.email.password_reset.farewell') }}</p>
+<p>Your friends at Filmkeep</p>

@@ -43,8 +43,9 @@
     
   }])
 
-  .controller('userCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
-    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
+  .controller('userCtrl', ['$scope', 'msgBus', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
+    function ($scope, msgBus,$stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
+        
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
 
@@ -80,8 +81,9 @@
 
     }]) 
 
-    .controller('FilmkeepCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory',
-    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory  ) {
+    .controller('FilmkeepCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory',
+    function ($scope, msgBus,$stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory  ) {
+        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Filmkeep" );
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
         $scope.reviews_per_page = 20; // this should match however many results your API puts on one page

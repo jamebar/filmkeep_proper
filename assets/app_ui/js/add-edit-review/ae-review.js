@@ -30,8 +30,8 @@ var aeReview = angular.module('ae-review', [
 
     }
 ])
-.directive('addEditReview', ['$rootScope','$document','$modal','$compile','$timeout','ratingTypesApiService', 'reviewApiService', 'msgBus','ReviewService','AlertService',
-    function($rootScope,$document,$modal,$compile,$timeout,ratingTypesApiService, reviewApiService,msgBus, ReviewService,AlertService){
+.directive('addEditReview', ['$rootScope','$filter','$document','$modal','$compile','$timeout','ratingTypesApiService', 'reviewApiService', 'msgBus','ReviewService','AlertService',
+    function($rootScope,$filter,$document,$modal,$compile,$timeout,ratingTypesApiService, reviewApiService,msgBus, ReviewService,AlertService){
         return {
             restrict: 'E',
             scope:{
@@ -68,18 +68,28 @@ var aeReview = angular.module('ae-review', [
                     scope.review.ratings = ratings;
 
                     if(scope.review.id)
+                    {
                       scope.review.$update({review_id:scope.review.id}).then(function(){
                         $rootScope.$broadcast('modal::close');
                         $rootScope.$broadcast('review::updated', scope.review);
                         AlertService.Notice("Your review of " + scope.review.film.title + " has been updated");
                       });
+                    }
                     else
-                      scope.review.$save().then(function(){
-                        $rootScope.$broadcast('modal::close');
-                        $rootScope.$broadcast('review::created', scope.review);
-                        AlertService.Notice("Your review of " + scope.review.film.title + " has been created");
-                      });
-
+                    {
+                      if(angular.isDefined(scope.review.film))
+                      {
+                        scope.review.$save().then(function(){
+                          $rootScope.$broadcast('modal::close');
+                          $rootScope.$broadcast('review::created', scope.review);
+                          AlertService.Notice("Your review of " + scope.review.film.title + " has been created");
+                        });
+                      }
+                      else{
+                        AlertService.Alert("Whoops, you must choose a film before saving.");
+                      }
+                    }
+                      
                     // var newReview = new reviewApiService();
                     // newReview
                     // scope.review = new reviewApiService();
@@ -178,7 +188,8 @@ var aeReview = angular.module('ae-review', [
                             return $.map(list.results, function(data) {
                                 return {
                                     title: data.title + " (" + data.release_date.substring(0, 4) + ")",
-                                    tmdb_id: data.id
+                                    tmdb_id: data.id,
+                                    poster: $filter('imageFilter')(data.poster_path,'poster',0)
                                 };
                             });
                         }
@@ -196,7 +207,12 @@ var aeReview = angular.module('ae-review', [
                 scope.typeaheadData = {
                     name: 'films',
                     displayKey: 'title',
-                    source: films.ttAdapter()
+                    source: films.ttAdapter(),
+                    templates: {
+                      suggestion: function (context) {
+                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+' <span class="release-date">('+context.release_date + ')</span></div>'
+                      }
+                    }
                 };
 
                 scope.$on('typeahead:selected', function(a, b) {

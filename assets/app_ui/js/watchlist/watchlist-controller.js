@@ -18,9 +18,10 @@
     });
   }])
 
-  .controller('WatchlistCtrl', ['$scope', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
-    function ($scope, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
-    
+  .controller('WatchlistCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
+    function ($scope,msgBus, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
+        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Watchlist" );
+
         watchlistApiService
             .getWatchlist(page_user.id).then(function(response) {
 

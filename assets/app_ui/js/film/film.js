@@ -24,8 +24,9 @@
     });
   }])
 
-  .controller('FilmCtrl', ['$scope', '$stateParams','me','FilmLoad',
-    function ($scope,$stateParams,me,FilmLoad) {
+  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
+    function ($scope,msgBus,$stateParams,me,FilmLoad) {
+        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
         $scope.me = me;
         FilmLoad.film.film_id = FilmLoad.film.id;
         $scope.film = FilmLoad.film;

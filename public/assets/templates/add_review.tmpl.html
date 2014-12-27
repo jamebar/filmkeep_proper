@@ -8,7 +8,7 @@
   
       <form ng-submit="reviewSubmit()">
           <div class="form-group" ng-if="!review.id">
-              <input  type="text" class="form-control" placeholder="Add a review" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.film" sf-typeahead>
+              <input  type="text" class="form-control" placeholder="Add a review" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.film" sf-typeahead >
           </div>
           <h3 ng-show="review.id">%%review.film.title%%</h3>
           <relation-hint ></relation-hint>
@@ -31,6 +31,7 @@
               </slider>
           </div>
           <div class="form-group">
+              <label>Notes</label>
               <textarea class="form-control" ng-model="review.notes"></textarea>
           </div>
 

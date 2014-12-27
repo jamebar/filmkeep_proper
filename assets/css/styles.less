@@ -151,6 +151,9 @@
     padding-left: 2em;
     padding-right: 2em;
   }
+  search{
+    float:left;
+  }
 }
 
 
@@ -159,7 +162,7 @@ search{
   width:300px;
   margin-top:10px;
   
-  float:left;
+  
   input{
       padding: 5px 10px;
       height: auto;
@@ -214,23 +217,41 @@ search{
 }
 
 a.social-btn{
-  padding:0px 15px;
+  clear:both;
   width:100%;
   color:#fff;
   display: block;
-  text-align: center;
+  overflow: auto;
 
-  span{
+  margin-bottom: 1em;
+  i{
       font-size: 3em;
       margin-right: 5px;
       vertical-align: middle;
+      float:left;
+      padding: 5px 8px 0px;
+      border-right:1px solid rgba(255,255,255,.3);
     }
+  span{
+    display: block;
+    line-height: 61px;
+    font-size: 1.2em;
+    text-align: center;
+
+  }
 }
 
 .facebook{
   background-color:#3B5998;
   &:hover{
     background-color:lighten(#3a5795, 5%);
+  }
+}
+
+.google{
+  background-color:#dd4b39;
+  &:hover{
+    background-color:lighten(#dd4b39, 5%);
   }
 }
 
@@ -294,6 +315,12 @@ a.action{
   border-radius: 45px;
 }
 
+.sm .avatar-pic{
+  width:30px;
+  height:30px;
+  border-raidus:15px;
+}
+
 .initials{
   font-family: 'Volkhov',"Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   background:@filmkeep-red;
@@ -315,10 +342,17 @@ a.action{
 .large .initials{
   height:90px;
   width:90px;
-  line-height: 60px;
   border-radius:45px;
   line-height: 90px;
   font-size: 30px;
+}
+
+.sm .initials{
+  height:30px;
+  width:30px;
+  line-height: 30px;
+  border-radius:15px;
+  font-size: 12px;
 }
 
 .footer{

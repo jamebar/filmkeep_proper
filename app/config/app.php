@@ -126,6 +126,7 @@ return array(
     'Laracasts\Validation\ValidationServiceProvider',
     'GetStream\StreamLaravel\StreamLaravelServiceProvider',
     'Zizaco\Confide\ServiceProvider',
+    'Doxxon\LaravelMandrillRequest\LaravelMandrillRequestServiceProvider',
 
 	),
 
@@ -197,6 +198,7 @@ return array(
     'OAuth'           => 'Artdarek\OAuth\Facade\OAuth',
     'FeedManager'     => 'GetStream\StreamLaravel\Facades\FeedManager',
     'Confide'         => 'Zizaco\Confide\Facade',
+    'Mandrill' => 'Doxxon\LaravelMandrillRequest\Facades\MandrillRequest',
 
 	),
 

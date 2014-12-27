@@ -58,6 +58,15 @@ a:focus {
 .min-content-height {
   min-height: 600px;
 }
+input[type="text"],
+input[type="number"],
+input[type="password"],
+textarea {
+  font-size: 16px;
+}
+.modal-close {
+  padding: 1em;
+}
 /*Constants*/
 .round-corners {
   border-radius: 5px;
@@ -222,7 +231,7 @@ slider span.bubble.limit {
   color: #ccc;
 }
 .tt-dropdown-menu {
-  width: 422px;
+  width: 100%;
   margin-top: 12px;
   padding: 8px 0;
   background-color: #fff;
@@ -237,8 +246,10 @@ slider span.bubble.limit {
 .tt-suggestion {
   padding: 3px 20px;
   font-size: 17px;
-  line-height: 24px;
+  line-height: 17px;
   cursor: pointer;
+  color: #333;
+  margin-bottom: 5px;
 }
 .tt-suggestion img {
   margin-right: 5px;
@@ -367,7 +378,7 @@ label {
   font-weight: 400;
 }
 .btn {
-  border-radius: 0 !important;
+  border-radius: 3px !important;
   border: none !important;
   box-shadow: none !important;
 }
@@ -433,7 +444,7 @@ label {
   background-color: #7fb5b7;
 }
 .alert-box.warning,
-.alert-box.alert-error {
+.alert-box.alert {
   background-color: #d2544c;
 }
 .navbar-inverse .navbar-nav > li > a {
@@ -474,6 +485,10 @@ label {
 .nav-tabs > li > a:hover {
   background-color: rgba(255, 255, 255, 0.6);
   border: none;
+}
+.nav > li > a:hover,
+.nav > li > a:focus {
+  background: none;
 }
 ul.compare-avatars,
 ul.compare-avatars li {
@@ -703,12 +718,14 @@ textarea {
     padding-left: 2em;
     padding-right: 2em;
   }
+  search {
+    float: left;
+  }
 }
 search {
   display: inline-block;
   width: 300px;
   margin-top: 10px;
-  float: left;
 }
 search input {
   padding: 5px 10px;
@@ -746,22 +763,38 @@ search .tt-hint {
   height: 60px;
 }
 a.social-btn {
-  padding: 0px 15px;
+  clear: both;
   width: 100%;
   color: #fff;
   display: block;
-  text-align: center;
+  overflow: auto;
+  margin-bottom: 1em;
 }
-a.social-btn span {
+a.social-btn i {
   font-size: 3em;
   margin-right: 5px;
   vertical-align: middle;
+  float: left;
+  padding: 5px 8px 0px;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+a.social-btn span {
+  display: block;
+  line-height: 61px;
+  font-size: 1.2em;
+  text-align: center;
 }
 .facebook {
   background-color: #3B5998;
 }
 .facebook:hover {
   background-color: #4162a7;
+}
+.google {
+  background-color: #dd4b39;
+}
+.google:hover {
+  background-color: #e15f4f;
 }
 .navbar-brand {
   background: url(/assets/img/filmkeep-logo-f.png) no-repeat;
@@ -813,6 +846,11 @@ a.action:hover {
   height: 90px;
   border-radius: 45px;
 }
+.sm .avatar-pic {
+  width: 30px;
+  height: 30px;
+  border-raidus: 15px;
+}
 .initials {
   font-family: 'Volkhov', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   background: #d2544c;
@@ -832,10 +870,16 @@ a.action:hover {
 .large .initials {
   height: 90px;
   width: 90px;
-  line-height: 60px;
   border-radius: 45px;
   line-height: 90px;
   font-size: 30px;
+}
+.sm .initials {
+  height: 30px;
+  width: 30px;
+  line-height: 30px;
+  border-radius: 15px;
+  font-size: 12px;
 }
 .footer {
   padding: 2em;

@@ -2,6 +2,8 @@
 <html lang="en" ng-app="myApp">
 <head>
     <meta charset="UTF-8">
+     <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width"  />
     <title>Filmkeep</title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/styles.min.css">
@@ -37,7 +39,7 @@
       @endif
       <div class="row">
           <div class="col-md-12">
-              <div class="login-logo"><img src="/assets/img/filmkeep-logo-invite.png"/></div>
+              <div class="login-logo"><img src="/assets/img/filmkeep-logo-large.png"/></div>
               @yield('content')
               
           </div>

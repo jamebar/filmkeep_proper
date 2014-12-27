@@ -274,7 +274,6 @@ angular.module('Api', ['ngResource'])
         });
 
         function getMeData(){
-          console.log('medata',meData)
           return meData;
         }
 
@@ -292,7 +291,7 @@ angular.module('Api', ['ngResource'])
         }
 
         function me() {
- 
+            
             var request = $http({
                 method: "get",
                 url: "/api/me",

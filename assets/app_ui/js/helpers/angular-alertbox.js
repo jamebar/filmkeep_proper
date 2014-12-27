@@ -65,8 +65,8 @@ angular.module('AlertBox', [])
                 $scope.warnings = AlertService.warnings;
                 $scope.notices = AlertService.notices;
             },
-            template:  '<div ng-repeat="alert in alerts track by $index" ng-class="[boxClass, alertClass]">{{alert}}</div> \
-                        <div ng-repeat="warning in warnings track by $index" ng-class="[boxClass, warningClass]">{{warning}}</div> \
+            template:  '<div ng-repeat="alert in alerts track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, alertClass]">{{alert}}</div> \
+                        <div ng-repeat="warning in warnings track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, warningClass]">{{warning}}</div> \
                         <div ng-repeat="notice in notices track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
         };
 

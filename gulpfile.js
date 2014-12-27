@@ -25,13 +25,13 @@ gulp.task('styles', function() {
 	.pipe(gulp.dest('public/assets/css'))
 	.pipe(notify({ message: 'Style task completed.' }));
 
-  gulp.src([
-    'assets/bower_components/jasny-bootstrap/dist/css/jasny-bootstrap.min.css',
-    ])
-  .pipe(minifycss())
-  .pipe(plumber())
-  .pipe(concat('vendor.css'))
-  .pipe(gulp.dest('public/assets/css'));
+  // gulp.src([
+  //   'assets/bower_components/angular-snap/angular-snap.min.css',
+  //   ])
+  // .pipe(minifycss())
+  // .pipe(plumber())
+  // .pipe(concat('vendor.css'))
+  // .pipe(gulp.dest('public/assets/css'));
 });
 
 gulp.task('scripts', function() {
@@ -51,7 +51,6 @@ gulp.task('scripts', function() {
         'assets/bower_components/moment/moment.js',
         'assets/bower_components/angular-utils-pagination/dirPagination.js',
         'assets/bower_components/angular-slugify/angular-slugify.js',
-        'assets/bower_components/jasny-bootstrap/dist/js/jasny-bootstrap.min.js',
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))

@@ -96,13 +96,23 @@ class ReviewsController extends BaseController {
   */
   public function compares()
   {
+
     $film_id = \Input::get('film_id');
-    $followers = Follower::where('user_id', Auth::user()->id)->lists('follower_id');
-    return Review::with('user','film','ratings','ratings.rating_type')
+    $user_id = Auth::user()->id;
+    $ids = $followers = Follower::where('user_id', $user_id)->lists('follower_id');
+    $ids[] = $user_id;
+
+    if(count($followers) > 0){
+      $reviews =  Review::with('user','film','ratings','ratings.rating_type')
                   ->where('film_id', $film_id)
-                  ->whereIn('user_id', $followers)
+                  ->whereIn('user_id', $ids)
                   ->take(30)
                   ->get();
+
+    }
+
+    return (count($reviews)>1) ? $reviews : 'false';
+    
   }
 
 	/**

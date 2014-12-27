@@ -24,6 +24,10 @@ class UserRepository
         $user->name = array_get($input, 'name');
         $user->email    = array_get($input, 'email');
         $user->password = array_get($input, 'password');
+        $user->avatar = array_get($input, 'avatar');
+        $user->google_id = array_get($input, 'google_id');
+        $user->facebook_id = array_get($input, 'facebook_id');
+        $user->confirmed = (array_get($input, 'confirmed')) ?  array_get($input, 'confirmed') : 0;
 
         $new_username =  preg_replace("/[^A-Za-z0-9]/", "", $user->name);
         $username_check = User::where('username', $new_username)->first();

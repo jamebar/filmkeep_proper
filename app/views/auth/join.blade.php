@@ -4,7 +4,8 @@
 <div class="login-box">
   <h2>Join with social</h2>
   <p>To get the most out of Filmkeep, connect with your social media account.</p>
-  <a href="/users/loginfacebook" target="_self" class="social-btn facebook "><span class="icon-social-facebook"></span> Sign-up with Facebook</a>
+  <a href="/users/loginfacebook" target="_self" class="social-btn facebook "><i class="icon-social-facebook"></i> <span>Sign-up with Facebook</span></a>
+  <a href="/users/logingoogle" target="_self" class="social-btn google "><i class="icon-social-google-plus"></i> <span>Sign-up with Google Plus</span></a>
   <hr>
   <h2>Join with email</h2>
   <form method="POST" action="{{{ URL::to('users') }}}" accept-charset="UTF-8">
@@ -37,7 +38,7 @@
       </fieldset>
   </form>
 
-                <p>By creating an account, I accept Filmkeep's Terms of Service and Privacy Policy.</p>
+                <!-- <p>By creating an account, I accept Filmkeep's Terms of Service and Privacy Policy.</p> -->
                 
                 <p>Already a member? <a href="{{ route('login') }}" target="_self">Sign in here</a></p>
             
