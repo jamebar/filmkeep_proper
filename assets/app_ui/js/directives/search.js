@@ -86,7 +86,7 @@
                     templates: {
                       header: '<h3 class="search-title">Films</h3>',
                       suggestion: function (context) {
-                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+' <span class="release-date">('+context.release_date + ')</span></div>'
+                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" /></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
                       }
                     }
                 }

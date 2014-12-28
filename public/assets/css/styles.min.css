@@ -634,6 +634,9 @@ textarea {
 .padding-top {
   padding-top: 70px;
 }
+.forceopacity {
+  background-color: #323232 !important;
+}
 @-webkit-keyframes dimOut {
   0% {
     opacity: 1;
@@ -757,6 +760,36 @@ search .tt-hint {
   color: #aaa;
   border-radius: 3px !important;
 }
+.search-item-content {
+  display: inline-block;
+  width: 75%;
+  vertical-align: middle;
+}
+.search-item-img {
+  vertical-align: middle;
+  display: inline-block;
+  width: 15%;
+  margin-right: 5px;
+}
+.search-item-img img {
+  width: 100%;
+}
+@media only screen and (min-width: 40.063em) {
+  .review-editor .search-item-content {
+    width: 80%;
+  }
+  .review-editor .search-item-img {
+    width: 10%;
+  }
+}
+@media only screen and (max-width: 40.063em) {
+  search {
+    width: 52%;
+  }
+  search .tt-dropdown-menu {
+    width: 300px;
+  }
+}
 .login-logo {
   margin: 4em auto;
   max-width: 320px;
@@ -774,6 +807,11 @@ search .tt-hint {
 }
 .login-box a {
   color: #d47d55;
+}
+.add-review-mobile {
+  margin-top: .7em;
+  margin-right: .6em;
+  font-size: 1.3em;
 }
 .preloader {
   font-size: 1em;
@@ -823,7 +861,7 @@ a.social-btn span {
   margin-top: 13px;
   margin-right: 1em;
 }
-@media only screen and (min-width: 40.063em) {
+@media only screen and (min-width: 992px) {
   .navbar-brand {
     background: url(/assets/img/filmkeep_logo_top.png) no-repeat;
     background-size: contain;

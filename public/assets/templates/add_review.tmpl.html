@@ -12,8 +12,9 @@
           </div>
           <h3 ng-show="review.id">%%review.film.title%%</h3>
           <relation-hint ></relation-hint>
-          
-          <div ng-repeat="rating_type in rating_types track by $index" class="rating-type">
+          <span hm-touch-start="test=3" ng-init="test='2'" hm-touch-end="test=4">test</span>
+          <span>%%test%%</span>
+          <div ng-repeat="rating_type in rating_types track by $index" class="rating-type"  >
               <p label="rating_type.label" rating-type-label></p>
               <slider
                   ng-model="rating_type.value"
@@ -23,8 +24,10 @@
                   show-steps="true"
                   precision="1"
                   stretch="1"
-                  ng-change="sliding()"
+                  ng-change="sliding($index)"
                   ng-mousedown="setCurrent($index)"
+                  hm-drag-start="test()"
+                  hm-drag-end="test()"
                   ng-mouseup="hideHint()"
                   ng-class="{fadeSlider:fade_slider}"
                   >

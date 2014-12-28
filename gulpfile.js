@@ -51,6 +51,8 @@ gulp.task('scripts', function() {
         'assets/bower_components/moment/moment.js',
         'assets/bower_components/angular-utils-pagination/dirPagination.js',
         'assets/bower_components/angular-slugify/angular-slugify.js',
+        'assets/hammer.min.js',
+        'assets/gestures.min.js',
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))

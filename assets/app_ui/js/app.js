@@ -20,6 +20,8 @@ angular.module('myApp', [
     'AlertBox',
     'film',
     'slugifier',
+    'ngTouch',
+    'angular-gestures'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');

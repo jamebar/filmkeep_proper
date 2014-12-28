@@ -95,13 +95,12 @@ var aeReview = angular.module('ae-review', [
                     // scope.review = new reviewApiService();
                 }
 
-                scope.sliding = function() {
-
+                scope.sliding = function(el) {
+                    // scope.setCurrent(el);
                     inBetween();
                 }
 
                 scope.setCurrent = function(el) {
-                    //console.log('hint_index',el);
                     scope.hint_index = el;
 
                     if(scope.reviews.length>0)
@@ -110,19 +109,18 @@ var aeReview = angular.module('ae-review', [
                     sortedReviews = _.sortBy(scope.reviews, function(r) {
                         return r.ratings[scope.hint_index] ? r.ratings[scope.hint_index].value : 0;
                     })
-                    // console.log(window.event.clientY);
-                    //el.getBoundingClientRect();
-                    scope.relation_top = window.event.clientY ;
-                    // console.log(scope.relation_top);
+                    scope.relation_top = window.event.clientY + $('.modal').scrollTop() - 85;
                     inBetween();
-                    // scope.fade_slider = true;
+                    scope.fade_slider = true;
                 }
 
                 scope.hideHint = function(el) {
+                    scope.fade_slider = false;
                     scope.show_hint = false;
-                    // scope.fade_slider = false;
                 }
-
+                scope.test = function(){
+                  console.log("touch works");
+                }
                 function getOffsetTop( elem )
                 {
                     var offsetTop = 0;
@@ -187,8 +185,9 @@ var aeReview = angular.module('ae-review', [
                         filter: function(list) {
                             return $.map(list.results, function(data) {
                                 return {
-                                    title: data.title + " (" + data.release_date.substring(0, 4) + ")",
+                                    title: data.title,
                                     tmdb_id: data.id,
+                                    release_date: data.release_date.substring(0, 4),
                                     poster: $filter('imageFilter')(data.poster_path,'poster',0)
                                 };
                             });
@@ -210,7 +209,7 @@ var aeReview = angular.module('ae-review', [
                     source: films.ttAdapter(),
                     templates: {
                       suggestion: function (context) {
-                        return '<div><img src="'+context.poster + '" height="40" width="30"/> ' +context.title+' <span class="release-date">('+context.release_date + ')</span></div>'
+                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" /></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
                       }
                     }
                 };

@@ -38,7 +38,7 @@
       </ul>
       
     </div> -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" scroll-position="scroll"  style="background:rgba(50, 50, 50, %%(scroll/300) +.4%%)">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" scroll-position="scroll"  style="background:rgba(50, 50, 50, %%(scroll/300) +.4%%)" ng-class="{forceopacity: !navbarCollapsed}">
     <div class="container-fluid">
       <div class="navbar-header">
       @if(Auth::check())
@@ -47,20 +47,21 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <ul class="nav nav-pills pull-right visible-xs-inline-block">
-        <li role="button" class="navbar-btn "><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span> Review</a></li>
-      </ul>
+      <!-- <ul class="nav nav-pills pull-right visible-xs-inline-block"> -->
+        <a ng-click="newReview()" class="pull-right add-review-mobile visible-xs-inline-block" target="_self"><span class="glyphicon-plus glyphicon" ></span> </a>
+      <!-- </ul> -->
       @else
         <ul class="nav nav-pills pull-right visible-xs-inline-block">
           <li role="button" class="navbar-btn "><a href="/users/login" target="_self">log in</a></li>
         </ul>
       @endif
       <a class="navbar-brand" href="/" target="_self" ></a>
+      <search></search>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" collapse="navbarCollapsed" ng-init="navbarCollapsed=true">
-      <search></search>
+      
 
       <ul class="nav navbar-nav navbar-right">
         @if(Auth::check())
