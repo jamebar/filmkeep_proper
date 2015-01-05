@@ -21,7 +21,7 @@ angular.module('myApp', [
     'film',
     'slugifier',
     'ngTouch',
-    'angular-gestures'
+    'hmTouchEvents'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -77,6 +77,11 @@ angular.module('myApp', [
       $scope.newReview = function(){
         msgBus.emitMsg('review::new');
       }
+
+      $rootScope.$on('$stateChangeStart', 
+        function(event, toState, toParams, fromState, fromParams){ 
+            $scope.navbarCollapsed = true;
+        })
       
     }
   

@@ -117,6 +117,16 @@
           });
         }
 
+        $scope.updateFilmeter = function(type){
+          var t = new ratingTypesApiService();
+          _.assign(t,type);
+          t.$update(function(response){
+            AlertService.Notice("Your Filmeter is updated");
+            type.orig = type.label;
+            type.edit = false;
+          })
+        }
+
         $scope.deleteFilmeter = function(meter){
           var filmeter = new ratingTypesApiService();
         

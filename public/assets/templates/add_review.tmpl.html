@@ -4,19 +4,20 @@
       <img  ng-src="%%review.film.poster_path | imageFilter:'poster':'1'%%" />
     </div> -->
     <div class="col-sx-12">
-    
-  
       <form ng-submit="reviewSubmit()">
           <div class="form-group" ng-if="!review.id">
               <input  type="text" class="form-control" placeholder="Add a review" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.film" sf-typeahead >
           </div>
           <h3 ng-show="review.id">%%review.film.title%%</h3>
           <relation-hint ></relation-hint>
-          <span hm-touch-start="test=3" ng-init="test='2'" hm-touch-end="test=4">test</span>
-          <span>%%test%%</span>
           <div ng-repeat="rating_type in rating_types track by $index" class="rating-type"  >
               <p label="rating_type.label" rating-type-label></p>
               <slider
+                  hm-press="setCurrent" 
+                  hm-pressup="hideHint"
+                  hm-panend="hideHint"
+                  hm-recognizer-options='[{"time":0}]'
+                  id="%%$index%%"
                   ng-model="rating_type.value"
                   floor="1"
                   ceiling="2000"
@@ -26,8 +27,6 @@
                   stretch="1"
                   ng-change="sliding($index)"
                   ng-mousedown="setCurrent($index)"
-                  hm-drag-start="test()"
-                  hm-drag-end="test()"
                   ng-mouseup="hideHint()"
                   ng-class="{fadeSlider:fade_slider}"
                   >
@@ -37,7 +36,6 @@
               <label>Notes</label>
               <textarea class="form-control" ng-model="review.notes"></textarea>
           </div>
-
           <input type="submit" class="btn btn-primary" value="%%ae_button_label%% Review">
       </form>
     </div>

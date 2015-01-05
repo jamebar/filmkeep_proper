@@ -1107,3 +1107,10 @@ a.action:hover {
 .msg-error {
   color: #d2544c;
 }
+.filmeter .btn {
+  width: 100%;
+  padding: 10px;
+}
+.btn-default {
+  background: #ccc;
+}

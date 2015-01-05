@@ -1,7 +1,7 @@
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {
 
-        this.delay = 4000;
+        this.delay = 2000;
         
         this.alerts = [];
         this.warnings = [];

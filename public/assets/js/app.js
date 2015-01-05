@@ -21,7 +21,7 @@ angular.module('myApp', [
     'film',
     'slugifier',
     'ngTouch',
-    'angular-gestures'
+    'hmTouchEvents'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -77,6 +77,11 @@ angular.module('myApp', [
       $scope.newReview = function(){
         msgBus.emitMsg('review::new');
       }
+
+      $rootScope.$on('$stateChangeStart', 
+        function(event, toState, toParams, fromState, fromParams){ 
+            $scope.navbarCollapsed = true;
+        })
       
     }
   
@@ -491,26 +496,32 @@ var aeReview = angular.module('ae-review', [
                 }
 
                 scope.setCurrent = function(el) {
-                    scope.hint_index = el;
-
+                    console.log(el);
+                    scope.hint_index = el.element ? (el.element.context.id *1) : el;
                     if(scope.reviews.length>0)
                       scope.show_hint = true;
 
                     sortedReviews = _.sortBy(scope.reviews, function(r) {
                         return r.ratings[scope.hint_index] ? r.ratings[scope.hint_index].value : 0;
                     })
-                    scope.relation_top = window.event.clientY + $('.modal').scrollTop() - 85;
+
+                    var ypos = window.event ? window.event.clientY : el.center.y;
+                    scope.relation_top = ypos + $('.modal').scrollTop() - 85;
                     inBetween();
                     scope.fade_slider = true;
                 }
 
                 scope.hideHint = function(el) {
+                  console.log("hide");
                     scope.fade_slider = false;
                     scope.show_hint = false;
                 }
-                scope.test = function(){
-                  console.log("touch works");
+
+                scope.test = function(e){ 
+
+                  console.log(e);
                 }
+
                 function getOffsetTop( elem )
                 {
                     var offsetTop = 0;
@@ -1052,7 +1063,7 @@ var aeReview = angular.module('ae-review', [
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {
 
-        this.delay = 4000;
+        this.delay = 2000;
         
         this.alerts = [];
         this.warnings = [];
@@ -1895,6 +1906,16 @@ angular.module('ReviewService', ['Api'])
             $scope.newcriteria = new ratingTypesApiService();
 
           });
+        }
+
+        $scope.updateFilmeter = function(type){
+          var t = new ratingTypesApiService();
+          _.assign(t,type);
+          t.$update(function(response){
+            AlertService.Notice("Your Filmeter is updated");
+            type.orig = type.label;
+            type.edit = false;
+          })
         }
 
         $scope.deleteFilmeter = function(meter){

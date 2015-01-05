@@ -52,7 +52,7 @@ gulp.task('scripts', function() {
         'assets/bower_components/angular-utils-pagination/dirPagination.js',
         'assets/bower_components/angular-slugify/angular-slugify.js',
         'assets/hammer.min.js',
-        'assets/gestures.min.js',
+        'assets/bower_components/ryanmullins-angular-hammer/angular.hammer.js'
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))

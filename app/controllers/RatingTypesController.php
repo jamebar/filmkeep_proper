@@ -77,7 +77,13 @@ class RatingTypesController extends BaseController{
 	 */
 	public function update($id)
 	{
-		//
+    $user = User::find(Auth::user()->id);
+
+    $type = Rating_type::where('user_id', $user->id)->where('id',$id)->first();
+    if($type){
+      $type->label = Input::get('label');
+    }
+    return Response::json(['response'=>$type->save()]);
 	}
 
 	/**

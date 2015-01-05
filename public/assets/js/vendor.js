@@ -5685,4 +5685,489 @@ angular.module("siyfion.sfTypeahead",[]).directive("sfTypeahead",function(){retu
  * Licensed under the MIT license */
 !function(a,b,c,d){"use strict";function e(a,b,c){return setTimeout(k(a,c),b)}function f(a,b,c){return Array.isArray(a)?(g(a,c[b],c),!0):!1}function g(a,b,c){var e;if(a)if(a.forEach)a.forEach(b,c);else if(a.length!==d)for(e=0;e<a.length;)b.call(c,a[e],e,a),e++;else for(e in a)a.hasOwnProperty(e)&&b.call(c,a[e],e,a)}function h(a,b,c){for(var e=Object.keys(b),f=0;f<e.length;)(!c||c&&a[e[f]]===d)&&(a[e[f]]=b[e[f]]),f++;return a}function i(a,b){return h(a,b,!0)}function j(a,b,c){var d,e=b.prototype;d=a.prototype=Object.create(e),d.constructor=a,d._super=e,c&&h(d,c)}function k(a,b){return function(){return a.apply(b,arguments)}}function l(a,b){return typeof a==kb?a.apply(b?b[0]||d:d,b):a}function m(a,b){return a===d?b:a}function n(a,b,c){g(r(b),function(b){a.addEventListener(b,c,!1)})}function o(a,b,c){g(r(b),function(b){a.removeEventListener(b,c,!1)})}function p(a,b){for(;a;){if(a==b)return!0;a=a.parentNode}return!1}function q(a,b){return a.indexOf(b)>-1}function r(a){return a.trim().split(/\s+/g)}function s(a,b,c){if(a.indexOf&&!c)return a.indexOf(b);for(var d=0;d<a.length;){if(c&&a[d][c]==b||!c&&a[d]===b)return d;d++}return-1}function t(a){return Array.prototype.slice.call(a,0)}function u(a,b,c){for(var d=[],e=[],f=0;f<a.length;){var g=b?a[f][b]:a[f];s(e,g)<0&&d.push(a[f]),e[f]=g,f++}return c&&(d=b?d.sort(function(a,c){return a[b]>c[b]}):d.sort()),d}function v(a,b){for(var c,e,f=b[0].toUpperCase()+b.slice(1),g=0;g<ib.length;){if(c=ib[g],e=c?c+f:b,e in a)return e;g++}return d}function w(){return ob++}function x(a){var b=a.ownerDocument;return b.defaultView||b.parentWindow}function y(a,b){var c=this;this.manager=a,this.callback=b,this.element=a.element,this.target=a.options.inputTarget,this.domHandler=function(b){l(a.options.enable,[a])&&c.handler(b)},this.init()}function z(a){var b,c=a.options.inputClass;return new(b=c?c:rb?N:sb?Q:qb?S:M)(a,A)}function A(a,b,c){var d=c.pointers.length,e=c.changedPointers.length,f=b&yb&&d-e===0,g=b&(Ab|Bb)&&d-e===0;c.isFirst=!!f,c.isFinal=!!g,f&&(a.session={}),c.eventType=b,B(a,c),a.emit("hammer.input",c),a.recognize(c),a.session.prevInput=c}function B(a,b){var c=a.session,d=b.pointers,e=d.length;c.firstInput||(c.firstInput=E(b)),e>1&&!c.firstMultiple?c.firstMultiple=E(b):1===e&&(c.firstMultiple=!1);var f=c.firstInput,g=c.firstMultiple,h=g?g.center:f.center,i=b.center=F(d);b.timeStamp=nb(),b.deltaTime=b.timeStamp-f.timeStamp,b.angle=J(h,i),b.distance=I(h,i),C(c,b),b.offsetDirection=H(b.deltaX,b.deltaY),b.scale=g?L(g.pointers,d):1,b.rotation=g?K(g.pointers,d):0,D(c,b);var j=a.element;p(b.srcEvent.target,j)&&(j=b.srcEvent.target),b.target=j}function C(a,b){var c=b.center,d=a.offsetDelta||{},e=a.prevDelta||{},f=a.prevInput||{};(b.eventType===yb||f.eventType===Ab)&&(e=a.prevDelta={x:f.deltaX||0,y:f.deltaY||0},d=a.offsetDelta={x:c.x,y:c.y}),b.deltaX=e.x+(c.x-d.x),b.deltaY=e.y+(c.y-d.y)}function D(a,b){var c,e,f,g,h=a.lastInterval||b,i=b.timeStamp-h.timeStamp;if(b.eventType!=Bb&&(i>xb||h.velocity===d)){var j=h.deltaX-b.deltaX,k=h.deltaY-b.deltaY,l=G(i,j,k);e=l.x,f=l.y,c=mb(l.x)>mb(l.y)?l.x:l.y,g=H(j,k),a.lastInterval=b}else c=h.velocity,e=h.velocityX,f=h.velocityY,g=h.direction;b.velocity=c,b.velocityX=e,b.velocityY=f,b.direction=g}function E(a){for(var b=[],c=0;c<a.pointers.length;)b[c]={clientX:lb(a.pointers[c].clientX),clientY:lb(a.pointers[c].clientY)},c++;return{timeStamp:nb(),pointers:b,center:F(b),deltaX:a.deltaX,deltaY:a.deltaY}}function F(a){var b=a.length;if(1===b)return{x:lb(a[0].clientX),y:lb(a[0].clientY)};for(var c=0,d=0,e=0;b>e;)c+=a[e].clientX,d+=a[e].clientY,e++;return{x:lb(c/b),y:lb(d/b)}}function G(a,b,c){return{x:b/a||0,y:c/a||0}}function H(a,b){return a===b?Cb:mb(a)>=mb(b)?a>0?Db:Eb:b>0?Fb:Gb}function I(a,b,c){c||(c=Kb);var d=b[c[0]]-a[c[0]],e=b[c[1]]-a[c[1]];return Math.sqrt(d*d+e*e)}function J(a,b,c){c||(c=Kb);var d=b[c[0]]-a[c[0]],e=b[c[1]]-a[c[1]];return 180*Math.atan2(e,d)/Math.PI}function K(a,b){return J(b[1],b[0],Lb)-J(a[1],a[0],Lb)}function L(a,b){return I(b[0],b[1],Lb)/I(a[0],a[1],Lb)}function M(){this.evEl=Nb,this.evWin=Ob,this.allow=!0,this.pressed=!1,y.apply(this,arguments)}function N(){this.evEl=Rb,this.evWin=Sb,y.apply(this,arguments),this.store=this.manager.session.pointerEvents=[]}function O(){this.evTarget=Ub,this.evWin=Vb,this.started=!1,y.apply(this,arguments)}function P(a,b){var c=t(a.touches),d=t(a.changedTouches);return b&(Ab|Bb)&&(c=u(c.concat(d),"identifier",!0)),[c,d]}function Q(){this.evTarget=Xb,this.targetIds={},y.apply(this,arguments)}function R(a,b){var c=t(a.touches),d=this.targetIds;if(b&(yb|zb)&&1===c.length)return d[c[0].identifier]=!0,[c,c];var e,f,g=t(a.changedTouches),h=[],i=this.target;if(f=c.filter(function(a){return p(a.target,i)}),b===yb)for(e=0;e<f.length;)d[f[e].identifier]=!0,e++;for(e=0;e<g.length;)d[g[e].identifier]&&h.push(g[e]),b&(Ab|Bb)&&delete d[g[e].identifier],e++;return h.length?[u(f.concat(h),"identifier",!0),h]:void 0}function S(){y.apply(this,arguments);var a=k(this.handler,this);this.touch=new Q(this.manager,a),this.mouse=new M(this.manager,a)}function T(a,b){this.manager=a,this.set(b)}function U(a){if(q(a,bc))return bc;var b=q(a,cc),c=q(a,dc);return b&&c?cc+" "+dc:b||c?b?cc:dc:q(a,ac)?ac:_b}function V(a){this.id=w(),this.manager=null,this.options=i(a||{},this.defaults),this.options.enable=m(this.options.enable,!0),this.state=ec,this.simultaneous={},this.requireFail=[]}function W(a){return a&jc?"cancel":a&hc?"end":a&gc?"move":a&fc?"start":""}function X(a){return a==Gb?"down":a==Fb?"up":a==Db?"left":a==Eb?"right":""}function Y(a,b){var c=b.manager;return c?c.get(a):a}function Z(){V.apply(this,arguments)}function $(){Z.apply(this,arguments),this.pX=null,this.pY=null}function _(){Z.apply(this,arguments)}function ab(){V.apply(this,arguments),this._timer=null,this._input=null}function bb(){Z.apply(this,arguments)}function cb(){Z.apply(this,arguments)}function db(){V.apply(this,arguments),this.pTime=!1,this.pCenter=!1,this._timer=null,this._input=null,this.count=0}function eb(a,b){return b=b||{},b.recognizers=m(b.recognizers,eb.defaults.preset),new fb(a,b)}function fb(a,b){b=b||{},this.options=i(b,eb.defaults),this.options.inputTarget=this.options.inputTarget||a,this.handlers={},this.session={},this.recognizers=[],this.element=a,this.input=z(this),this.touchAction=new T(this,this.options.touchAction),gb(this,!0),g(b.recognizers,function(a){var b=this.add(new a[0](a[1]));a[2]&&b.recognizeWith(a[2]),a[3]&&b.requireFailure(a[3])},this)}function gb(a,b){var c=a.element;g(a.options.cssProps,function(a,d){c.style[v(c.style,d)]=b?a:""})}function hb(a,c){var d=b.createEvent("Event");d.initEvent(a,!0,!0),d.gesture=c,c.target.dispatchEvent(d)}var ib=["","webkit","moz","MS","ms","o"],jb=b.createElement("div"),kb="function",lb=Math.round,mb=Math.abs,nb=Date.now,ob=1,pb=/mobile|tablet|ip(ad|hone|od)|android/i,qb="ontouchstart"in a,rb=v(a,"PointerEvent")!==d,sb=qb&&pb.test(navigator.userAgent),tb="touch",ub="pen",vb="mouse",wb="kinect",xb=25,yb=1,zb=2,Ab=4,Bb=8,Cb=1,Db=2,Eb=4,Fb=8,Gb=16,Hb=Db|Eb,Ib=Fb|Gb,Jb=Hb|Ib,Kb=["x","y"],Lb=["clientX","clientY"];y.prototype={handler:function(){},init:function(){this.evEl&&n(this.element,this.evEl,this.domHandler),this.evTarget&&n(this.target,this.evTarget,this.domHandler),this.evWin&&n(x(this.element),this.evWin,this.domHandler)},destroy:function(){this.evEl&&o(this.element,this.evEl,this.domHandler),this.evTarget&&o(this.target,this.evTarget,this.domHandler),this.evWin&&o(x(this.element),this.evWin,this.domHandler)}};var Mb={mousedown:yb,mousemove:zb,mouseup:Ab},Nb="mousedown",Ob="mousemove mouseup";j(M,y,{handler:function(a){var b=Mb[a.type];b&yb&&0===a.button&&(this.pressed=!0),b&zb&&1!==a.which&&(b=Ab),this.pressed&&this.allow&&(b&Ab&&(this.pressed=!1),this.callback(this.manager,b,{pointers:[a],changedPointers:[a],pointerType:vb,srcEvent:a}))}});var Pb={pointerdown:yb,pointermove:zb,pointerup:Ab,pointercancel:Bb,pointerout:Bb},Qb={2:tb,3:ub,4:vb,5:wb},Rb="pointerdown",Sb="pointermove pointerup pointercancel";a.MSPointerEvent&&(Rb="MSPointerDown",Sb="MSPointerMove MSPointerUp MSPointerCancel"),j(N,y,{handler:function(a){var b=this.store,c=!1,d=a.type.toLowerCase().replace("ms",""),e=Pb[d],f=Qb[a.pointerType]||a.pointerType,g=f==tb,h=s(b,a.pointerId,"pointerId");e&yb&&(0===a.button||g)?0>h&&(b.push(a),h=b.length-1):e&(Ab|Bb)&&(c=!0),0>h||(b[h]=a,this.callback(this.manager,e,{pointers:b,changedPointers:[a],pointerType:f,srcEvent:a}),c&&b.splice(h,1))}});var Tb={touchstart:yb,touchmove:zb,touchend:Ab,touchcancel:Bb},Ub="touchstart",Vb="touchstart touchmove touchend touchcancel";j(O,y,{handler:function(a){var b=Tb[a.type];if(b===yb&&(this.started=!0),this.started){var c=P.call(this,a,b);b&(Ab|Bb)&&c[0].length-c[1].length===0&&(this.started=!1),this.callback(this.manager,b,{pointers:c[0],changedPointers:c[1],pointerType:tb,srcEvent:a})}}});var Wb={touchstart:yb,touchmove:zb,touchend:Ab,touchcancel:Bb},Xb="touchstart touchmove touchend touchcancel";j(Q,y,{handler:function(a){var b=Wb[a.type],c=R.call(this,a,b);c&&this.callback(this.manager,b,{pointers:c[0],changedPointers:c[1],pointerType:tb,srcEvent:a})}}),j(S,y,{handler:function(a,b,c){var d=c.pointerType==tb,e=c.pointerType==vb;if(d)this.mouse.allow=!1;else if(e&&!this.mouse.allow)return;b&(Ab|Bb)&&(this.mouse.allow=!0),this.callback(a,b,c)},destroy:function(){this.touch.destroy(),this.mouse.destroy()}});var Yb=v(jb.style,"touchAction"),Zb=Yb!==d,$b="compute",_b="auto",ac="manipulation",bc="none",cc="pan-x",dc="pan-y";T.prototype={set:function(a){a==$b&&(a=this.compute()),Zb&&(this.manager.element.style[Yb]=a),this.actions=a.toLowerCase().trim()},update:function(){this.set(this.manager.options.touchAction)},compute:function(){var a=[];return g(this.manager.recognizers,function(b){l(b.options.enable,[b])&&(a=a.concat(b.getTouchAction()))}),U(a.join(" "))},preventDefaults:function(a){if(!Zb){var b=a.srcEvent,c=a.offsetDirection;if(this.manager.session.prevented)return void b.preventDefault();var d=this.actions,e=q(d,bc),f=q(d,dc),g=q(d,cc);return e||f&&c&Hb||g&&c&Ib?this.preventSrc(b):void 0}},preventSrc:function(a){this.manager.session.prevented=!0,a.preventDefault()}};var ec=1,fc=2,gc=4,hc=8,ic=hc,jc=16,kc=32;V.prototype={defaults:{},set:function(a){return h(this.options,a),this.manager&&this.manager.touchAction.update(),this},recognizeWith:function(a){if(f(a,"recognizeWith",this))return this;var b=this.simultaneous;return a=Y(a,this),b[a.id]||(b[a.id]=a,a.recognizeWith(this)),this},dropRecognizeWith:function(a){return f(a,"dropRecognizeWith",this)?this:(a=Y(a,this),delete this.simultaneous[a.id],this)},requireFailure:function(a){if(f(a,"requireFailure",this))return this;var b=this.requireFail;return a=Y(a,this),-1===s(b,a)&&(b.push(a),a.requireFailure(this)),this},dropRequireFailure:function(a){if(f(a,"dropRequireFailure",this))return this;a=Y(a,this);var b=s(this.requireFail,a);return b>-1&&this.requireFail.splice(b,1),this},hasRequireFailures:function(){return this.requireFail.length>0},canRecognizeWith:function(a){return!!this.simultaneous[a.id]},emit:function(a){function b(b){c.manager.emit(c.options.event+(b?W(d):""),a)}var c=this,d=this.state;hc>d&&b(!0),b(),d>=hc&&b(!0)},tryEmit:function(a){return this.canEmit()?this.emit(a):void(this.state=kc)},canEmit:function(){for(var a=0;a<this.requireFail.length;){if(!(this.requireFail[a].state&(kc|ec)))return!1;a++}return!0},recognize:function(a){var b=h({},a);return l(this.options.enable,[this,b])?(this.state&(ic|jc|kc)&&(this.state=ec),this.state=this.process(b),void(this.state&(fc|gc|hc|jc)&&this.tryEmit(b))):(this.reset(),void(this.state=kc))},process:function(){},getTouchAction:function(){},reset:function(){}},j(Z,V,{defaults:{pointers:1},attrTest:function(a){var b=this.options.pointers;return 0===b||a.pointers.length===b},process:function(a){var b=this.state,c=a.eventType,d=b&(fc|gc),e=this.attrTest(a);return d&&(c&Bb||!e)?b|jc:d||e?c&Ab?b|hc:b&fc?b|gc:fc:kc}}),j($,Z,{defaults:{event:"pan",threshold:10,pointers:1,direction:Jb},getTouchAction:function(){var a=this.options.direction,b=[];return a&Hb&&b.push(dc),a&Ib&&b.push(cc),b},directionTest:function(a){var b=this.options,c=!0,d=a.distance,e=a.direction,f=a.deltaX,g=a.deltaY;return e&b.direction||(b.direction&Hb?(e=0===f?Cb:0>f?Db:Eb,c=f!=this.pX,d=Math.abs(a.deltaX)):(e=0===g?Cb:0>g?Fb:Gb,c=g!=this.pY,d=Math.abs(a.deltaY))),a.direction=e,c&&d>b.threshold&&e&b.direction},attrTest:function(a){return Z.prototype.attrTest.call(this,a)&&(this.state&fc||!(this.state&fc)&&this.directionTest(a))},emit:function(a){this.pX=a.deltaX,this.pY=a.deltaY;var b=X(a.direction);b&&this.manager.emit(this.options.event+b,a),this._super.emit.call(this,a)}}),j(_,Z,{defaults:{event:"pinch",threshold:0,pointers:2},getTouchAction:function(){return[bc]},attrTest:function(a){return this._super.attrTest.call(this,a)&&(Math.abs(a.scale-1)>this.options.threshold||this.state&fc)},emit:function(a){if(this._super.emit.call(this,a),1!==a.scale){var b=a.scale<1?"in":"out";this.manager.emit(this.options.event+b,a)}}}),j(ab,V,{defaults:{event:"press",pointers:1,time:500,threshold:5},getTouchAction:function(){return[_b]},process:function(a){var b=this.options,c=a.pointers.length===b.pointers,d=a.distance<b.threshold,f=a.deltaTime>b.time;if(this._input=a,!d||!c||a.eventType&(Ab|Bb)&&!f)this.reset();else if(a.eventType&yb)this.reset(),this._timer=e(function(){this.state=ic,this.tryEmit()},b.time,this);else if(a.eventType&Ab)return ic;return kc},reset:function(){clearTimeout(this._timer)},emit:function(a){this.state===ic&&(a&&a.eventType&Ab?this.manager.emit(this.options.event+"up",a):(this._input.timeStamp=nb(),this.manager.emit(this.options.event,this._input)))}}),j(bb,Z,{defaults:{event:"rotate",threshold:0,pointers:2},getTouchAction:function(){return[bc]},attrTest:function(a){return this._super.attrTest.call(this,a)&&(Math.abs(a.rotation)>this.options.threshold||this.state&fc)}}),j(cb,Z,{defaults:{event:"swipe",threshold:10,velocity:.65,direction:Hb|Ib,pointers:1},getTouchAction:function(){return $.prototype.getTouchAction.call(this)},attrTest:function(a){var b,c=this.options.direction;return c&(Hb|Ib)?b=a.velocity:c&Hb?b=a.velocityX:c&Ib&&(b=a.velocityY),this._super.attrTest.call(this,a)&&c&a.direction&&a.distance>this.options.threshold&&mb(b)>this.options.velocity&&a.eventType&Ab},emit:function(a){var b=X(a.direction);b&&this.manager.emit(this.options.event+b,a),this.manager.emit(this.options.event,a)}}),j(db,V,{defaults:{event:"tap",pointers:1,taps:1,interval:300,time:250,threshold:2,posThreshold:10},getTouchAction:function(){return[ac]},process:function(a){var b=this.options,c=a.pointers.length===b.pointers,d=a.distance<b.threshold,f=a.deltaTime<b.time;if(this.reset(),a.eventType&yb&&0===this.count)return this.failTimeout();if(d&&f&&c){if(a.eventType!=Ab)return this.failTimeout();var g=this.pTime?a.timeStamp-this.pTime<b.interval:!0,h=!this.pCenter||I(this.pCenter,a.center)<b.posThreshold;this.pTime=a.timeStamp,this.pCenter=a.center,h&&g?this.count+=1:this.count=1,this._input=a;var i=this.count%b.taps;if(0===i)return this.hasRequireFailures()?(this._timer=e(function(){this.state=ic,this.tryEmit()},b.interval,this),fc):ic}return kc},failTimeout:function(){return this._timer=e(function(){this.state=kc},this.options.interval,this),kc},reset:function(){clearTimeout(this._timer)},emit:function(){this.state==ic&&(this._input.tapCount=this.count,this.manager.emit(this.options.event,this._input))}}),eb.VERSION="2.0.4",eb.defaults={domEvents:!1,touchAction:$b,enable:!0,inputTarget:null,inputClass:null,preset:[[bb,{enable:!1}],[_,{enable:!1},["rotate"]],[cb,{direction:Hb}],[$,{direction:Hb},["swipe"]],[db],[db,{event:"doubletap",taps:2},["tap"]],[ab]],cssProps:{userSelect:"none",touchSelect:"none",touchCallout:"none",contentZooming:"none",userDrag:"none",tapHighlightColor:"rgba(0,0,0,0)"}};var lc=1,mc=2;fb.prototype={set:function(a){return h(this.options,a),a.touchAction&&this.touchAction.update(),a.inputTarget&&(this.input.destroy(),this.input.target=a.inputTarget,this.input.init()),this},stop:function(a){this.session.stopped=a?mc:lc},recognize:function(a){var b=this.session;if(!b.stopped){this.touchAction.preventDefaults(a);var c,d=this.recognizers,e=b.curRecognizer;(!e||e&&e.state&ic)&&(e=b.curRecognizer=null);for(var f=0;f<d.length;)c=d[f],b.stopped===mc||e&&c!=e&&!c.canRecognizeWith(e)?c.reset():c.recognize(a),!e&&c.state&(fc|gc|hc)&&(e=b.curRecognizer=c),f++}},get:function(a){if(a instanceof V)return a;for(var b=this.recognizers,c=0;c<b.length;c++)if(b[c].options.event==a)return b[c];return null},add:function(a){if(f(a,"add",this))return this;var b=this.get(a.options.event);return b&&this.remove(b),this.recognizers.push(a),a.manager=this,this.touchAction.update(),a},remove:function(a){if(f(a,"remove",this))return this;var b=this.recognizers;return a=this.get(a),b.splice(s(b,a),1),this.touchAction.update(),this},on:function(a,b){var c=this.handlers;return g(r(a),function(a){c[a]=c[a]||[],c[a].push(b)}),this},off:function(a,b){var c=this.handlers;return g(r(a),function(a){b?c[a].splice(s(c[a],b),1):delete c[a]}),this},emit:function(a,b){this.options.domEvents&&hb(a,b);var c=this.handlers[a]&&this.handlers[a].slice();if(c&&c.length){b.type=a,b.preventDefault=function(){b.srcEvent.preventDefault()};for(var d=0;d<c.length;)c[d](b),d++}},destroy:function(){this.element&&gb(this,!1),this.handlers={},this.session={},this.input.destroy(),this.element=null}},h(eb,{INPUT_START:yb,INPUT_MOVE:zb,INPUT_END:Ab,INPUT_CANCEL:Bb,STATE_POSSIBLE:ec,STATE_BEGAN:fc,STATE_CHANGED:gc,STATE_ENDED:hc,STATE_RECOGNIZED:ic,STATE_CANCELLED:jc,STATE_FAILED:kc,DIRECTION_NONE:Cb,DIRECTION_LEFT:Db,DIRECTION_RIGHT:Eb,DIRECTION_UP:Fb,DIRECTION_DOWN:Gb,DIRECTION_HORIZONTAL:Hb,DIRECTION_VERTICAL:Ib,DIRECTION_ALL:Jb,Manager:fb,Input:y,TouchAction:T,TouchInput:Q,MouseInput:M,PointerEventInput:N,TouchMouseInput:S,SingleTouchInput:O,Recognizer:V,AttrRecognizer:Z,Tap:db,Pan:$,Swipe:cb,Pinch:_,Rotate:bb,Press:ab,on:n,off:o,each:g,merge:i,extend:h,inherit:j,bindFn:k,prefixed:v}),typeof define==kb&&define.amd?define(function(){return eb}):"undefined"!=typeof module&&module.exports?module.exports=eb:a[c]=eb}(window,document,"Hammer");
 //# sourceMappingURL=hammer.min.map
-"use strict";angular.module("angular-gestures",[]);var HGESTURES={hmDoubleTap:"doubletap",hmDragstart:"dragstart",hmDrag:"drag",hmDragUp:"dragup",hmDragDown:"dragdown",hmDragLeft:"dragleft",hmDragRight:"dragright",hmDragend:"dragend",hmHold:"press",hmPinch:"pinch",hmPinchIn:"pinchin",hmPinchOut:"pinchout",hmPress:"press",hmRelease:"release",hmRotate:"rotate",hmSwipe:"swipe",hmSwipeUp:"swipeup",hmSwipeDown:"swipedown",hmSwipeLeft:"swipeleft",hmSwipeRight:"swiperight",hmTap:"tap",hmTouch:"touch",hmTransformstart:"transformstart",hmTransform:"transform",hmTransformend:"transformend"},VERBOSE=!0;angular.forEach(HGESTURES,function(a,b){angular.module("angular-gestures").directive(b,["$parse","$log","$timeout",function(c,d,e){return function(f,g,h){var i,j;h.$observe(b,function(k){var l=c(k),m=c(h[b+"Opts"])(f,{});i=new Hammer(g[0],m),j=function(b){VERBOSE&&d.debug("angular-gestures: ",a,b),e(function(){l(f,{$event:b})},0)},i.on(a,j)}),f.$on("$destroy",function(){i.off(a,j)})}}])});
+// ---- Angular Hammer ----
+
+// Copyright (c) 2014 Ryan S Mullins <ryan@ryanmullins.org>
+// Licensed under the MIT Software License
+
+(function (window, angular, Hammer) {
+  'use strict';
+
+  // Checking to make sure Hammer and Angular are defined
+
+  if (typeof angular === 'undefined') {
+    if (typeof require !== 'undefined' && require) {
+      try {
+        angular = require('angular');
+      } catch (e) {
+        return console.log('ERROR: Angular Hammer could not require() a reference to angular');
+      }
+    } else if (typeof window.angular !== 'undefined') {
+      angular = window.angular;
+    } else {
+      return console.log('ERROR: Angular Hammer could not find or require() a reference to angular');
+    }
+  }
+
+  if (typeof Hammer === 'undefined') {
+    if (typeof require !== 'undefined' && require) {
+      try {
+        Hammer = require('hammerjs');
+      } catch (e) {
+        return console.log('ERROR: Angular Hammer could not require() a reference to Hammer');
+      }
+    } else if (typeof window.Hammer !== 'undefined') {
+      Hammer = window.Hammer;
+    } else {
+      return console.log('ERROR: Angular Hammer could not find or require() a reference to Hammer');
+    }
+  }
+
+  /**
+   * Mapping of the gesture event names with the Angular attribute directive
+   * names. Follows the form: <directiveName>:<eventName>.
+   *
+   * @type {Array}
+   */
+  var gestureTypes = [
+    'hmCustom:custom',
+    'hmSwipe:swipe',
+    'hmSwipeleft:swipeleft',
+    'hmSwiperight:swiperight',
+    'hmSwipeup:swipeup',
+    'hmSwipedown:swipedown',
+    'hmPan:pan',
+    'hmPanstart:panstart',
+    'hmPanmove:panmove',
+    'hmPanend:panend',
+    'hmPancancel:pancancel',
+    'hmPanleft:panleft',
+    'hmPanright:panright',
+    'hmPanup:panup',
+    'hmPandown:pandown',
+    'hmPress:press',
+    'hmPressup:pressup',
+    'hmRotate:rotate',
+    'hmRotatestart:rotatestart',
+    'hmRotatemove:rotatemove',
+    'hmRotateend:rotateend',
+    'hmRotatecancel:rotatecancel',
+    'hmPinch:pinch',
+    'hmPinchstart:pinchstart',
+    'hmPinchmove:pinchmove',
+    'hmPinchend:pinchend',
+    'hmPinchcancel:pinchcancel',
+    'hmPinchin:pinchin',
+    'hmPinchout:pinchout',
+    'hmTap:tap',
+    'hmDoubletap:doubletap'
+  ];
+
+  // ---- Module Definition ----
+
+  /**
+   * @module hmTouchEvents
+   * @description Angular.js module for adding Hammer.js event listeners to HTML
+   * elements using attribute directives
+   * @requires angular
+   * @requires hammer
+   */
+  angular.module('hmTouchEvents', []);
+
+  /**
+   * Iterates through each gesture type mapping and creates a directive for
+   * each of the
+   *
+   * @param  {String} type Mapping in the form of <directiveName>:<eventName>
+   * @return None
+   */
+  angular.forEach(gestureTypes, function (type) {
+    var directive = type.split(':'),
+        directiveName = directive[0],
+        eventName = directive[1];
+
+    angular.module('hmTouchEvents')
+      .directive(directiveName, ['$parse', '$window', function ($parse, $window) {
+        return {
+          'restrict' : 'A',
+          'link' : function (scope, element, attrs) {
+            var handlerName = attrs[directiveName],
+                handlerExpr = $parse(handlerName),
+                handler = function (event) {
+                  event.element = element;
+
+                  var phase = scope.$root.$$phase,
+                      fn = handlerExpr(scope);
+
+                  if (phase === '$apply' || phase === '$digest') {
+                    fn.call(scope, event);
+                  } else {
+                    scope.$apply(function() {
+                      fn.call(scope, event);
+                    });
+                  }
+                },
+                managerOpts = angular.fromJson(attrs.hmManagerOptions),
+                recognizerOpts = angular.fromJson(attrs.hmRecognizerOptions),
+                hammer = element.data('hammer');
+
+            // Check for Hammer and required functionality
+            // If no Hammer, maybe bind tap and doubletap to click and dblclick
+
+            if (!Hammer || !$window.addEventListener) {
+              if (directiveName === 'hmTap') {
+                element.bind('click', handler);
+              }
+
+              if (directiveName === 'hmDoubletap') {
+                element.bind('dblclick', handler);
+              }
+
+              return;
+            }
+
+            // Hammer exists, check for a manager and set up the recognizers.
+
+            if (!hammer) {
+              hammer = new Hammer.Manager(element[0], managerOpts);
+              element.data('hammer', hammer);
+              scope.$on('$destroy', function () {
+                hammer.destroy();
+              });
+            }
+
+            // Setting up the recognizers based on the supplied options
+
+            if (angular.isArray(recognizerOpts)) {
+              // The recognizer options may be stored in an array. In this
+              // case, Angular Hammer iterates through the array of options
+              // trying to find an occurrence of the options.type in the event
+              // name. If it find the type in the event name, it applies those
+              // options to the recognizer for events with that name. If it
+              // does not find the type in the event name it moves on.
+
+              angular.forEach(recognizerOpts, function (options) {
+                if (directiveName === 'hmCustom') {
+                  eventName = options.event;
+                } else {
+                  if (!options.type) {
+                    options.type = getRecognizerTypeFromeventName(eventName);
+                  }
+
+                  if (options.event) {
+                    delete options.event;
+                  }
+                }
+
+                if (directiveName === 'hmCustom' ||
+                    eventName.indexOf(options.type) > -1) {
+                  setupRecognizerWithOptions(
+                    hammer,
+                    applyManagerOptions(managerOpts, options),
+                    element);
+                }
+              });
+            } else if (angular.isObject(recognizerOpts)) {
+              // Recognizer options may be stored as an object. In this case,
+              // Angular Hammer checks to make sure that the options type
+              // property is found in the event name. If the options are
+              // designated for this general type of event, Angular Hammer
+              // applies the options directly to the manager instance for
+              // this element.
+
+              if (directiveName === 'hmCustom') {
+                eventName = recognizerOpts.event;
+              } else {
+                  if (!recognizerOpts.type) {
+                    recognizerOpts.type = getRecognizerTypeFromeventName(eventName);
+                  }
+
+                  if (recognizerOpts.event) {
+                    delete recognizerOpts.event;
+                  }
+              }
+
+              if (directiveName === 'hmCustom' ||
+                  eventName.indexOf(recognizerOpts.type) > -1) {
+                setupRecognizerWithOptions(
+                  hammer,
+                  applyManagerOptions(managerOpts, recognizerOpts),
+                  element);
+              }
+            } else if (directiveName !== 'hmCustom') {
+              // If no options are supplied, or the supplied options do not
+              // match any of the above conditions, Angular Hammer sets up
+              // the default options that a manager instantiated using
+              // Hammer() would have.
+
+              recognizerOpts = {
+                'type': getRecognizerTypeFromeventName(eventName)
+              };
+
+              if (directiveName === 'hmDoubletap') {
+                recognizerOpts.event = eventName;
+                recognizerOpts.taps = 2;
+
+                if (hammer.get('tap')) {
+                  recognizerOpts.recognizeWith = 'tap';
+                }
+              }
+
+              if (recognizerOpts.type.indexOf('pan') > -1 &&
+                  hammer.get('swipe')) {
+                recognizerOpts.recognizeWith = 'swipe';
+              }
+
+              if (recognizerOpts.type.indexOf('pinch') > -1 &&
+                  hammer.get('rotate')) {
+                recognizerOpts.recognizeWith = 'rotate';
+              }
+
+              setupRecognizerWithOptions(
+                hammer,
+                applyManagerOptions(managerOpts, recognizerOpts),
+                element);
+            } else {
+              eventName = null;
+            }
+
+            if (eventName) {
+              hammer.on(eventName, handler);
+            }
+          }
+        };
+      }]);
+  });
+
+  // ---- Private Functions -----
+
+  /**
+   * Adds a gesture recognizer to a given manager. The type of recognizer to
+   * add is determined by the value of the options.type property.
+   *
+   * @param {Object}  manager Hammer.js manager object assigned to an element
+   * @param {Object}  options Options that define the recognizer to add
+   * @return {Object} Reference to the new gesture recognizer, if successful,
+   *                  null otherwise.
+   */
+  function addRecognizer (manager, options) {
+    if (!manager || !options || !options.type) { return null; }
+
+    var recognizer;
+
+    if (options.type.indexOf('pan') > -1) {
+      recognizer = new Hammer.Pan(options);
+    } else if (options.type.indexOf('pinch') > -1) {
+      recognizer = new Hammer.Pinch(options);
+    } else if (options.type.indexOf('press') > -1) {
+      recognizer = new Hammer.Press(options);
+    } else if (options.type.indexOf('rotate') > -1) {
+      recognizer = new Hammer.Rotate(options);
+    } else if (options.type.indexOf('swipe') > -1) {
+      recognizer = new Hammer.Swipe(options);
+    } else {
+      recognizer = new Hammer.Tap(options);
+    }
+
+    manager.add(recognizer);
+    return recognizer;
+  }
+
+  /**
+   * Applies certain manager options to individual recognizer options.
+   *
+   * @param  {Object} managerOpts    Manager options
+   * @param  {Object} recognizerOpts Recognizer options
+   * @return None
+   */
+  function applyManagerOptions (managerOpts, recognizerOpts) {
+    if (managerOpts) {
+      recognizerOpts.preventGhosts = managerOpts.preventGhosts;
+    }
+
+    return recognizerOpts;
+  }
+
+  /**
+   * Extracts the type of recognizer that should be instantiated from a given
+   * event name. Used only when no recognizer options are provided.
+   *
+   * @param  {String} eventName Name to derive the recognizer type from
+   * @return {string}           Type of recognizer that fires events with that name
+   */
+  function getRecognizerTypeFromeventName (eventName) {
+    if (eventName.indexOf('pan') > -1) {
+      return 'pan';
+    } else if (eventName.indexOf('pinch') > -1) {
+      return 'pinch';
+    } else if (eventName.indexOf('press') > -1) {
+      return 'press';
+    } else if (eventName.indexOf('rotate') > -1) {
+      return 'rotate';
+    } else if (eventName.indexOf('swipe') > -1) {
+      return 'swipe';
+    } else {
+      return 'tap';
+    }
+  }
+
+  /**
+   * Applies the passed options object to the appropriate gesture recognizer.
+   * Recognizers are created if they do not already exist. See the README for a
+   * description of the options object that can be passed to this function.
+   *
+   * @param  {Object} manager Hammer.js manager object assigned to an element
+   * @param  {Object} options Options applied to a recognizer managed by manager
+   * @return None
+   */
+  function setupRecognizerWithOptions (manager, options, element) {
+    if (!manager || !options) { return; }
+
+    var recognizer = manager.get(options.type);
+
+    if (!recognizer) {
+      recognizer = addRecognizer(manager, options);
+    }
+
+    if (!options.directions) {
+      if (options.type === 'pan' || options.type === 'swipe') {
+        options.directions = 'DIRECTION_ALL';
+      } else if (options.type.indexOf('left') > -1) {
+        options.directions = 'DIRECTION_LEFT';
+      } else if (options.type.indexOf('right') > -1) {
+        options.directions = 'DIRECTION_RIGHT';
+      } else if (options.type.indexOf('up') > -1) {
+        options.directions = 'DIRECTION_UP';
+      } else if (options.type.indexOf('down') > -1) {
+        options.directions = 'DIRECTION_DOWN';
+      } else {
+        options.directions = '';
+      }
+    }
+
+    options.direction = parseDirections(options.directions);
+    recognizer.set(options);
+
+    if (options.recognizeWith) {
+      if (!manager.get(options.recognizeWith)){
+        addRecognizer(manager, {type:options.recognizeWith});
+      }
+
+      recognizer.recognizeWith(options.recognizeWith);
+    }
+
+    if (options.dropRecognizeWith && hammer.get(options.dropRecognizeWith)) {
+      recognizer.dropRecognizeWith(options.dropRecognizeWith);
+    }
+
+    if (options.requireFailure) {
+      if (!manager.get(options.requireFailure)){
+        addRecognizer(manager, {type:options.requireFailure});
+      }
+
+      recognizer.requireFailure(options.requireFailure);
+    }
+
+    if (options.dropRequireFailure && hammer.get(options.dropRequireFailure)) {
+      recognizer.dropRequireFailure(options.dropRequireFailure);
+    }
+
+    if (options.preventGhosts && element) {
+      preventGhosts(element);
+    }
+  }
+
+  /**
+   * Parses the value of the directions property of any Angular Hammer options
+   * object and converts them into the standard Hammer.js directions values.
+   *
+   * @param  {String} dirs Direction names separated by '|' characters
+   * @return {Number}      Hammer.js direction value
+   */
+  function parseDirections (dirs) {
+    var directions = 0;
+
+    angular.forEach(dirs.split('|'), function (direction) {
+      if (Hammer.hasOwnProperty(direction)) {
+        directions = directions | Hammer[direction];
+      }
+    });
+
+    return directions;
+  }
+
+  // ---- Preventing Ghost Clicks ----
+
+  /**
+   * Modified from: https://gist.github.com/jtangelder/361052976f044200ea17
+   *
+   * Prevent click events after a touchend.
+   *
+   * Inspired/copy-paste from this article of Google by Ryan Fioravanti
+   * https://developers.google.com/mobile/articles/fast_buttons#ghost
+   */
+
+  function preventGhosts (element) {
+    if (!element) { return; }
+
+    var coordinates = [],
+        threshold = 25,
+        timeout = 2500;
+
+    if ('ontouchstart' in window) {
+      element[0].addEventListener('touchstart', resetCoordinates, true);
+      element[0].addEventListener('touchend', registerCoordinates, true);
+      element[0].addEventListener('click', preventGhostClick, true);
+    }
+
+    /**
+     * prevent clicks if they're in a registered XY region
+     * @param {MouseEvent} ev
+     */
+    function preventGhostClick (ev) {
+      for (var i = 0; i < coordinates.length; i++) {
+        var x = coordinates[i][0];
+        var y = coordinates[i][1];
+
+        // within the range, so prevent the click
+        if (Math.abs(ev.clientX - x) < threshold &&
+            Math.abs(ev.clientY - y) < threshold) {
+          ev.stopPropagation();
+          ev.preventDefault();
+          break;
+        }
+      }
+    }
+
+    /**
+     * reset the coordinates array
+     */
+    function resetCoordinates () {
+      coordinates = [];
+    }
+
+    /**
+     * remove the first coordinates set from the array
+     */
+    function popCoordinates () {
+      coordinates.splice(0, 1);
+    }
+
+    /**
+     * if it is an final touchend, we want to register it's place
+     * @param {TouchEvent} ev
+     */
+    function registerCoordinates (ev) {
+      // touchend is triggered on every releasing finger
+      // changed touches always contain the removed touches on a touchend
+      // the touches object might contain these also at some browsers (firefox os)
+      // so touches - changedTouches will be 0 or lower, like -1, on the final touchend
+      if(ev.touches.length - ev.changedTouches.length <= 0) {
+        var touch = ev.changedTouches[0];
+        coordinates.push([touch.clientX, touch.clientY]);
+
+        setTimeout(popCoordinates, timeout);
+      }
+    }
+  }
+})(window, window.angular, window.Hammer);

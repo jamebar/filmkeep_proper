@@ -69,8 +69,8 @@
         <li><a ui-sref='root.user.filmkeep({username: "{{Auth::user()->username}}" })'>My Filmkeep</a></li>
         <li><a ui-sref='root.user.watchlist({username: "{{Auth::user()->username}}" })'>Watchlist</a></li>
         <li class="hidden-xs"><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span> Review</a></li>
-
-        <li class="dropdown">
+        
+        <li class="dropdown" ng-if="navbarCollapsed">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><avatar class="avatar sm" info="header_user" disable-click="true"></avatar></a>
           <ul class="dropdown-menu" role="menu">
             <li><a ui-sref="root.settings.profile"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
@@ -81,6 +81,8 @@
             
           </ul>
         </li>
+        <li ng-if="!navbarCollapsed"><a ui-sref="root.settings.profile"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+        <li ng-if="!navbarCollapsed"><a href="/users/logout" target="_self">Logout</a></li>
         @else
         <li ><a href="/users/login" target="_self">log in</a></li>
         @endif

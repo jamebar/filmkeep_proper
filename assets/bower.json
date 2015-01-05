@@ -27,6 +27,10 @@
     "angular-utils-pagination": "~0.3.1",
     "angular-confirm-click": "~0.0.4",
     "angular-slugify": "~1.0.0",
-    "angular-snap": "~1.6.0"
+    "angular-snap": "~1.6.0",
+    "ryanmullins-angular-hammer": "~2.1.3"
+  },
+  "resolutions": {
+    "hammerjs": ">=2.0.0"
   }
 }

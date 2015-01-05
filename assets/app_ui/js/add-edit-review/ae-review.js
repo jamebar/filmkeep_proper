@@ -101,26 +101,32 @@ var aeReview = angular.module('ae-review', [
                 }
 
                 scope.setCurrent = function(el) {
-                    scope.hint_index = el;
-
+                    console.log(el);
+                    scope.hint_index = el.element ? (el.element.context.id *1) : el;
                     if(scope.reviews.length>0)
                       scope.show_hint = true;
 
                     sortedReviews = _.sortBy(scope.reviews, function(r) {
                         return r.ratings[scope.hint_index] ? r.ratings[scope.hint_index].value : 0;
                     })
-                    scope.relation_top = window.event.clientY + $('.modal').scrollTop() - 85;
+
+                    var ypos = window.event ? window.event.clientY : el.center.y;
+                    scope.relation_top = ypos + $('.modal').scrollTop() - 85;
                     inBetween();
                     scope.fade_slider = true;
                 }
 
                 scope.hideHint = function(el) {
+                  console.log("hide");
                     scope.fade_slider = false;
                     scope.show_hint = false;
                 }
-                scope.test = function(){
-                  console.log("touch works");
+
+                scope.test = function(e){ 
+
+                  console.log(e);
                 }
+
                 function getOffsetTop( elem )
                 {
                     var offsetTop = 0;
