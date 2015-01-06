@@ -1945,6 +1945,49 @@ angular.module('ReviewService', ['Api'])
         }
     }])
    
+   .directive('ngReallyClick', ['$modal',
+        function($modal) {
+
+          var ModalInstanceCtrl = function($scope, $modalInstance) {
+            $scope.ok = function() {
+              $modalInstance.close();
+            };
+
+            $scope.cancel = function() {
+              $modalInstance.dismiss('cancel');
+            };
+          };
+
+          return {
+            restrict: 'A',
+            scope: {
+              ngReallyClick:"&"
+            },
+            link: function(scope, element, attrs) {
+              element.bind('click', function() {
+                var message = attrs.ngReallyMessage || "Are you sure ?";
+
+                var modalHtml = '<div class="modal-body"><p>' + message + '</p></div>';
+                modalHtml += '<div class="modal-footer"><button class="btn btn-success" ng-click="ok()">OK</button><button class="btn btn-default" ng-click="cancel()">Cancel</button></div>';
+
+                var modalInstance = $modal.open({
+                  template: modalHtml,
+                  controller: ModalInstanceCtrl,
+                  size:'sm'
+                });
+
+                modalInstance.result.then(function() {
+                  scope.ngReallyClick();
+                }, function() {
+                  //Modal dismissed
+                });
+                
+              });
+
+            }
+          }
+        }
+      ])
 
   
   ;

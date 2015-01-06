@@ -5,7 +5,7 @@
 <h3>Your custom filmeters</h3>
 <p>Create custom criteria. These will show up for you to use on all reviews, including past ones.</p>
 <div ng-repeat="type in types | filter: filterCustom" class="clearfix filmeter">
-  <span ng-show="!type.edit"><a ng-click="type.edit = !type.edit;">%%type.label%%</a> <div class="criteria-actions pull-right"><a ng-click="type.edit = !type.edit; type.label = type.orig" ng-init="type.edit = false; type.orig = type.label"><span class="glyphicon glyphicon-pencil" ></span></a> <a ng-click="deleteFilmeter(type)"><span class="glyphicon glyphicon-trash"></span></a></div></span>
+  <span ng-show="!type.edit"><a ng-click="type.edit = !type.edit;">%%type.label%%</a> <div class="criteria-actions pull-right"><a ng-click="type.edit = !type.edit; type.label = type.orig" ng-init="type.edit = false; type.orig = type.label"><span class="glyphicon glyphicon-pencil" ></span></a> <a ng-really-message='Are you sure you want to delete the filmeter: "%%type.label%%" ? This action will remove this rating from all films and cannot be undone.' ng-really-click="deleteFilmeter(type)"><span class="glyphicon glyphicon-trash"></span></a></div></span>
   <form ng-submit="updateFilmeter(type)" ng-show="type.edit">
     <div class="row">
       <div class="col-xs-12 col-sm-8">

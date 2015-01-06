@@ -1,6 +1,6 @@
-<?php
+<?php namespace Filmkeep;
  
-class Invite extends Eloquent {
+class Invite extends \Eloquent {
  
   /**
    * Properties that can be mass assigned

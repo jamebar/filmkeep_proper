@@ -1,6 +1,7 @@
 <?php
 
 use Filmkeep\User;
+use Filmkeep\Invite;
 
 /**
  * AuthController Class
@@ -20,6 +21,13 @@ class AuthController extends Controller
      */
     public function create()
     {
+        $code = Input::has('invite') ? Input::get('invite') : 'dontfind';
+        $invite = Invite::where('code', $code)->first();
+        
+        if(is_null($invite)){
+         return Redirect::to('/users/invite')->with('message','You must have a valid invite code to join');
+        }
+        
         return View::make('auth.join');
     }
 

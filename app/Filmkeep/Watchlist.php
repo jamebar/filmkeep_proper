@@ -19,12 +19,12 @@ class Watchlist extends \Eloquent {
     public function onWatchlist($tmdb_id)
     {
       
-            $watchlist = $this::where('user_id', \Auth::user()->id)->whereHas('film', function($q) use ($tmdb_id)
-            {
-                $q->where('tmdb_id', '=', $tmdb_id);
+      $watchlist = $this::where('user_id', \Auth::user()->id)->whereHas('film', function($q) use ($tmdb_id)
+      {
+          $q->where('tmdb_id', '=', $tmdb_id);
 
-            })->first();
-            return is_null($watchlist) ? 'false' : 'true';
+      })->first();
+      return is_null($watchlist) ? 'false' : 'true';
 
 
     }

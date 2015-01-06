@@ -20,6 +20,13 @@ label{
   }
 }
 
+.btn-success{
+  background-color:@filmkeep-blue;
+  &:active, &:focus{
+    background-color:@filmkeep-blue;
+  }
+  
+}
 .navbar-nav>li>a{
   line-height: 32px;
   padding-bottom: 0px;
@@ -32,7 +39,19 @@ label{
 
 .pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus{
   border-radius:5px;
+  border-color:@filmkeep-red;
+  background: @filmkeep-red;
 } 
+
+.pagination>li>a, .pagination>li>span{
+  color:@filmkeep-red;
+}
+
+.pagination>li>a:hover, .pagination>li>span:hover, .pagination>li>a:focus, .pagination>li>span:focus
+{
+  color:@filmkeep-red;
+  border-radius: 5px;
+}
 
 .progress{
   box-shadow: none;
@@ -125,3 +144,5 @@ label{
   border-color:#ccc;
   color:#333;
 }
+
+

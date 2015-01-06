@@ -74,6 +74,7 @@ Route::get('users/logout', 'AuthController@logout');
 
 Route::get('users/loginfacebook', 'AuthController@loginWithFacebook');
 Route::get('users/logingoogle', 'AuthController@loginWithGoogle');
+Route::get('users/invite', ['as'=>'invite','uses'=>'InviteController@index']);
 
 /*
 * API

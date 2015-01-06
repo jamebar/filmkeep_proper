@@ -395,6 +395,13 @@ label {
 .btn-primary:hover {
   background-color: #8fbec0;
 }
+.btn-success {
+  background-color: #7fb5b7;
+}
+.btn-success:active,
+.btn-success:focus {
+  background-color: #7fb5b7;
+}
 .navbar-nav > li > a {
   line-height: 32px;
   padding-bottom: 0px;
@@ -410,6 +417,19 @@ label {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
+  border-radius: 5px;
+  border-color: #d2544c;
+  background: #d2544c;
+}
+.pagination > li > a,
+.pagination > li > span {
+  color: #d2544c;
+}
+.pagination > li > a:hover,
+.pagination > li > span:hover,
+.pagination > li > a:focus,
+.pagination > li > span:focus {
+  color: #d2544c;
   border-radius: 5px;
 }
 .progress {
