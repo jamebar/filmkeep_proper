@@ -1,6 +1,6 @@
 <div class="film-cover-wrapper row-full-width " style="background-image:url(%%review.film.backdrop_path | imageFilter :'backdrop':'1' %%)">
   <div class="film-cover full-width-section">
-    
+    <div class="site-max">
         <div class="fc-info">
           <div class="fc-profile">
             
@@ -19,13 +19,13 @@
             </div>
           </div>
         </div>
-     
+     </div>
   </div>
 </div>
 
 <div class="full-width-section theme-beige row-full-width">
   
-  <div class="row">
+  <div class="row site-max">
     <div class="col-xs-12 col-sm-2">
       
       <div class="trailer-review hidden-xs" style="background-image:url(%%review.film.backdrop_path | imageFilter :'backdrop':'0' %%)">
@@ -42,7 +42,7 @@
 </div>
 
 <div class="full-width-section theme-red row-full-width">
-  <div class="review-ratings" ng-repeat="rating_type in rating_types">
+  <div class="review-ratings site-max" ng-repeat="rating_type in rating_types">
     <p label="rating_type.label" rating-type-label></p>
     <div class="progress" >
       <div class="progress-bar" role="progressbar" aria-valuenow="%%rating_type.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating_type.value)%%%;">
@@ -53,8 +53,10 @@
 </div>
 
 <div class="full-width-section theme-orange row-full-width">
-  <h3>Notes</h3>
-  <p>%%review.notes%%</p>
+  <div class="site-max">
+    <h3>Notes</h3>
+    <p>%%review.notes%%</p>
+  </div>
 </div>
 
 <!-- <div class="full-width-section theme-toast row-full-width">

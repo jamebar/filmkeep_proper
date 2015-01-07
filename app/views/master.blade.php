@@ -39,7 +39,7 @@
       
     </div> -->
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" scroll-position="scroll"  style="background:rgba(50, 50, 50, %%(scroll/300) +.4%%)" ng-class="{forceopacity: !navbarCollapsed}">
-    <div class="container-fluid">
+    <div class="container-fluid site-max">
       <div class="navbar-header">
       @if(Auth::check())
       <button type="button" class="navbar-toggle collapsed"  ng-click="navbarCollapsed = !navbarCollapsed">
@@ -108,10 +108,12 @@
     		
     </div>
     <div class="container-fluid footer">
+      <div class="row site-max">
         <div class="col-xs-12">
             <h4>Filmkeep 2014</h4>
             <p>This product uses the TMDb API but is not endorsed or certified by TMDb.<p>
         </div>
+      </div>
     </div>
     
 </body>

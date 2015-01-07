@@ -67,6 +67,10 @@ textarea {
 .modal-close {
   padding: 1em;
 }
+.site-max {
+  max-width: 1280px;
+  margin: 0px auto;
+}
 /*Constants*/
 .round-corners {
   border-radius: 5px;

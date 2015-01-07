@@ -1,5 +1,6 @@
 <div class="film-cover-wrapper row-full-width " style="background-image:url(%%film.backdrop_path | imageFilter :'backdrop':'1' %%)">
-  <div class="film-cover full-width-section">
+  <div class="film-cover full-width-section ">
+    <div class="site-max">
         <div class="fc-info">
           <div class="fc-poster hidden-xs hidden-sm">
             <img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" />
@@ -13,11 +14,12 @@
             </div>
           </div>
         </div>
+      </div>
   </div>
 </div>
 
 <div class="full-width-section theme-beige row-full-width">
-   <div class="row">
+   <div class="row site-max">
     <div class="col-xs-12 col-sm-2">
       
       <div class="trailer-review hidden-xs" style="background-image:url(%%film.backdrop_path | imageFilter :'backdrop':'0' %%)">
