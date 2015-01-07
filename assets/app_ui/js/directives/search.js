@@ -25,7 +25,7 @@
                         url: '/api/user/search?query=%QUERY',
                         filter: function(list) {
                             return $.map(list.results, function(data) {
-                                if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
+                                // if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
                                 
                                 
                                 return {
@@ -75,7 +75,7 @@
                     templates: {
                       header: '<h3 class="search-title">People</h3>',
                       suggestion: function (context) {
-                        return '<div><img src="'+context.avatar + '" height="30" width="30"/> ' +context.name+'<span></span></div>'
+                        return '<div>' +context.name+'<span></span></div>'
                       }
                     }
                 },
