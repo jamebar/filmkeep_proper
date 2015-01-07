@@ -17,10 +17,10 @@ class Follower extends \Eloquent {
      return $this->belongsTo('Filmkeep\User', 'user_id');
     }
 
-    // public function activityNotify()
-    // {
-    //     $targetFeed = \FeedManager::getNotificationFeed($this->target->id);
-    //     return array($targetFeed);
-    // }
+    public function activityNotify()
+    {
+        $targetFeed = \FeedManager::getNotificationFeed($this->target->id);
+        return array($targetFeed);
+    }
  
 }

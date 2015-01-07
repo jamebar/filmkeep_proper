@@ -12,6 +12,7 @@ return array(
     'api_key' => 'bmn8pwxbswp7',
     'api_secret' => 'jgwcam5sa96unam7726rygu5gzhcbtdfr3fuvhwhc79ra8w3pakxywz38kpjcp3s',
     'api_site_id' => '1784',
+    'location' => 'us-east',
 
     /*
     |-----------------------------------------------------------------------------

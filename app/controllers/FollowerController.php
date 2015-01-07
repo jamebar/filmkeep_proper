@@ -49,11 +49,11 @@ class FollowerController extends \BaseController {
     $follow_id = $follow->id;
     $follow->delete();
 
-    $api_key = \Config::get('stream-laravel::api_key');
-    $api_secret = \Config::get('stream-laravel::api_secret');
-    $client = new GetStream\Stream\Client($api_key, $api_secret );
-    $user_feed = $client->feed("user:{$user->id}");
-    $user_feed->removeActivity("Filmkeep\Follower:{$follow_id}", true);
+    // $api_key = \Config::get('stream-laravel::api_key');
+    // $api_secret = \Config::get('stream-laravel::api_secret');
+    // $client = new GetStream\Stream\Client($api_key, $api_secret );
+    // $user_feed = $client->feed("user","{$user->id}");
+    // $user_feed->removeActivity("Filmkeep\Follower:{$follow_id}", true);
 
     //follow the feed
     FeedManager::unfollowUser($user->id, $follower_id);

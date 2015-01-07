@@ -9,11 +9,6 @@ use Filmkeep\Follower;
 use Filmkeep\Watchlist;
 
 Route::get('/test', function(){
-  $user = User::find(101);
-  $user->password = 'kkkkkk';
-  $user->password_confirmation = 'kkkkkk';
-  $user->save();
-  dd($user->toArray());
   // $data = [
   //     'film_id' => 417,
   //     'user_id' => Auth::user()->id
