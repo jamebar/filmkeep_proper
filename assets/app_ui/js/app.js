@@ -283,8 +283,10 @@ angular.module('myApp', [
 
         function setInitials()
         {
-          if(angular.isDefined(scope.user) && scope.user.avatar.length<2)
+
+          if(angular.isDefined(scope.user) && !scope.user.avatar)
           {
+
             scope.initials = getInitials(scope.user.name)
           }
         }
@@ -301,7 +303,7 @@ angular.module('myApp', [
         // var labels = scope.label.split("|");
         // scope.labelLeft = labels[0];
         // scope.labelRight = labels.length>0 ? labels[1] : false;
-        
+       
     }
   }
     
