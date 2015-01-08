@@ -101,6 +101,7 @@ var aeReview = angular.module('ae-review', [
                 }
 
                 scope.setCurrent = function(el) {
+                    console.log("set current");
                     scope.hint_index = el.element ? (el.element.context.id *1) : el;
                     if(scope.reviews.length>0)
                       scope.show_hint = true;

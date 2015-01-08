@@ -17,6 +17,7 @@
                   hm-pressup="hideHint"
                   hm-panend="hideHint"
                   hm-recognizer-options='[{"time":0}]'
+                  hm-manager-options='{"enabled":true,"preventGhosts":true}'
                   id="%%$index%%"
                   ng-model="rating_type.value"
                   floor="1"
@@ -26,8 +27,6 @@
                   precision="1"
                   stretch="1"
                   ng-change="sliding($index)"
-                  ng-mousedown="setCurrent($index)"
-                  ng-mouseup="hideHint()"
                   ng-class="{fadeSlider:fade_slider}"
                   >
               </slider>
