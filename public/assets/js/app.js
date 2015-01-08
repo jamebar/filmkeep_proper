@@ -62,8 +62,8 @@ angular.module('myApp', [
   
 ])
 
-.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService',
-    function($scope,$rootScope,msgBus,meApiService) {
+.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService','notificationsApiService',
+    function($scope,$rootScope,msgBus,meApiService,notificationsApiService) {
       // console.log(me);
       
       msgBus.onMsg('user::loaded', function(e, data){
@@ -83,6 +83,16 @@ angular.module('myApp', [
             $scope.navbarCollapsed = true;
         })
       
+      notificationsApiService.getNotifications().then(function(response){
+        $scope.notif_items = response;
+        $scope.notif_new = _.where(response, { 'is_seen' : false }).length;
+      })
+
+      $scope.markSeen = function(){
+        notificationsApiService.markSeen();
+        $scope.notif_new = 0;
+      }
+
     }
   
 ])
@@ -246,6 +256,17 @@ angular.module('myApp', [
         }, delay);
     }
   }
+}])
+
+.directive('notifItems', [
+  function(){
+    return {
+      restrict: 'E',
+      templateUrl: '/assets/templates/notifications.tmpl.html',
+      link: function(scope,element,attr){
+
+      }
+    }
 }])
 
 .directive('ratingTypeLabel', [ function() {
@@ -498,7 +519,6 @@ var aeReview = angular.module('ae-review', [
                 }
 
                 scope.setCurrent = function(el) {
-                    console.log(el);
                     scope.hint_index = el.element ? (el.element.context.id *1) : el;
                     if(scope.reviews.length>0)
                       scope.show_hint = true;
@@ -514,14 +534,8 @@ var aeReview = angular.module('ae-review', [
                 }
 
                 scope.hideHint = function(el) {
-                  console.log("hide");
                     scope.fade_slider = false;
                     scope.show_hint = false;
-                }
-
-                scope.test = function(e){ 
-
-                  console.log(e);
                 }
 
                 function getOffsetTop( elem )
@@ -760,54 +774,6 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
-  angular.module('film', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.film', {
-      url: '/f/{filmId}_{filmSlug}',
-      title: 'Film',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/film.tmpl.html',
-          controller: 'FilmCtrl'
-        }
-      },
-      resolve: {
-        FilmLoad: function($stateParams,filmApiService) {
-         
-          return filmApiService.getFilm($stateParams.filmId);
-          
-        }, 
-      }
-    });
-  }])
-
-  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
-    function ($scope,msgBus,$stateParams,me,FilmLoad) {
-        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
-        $scope.me = me;
-        FilmLoad.film.film_id = FilmLoad.film.id;
-        $scope.film = FilmLoad.film;
-        $scope.follower_reviews = FilmLoad.follower_reviews;
-
-        
-
-
-        $scope.$on('watchlist::addremove', function(event, film_id) {
-
-          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
-                
-        });
-
-    }]) 
-
-  
-  ;
-
-
-  'use strict';
-
   angular.module('feed', [
   ])
 
@@ -924,6 +890,54 @@ var aeReview = angular.module('ae-review', [
     return moment.utc(date).fromNow(true);
   }
 })
+
+  'use strict';
+
+  angular.module('film', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.film', {
+      url: '/f/{filmId}_{filmSlug}',
+      title: 'Film',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/film.tmpl.html',
+          controller: 'FilmCtrl'
+        }
+      },
+      resolve: {
+        FilmLoad: function($stateParams,filmApiService) {
+         
+          return filmApiService.getFilm($stateParams.filmId);
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
+    function ($scope,msgBus,$stateParams,me,FilmLoad) {
+        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
+        $scope.me = me;
+        FilmLoad.film.film_id = FilmLoad.film.id;
+        $scope.film = FilmLoad.film;
+        $scope.follower_reviews = FilmLoad.follower_reviews;
+
+        
+
+
+        $scope.$on('watchlist::addremove', function(event, film_id) {
+
+          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
+                
+        });
+
+    }]) 
+
+  
+  ;
+
 
   'use strict';
 
@@ -1302,6 +1316,77 @@ angular.module('Api', ['ngResource'])
         }
 })
 
+.factory('notificationsApiService',
+    function($http, $q) {
+        var data;
+
+        return({
+            getNotifications: getNotifications,
+            markSeen: markSeen
+        });
+
+        
+
+        function getNotifications() {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/notifications",
+                params: {
+                    action: "get",
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function markSeen() {
+ 
+            var request = $http({
+                method: "post",
+                url: "/api/notifications/seen",
+                params: {
+                    action: "post",
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        // ---
+        // PRIVATE METHODS.
+        // ---
+
+
+        // I transform the error response, unwrapping the application dta from
+        // the API response payload.
+        function handleError( response ) {
+
+            // The API response from the server should be returned in a
+            // nomralized format. However, if the request was not handled by the
+            // server (or what not handles properly - ex. server error), then we
+            // may have to normalize it on our end, as best we can.
+            if (
+                ! angular.isObject( response.data ) ||
+                ! response.data.message
+                ) {
+
+                return( $q.reject( "An unknown error occurred." ) );
+
+            }
+
+            // Otherwise, use expected error message.
+            return( $q.reject( response.data.message ) );
+
+        }
+
+        function handleSuccess( response ) {
+            return( response.data );
+
+        }
+})
 
 .factory('userApiService',
     function($resource) {

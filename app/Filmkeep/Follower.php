@@ -5,7 +5,7 @@ class Follower extends \Eloquent {
     use \GetStream\StreamLaravel\Eloquent\ActivityTrait;
     protected $guarded = [];
 
-    public $activityLazyLoading = ['target'];
+    public $activityLazyLoading = ['target','user'];
 
     public function target()
     {

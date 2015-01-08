@@ -1,0 +1,11 @@
+<div ng-switch="notif_item.verb" >
+
+  <!-- FOLLOW NOTIF ITEM -->
+  <div ng-switch-when="filmkeep\follower" class="media">
+    <a ui-sref='root.user.filmkeep({username: notif_item.activities[0].actor.username})'><span class="media-left"><avatar class="avatar sm" info="notif_item.activities[0].actor"></avatar></span>
+      <div class="media-body">
+        <p>%%notif_item.activities[0].actor.name%% %%notif_item.verb | verb %% you</p>
+      </div>
+    </a>
+  </div>
+</div>

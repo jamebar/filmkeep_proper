@@ -62,8 +62,8 @@ angular.module('myApp', [
   
 ])
 
-.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService',
-    function($scope,$rootScope,msgBus,meApiService) {
+.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService','notificationsApiService',
+    function($scope,$rootScope,msgBus,meApiService,notificationsApiService) {
       // console.log(me);
       
       msgBus.onMsg('user::loaded', function(e, data){
@@ -83,6 +83,16 @@ angular.module('myApp', [
             $scope.navbarCollapsed = true;
         })
       
+      notificationsApiService.getNotifications().then(function(response){
+        $scope.notif_items = response;
+        $scope.notif_new = _.where(response, { 'is_seen' : false }).length;
+      })
+
+      $scope.markSeen = function(){
+        notificationsApiService.markSeen();
+        $scope.notif_new = 0;
+      }
+
     }
   
 ])
@@ -246,6 +256,17 @@ angular.module('myApp', [
         }, delay);
     }
   }
+}])
+
+.directive('notifItems', [
+  function(){
+    return {
+      restrict: 'E',
+      templateUrl: '/assets/templates/notifications.tmpl.html',
+      link: function(scope,element,attr){
+
+      }
+    }
 }])
 
 .directive('ratingTypeLabel', [ function() {

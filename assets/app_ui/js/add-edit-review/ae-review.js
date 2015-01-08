@@ -101,7 +101,6 @@ var aeReview = angular.module('ae-review', [
                 }
 
                 scope.setCurrent = function(el) {
-                    console.log(el);
                     scope.hint_index = el.element ? (el.element.context.id *1) : el;
                     if(scope.reviews.length>0)
                       scope.show_hint = true;
@@ -117,14 +116,8 @@ var aeReview = angular.module('ae-review', [
                 }
 
                 scope.hideHint = function(el) {
-                  console.log("hide");
                     scope.fade_slider = false;
                     scope.show_hint = false;
-                }
-
-                scope.test = function(e){ 
-
-                  console.log(e);
                 }
 
                 function getOffsetTop( elem )

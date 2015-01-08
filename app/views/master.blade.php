@@ -9,6 +9,8 @@
     <!-- <link rel="stylesheet" href="/assets/css/vendor.css"> -->
     <!-- <link rel="stylesheet" href="/assets/css/animate.min.css"> -->
   <link rel="stylesheet" href="/assets/css/styles.min.css">
+  <link rel="stylesheet" href="/assets/css/filmkeep-font.css">
+
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
     <script src="/assets/js/vendor.js"></script>
@@ -68,8 +70,19 @@
         <li><a ui-sref='root.feed'>Feed</a></li>
         <li><a ui-sref='root.user.filmkeep({username: "{{Auth::user()->username}}" })'>My Filmkeep</a></li>
         <li><a ui-sref='root.user.watchlist({username: "{{Auth::user()->username}}" })'>Watchlist</a></li>
+
+       
+
         <li class="hidden-xs"><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span> Review</a></li>
-        
+        <li class="dropdown" >
+          <a href="#" class="dropdown-toggle notif-wrapper" data-toggle="dropdown" ng-click="markSeen()"><i class="icon-megaphone"></i> <span ng-show="notif_new > 0" class="notif_count">%%notif_new%%</span></a>
+          <ul class="dropdown-menu notif" role="menu">
+            <li ng-if="notif_items.length <1">You have no notifications</li>
+            <li  ng-repeat="notif_item in notif_items">
+              <notif-items></notif-items>
+            </li> 
+          </ul>
+        </li>
         <li class="dropdown" ng-if="navbarCollapsed">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><avatar class="avatar sm" info="header_user" disable-click="true"></avatar></a>
           <ul class="dropdown-menu" role="menu">
@@ -99,7 +112,7 @@
       <!--Error messages from angular -->
       <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>
     	
-          
+        
                @yield('content')
                 
                 <div ui-view autoscroll="true"></div>

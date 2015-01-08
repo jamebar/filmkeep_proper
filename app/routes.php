@@ -9,6 +9,12 @@ use Filmkeep\Follower;
 use Filmkeep\Watchlist;
 
 Route::get('/test', function(){
+
+  $feed = FeedManager::getNotificationFeed(118);
+  $enricher = new Enrich();
+  $activities = $feed->getActivities(0,25)['results'];
+  $activities = $enricher->enrichAggregatedActivities($activities);
+  return $activities;
   // $data = [
   //     'film_id' => 417,
   //     'user_id' => Auth::user()->id
@@ -91,6 +97,9 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
     $router->get('watchlist', 'WatchlistController@index');
     $router->post('watchlist/add-remove', 'WatchlistController@addRemove');
+
+    $router->get('notifications', 'NotificationsController@index');
+    $router->post('notifications/seen', 'NotificationsController@markSeen');
 
     $router->get('film', 'FilmController@index');
 

@@ -1138,3 +1138,58 @@ a.action:hover {
 .btn-default {
   background: #ccc;
 }
+.notif-wrapper {
+  position: relative;
+}
+.notif-wrapper i {
+  line-height: 2em;
+  font-size: 1.4em;
+}
+.notif-wrapper .notif_count {
+  position: absolute;
+  top: 8px;
+  right: 4px;
+  width: 1.5em;
+  height: 1.5em;
+  display: block;
+  border-radius: 10px;
+  background-color: #7fb5b7;
+  color: #f4e8d0;
+  text-align: center;
+  line-height: 1.5em;
+  font-size: .8em;
+}
+.notif {
+  min-width: 290px;
+  padding: 1em;
+}
+.notif:before {
+  position: absolute;
+  content: '';
+  display: block;
+  top: -9px;
+  right: 13px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 12.5px 10px 12.5px;
+  border-color: transparent transparent #ffffff transparent;
+}
+.notif .media {
+  margin-top: 1em;
+}
+.notif .media a {
+  color: #7b7171;
+}
+.notif .media a:hover {
+  color: inherit;
+}
+.notif .media .media-left {
+  float: left;
+  padding: 0em 1em 0em 0em;
+}
+@media only screen and (max-width: 40em) {
+  .notif:before {
+    display: none;
+  }
+}
