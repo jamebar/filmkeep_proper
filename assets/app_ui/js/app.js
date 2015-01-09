@@ -229,6 +229,7 @@ angular.module('myApp', [
         $scope.newReview = function(film){
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
+              console.log(results);
                 $scope.rating_types = _.map(results, function(r){ r.value = 1000; return r });
             });
 

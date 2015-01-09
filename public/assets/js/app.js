@@ -229,6 +229,7 @@ angular.module('myApp', [
         $scope.newReview = function(film){
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
+              console.log(results);
                 $scope.rating_types = _.map(results, function(r){ r.value = 1000; return r });
             });
 
@@ -612,9 +613,8 @@ var aeReview = angular.module('ae-review', [
                     sortedReviews = _.sortBy(scope.reviews, function(r) {
                         return r.ratings[scope.hint_index] ? r.ratings[scope.hint_index].value : 0;
                     })
-
-                    var ypos = window.event ? window.event.clientY : el.center.y;
-                    scope.relation_top = $('#slider-'+ el).offset().top + $('.modal').scrollTop() - 75;
+                    console.log($(window).scrollTop())
+                    scope.relation_top = $('#slider-'+ el).offset().top + $('.modal').scrollTop() - $(window).scrollTop() - 75;
                     inBetween();
                     
                     scope.fade_slider = true;
