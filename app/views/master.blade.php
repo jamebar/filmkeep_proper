@@ -111,19 +111,10 @@
         @endif
       <!--Error messages from angular -->
       <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>
-    	
         
                @yield('content')
                 
                 <div ui-view autoscroll="true"></div>
-
-     <div slider 
-                ng-model="test" 
-                start=1 
-                end=2000 
-                >
-              </div>
-    		
     </div>
     <div class="container-fluid footer">
       <div class="row site-max">
