@@ -7,7 +7,7 @@ use Zizaco\Confide\ConfideUserInterface;
 class User extends Model implements ConfideUserInterface
 {
     use ConfideUser;
-  protected $visible = array('id','name','username','avatar','email','followers','reviews','watchist','rating_types');
+  protected $hidden = array('password','confirmation_code','remember_token','confirmed','facebook_id','google_id');
 
   public function reviews(){
        return $this->hasMany('Filmkeep\Review');
