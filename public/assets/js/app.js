@@ -21,7 +21,7 @@ angular.module('myApp', [
     'film',
     'slugifier',
     'ngTouch',
-    'hmTouchEvents'
+    'hmTouchEvents',
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -422,7 +422,6 @@ angular.module('myApp', [
 'use strict';
 
 var aeReview = angular.module('ae-review', [
-    'vr.directives.slider',
     'Api',
     'ngAnimate',
     'ReviewService'
@@ -461,6 +460,8 @@ var aeReview = angular.module('ae-review', [
 
                 scope.hint_index = 0;
                 var sortedReviews = [];
+                var currentSlider;
+                var sliderTimeout;
                 scope.show_hint = false;
                 scope.left = "";
                 scope.right = "";
@@ -514,27 +515,42 @@ var aeReview = angular.module('ae-review', [
                 }
 
                 scope.sliding = function(el) {
-                    // scope.setCurrent(el);
+                    
+                    if(currentSlider != el)
+                    {
+                      scope.setCurrent(el);
+                      currentSlider = el;
+                    } 
                     inBetween();
+
                 }
 
+                scope.$on('slider::start', function(e){
+                    scope.fade_slider = true;
+                    scope.show_hint = true;
+                });
+
+                scope.$on('slider::end', function(e){
+                    scope.hideHint();
+                    scope.$apply();
+                });
+
                 scope.setCurrent = function(el) {
-                    console.log("set current");
                     scope.hint_index = el.element ? (el.element.context.id *1) : el;
-                    if(scope.reviews.length>0)
-                      scope.show_hint = true;
 
                     sortedReviews = _.sortBy(scope.reviews, function(r) {
                         return r.ratings[scope.hint_index] ? r.ratings[scope.hint_index].value : 0;
                     })
 
                     var ypos = window.event ? window.event.clientY : el.center.y;
-                    scope.relation_top = ypos + $('.modal').scrollTop() - 85;
+                    scope.relation_top = $('#slider-'+ el).offset().top + $('.modal').scrollTop() - 75;
                     inBetween();
+                    
                     scope.fade_slider = true;
+                    scope.show_hint = true;
                 }
 
-                scope.hideHint = function(el) {
+                scope.hideHint = function() {
                     scope.fade_slider = false;
                     scope.show_hint = false;
                 }
@@ -552,8 +568,8 @@ var aeReview = angular.module('ae-review', [
                 }
 
                 function inBetween() {
-                    // console.log(scope.ratingTypes);
-                    // console.log(scope.ratingTypes[scope.hint_index]);
+                    
+
                    
                     scope.curValue = scope.rating_types[scope.hint_index].value;
                     //console.log(scope.review.assigned_ratings[scope.hint_index].value);

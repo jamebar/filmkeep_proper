@@ -57,7 +57,7 @@
           <li role="button" class="navbar-btn "><a href="/users/login" target="_self">log in</a></li>
         </ul>
       @endif
-      <a class="navbar-brand" href="/" target="_self" ></a>
+      <a class="navbar-brand" href="@if(Auth::check()) /feed @else/@endif" target="_self" ></a>
       <search></search>
     </div>
 
@@ -117,7 +117,12 @@
                 
                 <div ui-view autoscroll="true"></div>
 
-    
+     <div slider 
+                ng-model="test" 
+                start=1 
+                end=2000 
+                >
+              </div>
     		
     </div>
     <div class="container-fluid footer">

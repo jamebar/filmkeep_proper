@@ -21,7 +21,7 @@ angular.module('myApp', [
     'film',
     'slugifier',
     'ngTouch',
-    'hmTouchEvents'
+    'hmTouchEvents',
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');

@@ -1749,7 +1749,7 @@ angular.module('vr.directives.slider', ['ngTouch']).directive('slider',
                                  * What to do when dragging ends
                                  */
                                 function onEnd() {
-
+                                    scope.$emit('slider::end');
                                     // reset the offsets
                                     stickyOffsetLow = 0;
                                     stickyOffsetHigh = 0;
@@ -1983,6 +1983,7 @@ angular.module('vr.directives.slider', ['ngTouch']).directive('slider',
 									
 									if(scope.ngDisabled && scope.ngDisabled == true) return;
 
+                  scope.$emit('slider::start');
 									/**
 									 * The current x position of the mouse/finger/etc.
 									 * @type {number}
