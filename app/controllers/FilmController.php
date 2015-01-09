@@ -19,24 +19,8 @@ class FilmController extends BaseController {
 
     if(is_null($film))
     {
-        $TheMovieDb = new TheMovieDb();
-        $tmdb_info = $TheMovieDb->getFilmTmdb($tmdb_id);
-        if(is_array($tmdb_info) && isset($tmdb_info['id'])){
-          $poster_path = (isset($tmdb_info['poster_path'])) ? $tmdb_info['poster_path'] : "";
-          $backdrop_path = (isset($tmdb_info['backdrop_path'])) ? $tmdb_info['backdrop_path'] : "";
-          $imdb_id = (isset($tmdb_info['imdb_id'])) ? $tmdb_info['imdb_id'] : "";
-          $overview = (isset($tmdb_info['overview'])) ? $tmdb_info['overview'] : "";
-          $film_data = array(
-            'tmdb_id' => $tmdb_info['id'],
-            'title' => $tmdb_info['title'],
-            'poster_path' => $poster_path,
-            'backdrop_path' => $backdrop_path,
-            'imdb_id' => $imdb_id,
-            'summary' => $overview
-          );
-
-          $film = Film::create($film_data);
-        }
+        $film = new Film();
+        $film = $film->digestFilm($tmdb_id);
     }
     
     if(isset($film->id))
@@ -63,6 +47,27 @@ class FilmController extends BaseController {
       return Response::json($response);
     }
     
+  }
+
+  public function nowPlaying()
+  {
+    $t = new TheMovieDb();
+    $nowPlaying = [];
+    $i = 0;
+    foreach($t->getNowPlaying()['results'] as $tFilm){
+      if($i >10)
+        break;
+      
+      $f = new Film();
+      $film = $f->digestFilm($tFilm['id']);
+      $film['reviewed'] = $this->isReviewed($film);
+      $film['on_watchlist'] = $this->onWatchlist($film);
+
+      $nowPlaying[] = $film;
+      $i++;
+    }
+
+    return Response::json($nowPlaying);
   }
 
   private function isReviewed($film)

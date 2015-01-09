@@ -1221,3 +1221,20 @@ a.action:hover {
     display: none;
   }
 }
+.film-object.horizontal {
+  clear: both;
+  margin-bottom: 1em;
+  overflow: auto;
+}
+.film-object.horizontal .poster {
+  display: block;
+  width: 60px;
+  margin-right: 1em;
+  float: left;
+}
+.film-object.horizontal .poster img {
+  width: 100%;
+}
+.film-object.horizontal .film-object-content h3 {
+  font-size: 1.1em;
+}

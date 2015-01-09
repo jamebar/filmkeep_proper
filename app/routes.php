@@ -107,6 +107,8 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
         $t = new TheMovieDb();
         return $t->getFilmTrailer($tmdb_id);
     });
+
+    $router->get('/tmdb/nowplaying', 'FilmController@nowPlaying');
     
     $router->get('/tmdb/{query}', function($query){
         $t = new TheMovieDb();

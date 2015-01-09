@@ -416,7 +416,8 @@ angular.module('Api', ['ngResource'])
 
         return({
             getFilm: getFilm,
-            getTrailer: getTrailer
+            getTrailer: getTrailer,
+            getNowPlaying: getNowPlaying
         });
 
         function getFilm(tmdb_id) {
@@ -442,6 +443,20 @@ angular.module('Api', ['ngResource'])
                 params: {
                     action: "get",
                     tmdb_id: tmdb_id
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function getNowPlaying() {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/tmdb/nowplaying/",
+                params: {
+                    action: "get",
                 }
             });
 

@@ -27,48 +27,51 @@
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'msgBus','streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService',
-  function($scope, msgBus,streamApiService,me,ReviewService,reviewApiService,watchlistApiService){
+.controller('feedCtrl', ['$scope', 'msgBus','streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService','filmApiService',
+  function($scope, msgBus,streamApiService,me,ReviewService,reviewApiService,watchlistApiService,filmApiService){
     msgBus.emitMsg('pagetitle::change', 'My Feed' );
     $scope.loading = true;
     $scope.me = me;
-    $scope.review_new = new reviewApiService();
 
     ReviewService.getRatingTypes().then(function(results){
       $scope.rating_types_new = results;
         
     });
 
+    filmApiService.getNowPlaying().then(function(response){
+      $scope.now_playing = response;
+    })
+
     watchlistApiService
             .getWatchlist(me.user.id).then(function(response) {
                 $scope.watchlist_items = response.results;
             });
 
-    $scope.$on('watchlist::addremove', function(event, film_id) {
+    // $scope.$on('watchlist::addremove', function(event, film_id) {
 
-        _.forEach($scope.feed_items, function(feed_item){
-          _.forEach(feed_item.activities, function(activity){
-            if(activity.object.film_id === film_id)
-            {
-              activity.object.on_watchlist = activity.object.on_watchlist === 'true' ? 'false' : 'true';
-            }
+    //     _.forEach($scope.feed_items, function(feed_item){
+    //       _.forEach(feed_item.activities, function(activity){
+    //         if(activity.object.film_id === film_id)
+    //         {
+    //           activity.object.on_watchlist = activity.object.on_watchlist === 'true' ? 'false' : 'true';
+    //         }
             
-          })
-        })
-    });
+    //       })
+    //     })
+    // });
 
-    $scope.$on('review::updated', function(event, review) {
+    // $scope.$on('review::updated', function(event, review) {
 
-        _.forEach($scope.feed_items, function(feed_item){
-          _.forEach(feed_item.activities, function(activity){
-            // if(activity.object.film_id === film_id)
-            // {
-            //   activity.object.on_watchlist = activity.object.on_watchlist === 'true' ? 'false' : 'true';
-            // }
+    //     _.forEach($scope.feed_items, function(feed_item){
+    //       _.forEach(feed_item.activities, function(activity){
+    //         // if(activity.object.film_id === film_id)
+    //         // {
+    //         //   activity.object.on_watchlist = activity.object.on_watchlist === 'true' ? 'false' : 'true';
+    //         // }
             
-          })
-        })
-    });
+    //       })
+    //     })
+    // });
 
     streamApiService.getAggregated()
             .then(

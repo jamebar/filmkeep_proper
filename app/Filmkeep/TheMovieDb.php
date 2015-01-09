@@ -1,7 +1,5 @@
 <?php namespace Filmkeep;
 
-
-
 class TheMovieDb {
 
 	public $tmdb;
@@ -10,13 +8,13 @@ class TheMovieDb {
 	{
 		
 		$apikey = 'f39589d9c877cecbe4032052979da1aa';
-        $this->tmdb = new \TMDb($apikey,'en');
+    $this->tmdb = new \TMDb($apikey,'en');
 	}
     
 	public function getFilmTrailer($tmdb_id)
 	{
 		
-       		if ( ! $film_trailer =  \Cache::get("film_trailer-".$tmdb_id))
+    if ( ! $film_trailer =  \Cache::get("film_trailer-".$tmdb_id))
 		{
 			
 			$film_trailer = $this->tmdb->getMovieTrailers($tmdb_id,'en');
@@ -80,8 +78,38 @@ class TheMovieDb {
 	public function searchTmdb($query)
 	{
 
-		return $this->tmdb->searchMovie($query, 1,'ngram');
+    if ( ! $results =  \Cache::get("query-". $query))
+    {
+  		$results = $this->tmdb->searchMovie($query, 1,'ngram');
 
+      // Save into the cache for 1 day
+      \Cache::put("query-". $query, $results, 1440);
+    }
+
+    return $results;
 	}
+
+  /**
+  * now plyaing tmdb
+  * 
+  * Handles the Ajax call to retrieve now playing films 
+  * 
+  */
+  public function getNowPlaying()
+  {
+
+    //get image path configuration
+    if ( ! $now_playing =  \Cache::get("now_playing"))
+    {
+      
+      $now_playing = $this->tmdb->getNowPlayingMovies();
+    
+      // Save into the cache for 1 day
+      \Cache::put('now_playing', $now_playing, 1440);
+    }
+
+    return $now_playing;
+
+  }
     
 }

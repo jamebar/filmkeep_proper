@@ -14,7 +14,7 @@
               <a class="visible-xs-inline" ng-click="getTrailer(review.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
               <a ng-click="newReview(review.film)" ng-if="review.reviewed === 'false' ">review this</a>
               <a ng-click="watchlist(review.film)" ng-if="me.user.id"><span ng-class="{'glyphicon-plus': review.film.on_watchlist === 'false','glyphicon-ok': review.film.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
-              <a ng-click="editReview({review:review,rating_types:rating_types})" ng-if="me.user.id === review.user_id">edit</a>
+              <a ng-click="editReview(review.id)" ng-if="me.user.id === review.user_id">edit</a>
               <a ng-click="compare(review)" ng-if="review.reviewed === 'true' ">compare </a>
             </div>
           </div>

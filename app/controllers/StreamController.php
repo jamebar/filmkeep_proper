@@ -40,7 +40,7 @@ class StreamController extends Controller{
               $q->where('tmdb_id', '=', $activity['object']['film']['tmdb_id']);
 
           })->first();
-          $activity['object']['reviewed'] = is_null($review) ? 'false' : 'true';
+          $activity['object']['film']['reviewed'] = is_null($review) ? 'false' : 'true';
 
           
           $watchlist = Watchlist::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($activity)
@@ -48,7 +48,7 @@ class StreamController extends Controller{
               $q->where('tmdb_id', '=', $activity['object']['film']['tmdb_id']);
 
           })->first();
-          $activity['object']['on_watchlist'] = is_null($watchlist) ? 'false' : 'true';
+          $activity['object']['film']['on_watchlist'] = is_null($watchlist) ? 'false' : 'true';
         }
       }
     }

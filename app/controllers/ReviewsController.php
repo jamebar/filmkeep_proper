@@ -137,22 +137,10 @@ class ReviewsController extends BaseController {
     //Validate
     $this->addReviewForm->validate(\Input::all());
 
-		//get full film info from tmdb.com
-        $TheMovieDb = new TheMovieDb();
-        $film =  \Input::get('film');
-        $tmdb_info = $TheMovieDb->getFilmTmdb($film['tmdb_id']);
+        $film_data =  \Input::get('film');
         
-        if(is_array($tmdb_info)){
-            $poster_path = (isset($tmdb_info['poster_path'])) ? $tmdb_info['poster_path'] : "";
-            $backdrop_path = (isset($tmdb_info['backdrop_path'])) ? $tmdb_info['backdrop_path'] : "";
-            $imdb_id = (isset($tmdb_info['imdb_id'])) ? $tmdb_info['imdb_id'] : "";
-            $overview = (isset($tmdb_info['overview'])) ? $tmdb_info['overview'] : "";
-
-            if(isset($tmdb_info['title']))
-            {
-                $title = $tmdb_info['title'];
-            }
-        }
+        $film = new Film();
+        $film = $film->digestFilm($film_data['tmdb_id']);
 
         $user_id = Auth::user()->id;
 
@@ -160,19 +148,6 @@ class ReviewsController extends BaseController {
             'user_id' => $user_id,
             'notes' => Input::get('notes', ''),
         );
-
-        $film_data = array(
-            'tmdb_id' => $tmdb_info['id'],
-            'title' => $title,
-            'poster_path' => $poster_path,
-            'backdrop_path' => $backdrop_path,
-            'imdb_id' => $imdb_id,
-            'summary' => $overview
-        );
-
-        //add the film
-        $film = Film::firstOrNew( ['tmdb_id'=>$film_data['tmdb_id']] );
-        $film->fill($film_data)->save();
 
         $film_id = $film->id;
 

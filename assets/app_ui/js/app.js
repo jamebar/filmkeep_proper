@@ -78,6 +78,10 @@ angular.module('myApp', [
         msgBus.emitMsg('review::new');
       }
 
+      $scope.editReview = function(id){
+        msgBus.emitMsg('review::edit', id);
+      }
+
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){ 
             $scope.navbarCollapsed = true;
@@ -106,14 +110,31 @@ angular.module('myApp', [
 
        msgBus.emitMsg('user::loaded', me.user);
 
-        $scope.getReview = function(review) {
+       msgBus.onMsg('review::new', function(e, data){
+          $scope.newReview(data);
+        });
+
+       msgBus.onMsg('review::edit', function(e, data){
+          $scope.editReview(data);
+        });
+
+       msgBus.onMsg('film::trailer', function(e, data){
+          $scope.getTrailer(data);
+        });
+
+       msgBus.onMsg('review::compare', function(e, data){
+          $scope.compare(data);
+        });
+
+
+
+        $scope.getReview = function(id) {
             
-                ReviewService.getReview(review.review.id).then(function(results) {
-                   // console.log(results);
-                    $scope.review = results.review;
-                    $scope.rating_types = results.rating_types;
-                    showModal();
-                })
+            ReviewService.getReview(id).then(function(results) {
+                $scope.review = results.review;
+                $scope.rating_types = results.rating_types;
+                showModal();
+            })
            
             $scope.ae_button_label = "Update";
         }
@@ -197,8 +218,6 @@ angular.module('myApp', [
 
         $scope.editReview = function(id){
             $scope.getReview(id);
-            //openModal(id);
-
         }
 
         $scope.addNewReview = function(){
@@ -208,7 +227,6 @@ angular.module('myApp', [
         
 
         $scope.newReview = function(film){
-   
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
                 $scope.rating_types = _.map(results, function(r){ r.value = 1000; return r });
@@ -239,9 +257,7 @@ angular.module('myApp', [
             });
         }
 
-        msgBus.onMsg('review::new', function(e, data){
-          $scope.newReview();
-        });
+        
         
     }
 ])
@@ -254,6 +270,61 @@ angular.module('myApp', [
         $timeout(function(){
             element.remove();
         }, delay);
+    }
+  }
+}])
+
+.directive('filmObject', ['$rootScope','watchlistApiService','msgBus','meApiService','Slug',function($rootScope,watchlistApiService,msgBus,meApiService,Slug) {
+  return {
+    restrict: 'E',
+    scope:{
+      film: '=film',
+      review: '=review',
+    },
+    replace: true,
+    templateUrl: '/assets/templates/film_object.tmpl.html',
+    link: function(scope, element,attrs) {
+
+        scope.me = meApiService.meData();
+        scope.horizontal = attrs.horizontal || false;
+
+        scope.watchlist = function(obj)
+        {
+          var film_id = angular.isDefined(obj.film_id) ? obj.film_id : obj.id;
+          $rootScope.$broadcast('watchlist::addremove', film_id);
+
+          watchlistApiService
+            .addRemoveWatchlist(film_id).then(function(response) {
+
+            });
+        }
+
+        scope.slugify = function(input) {
+            return Slug.slugify(input);
+        };
+
+        scope.newReview = function(film){
+           msgBus.emitMsg('review::new', film);
+        }
+
+        scope.compare = function(review){
+           msgBus.emitMsg('review::compare', review);
+        }
+
+        scope.editReview = function(review){
+           msgBus.emitMsg('review::edit', review);
+        }
+
+        scope.getTrailer = function(tmdb_id){
+           msgBus.emitMsg('film::trailer', tmdb_id);
+        }
+
+        scope.$on('watchlist::addremove', function(ev, film_id){
+          if(scope.film.id === film_id)
+            {
+              scope.film.on_watchlist = scope.film.on_watchlist === 'true' ? 'false' : 'true';
+            }
+        })
     }
   }
 }])
