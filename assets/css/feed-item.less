@@ -12,10 +12,15 @@
 
   .activity-item{
     float:left;
+
     img{
       display: block;
 
     }
+  }
+
+  .activity-item.activity-review{
+    float:inherit;
   }
 }
 
@@ -23,12 +28,7 @@
   text-transform: capitalize;
 }
 
-.feed-review-poster{
-  margin-right:1em;
-   img{
-     width:200px;
-   }
-}
+
 
 .feed-review-ratings{
   .progress{
@@ -44,13 +44,35 @@
   margin-left: 0;
   margin-top: 0;
     
+  .title{
+    font-size: 2em;
+    margin-top: -77px;
+    display: block;
+    float: left;
+    font-family: 'Volkhov',"Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+    color:@filmkeep-beige;
+  }
+
   .feed-review-ratings{
     p{
       margin-bottom: 0px;
       margin-top:5px;
     }
   }
+
+  .film-object{
+    margin-right: 1em;
+    .poster{
+      width:200px;
+    }
+  }
+
 }
+
+.activity-review.collapsed{
+    background: #f5f1e8;
+    padding:1em;
+  }
 
 .feed-review-wrapper{
   padding:25px;
@@ -70,7 +92,7 @@
 }
 
 .feed-review-notes{
-  padding:25px;
+  padding: 0px 20px 20px 20px;
   text-align: center;
 }
 
@@ -91,6 +113,10 @@
 
   .activity-review{
     margin-left: -31px;
+    margin-top:-7px;
+  }
+
+  .pullup{
     margin-top: -20px;
   }
 

@@ -20,11 +20,13 @@ class Film extends Model {
       $backdrop_path = (isset($tmdb_info['backdrop_path'])) ? $tmdb_info['backdrop_path'] : "";
       $imdb_id = (isset($tmdb_info['imdb_id'])) ? $tmdb_info['imdb_id'] : "";
       $overview = (isset($tmdb_info['overview'])) ? $tmdb_info['overview'] : "";
+      $release_date = (isset($tmdb_info['release_date'])) ? $tmdb_info['release_date'] : "";
       $film_data = array(
         'tmdb_id' => $tmdb_info['id'],
         'title' => $tmdb_info['title'],
         'poster_path' => $poster_path,
         'backdrop_path' => $backdrop_path,
+        'release_date' => $release_date,
         'imdb_id' => $imdb_id,
         'summary' => $overview
       );

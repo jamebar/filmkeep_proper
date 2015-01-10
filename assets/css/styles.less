@@ -715,6 +715,31 @@ a.action{
   }
 }
 
+.film-object{
+  overflow: auto;
+
+  .poster{
+    display: block;
+    width:150px;
+    img{
+      width:100%;
+    }
+  }
+}
+.multi{
+  .film-object{
+
+    .poster{
+      width:110px;
+    }
+
+    .review-label{
+      display: none;
+    }
+  }
+}
+
+
 .film-object.horizontal{
   clear:both;
   margin-bottom: 1em;
@@ -731,5 +756,6 @@ a.action{
 
   .film-object-content h3{
     font-size: 1.1em;
+    margin-top: 0px;
   }
 }

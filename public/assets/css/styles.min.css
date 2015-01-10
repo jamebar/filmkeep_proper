@@ -330,14 +330,11 @@ ul.filmkeep-list li img {
 .feed-item .activity-item img {
   display: block;
 }
+.feed-item .activity-item.activity-review {
+  float: inherit;
+}
 .feed-actor {
   text-transform: capitalize;
-}
-.feed-review-poster {
-  margin-right: 1em;
-}
-.feed-review-poster img {
-  width: 200px;
 }
 .feed-review-ratings .progress {
   margin-bottom: 0px;
@@ -350,9 +347,27 @@ ul.filmkeep-list li img {
   margin-left: 0;
   margin-top: 0;
 }
+.activity-review .title {
+  font-size: 2em;
+  margin-top: -77px;
+  display: block;
+  float: left;
+  font-family: 'Volkhov', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  color: #f4e8d0;
+}
 .activity-review .feed-review-ratings p {
   margin-bottom: 0px;
   margin-top: 5px;
+}
+.activity-review .film-object {
+  margin-right: 1em;
+}
+.activity-review .film-object .poster {
+  width: 200px;
+}
+.activity-review.collapsed {
+  background: #f5f1e8;
+  padding: 1em;
 }
 .feed-review-wrapper {
   padding: 25px;
@@ -366,7 +381,7 @@ ul.filmkeep-list li img {
   margin-top: -100px;
 }
 .feed-review-notes {
-  padding: 25px;
+  padding: 0px 20px 20px 20px;
   text-align: center;
 }
 @media only screen and (min-width: 40em) {
@@ -381,6 +396,9 @@ ul.filmkeep-list li img {
   }
   .activity-review {
     margin-left: -31px;
+    margin-top: -7px;
+  }
+  .pullup {
     margin-top: -20px;
   }
 }
@@ -1227,6 +1245,22 @@ a.action:hover {
     display: none;
   }
 }
+.film-object {
+  overflow: auto;
+}
+.film-object .poster {
+  display: block;
+  width: 150px;
+}
+.film-object .poster img {
+  width: 100%;
+}
+.multi .film-object .poster {
+  width: 110px;
+}
+.multi .film-object .review-label {
+  display: none;
+}
 .film-object.horizontal {
   clear: both;
   margin-bottom: 1em;
@@ -1243,4 +1277,5 @@ a.action:hover {
 }
 .film-object.horizontal .film-object-content h3 {
   font-size: 1.1em;
+  margin-top: 0px;
 }

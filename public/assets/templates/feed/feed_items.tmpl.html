@@ -13,15 +13,17 @@
     <a ui-sref='root.review({reviewId: feed_item.activities[0].object.id})' ng-if="feed_item.activity_count===1">%%feed_item.activities[0].object.film.title%%</a>
     
     <div class="clearfix">
-      <div ng-repeat="activity in feed_item.activities" class="activity-item activity-review">
-        <div class="feed-review-cover" style="background-image:url(%%activity.object.film.backdrop_path | imageFilter :'backdrop':'1' %%)">
-          <div class="cover"></div>
-        </div>
+      <div ng-repeat="activity in feed_item.activities" class="activity-item activity-review" ng-class="{pullup:$index==0, collapsed:$index>0}">
+        <span ng-if="$index==0">
+          <div class="feed-review-cover" style="background-image:url(%%activity.object.film.backdrop_path | imageFilter :'backdrop':'1' %%)">
+            <div class="cover"></div>
+          </div>
           <div class="feed-review-wrapper clearfix">
             <div class="feed-review-poster pull-left">
                 <film-object film="activity.object.film" type="vertical" review="activity.object"></film-object>
             </div>
-            <div class="feed-review-ratings pull-left" ng-if="feed_item.activity_count===1">
+            <span class="title">%%activity.object.film.title%%</span>
+            <div class="feed-review-ratings " >
               <div ng-repeat="rating in activity.object.ratings | limitTo: 5">
                 <p type="rating.rating_type" rating-type-label></p>
                 <div class="progress" >
@@ -32,8 +34,13 @@
               </div>
             </div>
           </div>
-          <div class="feed-review-notes" ng-if="feed_item.activity_count===1">%%activity.object.notes%%</div>
-      </div>
+          <div class="feed-review-notes" >%%activity.object.notes%%</div>
+          </span>
+          <span ng-if="$index > 0">
+            <film-object film="activity.object.film" review="activity.object" horizontal="true" ></film-object>
+          </span>
+        </div>
+      
     </div>
   </div>
 
@@ -51,8 +58,8 @@
      to the watchlist
     
     <div class="clearfix">
-      <div ng-repeat="activity in feed_item.activities" class="activity-item">
-          <film-object film="activity.object.film" type="vertical"></film-object>
+      <div ng-repeat="activity in feed_item.activities" class="activity-item" ng-class="{multi: feed_item.activity_count>2}">
+          <film-object film="activity.object.film" type="vertical" ></film-object>
       </div>
     </div>
 
