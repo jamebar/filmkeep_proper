@@ -22,6 +22,8 @@ angular.module('myApp', [
     'slugifier',
     'ngTouch',
     'hmTouchEvents',
+    'angulartics',
+    'angulartics.google.analytics'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
