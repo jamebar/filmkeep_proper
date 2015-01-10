@@ -69,7 +69,7 @@ angular.module('ReviewService', ['Api'])
 
                     if(match){
                         val.value = match.value;
-                       
+                        val.new = false;
                     }
                     else{
                         val.value = 1000;

@@ -11,8 +11,8 @@
           <h3 ng-show="review.id">%%review.film.title%%</h3>
           <relation-hint ></relation-hint>
           
-          <div ng-repeat="rating_type in rating_types track by $index" class="rating-type"  >
-              <p label="rating_type.label" rating-type-label></p>
+          <div ng-repeat="rating_type in rating_types track by $index" ng-class="{new: rating_type.new}" class="rating-type"  >
+              <p type="rating_type" rating-type-label></p>
 
               <slider
                   id="slider-%%$index%%"

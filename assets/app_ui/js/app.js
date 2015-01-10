@@ -345,12 +345,12 @@ angular.module('myApp', [
   return {
     restrict: 'A',
     scope: {
-      label: '='
+      type: '=type'
     },
-    template: '<span>%%labelLeft%%<span ng-show="labelRight" class="pull-right">%%labelRight%%</span><span ng-show="rating_type.new">(New)</span>',
+    template: '<span>%%labelLeft%%<span ng-show="labelRight" class="pull-right">%%labelRight%%</span><span ng-show="rating-type.new" class="newlabel"> (New)</span>',
     link: function(scope, element,attrs) {
-        
-        var labels = scope.label.split("|");
+        console.log(scope.type);
+        var labels = scope.type.label.split("|");
         scope.labelLeft = labels[0];
         scope.labelRight = labels.length>0 ? labels[1] : false;
         

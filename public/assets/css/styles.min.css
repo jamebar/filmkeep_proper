@@ -97,6 +97,12 @@ slider span.bar {
   cursor: pointer;
   border-radius: 3px;
 }
+.new slider span.bar {
+  background: #7fb5b7;
+}
+.new .newlabel {
+  color: #7fb5b7;
+}
 slider span.bar.selection {
   background: #0a0;
   opacity: 0.5;

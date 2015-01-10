@@ -42,8 +42,8 @@
 </div>
 
 <div class="full-width-section theme-red row-full-width">
-  <div class="review-ratings site-max" ng-repeat="rating_type in rating_types">
-    <p label="rating_type.label" rating-type-label></p>
+  <div class="review-ratings site-max" ng-repeat="rating_type in rating_types | filter:{new: false}">
+    <p type="rating_type" rating-type-label></p>
     <div class="progress" >
       <div class="progress-bar" role="progressbar" aria-valuenow="%%rating_type.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating_type.value)%%%;">
         
