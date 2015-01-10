@@ -6,6 +6,7 @@ use Filmkeep\Film;
 use Filmkeep\Rating;
 use Filmkeep\Follower;
 use Filmkeep\TheMovieDb;
+use Filmkeep\Rotten;
 use Filmkeep\Forms\AddReview;
 
 
@@ -43,6 +44,11 @@ class FilmController extends BaseController {
         $response['follower_reviews'] = $follower_reviews;
         $response['film']['reviewed'] = $this->isReviewed($film);
         $response['film']['on_watchlist'] = $this->onWatchlist($film);
+      }
+
+      if(isset($film->imdb_id)){
+        $rotten = new Rotten();
+        $response['film']['rotten'] = $rotten->getScore($film->imdb_id);
       }
       return Response::json($response);
     }

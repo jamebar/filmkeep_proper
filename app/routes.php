@@ -3,6 +3,7 @@
 
 use Filmkeep\Review;
 use Filmkeep\TheMovieDb;
+use Filmkeep\Rotten;
 use GetStream\StreamLaravel\Enrich;
 use Filmkeep\User;
 use Filmkeep\Follower;
@@ -10,11 +11,15 @@ use Filmkeep\Watchlist;
 
 Route::get('/test', function(){
 
-  $feed = FeedManager::getNotificationFeed(118);
-  $enricher = new Enrich();
-  $activities = $feed->getActivities(0,25)['results'];
-  $activities = $enricher->enrichAggregatedActivities($activities);
-  return $activities;
+  $gb = new Rotten();
+  $gb_movie = $gb->getMovie('tt0097576');
+  return Response::json($gb_movie);
+
+  // $feed = FeedManager::getNotificationFeed(118);
+  // $enricher = new Enrich();
+  // $activities = $feed->getActivities(0,25)['results'];
+  // $activities = $enricher->enrichAggregatedActivities($activities);
+  // return $activities;
   // $data = [
   //     'film_id' => 417,
   //     'user_id' => Auth::user()->id

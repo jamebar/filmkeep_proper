@@ -7,6 +7,7 @@ use Filmkeep\Follower;
 use Filmkeep\TheMovieDb;
 use Filmkeep\Forms\AddReview;
 use Filmkeep\Watchlist;
+use Filmkeep\Rotten;
 
 
 class ReviewsController extends BaseController {
@@ -197,6 +198,12 @@ class ReviewsController extends BaseController {
           $review['reviewed'] = is_null($reviewed) ? 'false' : 'true';
           $w = new Watchlist();
           $review['film']['on_watchlist'] = $w->onWatchlist($review['film']['tmdb_id']);
+
+          if(isset($review['film']['imdb_id'])){
+            $rotten = new Rotten();
+            $review['film']['rotten'] = $rotten->getScore($review['film']['imdb_id']);
+          }
+          
         }
         return $review;
 	}
