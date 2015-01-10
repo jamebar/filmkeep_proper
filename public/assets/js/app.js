@@ -229,7 +229,6 @@ angular.module('myApp', [
         $scope.newReview = function(film){
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
-              console.log(results);
                 $scope.rating_types = _.map(results, function(r){ r.value = 1000; return r });
             });
 
@@ -349,7 +348,6 @@ angular.module('myApp', [
     },
     template: '<span>%%labelLeft%%<span ng-show="labelRight" class="pull-right">%%labelRight%%</span><span ng-show="rating-type.new" class="newlabel"> (New)</span>',
     link: function(scope, element,attrs) {
-        console.log(scope.type);
         var labels = scope.type.label.split("|");
         scope.labelLeft = labels[0];
         scope.labelRight = labels.length>0 ? labels[1] : false;
@@ -613,7 +611,6 @@ var aeReview = angular.module('ae-review', [
                     sortedReviews = _.sortBy(scope.reviews, function(r) {
                         return r.ratings[scope.hint_index] ? r.ratings[scope.hint_index].value : 0;
                     })
-                    console.log($(window).scrollTop())
                     scope.relation_top = $('#slider-'+ el).offset().top + $('.modal').scrollTop() - $(window).scrollTop() - 75;
                     inBetween();
                     
@@ -643,7 +640,6 @@ var aeReview = angular.module('ae-review', [
 
                    
                     scope.curValue = scope.rating_types[scope.hint_index].value;
-                    //console.log(scope.review.assigned_ratings[scope.hint_index].value);
                     var r = sortedReviews;
                     for (var i = 0; i < r.length; i++) {
                         
@@ -662,7 +658,6 @@ var aeReview = angular.module('ae-review', [
                         if (scope.curValue >= r[i].ratings[scope.hint_index].value && scope.curValue <= r[next_val].ratings[scope.hint_index].value) {
                             scope.left_compare = r[i].film.title
                             scope.right_compare = r[next_val].film.title;
-                            //console.log(r[i].ratings[scope.hint_index].value - r[next_val].ratings[scope.hint_index].value );
                         }
 
                         //check if last
@@ -720,7 +715,6 @@ var aeReview = angular.module('ae-review', [
                 };
 
                 scope.$on('typeahead:selected', function(a, b) {
-                    //console.log("a", a, "b", b, "review", scope.review);
                 })
 
             }
@@ -741,6 +735,124 @@ var aeReview = angular.module('ae-review', [
     }
 ])
 
+
+  'use strict';
+
+  angular.module('search', [
+])
+
+  .directive('search', ['$document','$filter','$state',
+    function($document,$filter,$state){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/search.tmpl.html',
+            link: function(scope, element, attrs) {
+
+              scope.search = {};
+              scope.search.query = null;  
+              
+
+                var people = new Bloodhound({
+                    datumTokenizer: function(d) {
+                        return Bloodhound.tokenizers.whitespace(title);
+                    },
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '/api/user/search?query=%QUERY',
+                        filter: function(list) {
+                            return $.map(list.results, function(data) {
+                                // if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
+                                
+                                
+                                return {
+                                    name: data.name,
+                                    avatar: $filter('profileFilter')(data.avatar),
+                                    username: data.username
+                                };
+                            });
+                        }
+                    }
+                });
+
+                var films = new Bloodhound({
+                    datumTokenizer: function(d) {
+                        return Bloodhound.tokenizers.whitespace(title);
+                    },
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '/api/tmdb/%QUERY',
+                        filter: function(list) {
+                            return $.map(list.results, function(data) {
+                                return {
+                                    title: data.title ,
+                                    tmdb_id: data.id,
+                                    poster: $filter('imageFilter')(data.poster_path,'poster',0),
+                                    release_date: data.release_date.substring(0, 4)
+                                };
+                            });
+                        }
+                    }
+                });
+
+                people.initialize();
+                films.initialize();
+
+                scope.typeaheadOptions = {
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                };
+
+                scope.mulitpleData = [
+                {
+                    name: 'people',
+                    displayKey: 'name',
+                    source: people.ttAdapter(),
+                    templates: {
+                      header: '<h3 class="search-title">People</h3>',
+                      suggestion: function (context) {
+                        return '<div>' +context.name+'<span></span></div>'
+                      }
+                    }
+                },
+                {
+                    name: 'films',
+                    displayKey: 'title',
+                    source: films.ttAdapter(),
+                    templates: {
+                      header: '<h3 class="search-title">Films</h3>',
+                      suggestion: function (context) {
+                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" /></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
+                      }
+                    }
+                }
+                ]
+
+                scope.$on('typeahead:autocompleted', searchComplete);
+                scope.$on('typeahead:selected', searchComplete);
+                
+                function searchComplete(event, suggestion, dataset){
+
+                  if(dataset === 'people'){
+                    $state.go('root.user.filmkeep', {username: suggestion.username});
+                  }
+
+                  if(dataset === 'films'){
+                    $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
+                    
+                  }
+                  scope.search.query = null;
+
+                }
+
+                
+
+            }
+
+        }
+    }
+  ]);
 
   'use strict';
 
@@ -863,124 +975,6 @@ var aeReview = angular.module('ae-review', [
     return moment.utc(date).fromNow(true);
   }
 })
-
-  'use strict';
-
-  angular.module('search', [
-])
-
-  .directive('search', ['$document','$filter','$state',
-    function($document,$filter,$state){
-        return {
-            restrict: 'E',
-            scope:{},
-            templateUrl: '/assets/templates/search.tmpl.html',
-            link: function(scope, element, attrs) {
-
-              scope.search = {};
-              scope.search.query = null;  
-              
-
-                var people = new Bloodhound({
-                    datumTokenizer: function(d) {
-                        return Bloodhound.tokenizers.whitespace(title);
-                    },
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    remote: {
-                        url: '/api/user/search?query=%QUERY',
-                        filter: function(list) {
-                            return $.map(list.results, function(data) {
-                                // if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
-                                
-                                
-                                return {
-                                    name: data.name,
-                                    avatar: $filter('profileFilter')(data.avatar),
-                                    username: data.username
-                                };
-                            });
-                        }
-                    }
-                });
-
-                var films = new Bloodhound({
-                    datumTokenizer: function(d) {
-                        return Bloodhound.tokenizers.whitespace(title);
-                    },
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    remote: {
-                        url: '/api/tmdb/%QUERY',
-                        filter: function(list) {
-                            return $.map(list.results, function(data) {
-                                return {
-                                    title: data.title ,
-                                    tmdb_id: data.id,
-                                    poster: $filter('imageFilter')(data.poster_path,'poster',0),
-                                    release_date: data.release_date.substring(0, 4)
-                                };
-                            });
-                        }
-                    }
-                });
-
-                people.initialize();
-                films.initialize();
-
-                scope.typeaheadOptions = {
-                    hint: true,
-                    highlight: true,
-                    minLength: 1
-                };
-
-                scope.mulitpleData = [
-                {
-                    name: 'people',
-                    displayKey: 'name',
-                    source: people.ttAdapter(),
-                    templates: {
-                      header: '<h3 class="search-title">People</h3>',
-                      suggestion: function (context) {
-                        return '<div>' +context.name+'<span></span></div>'
-                      }
-                    }
-                },
-                {
-                    name: 'films',
-                    displayKey: 'title',
-                    source: films.ttAdapter(),
-                    templates: {
-                      header: '<h3 class="search-title">Films</h3>',
-                      suggestion: function (context) {
-                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" /></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
-                      }
-                    }
-                }
-                ]
-
-                scope.$on('typeahead:autocompleted', searchComplete);
-                scope.$on('typeahead:selected', searchComplete);
-                
-                function searchComplete(event, suggestion, dataset){
-
-                  if(dataset === 'people'){
-                    $state.go('root.user.filmkeep', {username: suggestion.username});
-                  }
-
-                  if(dataset === 'films'){
-                    $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
-                    
-                  }
-                  scope.search.query = null;
-
-                }
-
-                
-
-            }
-
-        }
-    }
-  ]);
 
   'use strict';
 

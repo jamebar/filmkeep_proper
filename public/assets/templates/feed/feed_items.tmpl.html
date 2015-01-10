@@ -23,7 +23,7 @@
             </div>
             <div class="feed-review-ratings pull-left" ng-if="feed_item.activity_count===1">
               <div ng-repeat="rating in activity.object.ratings | limitTo: 5">
-                <p label="rating.rating_type.label" rating-type-label></p>
+                <p type="rating.rating_type" rating-type-label></p>
                 <div class="progress" >
                   <div class="progress-bar" role="progressbar" aria-valuenow="%%rating.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating.value)%%%;">
                     

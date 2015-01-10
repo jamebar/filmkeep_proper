@@ -229,7 +229,6 @@ angular.module('myApp', [
         $scope.newReview = function(film){
             $scope.review = new reviewApiService();
             ReviewService.getRatingTypes().then(function(results){
-              console.log(results);
                 $scope.rating_types = _.map(results, function(r){ r.value = 1000; return r });
             });
 
@@ -349,7 +348,6 @@ angular.module('myApp', [
     },
     template: '<span>%%labelLeft%%<span ng-show="labelRight" class="pull-right">%%labelRight%%</span><span ng-show="rating-type.new" class="newlabel"> (New)</span>',
     link: function(scope, element,attrs) {
-        console.log(scope.type);
         var labels = scope.type.label.split("|");
         scope.labelLeft = labels[0];
         scope.labelRight = labels.length>0 ? labels[1] : false;

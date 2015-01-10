@@ -123,7 +123,6 @@ var aeReview = angular.module('ae-review', [
                     sortedReviews = _.sortBy(scope.reviews, function(r) {
                         return r.ratings[scope.hint_index] ? r.ratings[scope.hint_index].value : 0;
                     })
-                    console.log($(window).scrollTop())
                     scope.relation_top = $('#slider-'+ el).offset().top + $('.modal').scrollTop() - $(window).scrollTop() - 75;
                     inBetween();
                     
@@ -153,7 +152,6 @@ var aeReview = angular.module('ae-review', [
 
                    
                     scope.curValue = scope.rating_types[scope.hint_index].value;
-                    //console.log(scope.review.assigned_ratings[scope.hint_index].value);
                     var r = sortedReviews;
                     for (var i = 0; i < r.length; i++) {
                         
@@ -172,7 +170,6 @@ var aeReview = angular.module('ae-review', [
                         if (scope.curValue >= r[i].ratings[scope.hint_index].value && scope.curValue <= r[next_val].ratings[scope.hint_index].value) {
                             scope.left_compare = r[i].film.title
                             scope.right_compare = r[next_val].film.title;
-                            //console.log(r[i].ratings[scope.hint_index].value - r[next_val].ratings[scope.hint_index].value );
                         }
 
                         //check if last
@@ -230,7 +227,6 @@ var aeReview = angular.module('ae-review', [
                 };
 
                 scope.$on('typeahead:selected', function(a, b) {
-                    //console.log("a", a, "b", b, "review", scope.review);
                 })
 
             }
