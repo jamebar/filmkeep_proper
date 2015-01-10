@@ -1,19 +1,21 @@
-<div ng-class="{horizontal:horizontal}" class="film-object">
+<div ng-class="{horizontal:horizontal}" class="film-object clearfix">
 
   <a ng-if="!review" ui-sref='root.film({filmId: film.tmdb_id, filmSlug: slugify(film.title) })' class="poster"><img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" /></a>
   <a ui-sref='root.review({reviewId: review.id})' ng-if="review" class="poster"><img ng-src="%%review.film.poster_path | imageFilter:'poster':'1'%%" /></a>
   <span class="film-object-content">
     <h3 ng-if="horizontal">%%film.title%%</h3>
-    <a class="action" href=""  tooltip="Watch Trailer" ng-click="getTrailer(film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
-    <a class="action" href=""  ng-click="newReview(film)" ng-if="film.reviewed === 'false'"><span class="glyphicon glyphicon-tasks"></span> <span class="review-label">review</span> </a>
+    <div class="fo-actions">
+      <a class="action" href=""  tooltip="Watch Trailer" ng-click="getTrailer(film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
+      <a class="action" href=""  tooltip="Review this" ng-click="newReview(film)" ng-if="film.reviewed === 'false'"><span class="glyphicon glyphicon-tasks"></span><!--  <span class="review-label">review</span>  --></a>
 
-    <span ng-if="review">
-      <a class="action" href=""  ng-click="compare(review)" ng-if="review.film.reviewed === 'true' ">compare</a> 
-      <a class="action" href=""  ng-click="editReview(review.id)" ng-if="review.user_id === me.user.id"><span class="glyphicon glyphicon-pencil visible-xs-inline-block" ></span><span class="hidden-xs">edit</span></a> 
+      <span ng-if="review">
+        <a class="action" href=""  tooltip="Compare" ng-click="compare(review)" ng-if="review.film.reviewed === 'true' "><span class="icon-torsos-all"></span></a> 
+        <a class="action" href=""  tooltip="Edit review" ng-click="editReview(review.id)" ng-if="review.user_id === me.user.id"><span class="glyphicon glyphicon-pencil" ></span><!-- <span class="hidden-xs">edit</span> --></a> 
 
-      <!-- <a ui-sref='root.review({reviewId: activity.object.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a> -->
-    </span>
+        <!-- <a ui-sref='root.review({reviewId: activity.object.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a> -->
+      </span>
 
-    <a class="action" href=""  ng-click="watchlist(film)"><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+      <a class="action watchlist-btn" ng-click="watchlist(film)" ><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+    </div>
   </span>
 </div>

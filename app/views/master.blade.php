@@ -115,7 +115,7 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-    <div class="container-fluid">
+    <div class="container-fluid" >
       <!--Error messages from backend pages -->
     	@if (Session::has('message'))
             <div id="flash_notice" data-alert data-options="animation_speed:500;" class="alert-box success fadeOutUp animated" close-me="3000">{{ Session::get('message') }} </div>
@@ -123,11 +123,11 @@
       <!--Error messages from angular -->
       <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>
         
-               @yield('content')
+        @yield('content')
                 
-                <div ui-view autoscroll="true"></div>
+        <div ui-view autoscroll="true"  ></div>
     </div>
-    <div class="container-fluid footer">
+    <div class="container-fluid footer clearfix">
       <div class="row site-max">
         <div class="col-xs-12">
             <h4>Filmkeep 2014</h4>

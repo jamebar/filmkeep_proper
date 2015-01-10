@@ -78,6 +78,7 @@
               function(response){
                 $scope.feed_items = response;
                 $scope.loading = false;
+                
             });
 
     $scope.toPercent = function(num){

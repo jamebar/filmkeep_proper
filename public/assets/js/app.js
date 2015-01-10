@@ -939,6 +939,7 @@ var aeReview = angular.module('ae-review', [
               function(response){
                 $scope.feed_items = response;
                 $scope.loading = false;
+                
             });
 
     $scope.toPercent = function(num){

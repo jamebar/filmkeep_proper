@@ -2,43 +2,50 @@
 .navbar {background-color:#323232 !important;}
 
 </style>
-<div class="row padding-top min-content-height site-max">
-  <div class="col-xs-12 col-md-4 hidden-xs">
-    <div class="sidebar-item friends-sidebar clearfix">
-      <h3>Friends</h3>
-      <span ng-show="me.user.followers ==0">
-        <p>You have not added any followers. To follow a friend's activity, click on "Follow" on a user's Filmkeep page.</p>
-        <p>Get started by searching for a friend with the search bar in the header.</p></span>
-       <ul>
-        <li ng-repeat="friend in me.user.followers | limitTo: 10">
-          <span ng-if="me.user.id !== friend.id">
-            <avatar info="friend"></avatar>
+<div class="row padding-top min-content-height du-wrapper clearfix">
+  <div class="leftside">
+    <div class="col-xs-12 hidden-xs pull-right leftsidesub">
+      <div class="sidebar-item friends-sidebar clearfix">
+        <h3>Following (%%me.user.followers.length%%)</h3>
+        <span ng-show="me.user.followers.length ==0">
+          <p>You have not added any followers. To follow a friend's activity, click on "Follow" on a user's Filmkeep page.</p>
+          <p>Get started by searching for a friend with the search bar in the header.</p></span>
+         <ul>
+          <li ng-repeat="friend in me.user.followers | limitTo: 10">
+            <span ng-if="me.user.id !== friend.id">
+              <avatar info="friend" class="reverse"></avatar>
+              
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="sidebar-item watchlist-sidebar clearfix">
+        <a ui-sref='root.user.watchlist({username: me.user.username})'><h3>Watchlist</h3></a>
+        <ul>
+          <li ng-repeat="witem in watchlist_items | limitTo: 6">
+            <film-object film="witem.film" ></film-object>
             
-          </span>
-        </li>
-      </ul>
-    </div>
-    <div class="sidebar-item watchlist-sidebar clearfix">
-      <a ui-sref='root.user.watchlist({username: me.user.username})'><h3>Watchlist</h3></a>
-      <ul>
-        <li ng-repeat="witem in watchlist_items | limitTo: 6">
-          <a ui-sref='root.film({filmId: witem.film.tmdb_id, filmSlug: slugify(witem.film.title) })'><img ng-src="%%witem.film.poster_path | imageFilter:'poster':'1'%%" /></a>
-        </li>
-      </ul>
-      <p ng-show="watchlist_items.length ==0">Your watchlist is empty.  You can add any film to your watchlist, just look for the "watchlist" button next to any film poster.</p>
-    </div>
+          </li>
+        </ul>
+        <p ng-show="watchlist_items.length ==0">Your watchlist is empty.  You can add any film to your watchlist, just look for the "watchlist" button next to any film poster.</p>
+      </div>
 
-    <div class="sidebar-item nowplaying-sidebar clearfix">
-      <h3>Now Playing</h3>
-        <film-object film="item" horizontal="true" ng-repeat="item in now_playing | limitTo: 6"></film-object>
+      <div class="sidebar-item nowplaying-sidebar clearfix">
+        <h3>Now Playing</h3>
+          <film-object film="item" horizontal="true" ng-repeat="item in now_playing | limitTo: 6"></film-object>
+      </div>
     </div>
   </div>
-  <div class="col-xs-12 col-md-8">
-    <div class="preloader" ng-show="loading">loading feed <img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
-    <h4 ng-show="feed_items.length ==0">Your feed is currently empty, the activity of those you follow, and your own review activity will show up here.</h4>
-    <div ng-repeat="feed_item in feed_items">
-      <feed-items></feed-items>
+  <div class="rightside pull-left">
+    <div class="col-xs-12 rightsidesub">
+      <div class="preloader" ng-show="loading"><img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
+      <h4 ng-show="feed_items.length ==0">Your feed is currently empty, the activity of those you follow, and your own review activity will show up here.</h4>
+      <div ng-repeat="feed_item in feed_items">
+        <feed-items></feed-items>
+      </div>
     </div>
   </div>
 </div>
+
+
 <div class="space-bottom"></div>

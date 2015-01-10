@@ -268,7 +268,9 @@ search{
 .preloader{
   font-size:1em;
   img{
-    height:60px;
+    height:160px;
+    margin:0 auto;
+    display: block;
   }
 }
 
@@ -348,7 +350,7 @@ a.social-btn{
 }
 
 a.action{
-  margin-right:5px;
+  margin-right:10px;
   color: rgba(0,0,0,.3);
 
   &:hover{
@@ -395,6 +397,10 @@ a.action{
   }
 }
 
+.reverse .initials{
+  background:@filmkeep-beige;
+  color:@filmkeep-red;
+}
 .large .initials{
   height:90px;
   width:90px;
@@ -716,7 +722,16 @@ a.action{
 }
 
 .film-object{
-  overflow: auto;
+
+  .glyphicon{
+    
+  }
+
+  [class^="icon-"]:before,
+[class*=" icon-"]:before{
+  
+  vertical-align: middle;
+}
 
   .poster{
     display: block;
@@ -741,9 +756,11 @@ a.action{
 
 
 .film-object.horizontal{
-  clear:both;
+  clear: both;
   margin-bottom: 1em;
-  overflow: auto;
+  background: rgba(0,0,0,.1);
+  padding: 1em;
+
   .poster{
     display: block;
     width:60px;
@@ -758,8 +775,73 @@ a.action{
     font-size: 1.1em;
     margin-top: 0px;
   }
+
+  
 }
+
+.fo-actions{
+    margin-top:.5em;
+  }
 
 .rotten{
   font-size:2em;
+}
+
+.du-wrapper{
+  margin-top:-20px;
+  padding-bottom: 20px;
+}
+.leftside{
+  background:@filmkeep-red;
+  width:40%;
+  float:left;
+  padding-right: 1.5em;
+  color:@filmkeep-beige;
+}
+
+.rightside{
+  width:100%;
+  background:#fff;
+  margin-top: 2em;
+}
+
+@media only screen and (min-width: 40em){
+  .rightside{
+    width:60%;
+  }
+}
+
+.leftsidesub{
+  max-width: 480px;
+}
+
+.rightsidesub{
+  max-width: 800px;
+}
+
+.watchlist-btn{
+  // border: 1px solid rgba(0,0,0,.1);
+  // border-radius: 3px;
+  // padding: 4px 8px;
+
+  .glyphicon{
+    font-size: 1em;
+  }
+  
+}
+
+.sidebar-item {
+  padding-top: 1em;
+  border-top: 1px solid rgba(0,0,0,.1);
+  margin-bottom: 3em;
+
+  a h3{
+    color:@filmkeep-blue;
+  }
+}
+
+.watchlist-page{
+  .film-object{
+    float:left;
+  }
 }
