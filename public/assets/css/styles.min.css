@@ -349,7 +349,9 @@ ul.filmkeep-list li img {
 }
 .activity-review .title {
   font-size: 2em;
-  margin-top: -77px;
+  margin-top: -91px;
+  width: 60%;
+  line-height: 1em;
   display: block;
   float: left;
   font-family: 'Volkhov', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
