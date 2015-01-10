@@ -50,7 +50,8 @@
               <label>Notes</label>
               <textarea class="form-control" ng-model="review.notes"></textarea>
           </div>
-          <input type="submit" class="btn btn-primary" value="%%ae_button_label%% Review">
+          <div ng-show="loader" class="btn btn-primary"><img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
+          <input ng-show="!loader" type="submit" class="btn btn-primary" value="%%ae_button_label%% Review">
       </form>
     </div>
 </div> 

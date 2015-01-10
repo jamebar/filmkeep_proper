@@ -535,6 +535,7 @@ var aeReview = angular.module('ae-review', [
                 scope.show_hint = false;
                 scope.left = "";
                 scope.right = "";
+                scope.loader = false;
                 // scope.relation_top = window.event.clientY;
                 scope.ae_button_label = scope.review.id ? "Update" : "Add";
                 
@@ -544,7 +545,6 @@ var aeReview = angular.module('ae-review', [
                     })
 
                 scope.reviewSubmit = function() {
-                    //scope.review.ratings = scope.rating_types;
                     var ratings = [];
                     _.forEach(scope.rating_types, function(val){
                         var rt = {
@@ -558,20 +558,24 @@ var aeReview = angular.module('ae-review', [
 
                     if(scope.review.id)
                     {
+                      scope.loader = true;
                       scope.review.$update({review_id:scope.review.id}).then(function(){
+                        scope.loader = false;
                         $rootScope.$broadcast('modal::close');
                         $rootScope.$broadcast('review::updated', scope.review);
-                        AlertService.Notice("Your review of " + scope.review.film.title + " has been updated");
+                        AlertService.Notice("Your review of '" + scope.review.film.title + "' has been updated");
                       });
                     }
                     else
                     {
-                      if(angular.isDefined(scope.review.film))
+                      if(angular.isDefined(scope.review.film) && angular.isDefined(scope.review.film.tmdb_id))
                       {
+                        scope.loader = true;
                         scope.review.$save().then(function(){
+                          scope.loader = false;
                           $rootScope.$broadcast('modal::close');
                           $rootScope.$broadcast('review::created', scope.review);
-                          AlertService.Notice("Your review of " + scope.review.film.title + " has been created");
+                          AlertService.Notice("Your review of '" + scope.review.film.title + "' has been created");
                         });
                       }
                       else{
@@ -1278,7 +1282,6 @@ angular.module('AlertBox', [])
             });
 
             $rootScope.$on('review::updated',function(e,review){
-              console.log(e,review);
               $scope.review.notes = review.notes;
             })
 

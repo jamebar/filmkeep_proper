@@ -42,7 +42,6 @@
             });
 
             $rootScope.$on('review::updated',function(e,review){
-              console.log(e,review);
               $scope.review.notes = review.notes;
             })
 
