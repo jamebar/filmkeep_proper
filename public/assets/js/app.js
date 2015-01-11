@@ -34,10 +34,34 @@ angular.module('myApp', [
   $rootScope.$stateParams = $stateParams; 
 }])
 
-.config(['$locationProvider','$stateProvider','$urlRouterProvider', function($locationProvider, $stateProvider,$urlRouterProvider) {
+.config(['$locationProvider','$stateProvider','$urlRouterProvider','$tooltipProvider', function($locationProvider, $stateProvider,$urlRouterProvider,$tooltipProvider) {
 
   $locationProvider.html5Mode(true);
 
+  var tooltipFactory = $tooltipProvider.$get[$tooltipProvider.$get.length - 1];
+  // decorate the tooltip getter
+  $tooltipProvider.$get = [
+      '$window',
+      '$compile',
+      '$timeout',
+      '$parse',
+      '$document',
+      '$position',
+      '$interpolate',
+      function ( $window, $compile, $timeout, $parse, $document, $position, $interpolate ) {
+          // for touch devices, don't return tooltips
+          if ('ontouchstart' in $window) {
+              return function () {
+                  return {
+                      compile: function () { }
+                  };
+              };
+          } else {
+              // run the default behavior
+              return tooltipFactory($window, $compile, $timeout, $parse, $document, $position, $interpolate);
+          }
+      }
+  ];
 
   $stateProvider.state('root', {
     abstract: true,
