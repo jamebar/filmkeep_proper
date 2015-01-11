@@ -20,7 +20,7 @@
         </ul>
       </div>
       <div class="sidebar-item watchlist-sidebar clearfix">
-        <a ui-sref='root.user.watchlist({username: me.user.username})'><h3>Watchlist</h3></a>
+        <h3>Watchlist <a ui-sref='root.user.watchlist({username: me.user.username})' class="pull-right">view</a></h3>
         <ul>
           <li ng-repeat="witem in watchlist_items | limitTo: 6">
             <film-object film="witem.film" ></film-object>
