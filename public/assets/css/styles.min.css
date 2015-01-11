@@ -466,6 +466,8 @@ label {
 .progress {
   box-shadow: none;
   background-color: #d47d55;
+  position: relative;
+  height: 25px;
 }
 .progress-bar {
   box-shadow: none;
@@ -1336,4 +1338,14 @@ a.action:hover {
 }
 .watchlist-page .film-object {
   float: left;
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
 }

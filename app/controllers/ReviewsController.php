@@ -205,6 +205,15 @@ class ReviewsController extends BaseController {
           }
           
         }
+        //add the latest 50 reviews for comparison
+        $reviews = Review::with('ratings','ratings.rating_type','film')
+                            ->where('user_id', $review['user_id'])
+                            ->take(50)
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+
+        $review['reviews'] = $reviews;
+        
         return $review;
 	}
 

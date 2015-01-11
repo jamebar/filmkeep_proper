@@ -30,6 +30,7 @@
             $scope.rating_types = ReviewLoad.rating_types;
             $scope.review = ReviewLoad.review;
             $scope.me = me;
+            
             // console.log($scope.review);
             $scope.toPercent = function(num){
                 return num/2000 * 100;
