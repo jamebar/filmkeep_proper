@@ -79,8 +79,8 @@
       <ul class="nav navbar-nav navbar-right">
         @if(Auth::check())
         <li><a ui-sref='root.feed'>Feed</a></li>
-        <li><a ui-sref='root.user.filmkeep({username: "{{Auth::user()->username}}" })'>My Filmkeep</a></li>
-        <li><a ui-sref='root.user.watchlist({username: "{{Auth::user()->username}}" })'>Watchlist</a></li>
+        <li><a ui-sref='root.user.filmkeep({username: header_user.username })'>My Filmkeep</a></li>
+        <li><a ui-sref='root.user.watchlist({username: header_user.username })'>Watchlist</a></li>
 
        
 

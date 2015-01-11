@@ -1295,9 +1295,6 @@ a.action:hover {
 .fo-actions {
   margin-top: .5em;
 }
-.rotten {
-  font-size: 2em;
-}
 .du-wrapper {
   margin-top: -20px;
   padding-bottom: 20px;
@@ -1354,5 +1351,36 @@ a.action:hover {
     width: 7px;
     height: 7px;
     margin-top: -3px;
+  }
+}
+.rotten-wrapper {
+  font-size: 2em;
+}
+.rotten-icon {
+  background-image: url(/assets/img/rt_lg.png);
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.fresh {
+  background-position: 0px 0px;
+}
+.rotten {
+  background-position: 0px -50px;
+}
+.certified_fresh {
+  background-position: 0px -100px;
+}
+.empty-feed {
+  padding: 1em;
+  font-size: 2em;
+  line-height: 1.5em;
+  text-align: center;
+  color: #ccc;
+}
+@media only screen and (min-width: 40em) {
+  .empty-feed {
+    padding: 3em;
   }
 }

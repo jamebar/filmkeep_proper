@@ -32,9 +32,8 @@
     </div>
     <div class="col-xs-12 col-sm-2">
 
-      <p ng-if="film.rotten" class="rotten">
-        <img ng-show="film.rotten.critics_rating =='Certified Fresh'" src="/assets/img/25x25_fresh.gif"/>
-        <img ng-show="film.rotten.critics_rating !='Certified Fresh'" src="/assets/img/25x25_rotten.gif"/>
+      <p ng-if="film.rotten" class="rotten-wrapper">
+        <span class="rotten-icon" ng-class="{fresh: film.rotten.critics_rating =='Fresh', certified_fresh: film.rotten.critics_rating =='Certified Fresh', rotten: film.rotten.critics_rating =='Rotten'}"></span>
         %%film.rotten.critics_score%%%
       </p>
     </div>
