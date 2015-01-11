@@ -568,9 +568,15 @@ ul.compare-avatars li {
   padding: 0;
   list-style: none;
 }
+ul.compare-avatars {
+  margin-bottom: 1em;
+}
 ul.compare-avatars li {
   float: left;
   margin-right: .5em;
+}
+ul.compare-avatars li .initials {
+  background: rgba(0, 0, 0, 0.3);
 }
 ul.compare-avatars li img {
   opacity: .3;
@@ -583,23 +589,27 @@ ul.compare-avatars li.active img {
   -webkit-filter: none;
           filter: none;
 }
+ul.compare-avatars li.active .initials {
+  background: #d2544c;
+}
 .compare-container {
   padding: 1em;
+  background: #f4e8d0;
 }
 .compare-container .progress {
-  background-color: #ececec;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .compare0 .progress-bar {
-  background-color: #4FCEE0;
+  background-color: #d2544c;
 }
 .compare1 .progress-bar {
-  background-color: #F3635E;
+  background-color: #7fb5b7;
 }
 .compare2 .progress-bar {
-  background-color: #8FCC00;
+  background-color: #d47d55;
 }
 .compare3 .progress-bar {
-  background-color: #CC27B2;
+  background-color: #c8bba1;
 }
 .progress-bar {
   padding-left: 10px;

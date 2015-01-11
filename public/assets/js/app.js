@@ -512,124 +512,6 @@ angular.module('myApp', [
   };
 }])
 ;
-
-  'use strict';
-
-  angular.module('search', [
-])
-
-  .directive('search', ['$document','$filter','$state',
-    function($document,$filter,$state){
-        return {
-            restrict: 'E',
-            scope:{},
-            templateUrl: '/assets/templates/search.tmpl.html',
-            link: function(scope, element, attrs) {
-
-              scope.search = {};
-              scope.search.query = null;  
-              
-
-                var people = new Bloodhound({
-                    datumTokenizer: function(d) {
-                        return Bloodhound.tokenizers.whitespace(title);
-                    },
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    remote: {
-                        url: '/api/user/search?query=%QUERY',
-                        filter: function(list) {
-                            return $.map(list.results, function(data) {
-                                // if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
-                                
-                                
-                                return {
-                                    name: data.name,
-                                    avatar: $filter('profileFilter')(data.avatar),
-                                    username: data.username
-                                };
-                            });
-                        }
-                    }
-                });
-
-                var films = new Bloodhound({
-                    datumTokenizer: function(d) {
-                        return Bloodhound.tokenizers.whitespace(title);
-                    },
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    remote: {
-                        url: '/api/tmdb/%QUERY',
-                        filter: function(list) {
-                            return $.map(list.results, function(data) {
-                                return {
-                                    title: data.title ,
-                                    tmdb_id: data.id,
-                                    poster: $filter('imageFilter')(data.poster_path,'poster',0),
-                                    release_date: data.release_date.substring(0, 4)
-                                };
-                            });
-                        }
-                    }
-                });
-
-                people.initialize();
-                films.initialize();
-
-                scope.typeaheadOptions = {
-                    hint: true,
-                    highlight: true,
-                    minLength: 1
-                };
-
-                scope.mulitpleData = [
-                {
-                    name: 'people',
-                    displayKey: 'name',
-                    source: people.ttAdapter(),
-                    templates: {
-                      header: '<h3 class="search-title">People</h3>',
-                      suggestion: function (context) {
-                        return '<div>' +context.name+'<span></span></div>'
-                      }
-                    }
-                },
-                {
-                    name: 'films',
-                    displayKey: 'title',
-                    source: films.ttAdapter(),
-                    templates: {
-                      header: '<h3 class="search-title">Films</h3>',
-                      suggestion: function (context) {
-                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" /></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
-                      }
-                    }
-                }
-                ]
-
-                scope.$on('typeahead:autocompleted', searchComplete);
-                scope.$on('typeahead:selected', searchComplete);
-                
-                function searchComplete(event, suggestion, dataset){
-
-                  if(dataset === 'people'){
-                    $state.go('root.user.filmkeep', {username: suggestion.username});
-                  }
-
-                  if(dataset === 'films'){
-                    $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
-                    
-                  }
-                  scope.search.query = null;
-
-                }
-
-                
-
-            }
-
-        }
-    }
-  ]);
 /*global _ */
 /*global moment*/
 
@@ -883,6 +765,124 @@ var aeReview = angular.module('ae-review', [
     }
 ])
 
+
+  'use strict';
+
+  angular.module('search', [
+])
+
+  .directive('search', ['$document','$filter','$state',
+    function($document,$filter,$state){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/search.tmpl.html',
+            link: function(scope, element, attrs) {
+
+              scope.search = {};
+              scope.search.query = null;  
+              
+
+                var people = new Bloodhound({
+                    datumTokenizer: function(d) {
+                        return Bloodhound.tokenizers.whitespace(title);
+                    },
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '/api/user/search?query=%QUERY',
+                        filter: function(list) {
+                            return $.map(list.results, function(data) {
+                                // if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
+                                
+                                
+                                return {
+                                    name: data.name,
+                                    avatar: $filter('profileFilter')(data.avatar),
+                                    username: data.username
+                                };
+                            });
+                        }
+                    }
+                });
+
+                var films = new Bloodhound({
+                    datumTokenizer: function(d) {
+                        return Bloodhound.tokenizers.whitespace(title);
+                    },
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '/api/tmdb/%QUERY',
+                        filter: function(list) {
+                            return $.map(list.results, function(data) {
+                                return {
+                                    title: data.title ,
+                                    tmdb_id: data.id,
+                                    poster: $filter('imageFilter')(data.poster_path,'poster',0),
+                                    release_date: data.release_date.substring(0, 4)
+                                };
+                            });
+                        }
+                    }
+                });
+
+                people.initialize();
+                films.initialize();
+
+                scope.typeaheadOptions = {
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                };
+
+                scope.mulitpleData = [
+                {
+                    name: 'people',
+                    displayKey: 'name',
+                    source: people.ttAdapter(),
+                    templates: {
+                      header: '<h3 class="search-title">People</h3>',
+                      suggestion: function (context) {
+                        return '<div>' +context.name+'<span></span></div>'
+                      }
+                    }
+                },
+                {
+                    name: 'films',
+                    displayKey: 'title',
+                    source: films.ttAdapter(),
+                    templates: {
+                      header: '<h3 class="search-title">Films</h3>',
+                      suggestion: function (context) {
+                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" /></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
+                      }
+                    }
+                }
+                ]
+
+                scope.$on('typeahead:autocompleted', searchComplete);
+                scope.$on('typeahead:selected', searchComplete);
+                
+                function searchComplete(event, suggestion, dataset){
+
+                  if(dataset === 'people'){
+                    $state.go('root.user.filmkeep', {username: suggestion.username});
+                  }
+
+                  if(dataset === 'films'){
+                    $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
+                    
+                  }
+                  scope.search.query = null;
+
+                }
+
+                
+
+            }
+
+        }
+    }
+  ]);
 
   'use strict';
 
@@ -1192,59 +1192,6 @@ var aeReview = angular.module('ae-review', [
   
   ;
 
-
-  'use strict';
-
-  angular.module('review', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.review', {
-      url: '/r/{reviewId}',
-      title: 'Review',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/review.tmpl.html',
-          controller: 'ReviewCtrl'
-        }
-      },
-      resolve: {
-        ReviewLoad: function($stateParams,ReviewService) {
-         
-          return ReviewService.getReview($stateParams.reviewId)
-          
-        }, 
-      }
-    });
-  }])
-
-  .controller('ReviewCtrl', ['$scope','msgBus','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
-    function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
-            msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
-            $scope.rating_types = ReviewLoad.rating_types;
-            $scope.review = ReviewLoad.review;
-            $scope.me = me;
-            
-            // console.log($scope.review);
-            $scope.toPercent = function(num){
-                return num/2000 * 100;
-            }
-
-            $scope.$on('watchlist::addremove', function(event, film_id) {
-
-              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
-                    
-            });
-
-            $rootScope.$on('review::updated',function(e,review){
-              $scope.review.notes = review.notes;
-            })
-
-    }]) 
-
-  
-  ;
-
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {
 
@@ -1318,6 +1265,59 @@ angular.module('AlertBox', [])
         };
 
     } ] );
+
+  'use strict';
+
+  angular.module('review', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.review', {
+      url: '/r/{reviewId}',
+      title: 'Review',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/review.tmpl.html',
+          controller: 'ReviewCtrl'
+        }
+      },
+      resolve: {
+        ReviewLoad: function($stateParams,ReviewService) {
+         
+          return ReviewService.getReview($stateParams.reviewId)
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('ReviewCtrl', ['$scope','msgBus','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
+            msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
+            $scope.rating_types = ReviewLoad.rating_types;
+            $scope.review = ReviewLoad.review;
+            $scope.me = me;
+            
+            // console.log($scope.review);
+            $scope.toPercent = function(num){
+                return num/2000 * 100;
+            }
+
+            $scope.$on('watchlist::addremove', function(event, film_id) {
+
+              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
+                    
+            });
+
+            $rootScope.$on('review::updated',function(e,review){
+              $scope.review.notes = review.notes;
+            })
+
+    }]) 
+
+  
+  ;
+
 
 angular.module('Api', ['ngResource'])
 
@@ -2010,42 +2010,6 @@ angular.module('ReviewService', ['Api'])
 
   'use strict';
 
-  angular.module('watchlist', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.user.watchlist', {
-      url: '/watchlist',
-      title: 'watchlist',
-      views: {
-        'page-child' : {
-          templateUrl: '/assets/templates/watchlist.tmpl.html',
-          controller: 'WatchlistCtrl'
-        }
-      },
-      
-    });
-  }])
-
-  .controller('WatchlistCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
-    function ($scope,msgBus, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
-        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Watchlist" );
-
-        watchlistApiService
-            .getWatchlist(page_user.id).then(function(response) {
-
-                $scope.watchlist_items = response.results;
-            });
-        
-
-    }]) 
-
-  
-  ;
-
-
-  'use strict';
-
   angular.module('settings', [
   ])
 
@@ -2242,6 +2206,42 @@ angular.module('ReviewService', ['Api'])
           }
         }
       ])
+
+  
+  ;
+
+
+  'use strict';
+
+  angular.module('watchlist', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.user.watchlist', {
+      url: '/watchlist',
+      title: 'watchlist',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/watchlist.tmpl.html',
+          controller: 'WatchlistCtrl'
+        }
+      },
+      
+    });
+  }])
+
+  .controller('WatchlistCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
+    function ($scope,msgBus, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
+        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Watchlist" );
+
+        watchlistApiService
+            .getWatchlist(page_user.id).then(function(response) {
+
+                $scope.watchlist_items = response.results;
+            });
+        
+
+    }]) 
 
   
   ;

@@ -5,49 +5,64 @@ ul.compare-avatars, ul.compare-avatars li{
 }
 
 ul.compare-avatars{
+  margin-bottom: 1em;
 
   li{
     float:left;
     margin-right:.5em;
 
+    .initials{
+      background:rgba(0,0,0,.3);
+
+    }
     img{
       opacity: .3;
       filter: grayscale(100%);
       display: block;
     }
 
-    &.active img{
+    &.active{
+
+      img{
       opacity: 1;
       filter: none;
+      }
+
+      .initials{
+        background:@filmkeep-red;
+      }
     }
+
+
   }
 }
 
 .compare-container{
   padding:1em;
+  background:@filmkeep-beige;
 
   .progress{
-    background-color:#ececec;
+    background-color:rgba(0,0,0,.1);
   }
 }
 
 .compare0 .progress-bar{
-  background-color:#4FCEE0;
+  background-color:@filmkeep-red;
 }
 
 
 .compare1 .progress-bar{
-  background-color:#F3635E;
+  background-color:@filmkeep-blue;
 }
 
 
 .compare2 .progress-bar{
-  background-color:#8FCC00;
+  background-color:@filmkeep-orange;
 }
 
 
 .compare3 .progress-bar{
-  background-color:#CC27B2;
+  background-color:@filmkeep-sage;
 }
 
 .progress-bar{

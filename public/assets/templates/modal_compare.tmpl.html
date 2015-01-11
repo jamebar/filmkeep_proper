@@ -4,7 +4,8 @@
   <span ng-show="showcompare">
     <ul class="compare-avatars clearfix">
       <li ng-repeat="review in compares | limitTo: 6" ng-class="{active:review.active}">
-        <a ng-click="review.active = !review.active"><img ng-src="%%review.user.avatar | profileFilter%%" width="60" height="60" class="round-corners avatar" width="50" height="50" /></a> %%review.user.name%%</li>
+        <avatar class="avatar" info="review.user" disable-click="true" ng-click="review.active = !review.active"></avatar>
+      </li>
     </ul>
 
     <div class="clearfix">
