@@ -848,12 +848,20 @@ a.action{
 
 
 .dot{
-  width: 7px;
-  height: 7px;
+  width: 5px;
+  height: 5px;
   display: inline-block;
   background: rgba(255,255,255,.3);
   border-radius: 5px;
   position: absolute;
   top: 50%;
-  margin-top: -3px;
+  margin-top: -2px;
+}
+
+@media only screen and (min-width: 40em){
+  .dot{
+    width: 7px;
+    height: 7px;
+    margin-top: -3px;
+  }
 }
