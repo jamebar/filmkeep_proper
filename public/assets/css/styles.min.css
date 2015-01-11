@@ -637,6 +637,18 @@ textarea {
 .friends-sidebar img {
   width: 60px;
 }
+.sidebar-item > h3 {
+  color: rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  font-family: 'Volkhov', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-size: .9em;
+}
+.sidebar-item {
+  padding-top: 1em;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 3em;
+}
 .info-wrapper {
   max-width: 800px;
   margin: 0 auto;
@@ -1324,14 +1336,6 @@ a.action:hover {
 }
 .watchlist-btn .glyphicon {
   font-size: 1em;
-}
-.sidebar-item {
-  padding-top: 1em;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  margin-bottom: 3em;
-}
-.sidebar-item a h3 {
-  color: #7fb5b7;
 }
 .watchlist-page .film-object {
   float: left;
