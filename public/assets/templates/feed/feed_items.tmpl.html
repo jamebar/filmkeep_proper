@@ -28,13 +28,12 @@
                 <p type="rating.rating_type" rating-type-label></p>
                 <div class="progress" >
                   <div class="progress-bar" role="progressbar" aria-valuenow="%%rating.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating.value)%%%;">
-                    
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="feed-review-notes" >%%activity.object.notes%%</div>
+          <div class="feed-review-notes" >%%activity.object.notes | limitTo : 100%%%%activity.object.notes.length > 100 ? "..." : ""%%</div>
           </span>
           <span ng-if="$index > 0">
             <film-object film="activity.object.film" review="activity.object" horizontal="true" ></film-object>
