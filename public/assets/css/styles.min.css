@@ -1370,6 +1370,7 @@ a.action:hover {
   position: absolute;
   top: 50%;
   margin-top: -2px;
+  margin-left: -3px;
 }
 @media only screen and (min-width: 40em) {
   .dot {
