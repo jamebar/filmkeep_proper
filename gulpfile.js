@@ -54,7 +54,7 @@ gulp.task('scripts', function() {
         'assets/hammer.min.js',
         'assets/bower_components/ryanmullins-angular-hammer/angular.hammer.js',
         'assets/bower_components/angulartics/dist/angulartics.min.js',
-        'assets/bower_components/angulartics/dist/angulartics-ga.min.js'
+        'assets/bower_components/angulartics/dist/angulartics-ga.min.js',
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))

@@ -72,6 +72,12 @@ textarea {
   max-width: 1280px;
   margin: 0px auto;
 }
+ul,
+ul li {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
 /*Constants*/
 .round-corners {
   border-radius: 5px;

@@ -52,7 +52,7 @@
   <div class="review-ratings site-max" ng-repeat="rating_type in rating_types | filter:{new: false}">
     <p type="rating_type" rating-type-label></p>
     <div class="progress" >
-      <span class="dot" title="%%review.film.title%%" ng-repeat="review in review.reviews" ng-style="{'left': (review.ratings[$parent.$index].value/2000)*100 + '%' }"></span>
+      <span class="dot" title="%%r.film.title%%" tooltip="%%r.film.title%%" tooltip-append-to-body="true" ng-repeat="r in review.reviews" tooltip-animation="false" ng-style="{'left': (r.ratings[$parent.$parent.$index].value/2000)*100 + '%' }"></span>
       <div class="progress-bar" role="progressbar" aria-valuenow="%%rating_type.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating_type.value)%%%;">
         
       </div>

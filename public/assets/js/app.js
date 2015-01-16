@@ -23,7 +23,7 @@ angular.module('myApp', [
     'ngTouch',
     'hmTouchEvents',
     'angulartics',
-    'angulartics.google.analytics'
+    'angulartics.google.analytics',
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -126,8 +126,8 @@ angular.module('myApp', [
     }
   
 ])
-.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService',
-    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService) {
+.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService','listsApiService',
+    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService,listsApiService) {
        var reviewModalInstance;
 
        $rootScope.$on('modal::close', function(){
@@ -153,6 +153,15 @@ angular.module('myApp', [
         });
 
 
+
+        $scope.addRemoveToList = function(list_id, film_id, action)
+        {
+          var list = new listsApiService();
+          list.id = list_id;
+          list.$addRemove({film_id:film_id, action: action}).then(function(response){
+            console.log(response);
+          })
+        }
 
         $scope.getReview = function(id) {
             
@@ -203,6 +212,9 @@ angular.module('myApp', [
 
             var me_review = _.remove(response, function(r){ return r.user_id === me.user.id});
             response.unshift(me_review[0]);
+
+            if(angular.isDefined(response[1]))
+              response[1].active = true;
             $scope.compares = response;
 
             $scope.showcompare = true;
@@ -912,8 +924,8 @@ var aeReview = angular.module('ae-review', [
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'msgBus','streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService','filmApiService',
-  function($scope, msgBus,streamApiService,me,ReviewService,reviewApiService,watchlistApiService,filmApiService){
+.controller('feedCtrl', ['$scope', 'msgBus','streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService','filmApiService','listsApiService',
+  function($scope, msgBus,streamApiService,me,ReviewService,reviewApiService,watchlistApiService,filmApiService,listsApiService){
     msgBus.emitMsg('pagetitle::change', 'My Feed' );
     $scope.loading = true;
     $scope.me = me;
@@ -922,6 +934,11 @@ var aeReview = angular.module('ae-review', [
       $scope.rating_types_new = results;
         
     });
+
+    var lists = new listsApiService();
+    lists.$query({with_films:true}).then(function(results){
+      $scope.lists = results.results;
+    })
 
     filmApiService.getNowPlaying().then(function(response){
       $scope.now_playing = response;
@@ -1313,6 +1330,7 @@ angular.module('AlertBox', [])
               $scope.review.notes = review.notes;
             })
 
+
     }]) 
 
   
@@ -1352,6 +1370,31 @@ angular.module('Api', ['ngResource'])
                 },
                 'query': {
                     method: 'GET'
+                }
+            }
+        );
+    }
+)
+
+.factory('listsApiService',
+    function($resource) {
+        return $resource(
+            '/api/lists/:id', {}, // Query parameters
+            {
+                'update': {
+                  method: 'PUT', 
+                  params: {id: '@id'},
+                },
+                'delete': {
+                  method: 'DELETE', 
+                  params: {id: '@id'},
+                },
+                'query': {
+                    method: 'GET'
+                },
+                'addRemove':{
+                    method: 'POST',
+                    params: {film_id: '@film_id'}
                 }
             }
         );

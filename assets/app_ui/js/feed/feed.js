@@ -27,8 +27,8 @@
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'msgBus','streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService','filmApiService',
-  function($scope, msgBus,streamApiService,me,ReviewService,reviewApiService,watchlistApiService,filmApiService){
+.controller('feedCtrl', ['$scope', 'msgBus','streamApiService','me', 'ReviewService','reviewApiService','watchlistApiService','filmApiService','listsApiService',
+  function($scope, msgBus,streamApiService,me,ReviewService,reviewApiService,watchlistApiService,filmApiService,listsApiService){
     msgBus.emitMsg('pagetitle::change', 'My Feed' );
     $scope.loading = true;
     $scope.me = me;
@@ -37,6 +37,11 @@
       $scope.rating_types_new = results;
         
     });
+
+    var lists = new listsApiService();
+    lists.$query({with_films:true}).then(function(results){
+      $scope.lists = results.results;
+    })
 
     filmApiService.getNowPlaying().then(function(response){
       $scope.now_playing = response;

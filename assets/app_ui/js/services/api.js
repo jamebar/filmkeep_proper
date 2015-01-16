@@ -38,6 +38,31 @@ angular.module('Api', ['ngResource'])
     }
 )
 
+.factory('listsApiService',
+    function($resource) {
+        return $resource(
+            '/api/lists/:id', {}, // Query parameters
+            {
+                'update': {
+                  method: 'PUT', 
+                  params: {id: '@id'},
+                },
+                'delete': {
+                  method: 'DELETE', 
+                  params: {id: '@id'},
+                },
+                'query': {
+                    method: 'GET'
+                },
+                'addRemove':{
+                    method: 'POST',
+                    params: {film_id: '@film_id'}
+                }
+            }
+        );
+    }
+)
+
 .factory('watchlistApiService',
     function($http, $q) {
         var data;

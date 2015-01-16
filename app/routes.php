@@ -8,12 +8,14 @@ use GetStream\StreamLaravel\Enrich;
 use Filmkeep\User;
 use Filmkeep\Follower;
 use Filmkeep\Watchlist;
+use Filmkeep\CustomList;
 
 Route::get('/test', function(){
 
-  $gb = new Rotten();
-  $gb_movie = $gb->getMovie('tt0097576');
-  return Response::json($gb_movie);
+  
+  // $gb = new Rotten();
+  // $gb_movie = $gb->getMovie('tt0097576');
+  // return Response::json($gb_movie);
 
   // $feed = FeedManager::getNotificationFeed(118);
   // $enricher = new Enrich();
@@ -95,6 +97,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
     $router->get('user/search', 'UsersController@search');
     $router->resource('user', 'UsersController');
 
+    $router->resource('lists', 'CustomListsController');
     $router->resource('rating_types', 'RatingTypesController');
     $router->get('followers', 'FollowerController@getFollowers');
     $router->post('follow/{follower_id}', 'FollowerController@follow');
@@ -102,6 +105,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
     $router->get('watchlist', 'WatchlistController@index');
     $router->post('watchlist/add-remove', 'WatchlistController@addRemove');
+
 
     $router->get('notifications', 'NotificationsController@index');
     $router->post('notifications/seen', 'NotificationsController@markSeen');

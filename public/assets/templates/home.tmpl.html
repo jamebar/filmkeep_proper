@@ -19,6 +19,15 @@
           </li>
         </ul>
       </div>
+      <div class="sidebar-item lists-sidebar clearfix">
+        <h3>Lists <a class="pull-right " ng-click="newList()"><span class="glyphicon-plus glyphicon"></span> New list</a></h3>
+        <ul>
+          <li ng-repeat="item in lists | limitTo: 6">
+            %%item.name%% (%%item.films.length%%)
+          </li>
+        </ul>
+        <p ng-show="lists.length == 0">Create custom lists of films e.g., favorite christmas films, etc. </p>
+      </div>
       <div class="sidebar-item watchlist-sidebar clearfix">
         <h3>Watchlist <a ui-sref='root.user.watchlist({username: me.user.username})' class="pull-right">view</a></h3>
         <ul>
@@ -27,7 +36,7 @@
             
           </li>
         </ul>
-        <p ng-show="watchlist_items.length ==0">Your watchlist is empty.  You can add any film to your watchlist, just look for the "watchlist" button next to any film poster.</p>
+        <p ng-show="watchlist_items.length ==0">Your watchlist is empty.  You can add any film to your watchlist, just look for the "watchlist" button next to any film poster. </p>
       </div>
 
       <div class="sidebar-item nowplaying-sidebar clearfix">

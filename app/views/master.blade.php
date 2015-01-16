@@ -68,7 +68,12 @@
           <li role="button" class="navbar-btn "><a href="/users/login" target="_self">log in</a></li>
         </ul>
       @endif
-      <a class="navbar-brand" href="@if(Auth::check()) /feed @else/@endif" target="_self" ></a>
+
+      @if(Auth::check())
+      <a class="navbar-brand" ui-sref='root.feed' ></a>
+      @else
+      <a class="navbar-brand" href="/" target="_self" ></a>
+      @endif
       <search></search>
     </div>
 
