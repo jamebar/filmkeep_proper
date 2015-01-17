@@ -483,7 +483,8 @@ label {
   border: none;
 }
 .form-control {
-  padding: 1.5em;
+  padding: 1em;
+  height: 100%;
 }
 .alert-box {
   width: 100%;
