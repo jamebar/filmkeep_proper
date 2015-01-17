@@ -482,6 +482,12 @@ label {
 .navbar-inverse {
   border: none;
 }
+.feed-review-ratings .progress {
+  background-color: #c8bba1;
+}
+.feed-review-ratings .progress-bar {
+  background-color: #d47d55;
+}
 .form-control {
   padding: 1em;
   height: 100%;
