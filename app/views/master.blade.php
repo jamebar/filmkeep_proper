@@ -127,8 +127,8 @@
         @endif
       <!--Error messages from angular -->
       <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>
-        <div ui-view autoscroll="true"  ></div>
-        @yield('content')
+        <div ui-view autoscroll="true" >@yield('content')</div>
+        
                 
         
     </div>
