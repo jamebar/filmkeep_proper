@@ -127,10 +127,8 @@
         @endif
       <!--Error messages from angular -->
       <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>
-        <div ui-view autoscroll="true" >@yield('content')</div>
-        
-                
-        
+        <div ui-view autoscroll="true" ></div>
+        @yield('content')
     </div>
     <div class="container-fluid footer clearfix">
       <div class="row site-max">
@@ -143,10 +141,10 @@
         </div>
         <div class="col-xs-12 col-md-4">
             <ul class="pull-right">
-              <li><a href="/pages/terms-service" target="_self">Terms of service</a></li>
-              <li><a href="/pages/privacy" target="_self">Privacy Policy</a></li>
-              <li><a href="/pages/code-of-conduct" target="_self">Code of Conduct</a></li>
-              <li><a href="/pages/copyright" target="_self">Copyright Policy</a></li>
+              <li><a ui-sref='root.terms'>Terms of service</a></li>
+              <li><a ui-sref='root.privacy' target="_self">Privacy Policy</a></li>
+              <li><a ui-sref='root.code' target="_self">Code of Conduct</a></li>
+              <li><a ui-sref='root.copyright' target="_self">Copyright Policy</a></li>
             </ul>
         </div>
       </div>

@@ -1,6 +1,4 @@
-@extends('master')
 
-@section('content')
 <div class="film-cover-wrapper row-full-width " style="background-image:url(/assets/img/bg/bg-jimmy-stewart-800.jpg)">
   <div class="film-cover full-width-section ">
     <div class="site-max">
@@ -13,10 +11,10 @@
 <div class="row site-max pages">
   <div class="col-xs-12 col-md-8">
     <ul class="terms-nav nav nav-pills">
-      <li><a href="/pages/terms-service" target="_self" >Terms of Service</a></li>
-      <li><a href="/pages/code-of-conduct" target="_self" >Code of Conduct</a></li>
-      <li><a href="/pages/privacy" target="_self" >Privacy Policy</a></li>
-      <li class="active"><a href="/pages/copyright" target="_self" >Copyright Policy</a></li>
+     <li ><a ui-sref='root.terms'>Terms of Service</a></li>
+      <li><a ui-sref='root.code' >Code of Conduct</a></li>
+      <li><a ui-sref='root.privacy'>Privacy Policy</a></li>
+      <li class="active"><a ui-sref='root.copyright'>Copyright Policy</a></li>
     </ul>
 
    <p>Filmkeep respects the intellectual property rights of others and expects its users to do the same. In accordance with the Digital Millennium Copyright Act, the text of which may be found in Section 512(c)(3) of the United States copyright laws (available at <a href="http://www.copyright.gov/title17/92chap5.html">http://www.copyright.gov/title17/92chap5.html</a>), Filmkeep will respond expeditiously to claims of copyright infringement committed using the Filmkeep service that are reported to the Filmkeep Designated Copyright Agent identified in the sample notice below.</p>
@@ -48,4 +46,3 @@
   </div>
   <div class="col-xs-12 col-md-4"></div>
 </div>
-@stop

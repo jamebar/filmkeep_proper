@@ -80,6 +80,53 @@ angular.module('myApp', [
     controller: 'homeCtrl',
     
   });
+
+  $stateProvider.state('root.terms', {
+    url: '/pages/terms-service',
+    views: {
+        'page' : {
+          templateUrl: '/assets/templates/pages/terms-service.tmpl.html',
+          controller: function(msgBus){
+            msgBus.emitMsg('pagetitle::change', 'Terms of Service' );
+          }
+        }
+    }
+  });
+
+  $stateProvider.state('root.privacy', {
+    url: '/pages/privacy',
+    views: {
+        'page' : {
+          templateUrl: '/assets/templates/pages/privacy.tmpl.html',
+          controller: function(msgBus){
+            msgBus.emitMsg('pagetitle::change', 'Privacy Policy' );
+          }
+        }
+      }
+  });
+
+  $stateProvider.state('root.copyright', {
+    url: '/pages/copyright',
+    views: {
+        'page' : {
+          templateUrl: '/assets/templates/pages/copyright.tmpl.html',
+          controller: function(msgBus){
+            msgBus.emitMsg('pagetitle::change', 'Copyright' );
+          }
+        }
+      }
+  });
+  $stateProvider.state('root.code', {
+    url: '/pages/code-of-conduct',
+    views: {
+        'page' : {
+          templateUrl: '/assets/templates/pages/code-of-conduct.tmpl.html',
+          controller: function(msgBus){
+            msgBus.emitMsg('pagetitle::change', 'Code of Conduct' );
+          }
+        }
+      }
+  });
 }])
 .controller('homeCtrl', ['$scope',
     function($scope) {
@@ -87,6 +134,8 @@ angular.module('myApp', [
     }
   
 ])
+
+
 
 .controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService','notificationsApiService',
     function($scope,$rootScope,msgBus,meApiService,notificationsApiService) {
@@ -898,6 +947,54 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
+  angular.module('film', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.film', {
+      url: '/f/{filmId}_{filmSlug}',
+      title: 'Film',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/film.tmpl.html',
+          controller: 'FilmCtrl'
+        }
+      },
+      resolve: {
+        FilmLoad: function($stateParams,filmApiService) {
+         
+          return filmApiService.getFilm($stateParams.filmId);
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
+    function ($scope,msgBus,$stateParams,me,FilmLoad) {
+        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
+        $scope.me = me;
+        FilmLoad.film.film_id = FilmLoad.film.id;
+        $scope.film = FilmLoad.film;
+        $scope.follower_reviews = FilmLoad.follower_reviews;
+
+        
+
+
+        $scope.$on('watchlist::addremove', function(event, film_id) {
+
+          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
+                
+        });
+
+    }]) 
+
+  
+  ;
+
+
+  'use strict';
+
   angular.module('feed', [
   ])
 
@@ -1023,54 +1120,6 @@ var aeReview = angular.module('ae-review', [
     return moment.utc(date).fromNow(true);
   }
 })
-
-  'use strict';
-
-  angular.module('film', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.film', {
-      url: '/f/{filmId}_{filmSlug}',
-      title: 'Film',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/film.tmpl.html',
-          controller: 'FilmCtrl'
-        }
-      },
-      resolve: {
-        FilmLoad: function($stateParams,filmApiService) {
-         
-          return filmApiService.getFilm($stateParams.filmId);
-          
-        }, 
-      }
-    });
-  }])
-
-  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
-    function ($scope,msgBus,$stateParams,me,FilmLoad) {
-        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
-        $scope.me = me;
-        FilmLoad.film.film_id = FilmLoad.film.id;
-        $scope.film = FilmLoad.film;
-        $scope.follower_reviews = FilmLoad.follower_reviews;
-
-        
-
-
-        $scope.$on('watchlist::addremove', function(event, film_id) {
-
-          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
-                
-        });
-
-    }]) 
-
-  
-  ;
-
 
   'use strict';
 

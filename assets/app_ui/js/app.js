@@ -80,6 +80,53 @@ angular.module('myApp', [
     controller: 'homeCtrl',
     
   });
+
+  $stateProvider.state('root.terms', {
+    url: '/pages/terms-service',
+    views: {
+        'page' : {
+          templateUrl: '/assets/templates/pages/terms-service.tmpl.html',
+          controller: function(msgBus){
+            msgBus.emitMsg('pagetitle::change', 'Terms of Service' );
+          }
+        }
+    }
+  });
+
+  $stateProvider.state('root.privacy', {
+    url: '/pages/privacy',
+    views: {
+        'page' : {
+          templateUrl: '/assets/templates/pages/privacy.tmpl.html',
+          controller: function(msgBus){
+            msgBus.emitMsg('pagetitle::change', 'Privacy Policy' );
+          }
+        }
+      }
+  });
+
+  $stateProvider.state('root.copyright', {
+    url: '/pages/copyright',
+    views: {
+        'page' : {
+          templateUrl: '/assets/templates/pages/copyright.tmpl.html',
+          controller: function(msgBus){
+            msgBus.emitMsg('pagetitle::change', 'Copyright' );
+          }
+        }
+      }
+  });
+  $stateProvider.state('root.code', {
+    url: '/pages/code-of-conduct',
+    views: {
+        'page' : {
+          templateUrl: '/assets/templates/pages/code-of-conduct.tmpl.html',
+          controller: function(msgBus){
+            msgBus.emitMsg('pagetitle::change', 'Code of Conduct' );
+          }
+        }
+      }
+  });
 }])
 .controller('homeCtrl', ['$scope',
     function($scope) {
@@ -87,6 +134,8 @@ angular.module('myApp', [
     }
   
 ])
+
+
 
 .controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService','notificationsApiService',
     function($scope,$rootScope,msgBus,meApiService,notificationsApiService) {

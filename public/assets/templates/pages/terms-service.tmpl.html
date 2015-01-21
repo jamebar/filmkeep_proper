@@ -1,11 +1,8 @@
-@extends('master')
-
-@section('content')
 <div class="film-cover-wrapper row-full-width " style="background-image:url(/assets/img/bg/bg-jimmy-stewart-800.jpg)">
   <div class="film-cover full-width-section ">
     <div class="site-max">
         <div class="fc-info">
-          <h2>Terms of Service</h2>
+          <h2>Filmkeep Terms of Service</h2>
         </div>
       </div>
   </div>
@@ -14,10 +11,10 @@
   <div class="col-xs-12 col-md-8">
     
     <ul class="terms-nav nav nav-pills">
-      <li class="active"><a href="/pages/terms-service" target="_self" >Terms of Service</a></li>
-      <li><a href="/pages/code-of-conduct" target="_self" >Code of Conduct</a></li>
-      <li><a href="/pages/privacy" target="_self" >Privacy Policy</a></li>
-      <li><a href="/pages/copyright" target="_self" >Copyright Policy</a></li>
+      <li class="active"><a ui-sref='root.terms'>Terms of Service</a></li>
+      <li><a ui-sref='root.code' >Code of Conduct</a></li>
+      <li><a ui-sref='root.privacy'>Privacy Policy</a></li>
+      <li><a ui-sref='root.copyright'>Copyright Policy</a></li>
     </ul>
 
     <p>Filmkeep’s products and services are provided by Filmkeep LLC (“Filmkeep”). These Terms of Service ("Terms") govern your access to and use of Filmkeep's website, products, and services ("Services"). Please read these Terms carefully, and contact us if you have any questions. By accessing or using our Services, you agree to be bound by these Terms, Our Copyright Policy, and by our Privacy Policy whether you are a registered user of the Services or a non-registered user just browsing (collectively “Users”).</p>
@@ -96,4 +93,3 @@
   </div>
   <div class="col-xs-12 col-md-4"></div>
 </div>
-@stop
