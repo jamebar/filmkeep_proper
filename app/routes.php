@@ -137,6 +137,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
 });
 
+Route::get('/pages/{page}', 'HomeController@pages');
 Route::any('/', ['as' =>'home', 'uses'=> 'HomeController@index']);
 Route::any('{all}', ['uses'=> 'HomeController@index'])->where('all', '.*');
 //

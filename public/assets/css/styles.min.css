@@ -575,6 +575,14 @@ fieldset[disabled] .btn-primary.active {
   border-color: #ccc;
   color: #333;
 }
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  background-color: #d2544c;
+}
+.nav > li > a {
+  padding: 5px 15px;
+}
 ul.compare-avatars,
 ul.compare-avatars li {
   margin: 0;
@@ -1416,4 +1424,30 @@ a.action:hover {
   .empty-feed {
     padding: 3em;
   }
+}
+.pages {
+  margin-bottom: 4em;
+}
+.pages h4 span {
+  text-transform: lowercase;
+  color: #aaa;
+}
+.pages ol li {
+  margin-bottom: 1em;
+}
+.pages ul {
+  margin: 1em;
+}
+.pages ul li {
+  margin-bottom: 1em;
+  margin-left: 1em;
+  list-style: disc;
+}
+.pages ul.terms-nav {
+  margin: 0;
+  margin-bottom: 2em;
+  margin-top: 2em;
+}
+.pages ul.terms-nav li {
+  margin: 0;
 }

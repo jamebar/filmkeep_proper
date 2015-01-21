@@ -38,7 +38,7 @@
       </fieldset>
   </form>
 
-                <!-- <p>By creating an account, I accept Filmkeep's Terms of Service and Privacy Policy.</p> -->
+                <p>By creating an account, I accept Filmkeep's <a href="/pages/terms-service">Terms of Service</a> and <a href="/pages/privacy">Privacy Policy</a>.</p>
                 
                 <p>Already a member? <a href="{{ route('login') }}" target="_self">Sign in here</a></p>
             

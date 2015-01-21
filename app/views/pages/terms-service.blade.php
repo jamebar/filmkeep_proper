@@ -1,0 +1,99 @@
+@extends('master')
+
+@section('content')
+<div class="film-cover-wrapper row-full-width " style="background-image:url(/assets/img/bg/bg-jimmy-stewart-800.jpg)">
+  <div class="film-cover full-width-section ">
+    <div class="site-max">
+        <div class="fc-info">
+          <h2>Terms of Service</h2>
+        </div>
+      </div>
+  </div>
+</div>
+<div class="row site-max pages">
+  <div class="col-xs-12 col-md-8">
+    
+    <ul class="terms-nav nav nav-pills">
+      <li class="active"><a href="/pages/terms-service" target="_self" >Terms of Service</a></li>
+      <li><a href="/pages/code-of-conduct" target="_self" >Code of Conduct</a></li>
+      <li><a href="/pages/privacy" target="_self" >Privacy Policy</a></li>
+      <li><a href="/pages/copyright" target="_self" >Copyright Policy</a></li>
+    </ul>
+
+    <p>Filmkeep’s products and services are provided by Filmkeep LLC (“Filmkeep”). These Terms of Service ("Terms") govern your access to and use of Filmkeep's website, products, and services ("Services"). Please read these Terms carefully, and contact us if you have any questions. By accessing or using our Services, you agree to be bound by these Terms, Our Copyright Policy, and by our Privacy Policy whether you are a registered user of the Services or a non-registered user just browsing (collectively “Users”).</p>
+
+    <p>ANY PARTICIPATION IN THIS SITE WILL CONSTITUTE ACCEPTANCE OF THIS AGREEMENT. IF YOU DO NOT AGREE TO ABIDE BY THESE TERMS IN THEIR ENTIRETY, YOU MAY NOT ACCESS OR USE THE SERVICES.</p>
+
+    <h2><span>1.</span> Using Filmkeep</h2>
+    <h4><span>A.</span> Who can use Filmkeep</h4>
+    <p>You may be required to set up a Filmkeep account in order to access certain features of the Services. You may use our Services only if you can form a binding contract with Filmkeep, and only in compliance with these Terms and all applicable laws. When you create your Filmkeep account, you must provide us with accurate and complete information. Any use or access by anyone under the age of 13 is prohibited. The Services are not directed toward children under 13 years of age, and we do not knowingly collect information from children. If you open an account on behalf of a company, organization, or other entity, then (a) "you" includes you and that entity, and (b) you represent and warrant that you are authorized to grant all permissions and licenses provided in these Terms and bind the entity to these Terms, and that you agree to these Terms on the entity's behalf. Some of our Services may be software that is downloaded to your computer, phone, tablet, or other device. You agree that we may automatically upgrade those Services, and these Terms will apply to such upgrades.</p>
+
+    <h4><span>b.</span> Our license to you</h4>
+    <p>Subject to these Terms and our policies, we grant you a limited, non-exclusive, non-transferable, and revocable license to use our Services.</p>  
+    <h4><span>c.</span> Your Use of the services</h4>
+    <p>You are responsible for your use of the Services and for any consequences thereof, including any information or materials you choose to make available, public or private communications transmitted through the Services (including posts), usernames and passwords that you provide to the Services, including those usernames and passwords provided by you for access to various third party services (e.g., social networking and other accounts that you wish to link with your account on the Services).</p>
+    <p>You will abide by the <a href="/pages/code-of-conduct">Filmkeep Code of Conduct</a> (which may updated from time to time) and all applicable laws in connection with your use of the Services. 
+    You may only use the Services for lawful purposes. You acknowledge that storing, distributing or transmitting unlawful material could expose you to criminal and/or civil liability. You may not download (other than page caching) or modify our Services or any portion of them unless we have provided you with express written consent. You may not make a derivative use of the Services or their contents for any purpose, nor may you download or copy information of Users, or otherwise engage in data mining or similar data gathering.  </p>
+
+    <h2><span>2.</span> Your Content </h2> 
+    <h4><span>a.</span> User-submitted feedback, submissions, postings, and e-mails.</h4>
+    <p>Certain areas on the Services may allow you to provide us or others with photos and other images, commentaries, links, reviews, audio and video, Feedback (defined below), posts, public and private messages or other potential content from you (“User Content”). </p>
+    <p>All User Content must comply with the <a href="/pages/code-of-conduct">Filmkeep Code of Conduct</a>.</p> 
+    <p>Specific rules or additional terms may apply to the submission of certain User Content. These Terms will be provided in connection with those portions of the Services and, while these Terms will apply to all User Content, such additional terms shall supplement the Terms unless expressly provided otherwise. In any event, any User Content you send to us will not be treated as confidential.</p>
+    <p>We are interested in hearing from you regarding your questions or comments about our Services. You may provide suggestions, comments or other feedback about our Services (collectively "Feedback") by writing to support@filmkeep.com. Doing so, you agree that we are free to use them without any restriction or compensation to you. By accepting your submission, Filmkeep does not waive any rights to use similar or related Feedback previously known to Filmkeep, or developed by its employees, or obtained from sources other than you. We regret that we may not be able to respond to Feedback. </p>
+    <h4><span>b.</span> How Filmkeep and other users can use your content</h4>
+    <p>While we do not claim ownership of User Materials, by providing User Content to us or others via the Services you automatically grant Filmkeep and its users a non-exclusive, royalty-free, transferable, sublicensable, worldwide license to use, store, display, reproduce, modify, create derivative works, perform, and distribute your User Content on Filmkeep solely for the purposes of operating, developing, providing, and using the Filmkeep Services. Nothing in these Terms shall restrict other legal rights Filmkeep may have to User Content, for example under other licenses. We reserve the right to remove or modify User Content for any reason, including User Content that we believe violates these Terms or our policies. </p>
+    <h4><span>c.</span> How long we keep your content</h4>
+    <p>Following termination or deactivation of your account, or if you remove any User Content from Filmkeep, we may retain your User Content for a commercially reasonable period of time for backup, archival, or audit purposes. Furthermore, Filmkeep and its users may retain and continue to use, store, display, reproduce, modify, create derivative works, perform, and distribute any of your User Content that other users have stored or shared through Filmkeep.</p>  
+
+    <h2><span>3.</span> Copyright Policy</h2>
+    <p>The Services and the User Content are protected by copyrights, patents, trade secrets or other proprietary rights (“Copyrights”). Some of the characters, branding, logos or images on the Services are also protected as registered or unregistered trademarks, trade names and/or service marks owned by us or others (“Trademarks”). We respect the intellectual property rights of others and ask users of the Services to do the same. You will not infringe the Copyrights, Trademarks or intellectual property rights of us or the owners of Content. The Content, Copyrights or Trademarks may not be used in connection with any other product or service, in any manner that is likely to cause confusion among customers, or in any manner that disparages or discredits us or our affiliates. Filmkeep has adopted and implemented the Filmkeep Copyright Policy in accordance with the Digital Millennium Copyright Act. For more information, please read our Copyright Policy. </p>
+    <h2><span>4.</span> Security</h2>
+    <p>We care about the security of our users. While we work to protect the security of your content and account, Filmkeep cannot guarantee that unauthorized third parties will not be able to defeat our security measures. Please notify us immediately of any compromise or unauthorized use of your account.</p> 
+    <h2><span>5.</span> Third-Party Links, Sites, and Services</h2>
+    <p>Our Services may contain links to third-party websites, advertisers, services, special offers, or other events or activities that are not owned or controlled by Filmkeep. We do not endorse or assume any responsibility for any such third-party sites, information, materials, products, or services. If you access any third party website, service, or content from Filmkeep, you do so at your own risk and you agree that Filmkeep will have no liability arising from your use of or access to any third-party website, service, or content.  </p>
+    <h2><span>6.</span> Termination</h2>
+    <p>Filmkeep may terminate or suspend this license at any time, with or without cause or notice to you. Upon termination, you continue to be bound by these Terms.  </p>
+    <h2><span>7.</span> Indemnity</h2>
+    <p>If you use our Services for commercial purposes in violation of Section 1(c), as determined in our sole and absolute discretion, you agree to indemnify and hold harmless Filmkeep and its officers, directors, employees and agents, from and against any claims, suits, proceedings, disputes, demands, liabilities, damages, losses, costs and expenses, including, without limitation, reasonable legal and accounting fees (including costs of defense of claims, suits or proceedings brought by third parties), in any way related to (a) your access to or use of our Services, (b) your User Content, or (c) your breach of any of these Terms.  </p>
+    <h2><span>8.</span> Disclaimers</h2>
+    <p>The Services and all included content are provided on an "as is" basis without warranty of any kind, whether express or implied.</p>
+     
+    <p>FILMKEEP SPECIFICALLY DISCLAIMS ANY AND ALL WARRANTIES AND CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT, AND ANY WARRANTIES ARISING OUT OF COURSE OF DEALING OR USAGE OF TRADE.</p>
+    <p>Filmkeep takes no responsibility and assumes no liability for any User Content that you or any other user or third party posts or transmits using our Services. You understand and agree that you may be exposed to User Content that is inaccurate, objectionable, inappropriate for children, or otherwise unsuited to your purpose.</p>  
+
+    <h2><span>9.</span> Limitation of Liability</h2>
+    <p>TO THE MAXIMUM EXTENT PERMITTED BY LAW, FILMKEEP SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOOD-WILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM (A) YOUR ACCESS TO OR USE OF OR INABILITY TO ACCESS OR USE THE SERVICES; (B) ANY CONDUCT OR CONTENT OF ANY THIRD PARTY ON THE SERVICES, INCLUDING WITHOUT LIMITATION, ANY DEFAMATORY, OFFENSIVE OR ILLEGAL CONDUCT OF OTHER USERS OR THIRD PARTIES; OR (C) UNAUTHORIZED ACCESS, USE OR ALTERATION OF YOUR TRANSMISSIONS OR CONTENT. IN NO EVENT SHALL FILMKEEP'S AGGREGATE LIABILITY FOR ALL CLAIMS RELATING TO THE SERVICES EXCEED ONE HUNDRED U.S. DOLLARS (U.S. $100.00).  </p>
+    <h2><span>10.</span> Arbitration </h2> 
+    <p>For any dispute you have with Filmkeep, you agree to first contact us and attempt to resolve the dispute with us informally. If Filmkeep has not been able to resolve the dispute with you informally, we each agree to resolve any claim, dispute, or controversy (excluding claims for injunctive or other equitable relief) arising out of or in connection with or relating to these Terms by binding arbitration by the American Arbitration Association ("AAA") under the Commercial Arbitration Rules and Supplementary Procedures for Consumer Related Disputes then in effect for the AAA, except as provided herein. Unless you and Filmkeep agree otherwise, the arbitration will be conducted in the county where you reside. Each party will be responsible for paying any AAA filing, administrative and arbitrator fees in accordance with AAA rules. The award rendered by the arbitrator shall include costs of arbitration, reasonable attorneys' fees and reasonable costs for expert and other witnesses, and any judgment on the award rendered by the arbitrator may be entered in any court of competent jurisdiction. Nothing in this Section shall prevent either party from seeking injunctive or other equitable relief from the courts for matters related to data security, intellectual property or unauthorized access to the Service. ALL CLAIMS MUST BE BROUGHT IN THE PARTIES' INDIVIDUAL CAPACITY, AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY PURPORTED CLASS OR REPRESENTATIVE PROCEEDING, AND, UNLESS WE AGREE OTHERWISE, THE ARBITRATOR MAY NOT CONSOLIDATE MORE THAN ONE PERSON'S CLAIMS. YOU AGREE THAT, BY ENTERING INTO THESE TERMS, YOU AND FILMKEEP ARE EACH WAIVING THE RIGHT TO A TRIAL BY JURY OR TO PARTICIPATE IN A CLASS ACTION.  </p>
+    <h2><span>11.</span> Class Action Waiver</h2>
+    <p>The parties agree that they will resolve their disputes on an individual basis. Any claims brought under this agreement must be brought in the parties' individual capacity, and not as a plaintiff or class member in any purported class, collective, or representative proceeding. This agreement also prevents any party from participating in a class action (existing or future) that was brought by any other party. Instead, the parties agree to resolve their disputes under this agreement on an individual basis. </p>
+    <h2><span>12.</span> Claims of infringement</h2>
+    <p>If you believe that any content appearing on the Services infringes your copyright rights, we want to hear from you. Please forward the following information in writing to the Copyright Agent at the address listed below:</p>
+    <ul>
+      <li>your name, address, telephone number, and e-mail address;</li>
+      <li>a description of the copyrighted work that you claim has been infringed;</li>
+      <li>a description of each place where alleged infringing material is located;</li>
+      <li>a statement by you that you have a good faith belief that the disputed use has not been authorized by you, your agent, or the law;</li>
+      <li>your electronic or physical signature or the electronic or physical signature of the person authorized to act on your behalf; and</li>
+    a statement by you made under penalty of perjury, that the information in your notice is accurate, that you are the copyright owner or authorized to act on the copyright owner’s behalf.</li>
+
+      <p>Copyright Agent<br>
+          Filmkeep LLC<br>
+          18700 Silent Water Way<br>
+          Pflugerville, TX 94103</p>
+      </li>
+    </ul>
+    <p>Email: <a href="mailto:support@filmkeep.com">support@filmkeep.com</a></p>
+    <h2><span>13.</span> General Terms </h2> 
+    <p>Notification Procedures and changes to these Terms. Filmkeep reserves the right to determine the form and means of providing notifications to you, and you agree to receive legal notices electronically if we so choose. We may revise these Terms from time to time and the most current version will always be posted on our website. If a revision, in our sole discretion, is material we will notify you. By continuing to access or use the Services after revisions become effective, you agree to be bound by the revised Terms. If you do not agree to the new terms, please stop using the Services. </p>
+    <p>Assignment. These Terms, and any rights and licenses granted hereunder, may not be transferred or assigned by you, but may be assigned by Filmkeep without restriction. Any attempted transfer or assignment in violation hereof shall be null and void.</p>
+    <p>Entire Agreement/Severability. These Terms, together with the Privacy Policy and any amendments and any additional agreements you may enter into with Filmkeep in connection with the Services, shall constitute the entire agreement between you and Filmkeep concerning the Services. If any provision of these Terms is deemed invalid, then that provision will be limited or eliminated to the minimum extent necessary, and the remaining provisions of these Terms will remain in full force and effect.</p>
+    <p>No Waiver. No waiver of any term of these Terms shall be deemed a further or continuing waiver of such term or any other term, and Filmkeep's failure to assert any right or provision under these Terms shall not constitute a waiver of such right or provision.</p>
+
+    <p>Last updated on January 20, 2015</p>
+
+  </div>
+  <div class="col-xs-12 col-md-4"></div>
+</div>
+@stop

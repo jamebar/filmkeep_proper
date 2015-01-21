@@ -127,16 +127,27 @@
         @endif
       <!--Error messages from angular -->
       <alert-box box-class="alert alert-box radius " alert-class="alert" warning-class="warning" notice-class="success" class="admin-alert "></alert-box>
-        
+        <div ui-view autoscroll="true"  ></div>
         @yield('content')
                 
-        <div ui-view autoscroll="true"  ></div>
+        
     </div>
     <div class="container-fluid footer clearfix">
       <div class="row site-max">
-        <div class="col-xs-12">
-            <h4>Filmkeep 2014</h4>
+        <div class="col-xs-12 col-md-8">
+            <h4>Filmkeep</h4>
+            <p>Easily create customizable film ratings that combine the simplicity of a 5-star score with the depth of a full review</p>
+            <small>&copy; 2015 Filmkeep. All rights reserved.</small>
+            <p></p>
             <p>This product uses the TMDb API but is not endorsed or certified by TMDb.<p>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <ul class="pull-right">
+              <li><a href="/pages/terms-service">Terms of service</a></li>
+              <li><a href="/pages/privacy">Privacy Policy</a></li>
+              <li><a href="/pages/code-of-conduct">Code of Conduct</a></li>
+              <li><a href="/pages/copyright">Copyright Policy</a></li>
+            </ul>
         </div>
       </div>
     </div>

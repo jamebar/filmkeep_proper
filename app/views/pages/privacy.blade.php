@@ -1,0 +1,80 @@
+@extends('master')
+
+@section('content')
+<div class="film-cover-wrapper row-full-width " style="background-image:url(/assets/img/bg/bg-jimmy-stewart-800.jpg)">
+  <div class="film-cover full-width-section ">
+    <div class="site-max">
+        <div class="fc-info">
+          <h2>Filmkeep Privacy Policy</h2>
+        </div>
+      </div>
+  </div>
+</div>
+<div class="row site-max  pages">
+  <div class="col-xs-12 col-md-8">
+    <ul class="terms-nav nav nav-pills">
+      <li><a href="/pages/terms-service" target="_self" >Terms of Service</a></li>
+      <li><a href="/pages/code-of-conduct" target="_self" >Code of Conduct</a></li>
+      <li class="active"><a href="/pages/privacy" target="_self" >Privacy Policy</a></li>
+      <li><a href="/pages/copyright" target="_self" >Copyright Policy</a></li>
+    </ul>
+
+    <p>Thank you for using Filmkeep! Your privacy is just as important to us as it is to you, so we wrote this policy to help you understand what information we collect, how we use it, and what choices you have. We welcome your questions and comments on this policy.
+    </p>
+
+    <h2>What information do we collect?</h2>
+    <p>We collect information in a few different ways:</p>
+    <h3><span>1.</span> When you give it to us or give us permission to obtain it</h3>
+    <p>When you sign up for or use our products, you voluntarily give us certain information. This can include your name, profile photo, Pins, comments, likes, email address you used to sign up, and any other information you provide us. If you’re using Filmkeep on your mobile device, you can also choose to provide us with location data.</p>
+    <p>You also may give us permission to access your information in other services. For example, you may link your Facebook, Google +, or Twitter account to Filmkeep, which allows us to obtain information from those accounts (like your friends or contacts). The information we get from those services often depends on your settings or their privacy policies, so be sure to check what those are.</p>
+    <h3><span>2.</span> We also get technical information when you use our products</h3>
+    <p>These days, whenever you use a website, mobile application, or other internet service, there’s certain information that almost always gets created and recorded automatically. The same is true when you use our products. Here are some of the types of information we collect:</p>
+    <p><strong>Log data.</strong> When you use Filmkeep, our servers automatically record information (“log data”), including information that your browser sends whenever you visit a website or your mobile app sends when you’re using it. This log data may include your Internet Protocol address, the address of the web pages you visited that had Filmkeep features, browser type and settings, the date and time of your request, how you used Filmkeep, and cookie data.</p>
+    <p><strong>Cookie data</strong>. Depending on how you’re accessing our products, we may use “cookies” (a small text file sent by your computer each time you visit our website, unique to your Filmkeep account or your browser) or similar technologies to record log data. When we use cookies, we may use “session” cookies (that last until you close your browser) or “persistent” cookies (that last until you or your browser delete them). For example, we may use cookies to store your language preferences or other Filmkeep settings so you don‘t have to set them up every time you visit Filmkeep. Some of the cookies we use are associated with your Filmkeep account (including personal information about you, such as the email address you gave us), and other cookies are not.</p>
+    <p><strong>Device information.</strong> In addition to log data, we may also collect information about the device you’re using Filmkeep on, including what type of device it is, what operating system you’re using, device settings, unique device identifiers, and crash data. Whether we collect some or all of this information often depends on what type of device you’re using and its settings. For example, different types of information are available depending on whether you’re using a Mac or a PC, or an iPhone or an Android phone. To learn more about what information your device makes available to us, please also check the policies of your device manufacturer or software provider.</p>
+    <h3><span>3.</span> Our partners and advertisers may share information with us</h3>
+    <p>Sometimes our partners may let us collect information when you use their services, or may share with us the information they collect. For example:</p>
+    <p>Some websites or apps may use Filmkeep features like our filmeters. If so, we may collect log information (described above) from those sites or apps.</p>
+    <p>Online advertisers typically share information with the websites or apps where they run ads to measure and/or improve those ads. We also receive this information, which may include information like whether clicks on ads led to purchases or a list of criteria to use in targeting ads. To learn more about the types of information advertisers may share with us, please see our Help Center.</p>
+    <h2>How do we use the information we collect?</h2>
+    <p>We use the information we collect to provide our services to you and make them better, develop new services, and protect Filmkeep and our users. For example, we may log how often people use two different versions of a service, which can help us understand which version is better.</p>
+    <p>We also use the information we collect to offer you customized content, including:</p>
+    <ul>
+      <li>Suggesting feed items or stories you might like. For example, if you’ve indicated that you’re interested in science fiction films or visited a certain critic’s website that has Filmkeep feature, we may suggest science fiction films, news, or people that we think you might like.</li>
+        <li>Showing you ads you might be interested in.</li>
+    </ul>
+    <p>We also use the information we collect to:</p>
+    <ul>
+      <li>Send you updates (such as when certain activity, like reviews or comments, happens on Filmkeep), newsletters, marketing materials and other information that may be of interest to you. For example, depending on your email notification settings, we may send you weekly updates that include films you may like. You can decide to stop getting these updates by updating your account settings (or through other settings we may provide).</li>
+        <li>Help your friends and contacts find you on Filmkeep. For example, if you sign up using a Facebook account, we may help your Facebook friends find your account on Filmkeep when they first sign up for Filmkeep. Or, we may allow people to search for your account on Filmkeep using your email address.</li>
+        <li>Respond to your questions or comments.</li>
+    </ul>
+    <p>The information we collect may be “personally identifiable” (meaning it can be used to specifically identify you as a unique person) or “non-personally identifiable” (meaning it can’t be used to specifically identify you). We use both types of information, and combinations of both types, as described above. We may use or store information wherever Filmkeep does business, including countries outside your own.</p>
+
+    <h2>What choices do you have about your information?</h2>
+    <p>If you have a Filmkeep account, many of the choices you have on Filmkeep are built directly into the product or your account settings, where you can access and change your information at any time.</p>
+    <p>You may also close your account at any time. When you close your account, we’ll deactivate it and remove your reviews and lists from Filmkeep. We may retain archived copies of your information as required by law or for legitimate business purposes (including to help address fraud and spam).</p>
+    <p>You may have choices available to you through the device or software you use to access Filmkeep. For example:</p>
+    <p>The browser you use may provide you with the ability to control cookies or other types of local data storage.</p>
+    <p>Your mobile device may provide you with choices around how and whether location or other data is shared with us.</p>
+    <p>To learn more about these choices, please see the information provided by the device or software provider.</p>
+    <h2>How and when do we share information?</h2>
+    <p>Filmkeep is a tool people use to discover and share films. When you create public reviews and lists, anyone can view them. You may also provide us with profile page information that anyone can view. The other limited instances where we may share your personal information include:</p>
+    <p>When we have your consent. This includes sharing information with other services (like Facebook, Google +, or Twitter) when you’ve chosen to link to your Filmkeep account to those services or publish your activity on Filmkeep to them. For example, you can choose to publish your reviews to Facebook, Google +, or Twitter.</p>
+    <p>We may employ third party companies or individuals to process personal information on our behalf based on our instructions and in compliance with this Privacy Policy. For example, we may share data with a security consultant to help us get better at identifying spam or with our accountants to make sure we’re keeping the books right. In addition, some of the information we request may be collected by third party providers on our behalf. For more information about the providers we use, please see our Help Center.</p>
+    <p>Online advertisers typically use third party companies to audit the delivery and performance of their ads on websites and apps. We also allow these companies to collect this information on Filmkeep. </p>
+    <p>If we believe that disclosure is reasonably necessary to comply with a law, regulation or legal request; to protect the safety, rights, or property of the public, any person, or Filmkeep; or to detect, prevent, or otherwise address fraud, security or technical issues.</p>
+    <p>We may engage in a merger, acquisition, bankruptcy, dissolution, reorganization, or similar transaction or proceeding that involves the transfer of the information described in this Policy.</p>
+    <p>We may also share aggregated or non-personally identifiable information with our partners, advertisers, or others. For example, we may tell an advertiser on Filmkeep how many people reviewed or listed something they shared, or the percentage of people who click on a review after viewing it.</p>
+    <h2>Our policy on children’s information</h2>
+     <p>Filmkeep is not directed to children under 13. If you learn that your minor child has provided us with personal information without your consent, please contact us.</p>
+    <h2>How do we make changes to this policy?</h2>
+    <p>We may change this policy from time to time, and if we do we’ll post any changes on this page. If you continue to use Filmkeep after those changes are in effect, you agree to the revised policy. If the changes are significant, we may provide more prominent notice or get your consent as required by law.</p>
+
+    <p>Last updated on January 20, 2015</p>
+
+
+  </div>
+  <div class="col-xs-12 col-md-4"></div>
+</div>
+@stop
