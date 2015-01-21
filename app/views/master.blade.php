@@ -143,10 +143,10 @@
         </div>
         <div class="col-xs-12 col-md-4">
             <ul class="pull-right">
-              <li><a href="/pages/terms-service">Terms of service</a></li>
-              <li><a href="/pages/privacy">Privacy Policy</a></li>
-              <li><a href="/pages/code-of-conduct">Code of Conduct</a></li>
-              <li><a href="/pages/copyright">Copyright Policy</a></li>
+              <li><a href="/pages/terms-service" target="_self">Terms of service</a></li>
+              <li><a href="/pages/privacy" target="_self">Privacy Policy</a></li>
+              <li><a href="/pages/code-of-conduct" target="_self">Code of Conduct</a></li>
+              <li><a href="/pages/copyright" target="_self">Copyright Policy</a></li>
             </ul>
         </div>
       </div>
