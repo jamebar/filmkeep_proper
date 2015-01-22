@@ -206,11 +206,20 @@ class ReviewsController extends BaseController {
           
         }
         //add the latest 50 reviews for comparison
-        $reviews = Review::with('ratings','ratings.rating_type','film')
+        $reviews = Review::with('ratings','film')
                             ->where('user_id', $review['user_id'])
                             ->take(50)
                             ->orderBy('created_at', 'desc')
-                            ->get();
+                            ->get()
+                            ->toArray();
+
+        foreach($reviews as &$r){
+          $newratings = [];
+          foreach($r['ratings'] as $rating){
+            $newratings[$rating['rating_type_id']] = $rating;
+          }
+          $r['ratings'] = $newratings;
+        }
 
         $review['reviews'] = $reviews;
         
