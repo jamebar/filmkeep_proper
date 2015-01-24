@@ -5,17 +5,17 @@
   <span class="film-object-content">
     <h3 ng-if="horizontal">%%film.title%%</h3>
     <div class="fo-actions">
-      <a class="action" href=""  tooltip="Watch Trailer" ng-click="getTrailer(film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
-      <a class="action" href=""  tooltip="Review this" ng-click="newReview(film)" ng-if="film.reviewed === 'false'"><span class="glyphicon glyphicon-tasks"></span><!--  <span class="review-label">review</span>  --></a>
+      <a class="action" href=""  tooltip="Watch Trailer" ng-click="getTrailer(film.tmdb_id)"><span class="ficon glyphicon glyphicon-facetime-video"></span></a>
+      <a class="action" href=""  tooltip="Review this" ng-click="newReview(film)" ng-if="film.reviewed === 'false'"><span class="ficon glyphicon glyphicon-tasks"></span><!--  <span class="review-label">review</span>  --></a>
 
       <span ng-if="review">
-        <a class="action" href=""  tooltip="Compare" ng-click="compare(review)" ng-if="review.film.reviewed === 'true' "><span class="icon-torsos-all"></span></a> 
-        <a class="action" href=""  tooltip="Edit review" ng-click="editReview(review.id)" ng-if="review.user_id === me.user.id"><span class="glyphicon glyphicon-pencil" ></span><!-- <span class="hidden-xs">edit</span> --></a> 
+        <a class="action" href=""  tooltip="Compare" ng-click="compare(review)" ng-if="review.film.reviewed === 'true' "><span class="ficon glyphicon glyphicon glyphicon-retweet"></span></a> 
+        <a class="action" href=""  tooltip="Edit review" ng-click="editReview(review.id)" ng-if="review.user_id === me.user.id"><span class="ficon glyphicon glyphicon-pencil" ></span><!-- <span class="hidden-xs">edit</span> --></a> 
 
         <!-- <a ui-sref='root.review({reviewId: activity.object.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a> -->
       </span>
 
-      <a class="action watchlist-btn" ng-click="watchlist(film)" ><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="glyphicon"></span> watchlist</a>
+      <a class="action watchlist-btn" ng-click="watchlist(film)" ><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="ficon glyphicon"></span> watchlist</a>
     </div>
   </span>
 </div>

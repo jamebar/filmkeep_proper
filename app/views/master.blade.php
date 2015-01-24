@@ -28,7 +28,6 @@
 
       ga('create', 'UA-58427686-1', 'auto');
       
-
     </script>
 </head>
 <body >
