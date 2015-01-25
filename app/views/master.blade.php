@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <!-- <link rel="stylesheet" href="/assets/css/vendor.css"> -->
     <!-- <link rel="stylesheet" href="/assets/css/animate.min.css"> -->
-  <link rel="stylesheet" href="/assets/css/styles.min.css?v=1.3">
+  <link rel="stylesheet" href="/assets/css/styles.min.css?v=1.4">
   <link rel="stylesheet" href="/assets/css/filmkeep-font.css">
 
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>

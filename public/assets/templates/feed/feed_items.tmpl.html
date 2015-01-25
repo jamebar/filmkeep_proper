@@ -58,7 +58,7 @@
     
     <div class="clearfix">
       <div ng-repeat="activity in feed_item.activities" class="activity-item" ng-class="{multi: feed_item.activity_count>2}">
-          <film-object film="activity.object.film" type="vertical" ></film-object>
+          <film-object film="activity.object.film" horizontal="true" ></film-object>
       </div>
     </div>
 

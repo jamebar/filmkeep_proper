@@ -331,9 +331,6 @@ ul.filmkeep-list li img {
 .feed-item .avatar {
   margin-left: 0px;
 }
-.feed-item .activity-item {
-  float: left;
-}
 .feed-item .activity-item img {
   display: block;
 }
@@ -1333,6 +1330,9 @@ a.action:hover {
   background: rgba(0, 0, 0, 0.1);
   padding: 1em;
 }
+.film-object.horizontal p {
+  color: rgba(0, 0, 0, 0.3);
+}
 .film-object.horizontal .poster {
   display: block;
   width: 60px;
@@ -1345,6 +1345,10 @@ a.action:hover {
 .film-object.horizontal .film-object-content h3 {
   font-size: 1.1em;
   margin-top: 0px;
+  margin-bottom: 0px;
+}
+feed-items .horizontal {
+  background: none !important;
 }
 .fo-actions {
   margin-top: .5em;

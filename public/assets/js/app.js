@@ -361,6 +361,21 @@ angular.module('myApp', [
   }
 }])
 
+.directive('textMore', [ function() {
+  return {
+    restrict: 'A',
+    transclude: true,
+    scope: {
+      textMore: '@',
+    },
+    template: '%%textMore | limitTo: max_length%% <a ng-click="max_length=1000000" ng-show="textMore.length > max_length ">...more</a><a ng-click="max_length=max" ng-show="textMore.length < max_length && textMore.length > max">{less}</a>',
+    link: function(scope, element,attrs) {
+        scope.max = attrs.max || 100;
+        scope.max_length = scope.max;
+    }
+  }
+}])
+
 .directive('filmObject', ['$rootScope','watchlistApiService','msgBus','meApiService','Slug',function($rootScope,watchlistApiService,msgBus,meApiService,Slug) {
   return {
     restrict: 'E',
@@ -947,54 +962,6 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
-  angular.module('film', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.film', {
-      url: '/f/{filmId}_{filmSlug}',
-      title: 'Film',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/film.tmpl.html',
-          controller: 'FilmCtrl'
-        }
-      },
-      resolve: {
-        FilmLoad: function($stateParams,filmApiService) {
-         
-          return filmApiService.getFilm($stateParams.filmId);
-          
-        }, 
-      }
-    });
-  }])
-
-  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
-    function ($scope,msgBus,$stateParams,me,FilmLoad) {
-        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
-        $scope.me = me;
-        FilmLoad.film.film_id = FilmLoad.film.id;
-        $scope.film = FilmLoad.film;
-        $scope.follower_reviews = FilmLoad.follower_reviews;
-
-        
-
-
-        $scope.$on('watchlist::addremove', function(event, film_id) {
-
-          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
-                
-        });
-
-    }]) 
-
-  
-  ;
-
-
-  'use strict';
-
   angular.module('feed', [
   ])
 
@@ -1120,6 +1087,127 @@ var aeReview = angular.module('ae-review', [
     return moment.utc(date).fromNow(true);
   }
 })
+
+  'use strict';
+
+  angular.module('film', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.film', {
+      url: '/f/{filmId}_{filmSlug}',
+      title: 'Film',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/film.tmpl.html',
+          controller: 'FilmCtrl'
+        }
+      },
+      resolve: {
+        FilmLoad: function($stateParams,filmApiService) {
+         
+          return filmApiService.getFilm($stateParams.filmId);
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
+    function ($scope,msgBus,$stateParams,me,FilmLoad) {
+        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
+        $scope.me = me;
+        FilmLoad.film.film_id = FilmLoad.film.id;
+        $scope.film = FilmLoad.film;
+        $scope.follower_reviews = FilmLoad.follower_reviews;
+
+        
+
+
+        $scope.$on('watchlist::addremove', function(event, film_id) {
+
+          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
+                
+        });
+
+    }]) 
+
+  
+  ;
+
+angular.module('AlertBox', [])
+    .service('AlertService', [ '$timeout', function($timeout) {
+
+        this.delay = 2000;
+        
+        this.alerts = [];
+        this.warnings = [];
+        this.notices = []
+
+        this.setCloseDelay = function(delay) {
+            this.delay = delay;
+        }
+        
+        this.removeMessage = function(msgType, message, delay) {
+            var tracked = this[msgType + 's'];
+            if (angular.isDefined(delay)) {
+                $timeout(
+                    function() {
+                        var index = tracked.indexOf(message);
+                        if (index > -1) {
+                            tracked.splice(index,1);
+                        }
+                    }, 
+                    this.delay
+                );
+            } else {
+                var index = tracked.indexOf(message);
+                if (index > -1) {
+                    tracked.splice(index,1);
+                }
+            }
+        };
+        
+        this.Message = function(msgType, message) {
+            var key = msgType + 's';
+            this[key].push(message);
+            this.removeMessage(msgType, message, this.delay);
+        };
+        
+        this.Alert = function(message) { this.Message('alert', message); }
+        this.Warning = function(message) { this.Message('warning', message); }
+        this.Notice = function(message) { this.Message('notice', message); }
+
+    } ] )
+    .directive('alertBox', [ 'AlertService', function(AlertService) {
+        return {
+            restrict: 'E',
+            
+            compile: function(element, attrs) {
+                attrs.boxClass = attrs.boxClass || "alert-box";
+                attrs.alertClass = attrs.alertClass || "alert";
+                attrs.noticeClass = attrs.noticeClass || "alert-success";
+                attrs.warningClass = attrs.warningClass || "alert-warning";
+            },
+            
+            scope: {
+                alertClass : "@",
+                warningClass : "@",
+                noticeClass : "@",
+                boxClass : "@"
+            },
+            
+            controller: function($scope) {
+                $scope.alerts = AlertService.alerts;
+                $scope.warnings = AlertService.warnings;
+                $scope.notices = AlertService.notices;
+            },
+            template:  '<div ng-repeat="alert in alerts track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, alertClass]">{{alert}}</div> \
+                        <div ng-repeat="warning in warnings track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, warningClass]">{{warning}}</div> \
+                        <div ng-repeat="notice in notices track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
+        };
+
+    } ] );
 
   'use strict';
 
@@ -1258,79 +1346,6 @@ var aeReview = angular.module('ae-review', [
   
   ;
 
-angular.module('AlertBox', [])
-    .service('AlertService', [ '$timeout', function($timeout) {
-
-        this.delay = 2000;
-        
-        this.alerts = [];
-        this.warnings = [];
-        this.notices = []
-
-        this.setCloseDelay = function(delay) {
-            this.delay = delay;
-        }
-        
-        this.removeMessage = function(msgType, message, delay) {
-            var tracked = this[msgType + 's'];
-            if (angular.isDefined(delay)) {
-                $timeout(
-                    function() {
-                        var index = tracked.indexOf(message);
-                        if (index > -1) {
-                            tracked.splice(index,1);
-                        }
-                    }, 
-                    this.delay
-                );
-            } else {
-                var index = tracked.indexOf(message);
-                if (index > -1) {
-                    tracked.splice(index,1);
-                }
-            }
-        };
-        
-        this.Message = function(msgType, message) {
-            var key = msgType + 's';
-            this[key].push(message);
-            this.removeMessage(msgType, message, this.delay);
-        };
-        
-        this.Alert = function(message) { this.Message('alert', message); }
-        this.Warning = function(message) { this.Message('warning', message); }
-        this.Notice = function(message) { this.Message('notice', message); }
-
-    } ] )
-    .directive('alertBox', [ 'AlertService', function(AlertService) {
-        return {
-            restrict: 'E',
-            
-            compile: function(element, attrs) {
-                attrs.boxClass = attrs.boxClass || "alert-box";
-                attrs.alertClass = attrs.alertClass || "alert";
-                attrs.noticeClass = attrs.noticeClass || "alert-success";
-                attrs.warningClass = attrs.warningClass || "alert-warning";
-            },
-            
-            scope: {
-                alertClass : "@",
-                warningClass : "@",
-                noticeClass : "@",
-                boxClass : "@"
-            },
-            
-            controller: function($scope) {
-                $scope.alerts = AlertService.alerts;
-                $scope.warnings = AlertService.warnings;
-                $scope.notices = AlertService.notices;
-            },
-            template:  '<div ng-repeat="alert in alerts track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, alertClass]">{{alert}}</div> \
-                        <div ng-repeat="warning in warnings track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, warningClass]">{{warning}}</div> \
-                        <div ng-repeat="notice in notices track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
-        };
-
-    } ] );
 
   'use strict';
 
@@ -2102,6 +2117,42 @@ angular.module('ReviewService', ['Api'])
 
   'use strict';
 
+  angular.module('watchlist', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.user.watchlist', {
+      url: '/watchlist',
+      title: 'watchlist',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/watchlist.tmpl.html',
+          controller: 'WatchlistCtrl'
+        }
+      },
+      
+    });
+  }])
+
+  .controller('WatchlistCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
+    function ($scope,msgBus, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
+        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Watchlist" );
+
+        watchlistApiService
+            .getWatchlist(page_user.id).then(function(response) {
+
+                $scope.watchlist_items = response.results;
+            });
+        
+
+    }]) 
+
+  
+  ;
+
+
+  'use strict';
+
   angular.module('settings', [
   ])
 
@@ -2298,42 +2349,6 @@ angular.module('ReviewService', ['Api'])
           }
         }
       ])
-
-  
-  ;
-
-
-  'use strict';
-
-  angular.module('watchlist', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.user.watchlist', {
-      url: '/watchlist',
-      title: 'watchlist',
-      views: {
-        'page-child' : {
-          templateUrl: '/assets/templates/watchlist.tmpl.html',
-          controller: 'WatchlistCtrl'
-        }
-      },
-      
-    });
-  }])
-
-  .controller('WatchlistCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','userApiService','reviewApiService','followApiService','watchlistApiService','followerFactory','me','page_user',
-    function ($scope,msgBus, $stateParams, ReviewService, userApiService, reviewApiService, followApiService, watchlistApiService, followerFactory,  me, page_user) {
-        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Watchlist" );
-
-        watchlistApiService
-            .getWatchlist(page_user.id).then(function(response) {
-
-                $scope.watchlist_items = response.results;
-            });
-        
-
-    }]) 
 
   
   ;
