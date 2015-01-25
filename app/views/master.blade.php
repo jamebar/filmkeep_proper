@@ -73,7 +73,7 @@
       @else
       <a class="navbar-brand" href="/" target="_self" ></a>
       @endif
-      <search></search>
+      <search ></search>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -140,6 +140,7 @@
         </div>
         <div class="col-xs-12 col-md-4">
             <ul class="pull-right">
+              <li><a ng-click="featureList()">Feature List</a></li>
               <li><a ui-sref='root.terms'>Terms of service</a></li>
               <li><a ui-sref='root.privacy' target="_self">Privacy Policy</a></li>
               <li><a ui-sref='root.code' target="_self">Code of Conduct</a></li>

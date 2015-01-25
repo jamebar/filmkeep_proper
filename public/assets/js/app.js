@@ -137,8 +137,8 @@ angular.module('myApp', [
 
 
 
-.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService','notificationsApiService',
-    function($scope,$rootScope,msgBus,meApiService,notificationsApiService) {
+.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService','notificationsApiService','$modal','wtfApiService',
+    function($scope,$rootScope,msgBus,meApiService,notificationsApiService,$modal,wtfApiService) {
       // console.log(me);
       
       msgBus.onMsg('user::loaded', function(e, data){
@@ -172,11 +172,27 @@ angular.module('myApp', [
         $scope.notif_new = 0;
       }
 
+      $scope.featureList = function(){
+          $scope.featurePreloader = true;
+          var featureInstance = $modal.open({
+                scope: $scope,
+                templateUrl: '/assets/templates/modal_wtf.tmpl.html',
+          
+            });
+
+          wtfApiService.getWtf().then(function(response){
+            var results = response.results.split('|');
+            $scope.todos = results[0].split(',');
+            $scope.done = results[1].split(',');
+            $scope.featurePreloader = false;
+          });
+        }
+
     }
   
 ])
-.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService','listsApiService',
-    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService,listsApiService) {
+.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService','listsApiService','wtfApiService',
+    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService,listsApiService,wtfApiService) {
        var reviewModalInstance;
 
        $rootScope.$on('modal::close', function(){
@@ -230,6 +246,8 @@ angular.module('myApp', [
           
             });
         }
+
+        
         
         $scope.compare = function(obj){
           $scope.showcompare = false;
@@ -368,7 +386,7 @@ angular.module('myApp', [
     scope: {
       textMore: '@',
     },
-    template: '%%textMore | limitTo: max_length%% <a ng-click="max_length=1000000" ng-show="textMore.length > max_length ">...more</a><a ng-click="max_length=max" ng-show="textMore.length < max_length && textMore.length > max">{less}</a>',
+    template: '%%textMore | limitTo: max_length%%<a ng-click="max_length=1000000" ng-show="textMore.length > max_length ">... read more</a><a ng-click="max_length=max" ng-show="textMore.length < max_length && textMore.length > max"> <i class="glyphicon glyphicon-chevron-left" style="font-size:.8em"></i> less </a>',
     link: function(scope, element,attrs) {
         scope.max = attrs.max || 75;
         scope.max_length = scope.max;
@@ -382,13 +400,14 @@ angular.module('myApp', [
     scope:{
       film: '=film',
       review: '=review',
+      horizontal: '@'
     },
     replace: true,
     templateUrl: '/assets/templates/film_object.tmpl.html',
     link: function(scope, element,attrs) {
 
         scope.me = meApiService.meData();
-        scope.horizontal = attrs.horizontal || false;
+
 
         scope.watchlist = function(obj)
         {
@@ -1539,6 +1558,61 @@ angular.module('Api', ['ngResource'])
         }
 })
 
+.factory('wtfApiService',
+    function($http, $q) {
+        var data;
+
+        return({
+            getWtf: getWtf,
+        });
+
+        
+
+        function getWtf() {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/wtf",
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+
+        // ---
+        // PRIVATE METHODS.
+        // ---
+
+
+        // I transform the error response, unwrapping the application dta from
+        // the API response payload.
+        function handleError( response ) {
+
+            // The API response from the server should be returned in a
+            // nomralized format. However, if the request was not handled by the
+            // server (or what not handles properly - ex. server error), then we
+            // may have to normalize it on our end, as best we can.
+            if (
+                ! angular.isObject( response.data ) ||
+                ! response.data.message
+                ) {
+
+                return( $q.reject( "An unknown error occurred." ) );
+
+            }
+
+            // Otherwise, use expected error message.
+            return( $q.reject( response.data.message ) );
+
+        }
+
+        function handleSuccess( response ) {
+            return( response.data );
+
+        }
+})
+
 .factory('notificationsApiService',
     function($http, $q) {
         var data;
@@ -2346,6 +2420,8 @@ angular.module('ReviewService', ['Api'])
 
                 $scope.watchlist_items = response.results;
             });
+
+        $scope.htoggle = true;
         
 
     }]) 

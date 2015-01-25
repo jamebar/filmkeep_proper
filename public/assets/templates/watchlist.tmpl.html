@@ -1,6 +1,11 @@
 <h3>Watchlist</h3>
 <p ng-if="watchlist_items.length < 1">There are no items on this watchlist yet</p>
+<div class="btn-group" role="group" aria-label="...">
+  <button ng-click="htoggle = true" type="button" ng-class="{active: htoggle== false,disabled:htoggle==true}" class="btn btn-default"><i class="glyphicon glyphicon-th-list"></i></button>
+  <button ng-click="htoggle = false" type="button" ng-class="{active: htoggle== true,disabled:htoggle==false}" class="btn btn-default"><i class="glyphicon glyphicon-th"></i></button>
+</div>
+
 <div class="watchlist-page">
-  <film-object film="w.film" ng-repeat="w in watchlist_items"></film-object>
+  <film-object film="w.film" ng-repeat="w in watchlist_items" horizontal="%%htoggle%%" ></film-object>
 </div>
 <div class="space-bottom"></div>

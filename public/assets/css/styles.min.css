@@ -423,6 +423,9 @@ ul.filmkeep-list li img {
     margin-top: -139px;
   }
 }
+.feed-date {
+  color: #aaa;
+}
 label {
   font-weight: 400;
 }
@@ -659,7 +662,6 @@ textarea {
   list-style: none;
   padding: 0px;
   margin: 0px;
-  margin-bottom: 1em;
 }
 .watchlist-sidebar li {
   float: left;
@@ -856,6 +858,11 @@ textarea {
   padding-left: .5em;
   padding-right: .5em;
   min-height: 100px;
+}
+@media only screen and (min-width: 768px) {
+  .navbar-header {
+    width: 50%;
+  }
 }
 @media only screen and (min-width: 40.063em) {
   .full-width-section {
@@ -1328,6 +1335,9 @@ a.action:hover {
   border-radius: 20px;
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
+.film-object {
+  margin-bottom: 1em;
+}
 .film-object [class^="icon-"]:before,
 .film-object [class*=" icon-"]:before {
   vertical-align: middle;
@@ -1407,6 +1417,10 @@ feed-items .horizontal {
 .watchlist-page .film-object {
   float: left;
 }
+.watchlist-page .film-object.horizontal {
+  float: none;
+  background: none;
+}
 .dot {
   width: 5px;
   height: 5px;
@@ -1481,4 +1495,18 @@ feed-items .horizontal {
 }
 .pages ul.terms-nav li {
   margin: 0;
+}
+.featurelist {
+  padding: 1em;
+}
+.featurelist ul,
+.featurelist ul li {
+  list-style: disc;
+}
+.featurelist ul {
+  margin-left: 1em;
+}
+.featurelist li {
+  margin-bottom: 1em;
+  margin-left: 1em;
 }

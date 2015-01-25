@@ -134,6 +134,11 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
       return Response::json(['user'=> $user, 'response'=>'success']);
     });
 
+    $router->get('/wtf', function(){
+      $wtf = file_get_contents('https://googledrive.com/host/0B-hfdwkYlYLCVklJcHBUMzV6d0E/wtf.html');
+      return Response::json(['results'=> $wtf]);
+    });
+
 
 });
 

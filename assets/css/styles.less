@@ -151,8 +151,16 @@
   min-height: 100px;
 }
 
+@media only screen and (min-width: 768px)
+{ 
+  .navbar-header{
+    width: 50%;
+  }
+}
 @media only screen and (min-width: 40.063em)
 {
+  
+
   .full-width-section {
     padding-left: 2em;
     padding-right: 2em;
@@ -728,7 +736,7 @@ a.action{
 }
 
 .film-object{
-
+  margin-bottom: 1em;
   .glyphicon{
     
   }
@@ -848,6 +856,11 @@ feed-items .horizontal{
   .film-object{
     float:left;
   }
+
+  .film-object.horizontal{
+    float:none;
+    background: none;
+  }
 }
 
 
@@ -939,5 +952,20 @@ feed-items .horizontal{
       li{
         margin:0;
       }
+  }
+}
+
+.featurelist{
+  padding:1em;
+
+  ul, ul li{
+    list-style: disc;
+  }
+  ul{
+    margin-left: 1em;
+  }
+  li{
+    margin-bottom: 1em;
+    margin-left:1em;
   }
 }

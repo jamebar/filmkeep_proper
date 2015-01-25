@@ -1,4 +1,4 @@
-<div ng-class="{horizontal:horizontal}" class="film-object clearfix">
+<div ng-class="{horizontal:horizontal == 'true'}" class="film-object clearfix">
 
   <a ng-if="!review" ui-sref='root.film({filmId: film.tmdb_id, filmSlug: slugify(film.title) })' class="poster"><img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" /></a>
   <a ui-sref='root.review({reviewId: review.id})' ng-if="review" class="poster"><img ng-src="%%review.film.poster_path | imageFilter:'poster':'1'%%" /></a>
@@ -6,8 +6,8 @@
     <h3 ng-if="horizontal">%%film.title%%</h3>
     <p ng-if="horizontal" text-more="%%film.summary%%" ></p>
     <div class="fo-actions">
-      <a class="action" href=""  tooltip="Watch Trailer" ng-click="getTrailer(film.tmdb_id)"><span class="ficon glyphicon glyphicon-facetime-video"></span></a>
-      <a class="action" href=""  tooltip="Review this" ng-click="newReview(film)" ng-if="film.reviewed === 'false'"><span class="ficon glyphicon glyphicon-tasks"></span><!--  <span class="review-label">review</span>  --></a>
+      <a class="action" tooltip="Watch Trailer" ng-click="getTrailer(film.tmdb_id)"><span class="ficon glyphicon glyphicon-facetime-video"></span></a>
+      <a class="action" tooltip="Review this" ng-click="newReview(film)" ng-if="film.reviewed === 'false'"><span class="ficon glyphicon glyphicon-tasks"></span><!--  <span class="review-label">review</span>  --></a>
 
       <span ng-if="review">
         <a class="action" href=""  tooltip="Compare" ng-click="compare(review)" ng-if="review.film.reviewed === 'true' "><span class="ficon glyphicon glyphicon glyphicon-retweet"></span></a> 
