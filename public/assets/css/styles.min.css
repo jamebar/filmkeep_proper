@@ -378,6 +378,9 @@ ul.filmkeep-list li img {
 .feed-review-wrapper {
   padding: 25px;
 }
+.feed-review-cover {
+  background-size: cover;
+}
 .feed-review-cover .cover {
   width: 100%;
   min-height: 150px;
@@ -406,6 +409,18 @@ ul.filmkeep-list li img {
   }
   .pullup {
     margin-top: -20px;
+  }
+}
+@media only screen and (max-width: 40em) {
+  .activity-review .film-object .poster {
+    display: none;
+  }
+  .feed-review-poster {
+    margin-top: -20px;
+    float: none !important;
+  }
+  .activity-review .title {
+    margin-top: -139px;
   }
 }
 label {
@@ -1375,7 +1390,7 @@ feed-items .horizontal {
   background: #fff;
   margin-top: 2em;
 }
-@media only screen and (min-width: 40em) {
+@media only screen and (min-width: 992px) {
   .rightside {
     width: 60%;
   }

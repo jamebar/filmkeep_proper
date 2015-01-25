@@ -370,7 +370,7 @@ angular.module('myApp', [
     },
     template: '%%textMore | limitTo: max_length%% <a ng-click="max_length=1000000" ng-show="textMore.length > max_length ">...more</a><a ng-click="max_length=max" ng-show="textMore.length < max_length && textMore.length > max">{less}</a>',
     link: function(scope, element,attrs) {
-        scope.max = attrs.max || 100;
+        scope.max = attrs.max || 75;
         scope.max_length = scope.max;
     }
   }

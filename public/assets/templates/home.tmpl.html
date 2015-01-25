@@ -4,7 +4,7 @@
 </style>
 <div class="row padding-top min-content-height du-wrapper clearfix">
   <div class="leftside">
-    <div class="col-xs-12 hidden-xs pull-right leftsidesub">
+    <div class="col-xs-12 hidden-xs hidden-sm pull-right leftsidesub">
       <div class="sidebar-item friends-sidebar clearfix">
         <h3>Following (%%me.user.followers.length%%)</h3>
         <span ng-show="me.user.followers.length ==0">
@@ -46,7 +46,7 @@
     </div>
   </div>
   <div class="rightside pull-left">
-    <div class="col-xs-12 rightsidesub">
+    <div class="col-sm-12 rightsidesub">
       <div class="preloader" ng-show="loading"><img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
       <h4 ng-show="feed_items.length ==0" class="empty-feed">Your feed is currently empty, the activity of those you follow, and your own review activity will show up here.</h4>
       <div ng-repeat="feed_item in feed_items">

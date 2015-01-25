@@ -81,7 +81,7 @@
 }
 
 .feed-review-cover{
-
+  background-size: cover;
   .cover{
     width:100%;
     min-height: 150px;
@@ -122,4 +122,20 @@
     margin-top: -20px;
   }
 
+}
+
+@media only screen and (max-width:40em)
+{
+  .activity-review .film-object .poster{
+    display: none;
+  }
+
+  .feed-review-poster{
+    margin-top: -20px;
+    float:none !important;
+  }
+
+  .activity-review .title{
+    margin-top: -139px;
+  }
 }
