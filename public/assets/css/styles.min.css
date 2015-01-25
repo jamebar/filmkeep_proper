@@ -683,6 +683,12 @@ textarea {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   margin-bottom: 3em;
 }
+.nowplaying-sidebar a {
+  color: #7fb5b7;
+}
+.nowplaying-sidebar .film-object.horizontal p {
+  color: rgba(244, 232, 208, 0.5);
+}
 .info-wrapper {
   max-width: 800px;
   margin: 0 auto;
@@ -1345,7 +1351,7 @@ a.action:hover {
 .film-object.horizontal .film-object-content h3 {
   font-size: 1.1em;
   margin-top: 0px;
-  margin-bottom: 0px;
+  margin-bottom: .2em;
 }
 feed-items .horizontal {
   background: none !important;
