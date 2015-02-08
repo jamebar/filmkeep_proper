@@ -53,3 +53,63 @@
 .icon-torsos-all:before {
   content: "e";
 }
+.icon-custom:before {
+  content: "f";
+}
+.icon-custom-circle:before {
+  content: "g";
+}
+.icon-custom-dotted:before {
+  content: "h";
+}
+.icon-custom-solid:before {
+  content: "i";
+}
+.icon-relation:before {
+  content: "j";
+}
+.icon-relation-circle:before {
+  content: "k";
+}
+.icon-relation-dotted:before {
+  content: "l";
+}
+.icon-relation-solid:before {
+  content: "m";
+}
+.icon-review:before {
+  content: "n";
+}
+.icon-review-circle:before {
+  content: "o";
+}
+.icon-review-dotted:before {
+  content: "p";
+}
+.icon-review-solid:before {
+  content: "q";
+}
+.icon-sliders:before {
+  content: "r";
+}
+.icon-sliders-circle:before {
+  content: "s";
+}
+.icon-sliders-dotted:before {
+  content: "t";
+}
+.icon-sliders-solid:before {
+  content: "u";
+}
+.icon-stars:before {
+  content: "v";
+}
+.icon-stars-circle:before {
+  content: "w";
+}
+.icon-stars-dotted:before {
+  content: "x";
+}
+.icon-stars-solid:before {
+  content: "y";
+}

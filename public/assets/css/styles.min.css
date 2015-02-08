@@ -79,6 +79,9 @@ ul li {
   list-style: none;
 }
 /*Constants*/
+.beige {
+  color: #f4e8d0 !important;
+}
 .round-corners {
   border-radius: 5px;
 }
@@ -710,6 +713,9 @@ textarea {
   max-width: 800px;
   margin: 0 auto;
 }
+.info-wrapper > h3 {
+  margin-bottom: 1.5em;
+}
 .info-section {
   padding: 4em;
   text-align: center;
@@ -718,9 +724,12 @@ textarea {
 .info-section h2 {
   font-size: 30px;
 }
+.info-section .row p {
+  text-align: left;
+}
 @media only screen and (min-width: 40.063em) {
   .info-section h2 {
-    font-size: 50px;
+    font-size: 40px;
   }
 }
 .sign-up {
@@ -729,7 +738,7 @@ textarea {
   border-radius: 3px !important;
 }
 .section1 {
-  background-image: url(/assets/img/bg/bg-jimmy-stewart-800.jpg);
+  background-image: url(/assets/img/homepage/theater-large.jpg);
   background-repeat: no-repeat;
   background-position: top center;
   background-size: cover;
@@ -738,14 +747,59 @@ textarea {
   margin-top: 2em;
 }
 .section2 {
-  background-color: #f4e8d0;
-  color: #d2544c;
+  background-color: #d2544c;
+  color: #f4e8d0;
+  font-size: 1.5em;
 }
 .section3 {
-  background-color: #d2544c;
+  background-image: url(/assets/img/homepage/filmreel-large.jpg);
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
 }
 .section4 {
-  background-color: #c8bba1;
+  background-color: #f4e8d0;
+  color: #7b7171;
+}
+.section4 i {
+  font-size: 6em;
+}
+.section4 i.red {
+  color: #d2544c;
+}
+.section5 {
+  background-image: url(/assets/img/homepage/jimmy-stewart-large.jpg);
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  color: #f4e8d0;
+}
+.section5 i {
+  font-size: 5em;
+}
+.section6 {
+  background-color: #d2544c;
+  color: #f4e8d0;
+}
+a.btn-open {
+  margin: 1em;
+  display: inline-block;
+  padding: 1em 2em;
+  color: #f4e8d0;
+  border-radius: 3px;
+  border: 1px solid #f4e8d0;
+}
+a.btn-open:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+a.learn-more {
+  color: #f4e8d0;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  margin-left: -72px;
+  display: inline-block;
+  text-align: center;
 }
 .review-editor {
   margin: 0 auto;
@@ -1104,6 +1158,10 @@ a.action:hover {
   background: #1e424d;
   color: #f4e8d0;
   min-height: 200px;
+}
+.footer ul li img {
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 .footer p {
   color: #497888;

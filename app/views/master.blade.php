@@ -131,21 +131,18 @@
     </div>
     <div class="container-fluid footer clearfix">
       <div class="row site-max">
-        <div class="col-xs-12 col-md-8">
-            <h4>Filmkeep</h4>
-            <p>Easily create customizable film ratings that combine the simplicity of a 5-star score with the depth of a full review</p>
-            <small>&copy; 2015 Filmkeep. All rights reserved.</small>
-            <p></p>
-            <p>This product uses the TMDb API but is not endorsed or certified by TMDb.<p>
-        </div>
-        <div class="col-xs-12 col-md-4">
-            <ul class="pull-right">
+        <div class="col-xs-12 col-md-2">
+             <ul class="">
               <li><a ng-click="featureList()">Feature List</a></li>
-              <li><a ui-sref='root.terms'>Terms of service</a></li>
-              <li><a ui-sref='root.privacy' target="_self">Privacy Policy</a></li>
-              <li><a ui-sref='root.code' target="_self">Code of Conduct</a></li>
-              <li><a ui-sref='root.copyright' target="_self">Copyright Policy</a></li>
+              <li><a ui-sref='root.terms'>Terms &amp; Service</a></li>
+              <li ><img src="/assets/img/filmkeep-logo-f.png"/></li>
             </ul>
+           
+        </div>
+        <div class="col-xs-12 col-md-10">
+          <p class="beige">Filmkeep is a social film experience. A place to share and discover movies. A repository of what you’ve watched and what you thought. It allows users to easily create customizable film ratings that combine the simplicity of a 5-star score with the depth of a full review. </p>
+          <p>&copy; 2015 Filmkeep. All rights reserved.</p>
+          <p>This product uses the TMDb API but is not endorsed or certified by TMDb.<p>
         </div>
       </div>
     </div>

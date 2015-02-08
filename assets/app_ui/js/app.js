@@ -139,8 +139,8 @@ angular.module('myApp', [
 
 .controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService','notificationsApiService','$modal','wtfApiService',
     function($scope,$rootScope,msgBus,meApiService,notificationsApiService,$modal,wtfApiService) {
-      // console.log(me);
-      
+
+
       msgBus.onMsg('user::loaded', function(e, data){
         $scope.header_user = data;
       });
@@ -296,6 +296,7 @@ angular.module('myApp', [
         
           });
         }
+
         $scope.slugify = function(input) {
         
             return Slug.slugify(input);
@@ -606,4 +607,35 @@ angular.module('myApp', [
     }
   };
 }])
+.directive('windowHeight', ['$window', function ($window) {
+  return {
+    scope: {
+      wheight: '=windowHeight'
+    },
+    link: function(scope, element, attrs) {
+      scope.wheight = $window.innerHeight;
+      function update() {
+        scope.wheight = $window.innerHeight;
+        scope.$apply();
+      }
+      $window.addEventListener('resize', update, false);
+      scope.$on('$destroy', function() {
+        $window.removeEventListener('resize', update, false);
+      });
+    }
+  };
+}])
+.directive('scrollToItem', function() {                                                      
+    return {                                                                                 
+        restrict: 'A',                                                                       
+        scope: {                                                                             
+            scrollTo: "@"                                                                    
+        },                                                                                   
+        link: function(scope, $elm,attr) {                                                   
+
+            $elm.on('click', function() {                                                    
+                $('html,body').animate({scrollTop: $(scope.scrollTo).offset().top }, "slow");
+            });                                                                              
+        }                                                                                    
+    }})
 ;
