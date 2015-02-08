@@ -87,7 +87,7 @@
             });
 
     $scope.toPercent = function(num){
-        return num/2000 * 100;
+        return (num/2000 * 100) + '%';
     }
   }])
 

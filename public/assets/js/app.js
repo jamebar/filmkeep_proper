@@ -149,6 +149,13 @@ angular.module('myApp', [
         $scope.page_title = data;
       });
 
+      $scope.getBackgroundOpacity = function(scroll){
+        return 'rgba(50, 50, 50, ' + ((scroll/300) +.4) + ')';
+      }
+
+      $scope.getHeight = function(h){
+        return h + 'px';
+      }
       $scope.newReview = function(){
         msgBus.emitMsg('review::new');
       }
@@ -347,7 +354,7 @@ angular.module('myApp', [
         }
 
         $scope.toPercent = function(num){
-            return num/2000 * 100;
+            return (num/2000 * 100) + '%';
         }
 
         $scope.watchlist = function(obj)
@@ -1099,7 +1106,7 @@ var aeReview = angular.module('ae-review', [
             });
 
     $scope.toPercent = function(num){
-        return num/2000 * 100;
+        return (num/2000 * 100) + '%';
     }
   }])
 
@@ -1397,6 +1404,60 @@ angular.module('AlertBox', [])
         };
 
     } ] );
+
+  'use strict';
+
+  angular.module('review', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.review', {
+      url: '/r/{reviewId}',
+      title: 'Review',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/review.tmpl.html',
+          controller: 'ReviewCtrl'
+        }
+      },
+      resolve: {
+        ReviewLoad: function($stateParams,ReviewService) {
+         
+          return ReviewService.getReview($stateParams.reviewId)
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('ReviewCtrl', ['$scope','msgBus','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
+            msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
+            $scope.rating_types = ReviewLoad.rating_types;
+            $scope.review = ReviewLoad.review;
+            $scope.me = me;
+            
+            // console.log($scope.review);
+            $scope.toPercent = function(num){
+                return (num/2000 * 100) + '%';
+            }
+
+            $scope.$on('watchlist::addremove', function(event, film_id) {
+
+              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
+                    
+            });
+
+            $rootScope.$on('review::updated',function(e,review){
+              $scope.review.notes = review.notes;
+            })
+
+
+    }]) 
+
+  
+  ;
+
 
 angular.module('Api', ['ngResource'])
 
@@ -2166,60 +2227,6 @@ angular.module('ReviewService', ['Api'])
 
 
 ]);
-
-  'use strict';
-
-  angular.module('review', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.review', {
-      url: '/r/{reviewId}',
-      title: 'Review',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/review.tmpl.html',
-          controller: 'ReviewCtrl'
-        }
-      },
-      resolve: {
-        ReviewLoad: function($stateParams,ReviewService) {
-         
-          return ReviewService.getReview($stateParams.reviewId)
-          
-        }, 
-      }
-    });
-  }])
-
-  .controller('ReviewCtrl', ['$scope','msgBus','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
-    function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
-            msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
-            $scope.rating_types = ReviewLoad.rating_types;
-            $scope.review = ReviewLoad.review;
-            $scope.me = me;
-            
-            // console.log($scope.review);
-            $scope.toPercent = function(num){
-                return num/2000 * 100;
-            }
-
-            $scope.$on('watchlist::addremove', function(event, film_id) {
-
-              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
-                    
-            });
-
-            $rootScope.$on('review::updated',function(e,review){
-              $scope.review.notes = review.notes;
-            })
-
-
-    }]) 
-
-  
-  ;
-
 
   'use strict';
 

@@ -1,4 +1,4 @@
-<div class="film-cover-wrapper row-full-width " style="background-image:url(%%film.backdrop_path | imageFilter :'backdrop':'1' %%)">
+<div class="film-cover-wrapper row-full-width " ng-style="{'background-image':'url(%%film.backdrop_path | imageFilter :'backdrop':'1' %%)'}">
   <div class="film-cover full-width-section ">
     <div class="site-max">
         <div class="fc-info">
@@ -22,7 +22,7 @@
    <div class="row site-max">
     <div class="col-xs-12 col-sm-2">
       
-      <div class="trailer-review hidden-xs" style="background-image:url(%%film.backdrop_path | imageFilter :'backdrop':'0' %%)">
+      <div class="trailer-review hidden-xs" ng-style="{'background-image':'url(%%film.backdrop_path | imageFilter :'backdrop':'0' %%)'}">
         <a ng-click="getTrailer(film.tmdb_id)">Trailer</a>
       </div>
       
@@ -33,8 +33,8 @@
     <div class="col-xs-12 col-sm-2">
 
       <p ng-if="film.rotten" class="rotten-wrapper">
-        <span class="rotten-icon" ng-class="{fresh: film.rotten.critics_rating =='Fresh', certified_fresh: film.rotten.critics_rating =='Certified Fresh', rotten: film.rotten.critics_rating =='Rotten'}"></span>
-        %%film.rotten.critics_score%%%
+        <a ng-href="%%film.rotten.link%%"><span class="rotten-icon" ng-class="{fresh: film.rotten.critics_rating =='Fresh', certified_fresh: film.rotten.critics_rating =='Certified Fresh', rotten: film.rotten.critics_rating =='Rotten'}"></span>
+        %%film.rotten.critics_score%%%</a>
       </p>
     </div>
     <!-- <div class="col-xs-12 col-sm-9"></div> -->

@@ -16,7 +16,7 @@
     <div class="clearfix">
       <div ng-repeat="activity in feed_item.activities" class="activity-item activity-review" ng-class="{pullup:$index==0, collapsed:$index>0}">
         <span ng-if="$index==0">
-          <div class="feed-review-cover" style="background-image:url(%%activity.object.film.backdrop_path | imageFilter :'backdrop':'1' %%)">
+          <div class="feed-review-cover" ng-style="{'background-image':'url(%%activity.object.film.backdrop_path | imageFilter :'backdrop':'1' %%)'}">
             <div class="cover"></div>
           </div>
           <div class="feed-review-wrapper clearfix">
@@ -28,7 +28,7 @@
               <div ng-repeat="rating in activity.object.ratings | limitTo: 5">
                 <p type="rating.rating_type" rating-type-label></p>
                 <div class="progress" >
-                  <div class="progress-bar" role="progressbar" aria-valuenow="%%rating.value%%" aria-valuemin="0" aria-valuemax="2000" style="width: %%toPercent(rating.value)%%%;">
+                  <div class="progress-bar" role="progressbar" aria-valuenow="%%rating.value%%" aria-valuemin="0" aria-valuemax="2000" ng-style="{width: toPercent(rating.value)}">
                   </div>
                 </div>
               </div>

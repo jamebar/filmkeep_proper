@@ -12,7 +12,7 @@
 <p ng-if="user_reviews.length < 1 && myPage">you haven't reviewed any films yet</p>
 <div class="clearfix">
   <ul class="filmkeep-list">
-      <li dir-paginate="user_review in user_reviews | itemsPerPage: reviews_per_page" total-items="total_reviews" current-page="pagination.current" style="background-image:url(%% user_review.film.poster_path | imageFilter :'poster':'1'%%);">
+      <li dir-paginate="user_review in user_reviews | itemsPerPage: reviews_per_page" total-items="total_reviews" current-page="pagination.current" ng-style="{'background-image':'url(%% user_review.film.poster_path | imageFilter :'poster':'1'%%)'}">
           <a href="/r/%%user_review.id%%" ><div class="filler"></div></a>
       </li>
   </ul>

@@ -50,7 +50,7 @@
       </ul>
       
     </div> -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" scroll-position="scroll"  style="background:rgba(50, 50, 50, %%(scroll/300) +.4%%)" ng-class="{forceopacity: !navbarCollapsed}">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" scroll-position="scroll"  ng-style="{'background':getBackgroundOpacity(scroll)}" ng-class="{forceopacity: !navbarCollapsed}">
     <div class="container-fluid site-max">
       <div class="navbar-header">
       @if(Auth::check())

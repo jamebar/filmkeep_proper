@@ -149,6 +149,13 @@ angular.module('myApp', [
         $scope.page_title = data;
       });
 
+      $scope.getBackgroundOpacity = function(scroll){
+        return 'rgba(50, 50, 50, ' + ((scroll/300) +.4) + ')';
+      }
+
+      $scope.getHeight = function(h){
+        return h + 'px';
+      }
       $scope.newReview = function(){
         msgBus.emitMsg('review::new');
       }
@@ -347,7 +354,7 @@ angular.module('myApp', [
         }
 
         $scope.toPercent = function(num){
-            return num/2000 * 100;
+            return (num/2000 * 100) + '%';
         }
 
         $scope.watchlist = function(obj)

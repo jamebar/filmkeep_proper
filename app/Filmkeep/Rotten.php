@@ -19,7 +19,9 @@ class Rotten {
   public function getScore($imdb_id){
     $rotten_info = $this->getMovie($imdb_id);
     if($rotten_info && isset($rotten_info->ratings)){
-      return $rotten_info->ratings;
+      $ratings = $rotten_info->ratings;
+      if(isset($rotten_info->links->alternate)) $ratings->link = $rotten_info->links->alternate;
+      return $ratings;
     }
 
     return false;
