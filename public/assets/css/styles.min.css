@@ -717,7 +717,7 @@ textarea {
   margin-bottom: 1.5em;
 }
 .info-section {
-  padding: 4em;
+  padding: 2em;
   text-align: center;
   color: #f4e8d0;
 }
@@ -728,6 +728,9 @@ textarea {
   text-align: left;
 }
 @media only screen and (min-width: 40.063em) {
+  .info-section {
+    padding: 4em;
+  }
   .info-section h2 {
     font-size: 40px;
   }
@@ -742,9 +745,6 @@ textarea {
   background-repeat: no-repeat;
   background-position: top center;
   background-size: cover;
-}
-.section1 h2 {
-  margin-top: 2em;
 }
 .section2 {
   background-color: #d2544c;
