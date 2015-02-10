@@ -9,9 +9,9 @@ return array(
     |
     */
 
-    'api_key' => 'bmn8pwxbswp7',
-    'api_secret' => 'jgwcam5sa96unam7726rygu5gzhcbtdfr3fuvhwhc79ra8w3pakxywz38kpjcp3s',
-    'api_site_id' => '1784',
+    'api_key' => 'dppcz8n6xmkc',
+    'api_secret' => 'a4ze5h59su875zxuthz3je7xxz4cf23g9aqtbwzs3vc7gtr2rxx6rcezqs8eapsj',
+    'api_site_id' => '2271',
     'location' => 'us-east',
 
     /*
