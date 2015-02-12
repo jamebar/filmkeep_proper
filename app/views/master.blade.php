@@ -119,7 +119,7 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-    <div class="container-fluid" >
+    <div class="container-fluid main-content" >
       <!--Error messages from backend pages -->
     	@if (Session::has('message'))
             <div id="flash_notice" data-alert data-options="animation_speed:500;" class="alert-box success fadeOutUp animated" close-me="3000">{{ Session::get('message') }} </div>
