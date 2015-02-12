@@ -1165,6 +1165,7 @@ a.action:hover {
 }
 .footer p {
   color: #497888;
+  opacity: .4;
 }
 .settings-panel {
   padding: 2em;

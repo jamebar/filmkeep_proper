@@ -32,7 +32,7 @@
     </div>
     <div class="col-xs-12 col-sm-2">
 
-      <p ng-if="film.rotten" class="rotten-wrapper">
+      <p ng-if="film.rotten && film.rotten.critics_score > -1" class="rotten-wrapper">
         <a ng-href="%%film.rotten.link%%"><span class="rotten-icon" ng-class="{fresh: film.rotten.critics_rating =='Fresh', certified_fresh: film.rotten.critics_rating =='Certified Fresh', rotten: film.rotten.critics_rating =='Rotten'}"></span>
         %%film.rotten.critics_score%%%</a>
       </p>
