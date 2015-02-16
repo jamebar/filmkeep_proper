@@ -7,7 +7,6 @@ body {
   background-color: white;
   font-family: 'Lato', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   color: #7b7171;
-  min-height: 600px;
   height: 100%;
 }
 body,
@@ -16,6 +15,9 @@ select,
 textarea,
 button {
   -webkit-font-smoothing: antialiased;
+}
+.main-content {
+  min-height: 600px;
 }
 .page-child {
   margin-top: 1em;
@@ -1490,6 +1492,7 @@ feed-items .horizontal {
   top: 50%;
   margin-top: -2px;
   margin-left: -3px;
+  cursor: pointer;
 }
 @media only screen and (min-width: 40em) {
   .dot {
