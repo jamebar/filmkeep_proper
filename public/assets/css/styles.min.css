@@ -7,7 +7,6 @@ body {
   background-color: white;
   font-family: 'Lato', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
   color: #7b7171;
-  min-height: 600px;
   height: 100%;
 }
 body,
@@ -16,6 +15,9 @@ select,
 textarea,
 button {
   -webkit-font-smoothing: antialiased;
+}
+.main-content {
+  min-height: 600px;
 }
 .page-child {
   margin-top: 1em;
