@@ -74,10 +74,14 @@ angular.module('myApp', [
     }
   });
 
-  $stateProvider.state('home', {
+  $stateProvider.state('root.home', {
     url: '/',
-    templateUrl: '/assets/templates/info.tmpl.html',
-    controller: 'homeCtrl',
+    views: {
+        'page' : {
+        templateUrl: '/assets/templates/info.tmpl.html',
+        controller: 'homeCtrl',
+      }
+    }
     
   });
 
@@ -143,6 +147,7 @@ angular.module('myApp', [
 
       msgBus.onMsg('user::loaded', function(e, data){
         $scope.header_user = data;
+        console.log(data)
       });
 
       msgBus.onMsg('pagetitle::change', function(e, data){
@@ -198,10 +203,13 @@ angular.module('myApp', [
     }
   
 ])
-.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService','listsApiService','wtfApiService',
-    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService,listsApiService,wtfApiService) {
+.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService','listsApiService','wtfApiService','commentsApiService',
+    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService,listsApiService,wtfApiService,commentsApiService) {
        var reviewModalInstance;
 
+       // commentsApiService.getComments('review','16').then(function(response){
+       //  console.log(response);
+       // })
        $rootScope.$on('modal::close', function(){
         reviewModalInstance.close();
        });
@@ -2140,6 +2148,37 @@ angular.module('Api', ['ngResource'])
 
             return( response.data );
 
+        }
+    }
+)
+.factory('commentsApiService',
+    function($http, $q) {
+
+        return({
+            getComments: getComments,
+        });
+
+        function getComments(type, id) {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/comments/" ,
+                params: {
+                    type: type,
+                    id: id
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function handleError( response ) {
+          return( response );
+        }
+
+        function handleSuccess( response ) {
+          return( response );
         }
     }
 )

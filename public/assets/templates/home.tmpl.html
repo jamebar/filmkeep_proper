@@ -11,7 +11,7 @@
           <p>You have not added any followers. To follow a friend's activity, click on "Follow" on a user's Filmkeep page.</p>
           <p>Get started by searching for a friend with the search bar in the header.</p></span>
          <ul>
-          <li ng-repeat="friend in me.user.followers | limitTo: 10">
+          <li ng-repeat="friend in me.user.followers | limitTo: 14">
             <span ng-if="me.user.id !== friend.id">
               <avatar info="friend" class="reverse"></avatar>
               

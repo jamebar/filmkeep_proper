@@ -20,5 +20,10 @@ class Review extends \Eloquent {
         return $this->hasMany('Filmkeep\Rating');
     }
 
+    public function comments()
+    {
+        return $this->morphMany('Filmkeep\Comment', 'commentable');
+    }
+
     
 }

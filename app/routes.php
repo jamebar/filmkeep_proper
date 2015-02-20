@@ -9,10 +9,12 @@ use Filmkeep\User;
 use Filmkeep\Follower;
 use Filmkeep\Watchlist;
 use Filmkeep\CustomList;
+use Filmkeep\Comment;
 
 Route::get('/test', function(){
 
-  
+  // $r = Review::find(16);
+  // $r->comments()->save( new Comment(['user_id'=>'117', 'comment'=>'this is a test','spoiler'=> false]) );
   // $gb = new Rotten();
   // $gb_movie = $gb->getMovie('tt0097576');
   // return Response::json($gb_movie);
@@ -82,7 +84,7 @@ Route::get('users/logout', 'AuthController@logout');
 
 Route::get('users/loginfacebook', 'AuthController@loginWithFacebook');
 Route::get('users/logingoogle', 'AuthController@loginWithGoogle');
-Route::get('users/invite', ['as'=>'invite','uses'=>'InviteController@index']);
+Route::get('users/invite', ['as'=>'invite','before'=>'guest', 'uses'=>'InviteController@index']);
 
 /*
 * API
@@ -96,6 +98,9 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
     $router->get('user/isauthorized', 'AuthController@isAuthorized');
     $router->get('user/search', 'UsersController@search');
     $router->resource('user', 'UsersController');
+
+    $router->get('comments', 'CommentsController@index');
+    $router->post('comments', 'CommentsController@store');
 
     $router->resource('lists', 'CustomListsController');
     $router->resource('rating_types', 'RatingTypesController');

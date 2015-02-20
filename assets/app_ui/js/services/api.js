@@ -665,6 +665,37 @@ angular.module('Api', ['ngResource'])
         }
     }
 )
+.factory('commentsApiService',
+    function($http, $q) {
+
+        return({
+            getComments: getComments,
+        });
+
+        function getComments(type, id) {
+ 
+            var request = $http({
+                method: "get",
+                url: "/api/comments/" ,
+                params: {
+                    type: type,
+                    id: id
+                }
+            });
+
+            return( request.then( handleSuccess, handleError ) );
+
+        }
+
+        function handleError( response ) {
+          return( response );
+        }
+
+        function handleSuccess( response ) {
+          return( response );
+        }
+    }
+)
 
 ;
 
