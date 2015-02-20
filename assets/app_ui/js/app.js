@@ -645,4 +645,22 @@ angular.module('myApp', [
             });                                                                              
         }                                                                                    
     }})
+.directive('showhide', function () {
+    return {
+        restrict: 'C',
+        link: function (scope, element, attrs) {
+            // find our "show" div
+            var show = angular.element(element.find('.showhide-toggle'));
+            var opened = true;
+            show.bind('click', toggle);
+
+            function toggle() {
+                opened = !opened;
+                element.removeClass(opened ? 'closed' : 'opened');
+                element.addClass(opened ? 'opened' : 'closed');
+            }
+            toggle();
+        }
+    }
+})
 ;

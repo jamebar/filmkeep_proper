@@ -10,3 +10,29 @@
   margin-left:-15px;
   margin-right:-15px;
 }
+
+
+.showhide {
+    display: inline-block;
+    width: 90%;
+    padding: 5px 3%;
+}
+.showhide > .less {
+}
+.showhide > .more {
+}
+.showhide > .show {
+  
+}
+.showhide.opened > .more {
+    display: block;
+}
+.showhide.closed > .more {
+    display: none;
+}
+.showhide.closed > .show a:after {
+    content:'More...';
+}
+.showhide.opened > .show a:after {
+    content:'Less...';
+}
