@@ -1589,3 +1589,25 @@ feed-items .horizontal {
   margin-bottom: 1em;
   margin-left: 1em;
 }
+.mpaa {
+  border-radius: 60px;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  padding-top: 20px;
+  display: block;
+  margin: 1em ;
+  background: #e5ca92;
+  color: #ac9871;
+  font-family: 'Volkhov', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+.mpaa span {
+  font-size: .5em;
+  line-height: 0em;
+  display: block;
+  color: #ac9871;
+}
+.R,
+.G {
+  font-size: 1.5em;
+}

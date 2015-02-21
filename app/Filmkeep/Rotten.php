@@ -21,11 +21,13 @@ class Rotten {
     if($rotten_info && isset($rotten_info->ratings)){
       $ratings = $rotten_info->ratings;
       if(isset($rotten_info->links->alternate)) $ratings->link = $rotten_info->links->alternate;
+      if(isset($rotten_info->mpaa_rating)) $ratings->mpaa = $rotten_info->mpaa_rating;
       return $ratings;
     }
 
     return false;
   }
+
 
 	public function getMovie($imdb_id)
 	{

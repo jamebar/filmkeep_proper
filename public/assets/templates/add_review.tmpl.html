@@ -6,52 +6,55 @@
     <div class="col-sx-12">
       <form ng-submit="reviewSubmit()">
           <div class="form-group" ng-if="!review.id">
-              <input  type="text" class="form-control" placeholder="Add a review" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.film" sf-typeahead >
+              <input  type="text" class="form-control" placeholder="Search for a movie title" options="typeaheadOptions" datasets="typeaheadData" ng-model="review.film" sf-typeahead >
           </div>
           <h3 ng-show="review.id">%%review.film.title%%</h3>
-          <relation-hint ></relation-hint>
-          
-          <div ng-repeat="rating_type in rating_types track by $index" ng-class="{new: rating_type.new}" class="rating-type"  >
-              <p type="rating_type" rating-type-label></p>
+          <span ng-if="!review.film.tmdb_id">To add a review, first search for your film in the field above <i class="glyphicon glyphicon-arrow-up"></i></span>
+          <span ng-if="review.film.tmdb_id">
+            <relation-hint ></relation-hint>
+            
+            <div ng-repeat="rating_type in rating_types track by $index" ng-class="{new: rating_type.new}" class="rating-type"  >
+                <p type="rating_type" rating-type-label></p>
 
-              <slider
-                  id="slider-%%$index%%"
-                  ng-model="rating_type.value"
-                  floor="1"
-                  ceiling="2000"
-                  step-width="1"
-                  show-steps="true"
-                  precision="1"
-                  stretch="1"
-                  ng-change="sliding($index)"
-                  ng-class="{fadeSlider:fade_slider}"
-                  >
-              </slider>
-             <!--  <slider
-                  hm-press="setCurrent" 
-                  hm-pressup="hideHint"
-                  hm-panend="hideHint"
-                  hm-recognizer-options='[{"time":0}]'
-                  hm-manager-options='{"enabled":true,"preventGhosts":true}'
-                  id="%%$index%%"
-                  ng-model="rating_type.value"
-                  floor="1"
-                  ceiling="2000"
-                  step-width="1"
-                  show-steps="true"
-                  precision="1"
-                  stretch="1"
-                  ng-change="sliding($index)"
-                  ng-class="{fadeSlider:fade_slider}"
-                  >
-              </slider> -->
-          </div>
-          <div class="form-group">
-              <label>Notes</label>
-              <textarea class="form-control" ng-model="review.notes"></textarea>
-          </div>
-          <div ng-show="loader" class="btn btn-primary"><img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
-          <input ng-show="!loader" type="submit" class="btn btn-primary" value="%%ae_button_label%% Review">
+                <slider
+                    id="slider-%%$index%%"
+                    ng-model="rating_type.value"
+                    floor="1"
+                    ceiling="2000"
+                    step-width="1"
+                    show-steps="true"
+                    precision="1"
+                    stretch="1"
+                    ng-change="sliding($index)"
+                    ng-class="{fadeSlider:fade_slider}"
+                    >
+                </slider>
+               <!--  <slider
+                    hm-press="setCurrent" 
+                    hm-pressup="hideHint"
+                    hm-panend="hideHint"
+                    hm-recognizer-options='[{"time":0}]'
+                    hm-manager-options='{"enabled":true,"preventGhosts":true}'
+                    id="%%$index%%"
+                    ng-model="rating_type.value"
+                    floor="1"
+                    ceiling="2000"
+                    step-width="1"
+                    show-steps="true"
+                    precision="1"
+                    stretch="1"
+                    ng-change="sliding($index)"
+                    ng-class="{fadeSlider:fade_slider}"
+                    >
+                </slider> -->
+            </div>
+            <div class="form-group">
+                <label>Notes</label>
+                <textarea class="form-control" ng-model="review.notes"></textarea>
+            </div>
+            <div ng-show="loader" class="btn btn-primary"><img src="/assets/img/loaders/loading-bubbles.svg" alt="Loading icon" /></div>
+            <input ng-show="!loader" type="submit" class="btn btn-primary" value="%%ae_button_label%% Review">
+          </span>
       </form>
     </div>
 </div> 

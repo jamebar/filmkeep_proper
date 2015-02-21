@@ -79,14 +79,11 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" collapse="navbarCollapsed" ng-init="navbarCollapsed=true">
       
-
       <ul class="nav navbar-nav navbar-right">
         @if(Auth::check())
         <li><a ui-sref='root.feed'>Feed</a></li>
         <li><a ui-sref='root.user.filmkeep({username: header_user.username })'>My Filmkeep</a></li>
         <li><a ui-sref='root.user.watchlist({username: header_user.username })'>Watchlist</a></li>
-
-       
 
         <li class="hidden-xs"><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span> Review</a></li>
         <li class="dropdown" >
