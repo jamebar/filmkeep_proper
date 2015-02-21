@@ -43,7 +43,10 @@
             });
 
             $rootScope.$on('review::updated',function(e,review){
-              $scope.review.notes = review.notes;
+              ReviewService.getReview($stateParams.reviewId).then(function(response){
+                $scope.rating_types = response.rating_types;
+                $scope.review = response.review;
+              })
             })
 
 
