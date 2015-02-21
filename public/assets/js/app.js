@@ -759,7 +759,7 @@ var aeReview = angular.module('ae-review', [
                         scope.review.$save().then(function(){
                           scope.loader = false;
                           $rootScope.$broadcast('modal::close');
-                          $rootScope.$broadcast('review::created', scope.review);
+                          msgBus.emitMsg('review::added', scope.review);
                           AlertService.Notice("Your review of '" + scope.review.film.title + "' has been created");
                         });
                       }
@@ -1045,54 +1045,6 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
-  angular.module('film', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.film', {
-      url: '/f/{filmId}_{filmSlug}',
-      title: 'Film',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/film.tmpl.html',
-          controller: 'FilmCtrl'
-        }
-      },
-      resolve: {
-        FilmLoad: function($stateParams,filmApiService) {
-         
-          return filmApiService.getFilm($stateParams.filmId);
-          
-        }, 
-      }
-    });
-  }])
-
-  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
-    function ($scope,msgBus,$stateParams,me,FilmLoad) {
-        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
-        $scope.me = me;
-        FilmLoad.film.film_id = FilmLoad.film.id;
-        $scope.film = FilmLoad.film;
-        $scope.follower_reviews = FilmLoad.follower_reviews;
-
-        
-
-
-        $scope.$on('watchlist::addremove', function(event, film_id) {
-
-          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
-                
-        });
-
-    }]) 
-
-  
-  ;
-
-
-  'use strict';
-
   angular.module('feed', [
   ])
 
@@ -1221,6 +1173,54 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
+  angular.module('film', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.film', {
+      url: '/f/{filmId}_{filmSlug}',
+      title: 'Film',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/film.tmpl.html',
+          controller: 'FilmCtrl'
+        }
+      },
+      resolve: {
+        FilmLoad: function($stateParams,filmApiService) {
+         
+          return filmApiService.getFilm($stateParams.filmId);
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
+    function ($scope,msgBus,$stateParams,me,FilmLoad) {
+        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
+        $scope.me = me;
+        FilmLoad.film.film_id = FilmLoad.film.id;
+        $scope.film = FilmLoad.film;
+        $scope.follower_reviews = FilmLoad.follower_reviews;
+
+        
+
+
+        $scope.$on('watchlist::addremove', function(event, film_id) {
+
+          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
+                
+        });
+
+    }]) 
+
+  
+  ;
+
+
+  'use strict';
+
   angular.module('filmkeep', ['angularUtils.directives.dirPagination'
   ])
 
@@ -1346,9 +1346,13 @@ var aeReview = angular.module('ae-review', [
               }, function(response) {
                   $scope.total_reviews = response.total;
                   $scope.user_reviews = response.results;
-                  
+                  $scope.page_user.total_reviews = response.total;
               });
         }
+
+        msgBus.onMsg('review::added', function(e, data){
+          getResultsPage(1);
+        });
 
     }]) 
   

@@ -126,9 +126,13 @@
               }, function(response) {
                   $scope.total_reviews = response.total;
                   $scope.user_reviews = response.results;
-                  
+                  $scope.page_user.total_reviews = response.total;
               });
         }
+
+        msgBus.onMsg('review::added', function(e, data){
+          getResultsPage(1);
+        });
 
     }]) 
   
