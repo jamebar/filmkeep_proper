@@ -11,19 +11,41 @@ bowerSrc = require('gulp-bower-src'),
 livereload = require('gulp-livereload'),
 sourcemaps = require('gulp-sourcemaps'),
 plumber = require('gulp-plumber'),
+replace = require('gulp-replace'),
 lr = require('tiny-lr'),
 gulpFilter = require('gulp-filter'),
 server = lr();
 
+var getStamp = function() {
+  var myDate = new Date();
+
+  var myYear = myDate.getFullYear().toString();
+  var myMonth = ('0' + (myDate.getMonth() + 1)).slice(-2);
+  var myDay = ('0' + myDate.getDate()).slice(-2);
+  var mySeconds = myDate.getSeconds().toString();
+
+  var myFullDate = myYear + myMonth + myDay;
+
+  return myFullDate;
+};
 
 gulp.task('styles', function() {
+  var filename = 'styles-' + getStamp() + '.css';
 	gulp.src('assets/css/styles.less')
 	.pipe(less())
 	.pipe(autoprefixer('last 2 version', 'safari 5', 'ie 9', 'ios 6', 'android 4'))
-	.pipe(rename({ suffix: '.min' }))
-	//.pipe(minifycss())
+	.pipe(minifycss())
+  .pipe(concat(filename))
 	.pipe(gulp.dest('public/assets/css'))
 	.pipe(notify({ message: 'Style task completed.' }));
+
+  gulp.src('app/views/master.blade.php', { base: './' }) //must define base so I can overwrite the src file below. Per http://stackoverflow.com/questions/22418799/can-gulp-overwrite-all-src-files
+        .pipe(replace(/<link rel=\"stylesheet\" id=\"bundlecss\".*>/g, '<link rel="stylesheet" id="bundlecss" href="/assets/css/' + filename + '">'))  //so find the script tag with an id of bundle, and replace its src.
+        .pipe(gulp.dest('./')); //Write the file back to the same spot.
+
+  gulp.src('app/views/master_auth.blade.php', { base: './' }) //must define base so I can overwrite the src file below. Per http://stackoverflow.com/questions/22418799/can-gulp-overwrite-all-src-files
+        .pipe(replace(/<link rel=\"stylesheet\" id=\"bundlecss\".*>/g, '<link rel="stylesheet" id="bundlecss" href="/assets/css/' + filename + '">'))  //so find the script tag with an id of bundle, and replace its src.
+        .pipe(gulp.dest('./')); //Write the file back to the same spot.
 
   // gulp.src([
   //   'assets/bower_components/angular-snap/angular-snap.min.css',
@@ -35,6 +57,7 @@ gulp.task('styles', function() {
 });
 
 gulp.task('scripts', function() {
+
 	gulp.src([
         'assets/bower_components/jquery/dist/jquery.min.js',
         'assets/bower_components/lodash/dist/lodash.min.js',
@@ -61,10 +84,20 @@ gulp.task('scripts', function() {
         .pipe(gulp.dest('public/assets/js'))
         .pipe(notify({ message: 'Scripts task completed.' }));
 
+    var filename = 'app-' + getStamp() + '.js';
     gulp.src('assets/app_ui/js/**/*.js')
         .pipe(plumber())
-        .pipe(concat('app.js'))
+        .pipe(concat(filename))
         .pipe(gulp.dest('public/assets/js'));
+
+    gulp.src('app/views/master.blade.php', { base: './' }) //must define base so I can overwrite the src file below. Per http://stackoverflow.com/questions/22418799/can-gulp-overwrite-all-src-files
+        .pipe(replace(/<script id=\"bundle\".*><\/script>/g, '<script id="bundle" src="/assets/js/' + filename + '"></script>'))  //so find the script tag with an id of bundle, and replace its src.
+        .pipe(gulp.dest('./')); //Write the file back to the same spot.
+
+    gulp.src('app/views/master_auth.blade.php', { base: './' }) //must define base so I can overwrite the src file below. Per http://stackoverflow.com/questions/22418799/can-gulp-overwrite-all-src-files
+        .pipe(replace(/<script id=\"bundle\".*><\/script>/g, '<script id="bundle" src="/assets/js/' + filename + '"></script>'))  //so find the script tag with an id of bundle, and replace its src.
+        .pipe(gulp.dest('./')); //Write the file back to the same spot.
+
 });
 
 
