@@ -147,7 +147,6 @@ angular.module('myApp', [
 
       msgBus.onMsg('user::loaded', function(e, data){
         $scope.header_user = data;
-        console.log(data)
       });
 
       msgBus.onMsg('pagetitle::change', function(e, data){

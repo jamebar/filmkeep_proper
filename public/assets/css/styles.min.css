@@ -1374,11 +1374,7 @@ a.action:hover {
   line-height: 1.5em;
   font-size: .8em;
 }
-.notif {
-  min-width: 290px;
-  padding: 1em;
-}
-.notif:before {
+.dropdown-menu:before {
   position: absolute;
   content: '';
   display: block;
@@ -1389,6 +1385,10 @@ a.action:hover {
   border-style: solid;
   border-width: 0 12.5px 10px 12.5px;
   border-color: transparent transparent #ffffff transparent;
+}
+.notif {
+  min-width: 290px;
+  padding: 1em;
 }
 .notif .media {
   margin-top: 1em;

@@ -86,7 +86,7 @@ var aeReview = angular.module('ae-review', [
                         scope.review.$save().then(function(){
                           scope.loader = false;
                           $rootScope.$broadcast('modal::close');
-                          $rootScope.$broadcast('review::created', scope.review);
+                          msgBus.emitMsg('review::added', scope.review);
                           AlertService.Notice("Your review of '" + scope.review.film.title + "' has been created");
                         });
                       }

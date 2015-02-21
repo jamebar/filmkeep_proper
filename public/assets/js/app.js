@@ -147,7 +147,6 @@ angular.module('myApp', [
 
       msgBus.onMsg('user::loaded', function(e, data){
         $scope.header_user = data;
-        console.log(data)
       });
 
       msgBus.onMsg('pagetitle::change', function(e, data){
@@ -760,7 +759,7 @@ var aeReview = angular.module('ae-review', [
                         scope.review.$save().then(function(){
                           scope.loader = false;
                           $rootScope.$broadcast('modal::close');
-                          $rootScope.$broadcast('review::created', scope.review);
+                          msgBus.emitMsg('review::added', scope.review);
                           AlertService.Notice("Your review of '" + scope.review.film.title + "' has been created");
                         });
                       }
@@ -1347,9 +1346,13 @@ var aeReview = angular.module('ae-review', [
               }, function(response) {
                   $scope.total_reviews = response.total;
                   $scope.user_reviews = response.results;
-                  
+                  $scope.page_user.total_reviews = response.total;
               });
         }
+
+        msgBus.onMsg('review::added', function(e, data){
+          getResultsPage(1);
+        });
 
     }]) 
   
