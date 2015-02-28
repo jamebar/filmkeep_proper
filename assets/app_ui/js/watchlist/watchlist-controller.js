@@ -28,7 +28,7 @@
                 $scope.watchlist_items = response.results;
             });
 
-        $scope.htoggle = true;
+        $scope.htoggle = false;
         
 
     }]) 

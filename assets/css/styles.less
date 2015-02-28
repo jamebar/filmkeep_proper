@@ -1014,12 +1014,18 @@ feed-items .horizontal{
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
 
+  a p{
+    color:#ccc;
+    font-size: .8em;
+    margin-top: .5em;
+    margin-bottom: 0em;
+  }
   a:hover{
     color:@filmkeep-sage;
   }
 
   .glyphicon{
-    color:darken(@filmkeep-red,7%);
+    color:darken(#efefef,7%);
   }
 }
 
@@ -1036,10 +1042,10 @@ feed-items .horizontal{
 }
 
 .panel-default>.panel-heading {
-  color: @filmkeep-beige;
-  background-color: @filmkeep-red;
+  color: @filmkeep-red;
+  background-color: #fff;
   border: none; 
-  border-bottom:1px solid darken(@filmkeep-red, 5%);
+  border-bottom:1px dotted darken(#efefef, 5%);
 }
 .panel-group .panel+.panel{
   margin-top:0px;
