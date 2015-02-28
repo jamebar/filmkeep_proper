@@ -1095,6 +1095,9 @@ var aeReview = angular.module('ae-review', [
             .getWatchlist(me.user.id).then(function(response) {
                 $scope.watchlist_items = response.results;
             });
+    $scope.releaseDate = function(d){
+      return moment(d).format('YYYY');
+    }
 
     // $scope.$on('watchlist::addremove', function(event, film_id) {
 
