@@ -1005,3 +1005,42 @@ feed-items .horizontal{
   font-size: 1.5em;
 
 }
+
+.open .panel-heading{
+  display: none;
+}
+
+.panel-heading{
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+
+  a:hover{
+    color:@filmkeep-sage;
+  }
+
+  .glyphicon{
+    color:darken(@filmkeep-red,7%);
+  }
+}
+
+.panel-body{
+  padding:0px;
+}
+
+.panel-default>.panel-heading+.panel-collapse>.panel-body{
+  border:none;
+}
+
+.panel-default,.panel{
+  border:none;
+}
+
+.panel-default>.panel-heading {
+  color: @filmkeep-beige;
+  background-color: @filmkeep-red;
+  border: none; 
+  border-bottom:1px solid darken(@filmkeep-red, 5%);
+}
+.panel-group .panel+.panel{
+  margin-top:0px;
+}
