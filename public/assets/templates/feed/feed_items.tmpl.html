@@ -14,8 +14,11 @@
       <a ui-sref='root.review({reviewId: feed_item.activities[0].object.id})' ng-if="feed_item.activity_count===1">%%feed_item.activities[0].object.film.title%%</a>
     </span>
     <div class="clearfix">
-      <div ng-repeat="activity in feed_item.activities" class="activity-item activity-review" ng-class="{pullup:$index==0, collapsed:$index>0}">
-        <span ng-if="$index==0">
+      <accordion close-others="false">
+      <accordion-group  is-open="status.open" ng-class="{open: status.open }" ng-init="status.open = $index ==0 ? true : false"  ng-repeat="activity in feed_item.activities" class="activity-item activity-review" >
+        <accordion-heading>
+            %%activity.object.film.title%% <i class="pull-right glyphicon glyphicon-chevron-down" ></i>
+        </accordion-heading>
           <div class="feed-review-cover" ng-style="{'background-image':'url(%%activity.object.film.backdrop_path | imageFilter :'backdrop':'1' %%)'}">
             <div class="cover"></div>
           </div>
@@ -35,11 +38,8 @@
             </div>
           </div>
           <div class="feed-review-notes" text-more="%%activity.object.notes%%" max="125"></div>
-          </span>
-          <span ng-if="$index > 0">
-            <film-object film="activity.object.film" review="activity.object" horizontal="true" ></film-object>
-          </span>
-        </div>
+      </accordion-group>
+      </accordion>
       
     </div>
   </div>
@@ -56,7 +56,7 @@
       %% feed_item.verb | verb %%
       <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span>
       <a ui-sref='root.film({filmId: feed_item.activities[0].object.film.tmdb_id, filmSlug: slugify(feed_item.activities[0].object.film.title)})' ng-if="feed_item.activity_count===1">%%feed_item.activities[0].object.film.title%%</a>
-       to the watchlist
+       to the <a ui-sref='root.user.watchlist({username: feed_item.activities[0].actor.username})'>watchlist</a>
     </span>
     <div class="clearfix">
       <span ng-repeat="activity in feed_item.activities" class="activity-item" ng-class="{multi: feed_item.activity_count>2}">

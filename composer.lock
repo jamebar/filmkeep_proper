@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b11c4dee7b83feea44ecbf4656b2348a",
+    "hash": "b8095cccaad640e95b28e25d894df36c",
     "packages": [
         {
             "name": "artdarek/oauth-4-laravel",
@@ -290,7 +290,7 @@
         },
         {
             "name": "get-stream/stream-laravel",
-            "version": "2.1.1",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GetStream/stream-laravel.git",

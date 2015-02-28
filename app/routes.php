@@ -19,10 +19,10 @@ Route::get('/test', function(){
   // $gb_movie = $gb->getMovie('tt0097576');
   // return Response::json($gb_movie);
 
-  // $feed = FeedManager::getNotificationFeed(118);
+  // $feed = FeedManager::getNewsFeeds(117)['flat'];
   // $enricher = new Enrich();
   // $activities = $feed->getActivities(0,25)['results'];
-  // $activities = $enricher->enrichAggregatedActivities($activities);
+  // $activities = $enricher->enrichActivities($activities);
   // return $activities;
   // $data = [
   //     'film_id' => 417,
