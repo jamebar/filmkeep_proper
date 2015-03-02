@@ -67,7 +67,7 @@
       <div class="showhide" ng-if="feed_item.activities.length > 2">and <a class="less showhide-toggle">%%feed_item.activities.length - 2%% more</a>
         <div class="more">
           <span ng-repeat="activity in feed_item.activities" ng-if="$index > 1" >
-              <a ui-sref='root.film({filmId: activity.object.film.tmdb_id, filmSlug: slugify(activity.object.film.title)})'>%%activity.object.film.title%%<span ng-if="!$last">, </span></a>
+             <film-object ng-if="$index > 1" film="activity.object.film" horizontal="true" ></film-object>
           </span>
         </div>
       </div>
