@@ -1,0 +1,7 @@
+
+<div class="comment" ng-repeat="comment in comments">
+  <avatar class="avatar" info="comment.user"></avatar>
+  <span class="comment_desc" ng-class="{spoiler: comment.spoiler == true}">%%comment.comment%%</span>
+  <span class="comment_date">%%comment.updated_at | fDate %%</span>
+</div>
+<comments-form></comments-form>

@@ -1,0 +1,63 @@
+.comment{
+  margin-bottom: 1em;
+  clear: both;
+  overflow: auto;
+  .comment_desc{
+    white-space: pre-wrap;
+    display: block;
+    float: left;
+    margin-top: 1em;
+  }
+  avatar{
+    margin-right: 1em;
+    float: left;
+  }
+  .comment_date{
+    float:right;
+  }
+
+
+}
+@media only screen and (min-width: 60em)
+{
+  comments-form{
+    .btn-primary{
+      max-width: 150px;
+    } 
+  }
+}
+
+input.spoiler{
+  display: block;
+}
+
+.comment_input{
+  width:100%;
+  padding:1em;
+  height:100%;
+  background: @filmkeep-beige;
+  border-radius:5px !important;
+}
+
+
+.comment span.spoiler{
+  background: fadeout(#000000,75%);
+  color: transparent;
+  border-radius: 5px;
+  position: relative;
+  // &:after{
+  //   position: absolute;
+  //   top:0px;
+  //   left:0px;
+  //   content:'Contains Spoilers';
+  //   color:darken(@filmkeep-sage,30%);
+  //   white-space: nowrap;
+  //   overflow: hidden;
+  // }
+
+  &:hover{
+    background:transparent;
+    color:inherit;
+
+  }
+}

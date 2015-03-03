@@ -14,10 +14,10 @@ class CommentsController extends \BaseController {
   public function index()
   {
     $type = Input::get('type');
-    $type_id = Input::get('id');
+    $type_id = Input::get('type_id');
     $object = $this->klass($type,$type_id);
     if($object)
-      return $object->comments->load('user');
+      return ['results'=> $object->comments->load('user')];
     else
       return [];
   }
@@ -32,15 +32,19 @@ class CommentsController extends \BaseController {
   {
     $user = User::find(Auth::user()->id);
     $type = Input::get('type');
-    $type_id = Input::get('id');
-    $comment = new Comment(['comment'=> Input::get('comment'),
+    $type_id = Input::get('type_id');
+    $spoiler = Input::has('spoiler') ? '1' : '0';
+    $comment = new Comment(['comment'=> Input::get('description'),
                             'user_id'=> $user->id,
-                            'spoiler'=> Input::get('spoiler'),
+                            'film_id'=> Input::get('film_id'),
+                            'spoiler'=> Input::has('spoiler'),
                             ]);
     
+    //send notification to each user on this comment thread
+
     $object = $this->klass($type,$type_id);
     if($object)
-      return $object->comments()->save($comment);
+      return $object->comments()->save($comment)->load('user');
     else
       return [];
   }

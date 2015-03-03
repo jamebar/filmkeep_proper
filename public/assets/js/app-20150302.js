@@ -24,6 +24,7 @@ angular.module('myApp', [
     'hmTouchEvents',
     'angulartics',
     'angulartics.google.analytics',
+    'fk.comments'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -907,14 +908,54 @@ var aeReview = angular.module('ae-review', [
   angular.module('fk.comments', [
 ])
 
-  .directive('comments', [
-    function(){
+  .directive('comments', ['Api','AlertService',
+    function(Api,AlertService){
         return {
             restrict: 'E',
-            scope:{},
-            templateUrl: '/assets/templates/comment_form.tmpl.html',
+            scope:{
+              type : '@',
+              commentableId: '=',
+              filmId: '=',
+            },
+            templateUrl: '/assets/templates/comments/comments.tmpl.html',
             link: function(scope, element, attrs) {
 
+              Api.Comments.query({type: scope.type, type_id: scope.commentableId}, function(response){
+                scope.comments = response.results;
+              });
+
+              scope.newComment = function(){
+                scope.comment = new Api.Comments();
+              }
+              
+              scope.addComment = function(){
+                scope.comment.type = scope.type;
+                scope.comment.type_id = scope.commentableId;
+                scope.comment.film_id = scope.filmId;
+                scope.comment.$save(function(response){
+                  AlertService.Notice("Your comment has been added.");
+                  scope.comments.push(scope.comment)
+                  scope.newComment();
+                },function(response){
+                  AlertService.Notice("Whoops, make sure you type a comment.");
+                  
+                })
+              }
+
+              scope.newComment();
+
+            }
+
+        }
+    }
+  ])
+
+  .directive('commentsForm', ['Api',
+    function(Api){
+        return {
+            restrict: 'E',
+            templateUrl: '/assets/templates/comments/comment_form.tmpl.html',
+            link: function(scope, element, attrs) {
 
             }
 
@@ -1185,6 +1226,79 @@ var aeReview = angular.module('ae-review', [
   
   ;
 
+angular.module('AlertBox', [])
+    .service('AlertService', [ '$timeout', function($timeout) {
+
+        this.delay = 2000;
+        
+        this.alerts = [];
+        this.warnings = [];
+        this.notices = []
+
+        this.setCloseDelay = function(delay) {
+            this.delay = delay;
+        }
+        
+        this.removeMessage = function(msgType, message, delay) {
+            var tracked = this[msgType + 's'];
+            if (angular.isDefined(delay)) {
+                $timeout(
+                    function() {
+                        var index = tracked.indexOf(message);
+                        if (index > -1) {
+                            tracked.splice(index,1);
+                        }
+                    }, 
+                    this.delay
+                );
+            } else {
+                var index = tracked.indexOf(message);
+                if (index > -1) {
+                    tracked.splice(index,1);
+                }
+            }
+        };
+        
+        this.Message = function(msgType, message) {
+            var key = msgType + 's';
+            this[key].push(message);
+            this.removeMessage(msgType, message, this.delay);
+        };
+        
+        this.Alert = function(message) { this.Message('alert', message); }
+        this.Warning = function(message) { this.Message('warning', message); }
+        this.Notice = function(message) { this.Message('notice', message); }
+
+    } ] )
+    .directive('alertBox', [ 'AlertService', function(AlertService) {
+        return {
+            restrict: 'E',
+            
+            compile: function(element, attrs) {
+                attrs.boxClass = attrs.boxClass || "alert-box";
+                attrs.alertClass = attrs.alertClass || "alert";
+                attrs.noticeClass = attrs.noticeClass || "alert-success";
+                attrs.warningClass = attrs.warningClass || "alert-warning";
+            },
+            
+            scope: {
+                alertClass : "@",
+                warningClass : "@",
+                noticeClass : "@",
+                boxClass : "@"
+            },
+            
+            controller: function($scope) {
+                $scope.alerts = AlertService.alerts;
+                $scope.warnings = AlertService.warnings;
+                $scope.notices = AlertService.notices;
+            },
+            template:  '<div ng-repeat="alert in alerts track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, alertClass]">{{alert}}</div> \
+                        <div ng-repeat="warning in warnings track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, warningClass]">{{warning}}</div> \
+                        <div ng-repeat="notice in notices track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
+        };
+
+    } ] );
 
   'use strict';
 
@@ -1326,79 +1440,6 @@ var aeReview = angular.module('ae-review', [
   
   ;
 
-angular.module('AlertBox', [])
-    .service('AlertService', [ '$timeout', function($timeout) {
-
-        this.delay = 2000;
-        
-        this.alerts = [];
-        this.warnings = [];
-        this.notices = []
-
-        this.setCloseDelay = function(delay) {
-            this.delay = delay;
-        }
-        
-        this.removeMessage = function(msgType, message, delay) {
-            var tracked = this[msgType + 's'];
-            if (angular.isDefined(delay)) {
-                $timeout(
-                    function() {
-                        var index = tracked.indexOf(message);
-                        if (index > -1) {
-                            tracked.splice(index,1);
-                        }
-                    }, 
-                    this.delay
-                );
-            } else {
-                var index = tracked.indexOf(message);
-                if (index > -1) {
-                    tracked.splice(index,1);
-                }
-            }
-        };
-        
-        this.Message = function(msgType, message) {
-            var key = msgType + 's';
-            this[key].push(message);
-            this.removeMessage(msgType, message, this.delay);
-        };
-        
-        this.Alert = function(message) { this.Message('alert', message); }
-        this.Warning = function(message) { this.Message('warning', message); }
-        this.Notice = function(message) { this.Message('notice', message); }
-
-    } ] )
-    .directive('alertBox', [ 'AlertService', function(AlertService) {
-        return {
-            restrict: 'E',
-            
-            compile: function(element, attrs) {
-                attrs.boxClass = attrs.boxClass || "alert-box";
-                attrs.alertClass = attrs.alertClass || "alert";
-                attrs.noticeClass = attrs.noticeClass || "alert-success";
-                attrs.warningClass = attrs.warningClass || "alert-warning";
-            },
-            
-            scope: {
-                alertClass : "@",
-                warningClass : "@",
-                noticeClass : "@",
-                boxClass : "@"
-            },
-            
-            controller: function($scope) {
-                $scope.alerts = AlertService.alerts;
-                $scope.warnings = AlertService.warnings;
-                $scope.notices = AlertService.notices;
-            },
-            template:  '<div ng-repeat="alert in alerts track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, alertClass]">{{alert}}</div> \
-                        <div ng-repeat="warning in warnings track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, warningClass]">{{warning}}</div> \
-                        <div ng-repeat="notice in notices track by $index" class="fadeInDown fadeOutUp animated" ng-class="[boxClass, noticeClass]">{{notice}}</div>'
-        };
-
-    } ] );
 
   'use strict';
 
@@ -1474,7 +1515,7 @@ angular.module('Api', ['ngResource'])
       return {
         Reviews: build_resource('/review/:review_id', null, { update: { method:'PUT' }, 'query':{ method: 'GET'}}),
         Notifications: build_resource('/notifications', null, { markSeen: { method:'post', params:{action: "post"} }, 'query':{ method: 'GET', isArray:true}}),
-        Comments: build_resource('/comments/:id', null, { update: { method:'PUT' }, 'query':{ method: 'GET', isArray:true}}),
+        Comments: build_resource('/comments/:id', null, { update: { method:'PUT' }, 'query':{ method: 'GET'}}),
         RatingTypes: build_resource('/rating_types/:id', null, { update: { method:'PUT', params:{id:'@id'}}, delete: { method:'DELETE', params:{id:'@id'}}, 'query':{ method: 'GET'}}),
         Users: build_resource('/user/:id', null, { update: { method:'PUT', params:{id:'@id'}}, search: { method:'GET'}, 'query':{ method: 'GET', isArray:true}}),
         Lists: build_resource('/rating_types:id', null, {

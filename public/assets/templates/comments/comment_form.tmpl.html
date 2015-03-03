@@ -1,0 +1,9 @@
+<form ng-submit="addComment()">
+  <textarea placeholder="Type your comment here" type="text" ng-model="comment.description" class="comment_input" name="comment"/></textarea>
+  <div class="checkbox">
+    <label>
+    <input type="checkbox" name="spoiler" class="spoiler form-control" ng-model="comment.spoiler"/> Contains Spoilers
+    </label>
+  </div>
+  <input class="btn btn-primary"  type="submit" value="Add Comment">
+</form>

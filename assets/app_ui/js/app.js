@@ -24,6 +24,7 @@ angular.module('myApp', [
     'hmTouchEvents',
     'angulartics',
     'angulartics.google.analytics',
+    'fk.comments'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
