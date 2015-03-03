@@ -13,6 +13,14 @@ use Filmkeep\Comment;
 
 Route::get('/test', function(){
 
+  // $api_key = 'dppcz8n6xmkc';
+  // $api_secret = 'a4ze5h59su875zxuthz3je7xxz4cf23g9aqtbwzs3vc7gtr2rxx6rcezqs8eapsj';
+  // $client = new GetStream\Stream\Client($api_key, $api_secret );
+  // $user_feed25 = $client->feed("user","25");
+  // $user_feed4 = $client->feed("aggregated","4");
+  // $user_feed4->followFeed('user', '25');
+  
+  // return $user_feed25->followers(0, 50);
   // $r = Review::find(16);
   // $r->comments()->save( new Comment(['user_id'=>'117', 'comment'=>'this is a test','spoiler'=> false]) );
   // $gb = new Rotten();

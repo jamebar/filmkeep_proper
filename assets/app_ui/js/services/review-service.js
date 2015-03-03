@@ -2,8 +2,8 @@
 
 angular.module('ReviewService', ['Api'])
 
-.factory('ReviewService', [ '$q','ratingTypesApiService', 'reviewApiService', 'compareApiService',
-    function ($q,ratingTypesApiService,reviewApiService, compareApiService) {
+.factory('ReviewService', [ '$q','Api',
+    function ($q,Api) {
 
      
         function Review(){
@@ -14,13 +14,13 @@ angular.module('ReviewService', ['Api'])
         var reviews_deferred = $q.defer();
         var _types_data = null;
 
-        ratingTypesApiService
+        Api.RatingTypes
             .query({}, function(response) {
                 types_deferred.resolve(response.results);
              
             });
 
-        reviewApiService
+        Api.Reviews
             .query({
                 num: '50'
             }, function(response) {
@@ -42,13 +42,13 @@ angular.module('ReviewService', ['Api'])
         }
 
         Review.getCompares = function(film_id){
-            return compareApiService.getCompares(film_id);
+            return Api.getCompares(film_id);
         }
 
         Review.getReview = function(review_id)
         { 
             var deferred = $q.defer();
-            reviewApiService
+            Api.Reviews
                 .get({review_id:review_id},function(response) {
                 
                     deferred.resolve(response);

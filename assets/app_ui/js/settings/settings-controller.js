@@ -16,8 +16,8 @@
         }
       },
       resolve: {
-        isAuthorized: function (meApiService) {
-            return meApiService.isAuthorized();
+        isAuthorized: function (Api) {
+            return Api.isAuthorized();
         } 
       },
       onEnter: function(isAuthorized){
@@ -49,10 +49,10 @@
 
   }])
 
-  .controller('settingsCtrl', ['$scope','me','userApiService','AlertService','$state',
-    function ($scope, me,userApiService,AlertService,$state) {
+  .controller('settingsCtrl', ['$scope','me','AlertService','$state','Api',
+    function ($scope, me,AlertService,$state,Api) {
 
-      $scope.current_user = new userApiService();
+      $scope.current_user = new Api.Users();
         _.assign($scope.current_user, me.user);
         
       $scope.tabs = [
@@ -71,8 +71,8 @@
 
   }]) 
 
-  .controller('settingsProfileCtrl', ['$scope','me','userApiService','AlertService','msgBus',
-    function ($scope, me,userApiService,AlertService,msgBus) {
+  .controller('settingsProfileCtrl', ['$scope','me','AlertService','msgBus',
+    function ($scope, me,AlertService,msgBus) {
         msgBus.emitMsg('pagetitle::change', "Settings: Profile");
 
         $scope.saveUser = function(){
@@ -86,16 +86,16 @@
 
   }]) 
 
-  .controller('settingsInvitesCtrl', ['$scope','me','userApiService','AlertService','msgBus',
-    function ($scope, me,userApiService,AlertService,msgBus) {
+  .controller('settingsInvitesCtrl', [
+    function () {
 
 
   }]) 
 
-  .controller('settingsFilmetersCtrl', ['$scope','me','userApiService','AlertService','ratingTypesApiService','ReviewService','msgBus',
-    function ($scope, me,userApiService,AlertService,ratingTypesApiService,ReviewService,msgBus) {
+  .controller('settingsFilmetersCtrl', ['$scope','me','AlertService','ReviewService','msgBus','Api',
+    function ($scope, me,AlertService,ReviewService,msgBus,Api) {
         msgBus.emitMsg('pagetitle::change', "Settings: Filmeters");
-        $scope.newcriteria = new ratingTypesApiService();
+        $scope.newcriteria = new Api.RatingTypes();
         ReviewService.getRatingTypes().then(function(results){
           $scope.types = results;
             
@@ -112,13 +112,13 @@
         $scope.saveFilmeter = function(){
           $scope.newcriteria.$save(function(response){
             $scope.types.push(response);
-            $scope.newcriteria = new ratingTypesApiService();
+            $scope.newcriteria = new Api.RatingTypes();
 
           });
         }
 
         $scope.updateFilmeter = function(type){
-          var t = new ratingTypesApiService();
+          var t = new Api.RatingTypes();
           _.assign(t,type);
           t.$update(function(response){
             AlertService.Notice("Your Filmeter is updated");
@@ -128,7 +128,7 @@
         }
 
         $scope.deleteFilmeter = function(meter){
-          var filmeter = new ratingTypesApiService();
+          var filmeter = new Api.RatingTypes();
         
           filmeter.id = meter.id;
           filmeter.$delete(function(response){

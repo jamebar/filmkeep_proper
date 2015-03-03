@@ -15,11 +15,9 @@
         }
       },
       resolve: {
-        FilmLoad: function($stateParams,filmApiService) {
-         
-          return filmApiService.getFilm($stateParams.filmId);
-          
-        }, 
+        FilmLoad:['$stateParams','Api', function($stateParams,Api) {
+          return Api.getFilm($stateParams.filmId);
+        }], 
       }
     });
   }])
@@ -31,9 +29,6 @@
         FilmLoad.film.film_id = FilmLoad.film.id;
         $scope.film = FilmLoad.film;
         $scope.follower_reviews = FilmLoad.follower_reviews;
-
-        
-
 
         $scope.$on('watchlist::addremove', function(event, film_id) {
 

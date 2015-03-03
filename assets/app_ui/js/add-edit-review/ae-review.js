@@ -10,27 +10,13 @@ var aeReview = angular.module('ae-review', [
 ])
 
 
-.controller('addReviewCtrl', ['$q', '$scope', 'ratingTypesApiService', 'reviewApiService', 'msgBus', 'ReviewService',
-    function($q, $scope, ratingTypesApiService, reviewApiService, msgBus, ReviewService) {
-
-        // msgBus.onMsg('review:new', function(event, data) {
-        //     $scope.review = new reviewApiService();
-        //     ReviewService.getRatingTypes().then(function(results){
-        //         $scope.rating_types = results;
-        //         console.log('new', results);
-        //     })
-        //     $scope.ae_button_label = "Add";
-        // }, $scope);
-
-        // msgBus.onMsg('review:edit', function(event, data) {
-        //   console.log(data.id);
-        //   $scope.getReview(data.id);
-        // }, $scope);
+.controller('addReviewCtrl', ['$q', '$scope', 'msgBus', 'ReviewService',
+    function($q, $scope, msgBus, ReviewService) {
 
     }
 ])
-.directive('addEditReview', ['$rootScope','$filter','$document','$modal','$compile','$timeout','ratingTypesApiService', 'reviewApiService', 'msgBus','ReviewService','AlertService',
-    function($rootScope,$filter,$document,$modal,$compile,$timeout,ratingTypesApiService, reviewApiService,msgBus, ReviewService,AlertService){
+.directive('addEditReview', ['$rootScope','$filter','$document','$modal','$compile','$timeout', 'msgBus','ReviewService','AlertService',
+    function($rootScope,$filter,$document,$modal,$compile,$timeout,msgBus, ReviewService,AlertService){
         return {
             restrict: 'E',
             scope:{

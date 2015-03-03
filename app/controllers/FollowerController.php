@@ -55,7 +55,7 @@ class FollowerController extends \BaseController {
     // $user_feed = $client->feed("user","{$user->id}");
     // $user_feed->removeActivity("Filmkeep\Follower:{$follow_id}", true);
 
-    //follow the feed
+    //unfollow the feed
     FeedManager::unfollowUser($user->id, $follower_id);
 
     return User::with('followers')->where('id',Auth::user()->id)->first();

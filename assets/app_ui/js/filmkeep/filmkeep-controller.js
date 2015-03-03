@@ -17,9 +17,9 @@
       },
 
       resolve: {
-        page_user: function(userApiService, $stateParams, $q){
+        page_user: function(Api, $stateParams, $q){
           var deferred = $q.defer();
-          userApiService
+          Api.Users
             .get({id:$stateParams.username,username:true}, function(response){
               deferred.resolve(response);
 
@@ -43,8 +43,8 @@
     
   }])
 
-  .controller('userCtrl', ['$scope', 'msgBus', '$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory','me','page_user',
-    function ($scope, msgBus,$stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory,  me, page_user) {
+  .controller('userCtrl', ['$scope', 'msgBus', '$stateParams','ReviewService','followerFactory','me','page_user','Api',
+    function ($scope, msgBus, $stateParams, ReviewService, followerFactory,  me, page_user, Api) {
         
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
@@ -64,14 +64,14 @@
 
             //make change immediately, should be in callback, but it's too slow
             page_user.following = false;
-            followApiService.unfollow(page_user.id).then(function(response){
+            Api.unfollow(page_user.id).then(function(response){
               me.user.followers = response.followers;
             });
 
           }else{
 
             page_user.following = true;
-            followApiService.follow(page_user.id).then(function(response){
+            Api.follow(page_user.id).then(function(response){
               me.user.followers = response.followers;
             });
 
@@ -81,8 +81,8 @@
 
     }]) 
 
-    .controller('FilmkeepCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','userApiService','reviewApiService','followApiService','followerFactory',
-    function ($scope, msgBus,$stateParams, ReviewService, userApiService, reviewApiService, followApiService, followerFactory  ) {
+    .controller('FilmkeepCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','followerFactory','Api',
+    function ($scope, msgBus,$stateParams, ReviewService, followerFactory, Api ) {
         msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Filmkeep" );
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
@@ -114,9 +114,8 @@
             $scope.pagination.current = 1;
           
         }
-
         function getResultsPage(pageNumber) {
-          reviewApiService
+          Api.Reviews
               .query({
                   num: $scope.reviews_per_page,
                   page: pageNumber,

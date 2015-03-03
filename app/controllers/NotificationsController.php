@@ -26,5 +26,4 @@ class NotificationsController extends Controller{
     $activities = $feed->getActivities(0,100,$options);
     return Response::json(['response'=> true]);
   }
-
 }

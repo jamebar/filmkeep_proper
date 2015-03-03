@@ -68,8 +68,8 @@ angular.module('myApp', [
     templateUrl: '/assets/templates/app.tmpl.html',
     controller: 'appCtrl',
     resolve: {
-      me: function (meApiService) {
-          return meApiService.me();
+      me: function (Api) {
+          return Api.me();
       } 
     }
   });
@@ -141,8 +141,8 @@ angular.module('myApp', [
 
 
 
-.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','meApiService','notificationsApiService','$modal','wtfApiService',
-    function($scope,$rootScope,msgBus,meApiService,notificationsApiService,$modal,wtfApiService) {
+.controller('wrapperCtrl', ['$scope','$rootScope','msgBus','$modal','Api',
+    function($scope,$rootScope,msgBus,$modal,Api) {
 
 
       msgBus.onMsg('user::loaded', function(e, data){
@@ -173,13 +173,13 @@ angular.module('myApp', [
             $scope.navbarCollapsed = true;
         })
       
-      notificationsApiService.getNotifications().then(function(response){
+      Api.Notifications.query(function(response){
         $scope.notif_items = response;
         $scope.notif_new = _.where(response, { 'is_seen' : false }).length;
       })
 
       $scope.markSeen = function(){
-        notificationsApiService.markSeen();
+        Api.markSeen();
         $scope.notif_new = 0;
       }
 
@@ -191,7 +191,7 @@ angular.module('myApp', [
           
             });
 
-          wtfApiService.getWtf().then(function(response){
+          Api.getWtf().then(function(response){
             var results = response.results.split('|');
             $scope.todos = results[0].split(',');
             $scope.done = results[1].split(',');
@@ -202,13 +202,10 @@ angular.module('myApp', [
     }
   
 ])
-.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','reviewApiService','me','watchlistApiService','Slug','filmApiService','listsApiService','wtfApiService','commentsApiService',
-    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,reviewApiService,me,watchlistApiService,Slug,filmApiService,listsApiService,wtfApiService,commentsApiService) {
+.controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','me','Slug','Api',
+    function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,me,Slug,Api) {
        var reviewModalInstance;
 
-       // commentsApiService.getComments('review','16').then(function(response){
-       //  console.log(response);
-       // })
        $rootScope.$on('modal::close', function(){
         reviewModalInstance.close();
        });
@@ -235,7 +232,7 @@ angular.module('myApp', [
 
         $scope.addRemoveToList = function(list_id, film_id, action)
         {
-          var list = new listsApiService();
+          var list = new Api.Lists();
           list.id = list_id;
           list.$addRemove({film_id:film_id, action: action}).then(function(response){
             console.log(response);
@@ -320,7 +317,7 @@ angular.module('myApp', [
           $scope.trailer_source = false;
           $scope.trailer_sources = [];
           
-          filmApiService.getTrailer(tmdb_id).then(function(response){
+          Api.getTrailer(tmdb_id).then(function(response){
             if(angular.isDefined(response.youtube) && response.youtube.length>0){
               $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/' + response.youtube[0].source);
               $scope.current_trailer = response.youtube[0].source;
@@ -344,10 +341,8 @@ angular.module('myApp', [
           showModal();
         }
 
-        
-
         $scope.newReview = function(film){
-            $scope.review = new reviewApiService();
+            $scope.review = new Api.Reviews();
             ReviewService.getRatingTypes().then(function(results){
                 $scope.rating_types = _.map(results, function(r){ r.value = 1000; return r });
             });
@@ -369,11 +364,8 @@ angular.module('myApp', [
           var film_id = angular.isDefined(obj.film_id) ? obj.film_id : obj.id;
           $scope.$broadcast('watchlist::addremove', film_id);
 
-          watchlistApiService
-            .addRemoveWatchlist(film_id).then(function(response) {
+          Api.addRemoveWatchlist(film_id).then(function(response) {
 
-                // console.log(response);
-                
             });
         }
 
@@ -409,7 +401,7 @@ angular.module('myApp', [
   }
 }])
 
-.directive('filmObject', ['$rootScope','watchlistApiService','msgBus','meApiService','Slug',function($rootScope,watchlistApiService,msgBus,meApiService,Slug) {
+.directive('filmObject', ['$rootScope','msgBus','Slug','Api',function($rootScope,msgBus,Slug,Api) {
   return {
     restrict: 'E',
     scope:{
@@ -421,7 +413,7 @@ angular.module('myApp', [
     templateUrl: '/assets/templates/film_object.tmpl.html',
     link: function(scope, element,attrs) {
 
-        scope.me = meApiService.meData();
+        scope.me = Api.meData();
 
 
         scope.watchlist = function(obj)
@@ -429,8 +421,7 @@ angular.module('myApp', [
           var film_id = angular.isDefined(obj.film_id) ? obj.film_id : obj.id;
           $rootScope.$broadcast('watchlist::addremove', film_id);
 
-          watchlistApiService
-            .addRemoveWatchlist(film_id).then(function(response) {
+          Api.addRemoveWatchlist(film_id).then(function(response) {
 
             });
         }
@@ -551,11 +542,11 @@ angular.module('myApp', [
 }])
 
 
-.factory('followerFactory', ['meApiService',function(meApiService){
+.factory('followerFactory', ['Api',function(Api){
   return {
     isFollowing : function(user)
     {
-      var me = meApiService.meData();
+      var me = Api.meData();
       // console.log(me, user.id)
       if(!angular.isDefined(me.user))
         return false;
