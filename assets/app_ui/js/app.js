@@ -309,6 +309,12 @@ angular.module('myApp', [
           });
         }
 
+        $scope.showVideo = function(){
+              $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/vmw2OVRDJ5g');
+              $scope.current_trailer = 'vmw2OVRDJ5g';
+            trailerModal();
+        }
+
         $scope.slugify = function(input) {
         
             return Slug.slugify(input);

@@ -30,6 +30,9 @@ class CommentsController extends \BaseController {
    */
   public function store()
   {
+    if(Auth::guest())
+      App::abort(403, 'Unauthorized action.');
+    
     $user = User::find(Auth::user()->id);
     $type = Input::get('type');
     $type_id = Input::get('type_id');
