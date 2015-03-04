@@ -28,5 +28,10 @@ class Watchlist extends \Eloquent {
 
 
     }
+
+    public function comments()
+    {
+        return $this->morphMany('Filmkeep\Comment', 'commentable');
+    }
     
 }

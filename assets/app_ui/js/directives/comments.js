@@ -4,8 +4,8 @@
   angular.module('fk.comments', [
 ])
 
-  .directive('comments', ['Api','AlertService',
-    function(Api,AlertService){
+  .directive('comments', ['Api','AlertService','$timeout',
+    function(Api,AlertService,$timeout){
         return {
             restrict: 'E',
             scope:{
@@ -16,9 +16,14 @@
             templateUrl: '/assets/templates/comments/comments.tmpl.html',
             link: function(scope, element, attrs) {
 
+              $timeout(function() {
+                $('.comment_input').focus();
+              });
+              
               Api.Comments.query({type: scope.type, type_id: scope.commentableId}, function(response){
                 scope.comments = response.results;
               });
+              scope.me = Api.meData();
 
               scope.newComment = function(){
                 scope.comment = new Api.Comments();

@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <!-- <link rel="stylesheet" href="/assets/css/vendor.css"> -->
     <!-- <link rel="stylesheet" href="/assets/css/animate.min.css"> -->
-  <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150303.css">
+  <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150304.css">
   <link rel="stylesheet" href="/assets/css/filmkeep-font.css">
 
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
     <script src="/assets/js/vendor.js?cache=1.2"></script>
-    <script id="bundle" src="/assets/js/app-20150303.js"></script>
+    <script id="bundle" src="/assets/js/app-20150304.js"></script>
     <base href="/" />
     <script>
       var image_path_config = {{json_encode($image_path_config)}};

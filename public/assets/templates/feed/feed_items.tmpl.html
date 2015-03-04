@@ -25,7 +25,7 @@
           </div>
           <div class="feed-review-wrapper clearfix">
             <div class="feed-review-poster pull-left">
-                <film-object film="activity.object.film" type="vertical" review="activity.object"></film-object>
+                <film-object film="activity.object.film" comments="true" type="vertical" review="activity.object"></film-object>
             </div>
             <span class="title">%%activity.object.film.title%%</span>
             <div class="feed-review-ratings " >
@@ -39,6 +39,10 @@
             </div>
           </div>
           <div class="feed-review-notes" text-more="%%activity.object.notes%%" max="125"></div>
+          <div class="feed-comments" ng-if="activity.object.film.showcomments">
+            <comments type="review"  commentable-id="activity.object.id" film-id="activity.object.film.id"></comments>
+          </div>
+
       </accordion-group>
       </accordion>
       
@@ -60,14 +64,20 @@
        to the <a ui-sref='root.user.watchlist({username: feed_item.activities[0].actor.username})'>watchlist</a>
     </span>
     <div class="clearfix">
-      <span ng-repeat="activity in feed_item.activities" class="activity-item" ng-class="{multi: feed_item.activity_count>2}">
-          <film-object ng-if="$index < 2" film="activity.object.film" horizontal="true" ></film-object>
+      <span ng-repeat="activity in feed_item.activities" ng-if="$index < 2" class="activity-item" ng-class="{multi: feed_item.activity_count>2}">
+          <film-object  film="activity.object.film" horizontal="true" comments="true"></film-object>
+          <div class="feed-comments" ng-if="activity.object.film.showcomments">
+            <comments type="watchlist"  commentable-id="activity.object.id" film-id="activity.object.film.id"></comments>
+          </div>
       </span>
 
       <div class="showhide" ng-if="feed_item.activities.length > 2">and <a class="less showhide-toggle">%%feed_item.activities.length - 2%% more</a>
         <div class="more">
           <span ng-repeat="activity in feed_item.activities" ng-if="$index > 1" >
-             <film-object ng-if="$index > 1" film="activity.object.film" horizontal="true" ></film-object>
+             <film-object film="activity.object.film" horizontal="true" comments="true"></film-object>
+            <div class="feed-comments" ng-if="activity.object.film.showcomments">
+              <comments type="watchlist"  commentable-id="activity.object.id" film-id="activity.object.film.id"></comments>
+            </div>
           </span>
         </div>
       </div>

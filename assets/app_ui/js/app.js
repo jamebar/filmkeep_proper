@@ -421,7 +421,7 @@ angular.module('myApp', [
     link: function(scope, element,attrs) {
 
         scope.me = Api.meData();
-
+        scope.comments = attrs.comments || false;
 
         scope.watchlist = function(obj)
         {
@@ -668,4 +668,5 @@ angular.module('myApp', [
         }
     }
 })
+
 ;

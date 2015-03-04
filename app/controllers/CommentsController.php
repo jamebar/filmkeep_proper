@@ -3,6 +3,7 @@
 use Filmkeep\User;
 use Filmkeep\Review;
 use Filmkeep\Comment;
+use Filmkeep\Watchlist;
 
 class CommentsController extends \BaseController {
 
@@ -57,6 +58,9 @@ class CommentsController extends \BaseController {
     switch($type){
       case 'review':
       return Review::find($id);
+      break;
+      case 'watchlist':
+      return Watchlist::find($id);
       break;
     }
     
