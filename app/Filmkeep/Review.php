@@ -6,7 +6,7 @@ class Review extends \Eloquent {
 
 	  protected $guarded = [];
     
-    public $activityLazyLoading = ['film','ratings','ratings.rating_type'];
+    public $activityLazyLoading = ['film','ratings','ratings.rating_type','comments'];
 
     public function film(){
          return $this->belongsTo('Filmkeep\Film');

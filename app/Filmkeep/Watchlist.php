@@ -6,7 +6,7 @@ class Watchlist extends \Eloquent {
 
     protected $guarded = [];
     
-    public $activityLazyLoading = ['film','user'];
+    public $activityLazyLoading = ['film','user','comments'];
 
     public function film(){
          return $this->belongsTo('Filmkeep\Film');

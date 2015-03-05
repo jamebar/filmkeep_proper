@@ -415,14 +415,15 @@ angular.module('myApp', [
     scope:{
       film: '=film',
       review: '=review',
-      horizontal: '@'
+      horizontal: '@',
+      comments: '='
     },
     replace: true,
     templateUrl: '/assets/templates/film_object.tmpl.html',
     link: function(scope, element,attrs) {
 
         scope.me = Api.meData();
-        scope.comments = attrs.comments || false;
+        scope.comments_show = angular.isDefined(scope.comments);
 
         scope.watchlist = function(obj)
         {
