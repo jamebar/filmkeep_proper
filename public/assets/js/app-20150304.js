@@ -1206,7 +1206,7 @@ var aeReview = angular.module('ae-review', [
 
   .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
     $stateProvider.state('root.film', {
-      url: '/f/{filmId}_{filmSlug}',
+      url: '/f/{filmId}-{filmSlug}',
       title: 'Film',
       views: {
         'page' : {
