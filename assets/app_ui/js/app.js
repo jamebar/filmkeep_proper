@@ -417,7 +417,7 @@ angular.module('myApp', [
       horizontal: '@'
     },
     replace: true,
-    templateUrl: '/assets/templates/film_object.tmpl.html',
+    templateUrl: '/assets/templates/film_object.tmpl.html?cache=1',
     link: function(scope, element,attrs) {
 
         scope.me = Api.meData();
