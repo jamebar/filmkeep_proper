@@ -36,8 +36,9 @@ angular.module('myApp', [
   $rootScope.$stateParams = $stateParams; 
 }])
 
-.config(['$locationProvider','$stateProvider','$urlRouterProvider','$tooltipProvider', function($locationProvider, $stateProvider,$urlRouterProvider,$tooltipProvider) {
-
+.config(['$locationProvider','$stateProvider','$urlRouterProvider','$tooltipProvider','$urlMatcherFactoryProvider', function($locationProvider, $stateProvider,$urlRouterProvider,$tooltipProvider,$urlMatcherFactoryProvider) {
+  $urlMatcherFactoryProvider.caseInsensitive(true);
+  $urlMatcherFactoryProvider.strictMode(false);
   $locationProvider.html5Mode(true);
 
   var tooltipFactory = $tooltipProvider.$get[$tooltipProvider.$get.length - 1];

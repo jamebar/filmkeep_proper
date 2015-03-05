@@ -36,8 +36,9 @@ angular.module('myApp', [
   $rootScope.$stateParams = $stateParams; 
 }])
 
-.config(['$locationProvider','$stateProvider','$urlRouterProvider','$tooltipProvider', function($locationProvider, $stateProvider,$urlRouterProvider,$tooltipProvider) {
-
+.config(['$locationProvider','$stateProvider','$urlRouterProvider','$tooltipProvider','$urlMatcherFactoryProvider', function($locationProvider, $stateProvider,$urlRouterProvider,$tooltipProvider,$urlMatcherFactoryProvider) {
+  $urlMatcherFactoryProvider.caseInsensitive(true);
+  $urlMatcherFactoryProvider.strictMode(false);
   $locationProvider.html5Mode(true);
 
   var tooltipFactory = $tooltipProvider.$get[$tooltipProvider.$get.length - 1];
@@ -1259,7 +1260,7 @@ var aeReview = angular.module('ae-review', [
       },
 
       resolve: {
-        page_user: function(Api, $stateParams, $q){
+        page_user: ['Api','$stateParams','$q',function(Api, $stateParams, $q){
           var deferred = $q.defer();
           Api.Users
             .get({id:$stateParams.username,username:true}, function(response){
@@ -1267,17 +1268,30 @@ var aeReview = angular.module('ae-review', [
 
             });
           return deferred.promise;
-        }
+        }]
       }
     });
 
     $stateProvider.state('root.user.filmkeep', {
-      url: '/filmkeep',
+      url: '',
       title: 'filmkeep',
       views: {
         'page-child' : {
           templateUrl: '/assets/templates/filmkeep.tmpl.html',
           controller: 'FilmkeepCtrl'
+        }
+      },
+    });
+
+    $stateProvider.state('root.user.filmkeep2', {
+      url: '/filmkeep',
+      title: 'filmkeep',
+       views: {
+        'page-child' : {
+          template: '',
+          controller: ['$stateParams','$state',function($stateParams,$state){
+            $state.go('root.user.filmkeep', {username: $stateParams.username });
+          }]
         }
       },
     });

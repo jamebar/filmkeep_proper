@@ -17,7 +17,7 @@
       },
 
       resolve: {
-        page_user: function(Api, $stateParams, $q){
+        page_user: ['Api','$stateParams','$q',function(Api, $stateParams, $q){
           var deferred = $q.defer();
           Api.Users
             .get({id:$stateParams.username,username:true}, function(response){
@@ -25,17 +25,30 @@
 
             });
           return deferred.promise;
-        }
+        }]
       }
     });
 
     $stateProvider.state('root.user.filmkeep', {
-      url: '/filmkeep',
+      url: '',
       title: 'filmkeep',
       views: {
         'page-child' : {
           templateUrl: '/assets/templates/filmkeep.tmpl.html',
           controller: 'FilmkeepCtrl'
+        }
+      },
+    });
+
+    $stateProvider.state('root.user.filmkeep2', {
+      url: '/filmkeep',
+      title: 'filmkeep',
+       views: {
+        'page-child' : {
+          template: '',
+          controller: ['$stateParams','$state',function($stateParams,$state){
+            $state.go('root.user.filmkeep', {username: $stateParams.username });
+          }]
         }
       },
     });
