@@ -33,7 +33,7 @@ class StreamController extends Controller{
       foreach($activity_group['activities'] as &$activity)
       {
         
-        if($activity['verb'] !== 'filmkeep\follower')
+        if($activity['verb'] !== 'filmkeep\follower' && $activity['verb'] !== 'filmkeep\comment')
         {
           $review = Review::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($activity)
           {

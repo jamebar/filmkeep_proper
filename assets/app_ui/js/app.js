@@ -182,7 +182,7 @@ angular.module('myApp', [
       })
 
       $scope.markSeen = function(){
-        Api.markSeen();
+        Api.Notifications.markSeen();
         $scope.notif_new = 0;
       }
 
@@ -582,6 +582,7 @@ angular.module('myApp', [
   return function(verb){
     var keys = {'filmkeep\\review':'reviewed',
                 'filmkeep\\watchlist':'added',
+                'filmkeep\\comment':'commented',
                 'filmkeep\\follower':'started following'
                 };
     return keys[verb];

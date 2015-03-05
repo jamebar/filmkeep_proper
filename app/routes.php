@@ -121,7 +121,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
 
     $router->get('notifications', 'NotificationsController@index');
-    $router->post('notifications/seen', 'NotificationsController@markSeen');
+    $router->post('notifications', 'NotificationsController@markSeen');
 
     $router->get('film', 'FilmController@index');
 
