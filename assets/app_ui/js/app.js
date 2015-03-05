@@ -24,7 +24,8 @@ angular.module('myApp', [
     'hmTouchEvents',
     'angulartics',
     'angulartics.google.analytics',
-    'fk.comments'
+    'fk.comments',
+    'templates'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -417,7 +418,7 @@ angular.module('myApp', [
       horizontal: '@'
     },
     replace: true,
-    templateUrl: '/assets/templates/film_object.tmpl.html?cache=1',
+    templateUrl: '/assets/templates/film_object.tmpl.html',
     link: function(scope, element,attrs) {
 
         scope.me = Api.meData();

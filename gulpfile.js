@@ -14,6 +14,8 @@ plumber = require('gulp-plumber'),
 replace = require('gulp-replace'),
 lr = require('tiny-lr'),
 gulpFilter = require('gulp-filter'),
+minifyHtml    = require('gulp-minify-html'),
+templateCache = require('gulp-angular-templatecache'),
 server = lr();
 
 var getStamp = function() {
@@ -28,6 +30,29 @@ var getStamp = function() {
 
   return myFullDate;
 };
+
+gulp.task('cache_templates', function() {
+   var filename = 'templates-' + getStamp() + '.js';
+  gulp.src('assets/templates/**/*.html')
+    .pipe(minifyHtml({empty: true}))
+    .pipe(templateCache({
+      standalone: true,
+      root: '/assets/templates'
+    }))
+    .pipe(concat(filename))
+    .pipe(gulp.dest('public/assets/js'))
+    .pipe(notify({ message: 'template task completed.' }));
+
+    gulp.src('app/views/master.blade.php', { base: './' }) //must define base so I can overwrite the src file below. Per http://stackoverflow.com/questions/22418799/can-gulp-overwrite-all-src-files
+        .pipe(replace(/<script id=\"templates\".*><\/script>/g, '<script id="templates" src="/assets/js/' + filename + '"></script>'))  //so find the script tag with an id of bundle, and replace its src.
+        .pipe(gulp.dest('./')); //Write the file back to the same spot.
+
+    gulp.src('app/views/master_auth.blade.php', { base: './' }) //must define base so I can overwrite the src file below. Per http://stackoverflow.com/questions/22418799/can-gulp-overwrite-all-src-files
+        .pipe(replace(/<script id=\"templates\".*><\/script>/g, '<script id="templates" src="/assets/js/' + filename + '"></script>'))  //so find the script tag with an id of bundle, and replace its src.
+        .pipe(gulp.dest('./')); //Write the file back to the same spot.
+
+
+});
 
 gulp.task('styles', function() {
   var filename = 'styles-' + getStamp() + '.css';
@@ -101,6 +126,7 @@ gulp.task('scripts', function() {
 });
 
 
+
 gulp.task('watch', function() {
 	server.listen(35729, function (e) {
 		if (e) {
@@ -109,6 +135,7 @@ gulp.task('watch', function() {
  
 		gulp.watch(['assets/css/*.less'], ['styles']);
 		gulp.watch(['assets/**/*.js'], ['scripts']);
+    gulp.watch('assets/templates/**/*.html', ['cache_templates']);
 		
 	});
 });

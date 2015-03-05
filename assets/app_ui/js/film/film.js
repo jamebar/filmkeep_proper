@@ -10,7 +10,7 @@
       title: 'Film',
       views: {
         'page' : {
-          templateUrl: '/assets/templates/film.tmpl.html?cache=1',
+          templateUrl: '/assets/templates/film.tmpl.html',
           controller: 'FilmCtrl'
         }
       },
