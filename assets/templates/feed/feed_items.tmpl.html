@@ -10,7 +10,7 @@
         <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
       </span>
       %% feed_item.verb | verb %%
-      <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span>
+      <span ng-if="feed_item.activity_count > 1">%%feed_item.activity_count%% films</span>
       <a ui-sref='root.review({reviewId: feed_item.activities[0].object.id})' ng-if="feed_item.activity_count===1">%%feed_item.activities[0].object.film.title%%</a>
     </span>
     <div class="clearfix">
@@ -18,7 +18,7 @@
       <accordion-group  is-open="status.open" ng-class="{open: status.open }" ng-init="status.open = $index ==0 ? true : false"  ng-repeat="activity in feed_item.activities" class="activity-item activity-review" >
         <accordion-heading>
             %%activity.object.film.title%% (%%releaseDate(activity.object.film.release_date)%%) <i class="pull-right glyphicon glyphicon-chevron-down" ></i>
-            <p ng-if="activity.object.notes.length >1" text-more="%%activity.object.notes%%" max="50"></p>
+            <p ng-if="activity.object.notes.length > 1" text-more="%%activity.object.notes%%" max="50"></p>
         </accordion-heading>
           <div class="feed-review-cover" ng-style="{'background-image':'url(%%activity.object.film.backdrop_path | imageFilter :'backdrop':'1' %%)'}">
             <div class="cover"></div>
@@ -59,7 +59,7 @@
           <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
       </span>
       %% feed_item.verb | verb %%
-      <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span>
+      <span ng-if="feed_item.activity_count > 1">%%feed_item.activity_count%% films</span>
       <a ui-sref='root.film({filmId: feed_item.activities[0].object.film.tmdb_id, filmSlug: slugify(feed_item.activities[0].object.film.title)})' ng-if="feed_item.activity_count===1">%%feed_item.activities[0].object.film.title%%</a>
        to the <a ui-sref='root.user.watchlist({username: feed_item.activities[0].actor.username})'>watchlist</a>
     </span>
