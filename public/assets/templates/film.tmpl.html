@@ -3,7 +3,7 @@
     <div class="site-max">
         <div class="fc-info">
           <div class="fc-poster hidden-xs hidden-sm">
-            <img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" />
+            <img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" onerror="if (this.src != '/assets/img/fallback-poster.jpg') this.src = '/assets/img/fallback-poster.jpg';"/>
           </div>
           <div class="fc-content">
             <h2>%%film.title%%</h2>

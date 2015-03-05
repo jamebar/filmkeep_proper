@@ -1,6 +1,6 @@
 <div ng-class="{horizontal:horizontal == 'true'}" class="film-object clearfix">
 
-  <a ng-if="!review" ui-sref='root.film({filmId: film.tmdb_id, filmSlug: slugify(film.title) })' class="poster"><img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" /></a>
+  <a ng-if="!review" ui-sref='root.film({filmId: film.tmdb_id, filmSlug: slugify(film.title) })' class="poster"><img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" onerror="if (this.src != '/assets/img/fallback-poster.jpg') this.src = '/assets/img/fallback-poster.jpg';" /></a>
   <a ui-sref='root.review({reviewId: review.id})' ng-if="review" class="poster"><img ng-src="%%review.film.poster_path | imageFilter:'poster':'1'%%" /></a>
   <span class="film-object-content">
     <h3 ng-if="horizontal">%%film.title%%</h3>
