@@ -17,7 +17,7 @@
             link: function(scope, element, attrs) {
 
               $timeout(function() {
-                $('.comment_input').focus();
+                element.find('.comment_input').focus();
               });
               
               Api.Comments.query({type: scope.type, type_id: scope.commentableId}, function(response){
