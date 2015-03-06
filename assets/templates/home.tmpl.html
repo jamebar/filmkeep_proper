@@ -28,6 +28,16 @@
         </ul>
         <p ng-show="lists.length == 0">Create custom lists of films e.g., favorite christmas films, etc. </p>
       </div> -->
+      <div class="sidebar-item announcements-sidebar clearfix" ng-if="announcements.length > 0">
+        <h3>Latest </h3>
+        <ul>
+          <li ng-repeat="item in announcements | limitTo: 6">
+            <h3>%%item.title%%</h3>
+            <p ng-bind-html="item.description | unsafe"></p>
+          </li>
+        </ul>
+        <p ng-show="watchlist_items.length ==0">Your watchlist is empty.  You can add any film to your watchlist, just look for the "watchlist" button next to any film poster. </p>
+      </div>
       <div class="sidebar-item watchlist-sidebar clearfix">
         <h3>Watchlist <a ui-sref='root.user.watchlist({username: me.user.username})' class="pull-right">view</a></h3>
         <ul>

@@ -1,0 +1,22 @@
+<div class="film-cover-wrapper " ng-style="{'background-image':'url(%%subject.film.backdrop_path | imageFilter :'backdrop':'1' %%)'}">
+  <div class="film-cover ">
+    
+        <div class="fc-info">
+          <div class="fc-poster hidden-xs hidden-sm">
+            <img ng-src="%%subject.film.poster_path | imageFilter:'poster':'1'%%" onerror="if (this.src != '/assets/img/fallback-poster.jpg') this.src = '/assets/img/fallback-poster.jpg';"/>
+          </div>
+          <div class="fc-content">
+            <h2>%%subject.film.title%%</h2>
+            <div class="film-actions">
+              <a class="visible-xs-inline" ng-click="getTrailer(subject.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
+              <a ui-sref='root.film({filmId: subject.film.tmdb_id, filmSlug: slugify(subject.film.title) })' > Visit film page</a>
+            </div>
+          </div>
+        </div>
+     
+  </div>
+</div>
+<div class="watchlist-modal">
+  <p>%%subject.film.summary%%</p>
+  <comments type="watchlist" commentable-id="subject.commentable_id" film-id="subject.film.id"></comments>
+</div>

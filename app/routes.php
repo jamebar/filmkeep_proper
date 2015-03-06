@@ -10,6 +10,7 @@ use Filmkeep\Follower;
 use Filmkeep\Watchlist;
 use Filmkeep\CustomList;
 use Filmkeep\Comment;
+use Filmkeep\Announcement;
 
 Route::get('/test', function(){
 
@@ -144,7 +145,8 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
         return Response::json(['response'=>'false']);
 
       $user = User::with('followers')->where('id',Auth::user()->id)->first();
-      return Response::json(['user'=> $user, 'response'=>'success']);
+      $announcements = Announcement::where('is_active', true)->get();
+      return Response::json(['user'=> $user, 'response'=>'success', 'announcements' => $announcements]);
     });
 
     $router->get('/wtf', function(){

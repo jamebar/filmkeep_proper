@@ -171,6 +171,18 @@ angular.module('myApp', [
         msgBus.emitMsg('review::edit', id);
       }
 
+       $scope.watchlistModal = function(obj){
+          $scope.subject = obj;
+          // console.log(obj);
+          var modalInstance = $modal.open({
+                scope: $scope,
+                templateUrl: '/assets/templates/modal_watchlist.tmpl.html',
+          
+            });
+
+          
+        }
+
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){ 
             $scope.navbarCollapsed = true;
@@ -377,11 +389,15 @@ angular.module('myApp', [
 
             });
         }
-
-        
         
     }
 ])
+.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+
+})
 .directive('closeMe', [ '$timeout', function($timeout) {
   return {
     restrict: 'A',

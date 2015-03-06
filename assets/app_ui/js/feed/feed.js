@@ -32,6 +32,7 @@
     msgBus.emitMsg('pagetitle::change', 'My Feed' );
     $scope.loading = true;
     $scope.me = me;
+    $scope.announcements = me.announcements;
 
     ReviewService.getRatingTypes().then(function(results){
       $scope.rating_types_new = results;
