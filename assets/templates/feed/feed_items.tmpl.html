@@ -93,7 +93,7 @@
     <span class="feed-actor">
         <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
     </span>
-    %% feed_item.verb | verb %% &nbsp;
+    %% feed_item.verb | verb %%&nbsp;
     <!-- <span ng-if="feed_item.activity_count>1">%%feed_item.activity_count%% films</span> -->
     
     <span ng-repeat="activity in feed_item.activities | limitTo:3" >
