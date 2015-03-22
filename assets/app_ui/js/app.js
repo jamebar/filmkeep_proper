@@ -174,6 +174,7 @@ angular.module('myApp', [
 
        $scope.watchlistModal = function(obj){
           $scope.subject = obj;
+          $scope.subject.commentable_id = obj.commentable_id || obj.id;
           // console.log(obj);
           var modalInstance = $modal.open({
                 scope: $scope,
@@ -435,7 +436,9 @@ angular.module('myApp', [
       film: '=film',
       review: '=review',
       horizontal: '@',
-      comments: '='
+      comments: '=',
+      watchlistmodal: '&commentClick',
+      commentObject: '='
     },
     replace: true,
     templateUrl: '/assets/templates/film_object.tmpl.html',
@@ -452,6 +455,12 @@ angular.module('myApp', [
           Api.addRemoveWatchlist(film_id).then(function(response) {
 
             });
+        }
+
+        scope.openComments = function(){
+          scope.film.showcomments = !scope.film.showcomments
+          scope.watchlistmodal(scope.commentObject);
+          // console.log(scope.commentObject)
         }
 
         scope.slugify = function(input) {

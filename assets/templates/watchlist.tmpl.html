@@ -5,7 +5,7 @@
   <button ng-click="htoggle = false" type="button" ng-class="{active: htoggle== true,disabled:htoggle==false}" class="btn btn-default"><i class="glyphicon glyphicon-th"></i></button>
 </div>
 
-<div class="watchlist-page">
-  <film-object film="w.film" ng-repeat="w in watchlist_items" horizontal="%%htoggle%%" ></film-object>
+<div class="watchlist-page" >
+  <film-object film="w.film" comments="w.comments.length" comment-object="w" comment-click="watchlistModal(w)" ng-repeat="w in watchlist_items" horizontal="%%htoggle%%" ></film-object>
 </div>
 <div class="space-bottom"></div>

@@ -3,8 +3,7 @@
   <a ng-if="!review" ui-sref='root.film({filmId: film.tmdb_id, filmSlug: slugify(film.title) })' class="poster"><img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" onerror="if (this.src != '/assets/img/fallback-poster.jpg') this.src = '/assets/img/fallback-poster.jpg';" /></a>
   <a ui-sref='root.review({reviewId: review.id})' ng-if="review" class="poster"><img ng-src="%%review.film.poster_path | imageFilter:'poster':'1'%%" /></a>
   <span class="film-object-content">
-    <h3 ng-if="horizontal && !review"><a ui-sref='root.film({filmId: film.tmdb_id, filmSlug: slugify(film.title) })'>%%film.title%%</a></h3>
-    <h3 ng-if="horizontal && review"><a ui-sref='root.review({reviewId: review.id})'>%%film.title%%</a></h3>
+    <h3 ng-if="horizontal"><a ui-sref='root.film({filmId: film.tmdb_id, filmSlug: slugify(film.title) })'>%%film.title%%</a></h3>
     <p ng-if="horizontal" text-more="%%film.summary%%" ></p>
     <div class="fo-actions">
       <a class="action" tooltip="Watch Trailer" ng-click="getTrailer(film.tmdb_id)"><span class="ficon glyphicon glyphicon-facetime-video"></span></a>
@@ -16,7 +15,7 @@
 
         <!-- <a ui-sref='root.review({reviewId: activity.object.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a> -->
       </span>
-      <a class="action comment-icon" ng-show="comments_show" tooltip="Toggle comments" ng-click="film.showcomments = !film.showcomments" ng-init="film.showcomments = false"><i class="ficon glyphicon glyphicon-comment"></i><span class="comment-count" ng-show="comments > 0">%%comments%%</span></a>
+      <a class="action comment-icon" ng-show="comments_show" tooltip="Toggle comments" ng-click="openComments()" ng-init="film.showcomments = false"><i class="ficon glyphicon glyphicon-comment"></i><span class="comment-count" ng-show="comments > 0">%%comments%%</span></a>
       <a class="action watchlist-btn" ng-click="watchlist(film)" ><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="ficon glyphicon"></span> watchlist</a>
 
     </div>
