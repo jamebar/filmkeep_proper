@@ -10,16 +10,23 @@
   </div>
 
   <!-- FOLLOW COMMENT ITEM -->
-  <div ng-switch-when="filmkeep\comment" class="media">
+  <div ng-switch-when="filmkeep\comment" >
     <span ng-switch="notif_item.activities[0].object.commentable_type">
-      <a ng-switch-when="Filmkeep\Review" ui-sref='root.review({reviewId: notif_item.activities[0].object.commentable_id})'><span class="media-left"><avatar class="avatar sm" info="notif_item.activities[0].actor"></avatar></span>
-        <div class="media-body">
-          <p>%%notif_item.activities[0].actor.name%% %%notif_item.verb | verb %% on %%notif_item.activities[0].object.film.title%%</p>
+      <a ng-switch-when="Filmkeep\Review" ui-sref='root.review({reviewId: notif_item.activities[0].object.commentable_id})'>
+        <div class="media">
+            <div class="media-left"><avatar class="avatar sm" info="notif_item.activities[0].actor"></avatar></div>
+            <div class="media-body">
+              <p>%%notif_item.activities[0].actor.name%% %%notif_item.verb | verb %% on %%notif_item.activities[0].object.film.title%%</p>
+            </div>
         </div>
       </a>
-      <a ng-switch-when="Filmkeep\Watchlist" ng-click="watchlistModal(notif_item.activities[0].object)"><span class="media-left"><avatar class="avatar sm" info="notif_item.activities[0].actor"></avatar></span>
-        <div class="media-body">
-          <p>%%notif_item.activities[0].actor.name%% %%notif_item.verb | verb %% on %%notif_item.activities[0].object.film.title%%</p>
+      <a ng-switch-when="Filmkeep\Watchlist" ng-click="watchlistModal(notif_item.activities[0].object)">
+
+        <div class="media">
+          <div class="media-left"><avatar class="avatar sm" info="notif_item.activities[0].actor"></avatar></div>
+            <div class="media-body">
+              <p>%%notif_item.activities[0].actor.name%% %%notif_item.verb | verb %% on %%notif_item.activities[0].object.film.title%%</p>
+            </div>
         </div>
       </a>
     </span>

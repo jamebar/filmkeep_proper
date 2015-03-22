@@ -5,7 +5,7 @@
    <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width"  />
 	<title ng-bind-template="Filmkeep: %%page_title%%">Filmkeep</title>
-    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=12">
     <!-- <link rel="stylesheet" href="/assets/css/vendor.css"> -->
     <!-- <link rel="stylesheet" href="/assets/css/animate.min.css"> -->
   <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150321.css">
@@ -61,7 +61,17 @@
         <span class="icon-bar"></span>
       </button>
       <!-- <ul class="nav nav-pills pull-right visible-xs-inline-block"> -->
-        <a ng-click="newReview()" class="pull-right add-review-mobile visible-xs-inline-block" target="_self"><span class="glyphicon-plus glyphicon" ></span> </a>
+        <!-- <a ng-click="newReview()" class="pull-right add-review-mobile visible-xs-inline-block" target="_self"><span class="glyphicon-plus glyphicon" ></span> </a> -->
+        <!-- ng-show="notif_new > 0"  -->
+      <span class="dropdown visible-xs-block">
+        <a href="#" class="dropdown-toggle notif-wrapper  add-review-mobile pull-right" data-toggle="dropdown" ng-click="markSeen()"><i class="icon-megaphone"></i> <span class="notif_count" ng-show="notif_new > 0">%%notif_new%%</span></a>
+        <ul class="dropdown-menu notif" role="menu">
+          <li ng-if="notif_items.length <1">You have no notifications</li>
+          <li  ng-repeat="notif_item in notif_items">
+            <notif-items></notif-items>
+          </li> 
+        </ul>
+      </span>
       <!-- </ul> -->
       @else
         <ul class="nav nav-pills pull-right visible-xs-inline-block">
@@ -86,10 +96,10 @@
         <li><a ui-sref='root.user.filmkeep({username: header_user.username })'>My Filmkeep</a></li>
         <li><a ui-sref='root.user.watchlist({username: header_user.username })'>Watchlist</a></li>
 
-        <li class="hidden-xs"><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span> Review</a></li>
-        <li class="dropdown" >
+        <li ><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span> Review</a></li>
+        <li class="dropdown hidden-xs" >
           <a href="#" class="dropdown-toggle notif-wrapper" data-toggle="dropdown" ng-click="markSeen()"><i class="icon-megaphone"></i> <span ng-show="notif_new > 0" class="notif_count">%%notif_new%%</span></a>
-          <ul class="dropdown-menu notif" role="menu">
+          <ul class="dropdown-menu notif " role="menu">
             <li ng-if="notif_items.length <1">You have no notifications</li>
             <li  ng-repeat="notif_item in notif_items">
               <notif-items></notif-items>
