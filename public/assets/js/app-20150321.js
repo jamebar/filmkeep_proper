@@ -178,6 +178,7 @@ angular.module('myApp', [
           var modalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_watchlist.tmpl.html',
+                backdrop: 'static'
           
             });
 
@@ -204,7 +205,7 @@ angular.module('myApp', [
           var featureInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_wtf.tmpl.html',
-          
+                backdrop: 'static'
             });
 
           Api.getWtf().then(function(response){
@@ -270,7 +271,7 @@ angular.module('myApp', [
             reviewModalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_review.tmpl.html',
-          
+                backdrop: 'static'
             });
         }
 
@@ -282,7 +283,7 @@ angular.module('myApp', [
           var modalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_compare.tmpl.html',
-          
+                backdrop: 'static'
             });
 
           ReviewService.getCompares(obj.film_id).then(function(response){
@@ -320,14 +321,14 @@ angular.module('myApp', [
           var modalInstance = $modal.open({
               scope: $scope,
               templateUrl: '/assets/templates/modal_trailer.tmpl.html',
-        
+              
           });
         }
 
         $scope.showVideo = function(){
               $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/vmw2OVRDJ5g');
               $scope.current_trailer = 'vmw2OVRDJ5g';
-            trailerModal();
+              trailerModal();
         }
 
         $scope.slugify = function(input) {
@@ -691,189 +692,6 @@ angular.module('myApp', [
 })
 
 ;
-
-  'use strict';
-
-  angular.module('fk.comments', [
-])
-
-  .directive('comments', ['Api','AlertService','$timeout',
-    function(Api,AlertService,$timeout){
-        return {
-            restrict: 'E',
-            scope:{
-              type : '@',
-              commentableId: '=',
-              filmId: '=',
-            },
-            templateUrl: '/assets/templates/comments/comments.tmpl.html',
-            link: function(scope, element, attrs) {
-
-              $timeout(function() {
-                element.find('.comment_input').focus();
-              });
-              
-              Api.Comments.query({type: scope.type, type_id: scope.commentableId}, function(response){
-                scope.comments = response.results;
-              });
-              scope.me = Api.meData();
-
-              scope.newComment = function(){
-                scope.comment = new Api.Comments();
-              }
-              
-              scope.addComment = function(){
-                scope.comment.type = scope.type;
-                scope.comment.type_id = scope.commentableId;
-                scope.comment.film_id = scope.filmId;
-                scope.comment.$save(function(response){
-                  AlertService.Notice("Your comment has been added.");
-                  scope.comments.push(scope.comment)
-                  scope.newComment();
-                },function(response){
-                  AlertService.Notice("Whoops, make sure you type a comment.");
-                  
-                })
-              }
-
-              scope.newComment();
-
-            }
-
-        }
-    }
-  ])
-
-  .directive('commentsForm', ['Api',
-    function(Api){
-        return {
-            restrict: 'E',
-            templateUrl: '/assets/templates/comments/comment_form.tmpl.html',
-            link: function(scope, element, attrs) {
-
-            }
-
-        }
-    }
-  ]);
-
-  'use strict';
-
-  angular.module('search', [
-])
-
-  .directive('search', ['$document','$filter','$state',
-    function($document,$filter,$state){
-        return {
-            restrict: 'E',
-            scope:{},
-            templateUrl: '/assets/templates/search.tmpl.html',
-            link: function(scope, element, attrs) {
-
-              scope.search = {};
-              scope.search.query = null;  
-              
-
-                var people = new Bloodhound({
-                    datumTokenizer: function(d) {
-                        return Bloodhound.tokenizers.whitespace(title);
-                    },
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    remote: {
-                        url: '/api/user/search?query=%QUERY',
-                        filter: function(list) {
-                            return $.map(list.results, function(data) {
-                                // if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
-                                
-                                
-                                return {
-                                    name: data.name,
-                                    avatar: $filter('profileFilter')(data.avatar),
-                                    username: data.username
-                                };
-                            });
-                        }
-                    }
-                });
-
-                var films = new Bloodhound({
-                    datumTokenizer: function(d) {
-                        return Bloodhound.tokenizers.whitespace(title);
-                    },
-                    queryTokenizer: Bloodhound.tokenizers.whitespace,
-                    remote: {
-                        url: '/api/tmdb/%QUERY',
-                        filter: function(list) {
-                            return $.map(list.results, function(data) {
-                                return {
-                                    title: data.title ,
-                                    tmdb_id: data.id,
-                                    poster: $filter('imageFilter')(data.poster_path,'poster',0),
-                                    release_date: data.release_date.substring(0, 4)
-                                };
-                            });
-                        }
-                    }
-                });
-
-                people.initialize();
-                films.initialize();
-
-                scope.typeaheadOptions = {
-                    hint: true,
-                    highlight: true,
-                    minLength: 1
-                };
-
-                scope.mulitpleData = [
-                {
-                    name: 'people',
-                    displayKey: 'name',
-                    source: people.ttAdapter(),
-                    templates: {
-                      header: '<h3 class="search-title">People</h3>',
-                      suggestion: function (context) {
-                        return '<div>' +context.name+'<span></span></div>'
-                      }
-                    }
-                },
-                {
-                    name: 'films',
-                    displayKey: 'title',
-                    source: films.ttAdapter(),
-                    templates: {
-                      header: '<h3 class="search-title">Films</h3>',
-                      suggestion: function (context) {
-                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" onerror="if (this.src != \'/assets/img/fallback-poster.jpg\') this.src = \'/assets/img/fallback-poster.jpg\';"/></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
-                      }
-                    }
-                }
-                ]
-
-                scope.$on('typeahead:autocompleted', searchComplete);
-                scope.$on('typeahead:selected', searchComplete);
-                
-                function searchComplete(event, suggestion, dataset){
-
-                  if(dataset === 'people'){
-                    $state.go('root.user.filmkeep', {username: suggestion.username});
-                  }
-
-                  if(dataset === 'films'){
-                    $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
-                    
-                  }
-                  scope.search.query = null;
-
-                }
-
-                
-
-            }
-
-        }
-    }
-  ]);
 /*global _ */
 /*global moment*/
 
@@ -1087,7 +905,7 @@ var aeReview = angular.module('ae-review', [
                     source: films.ttAdapter(),
                     templates: {
                       suggestion: function (context) {
-                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" /></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
+                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" onerror="if (this.src != \'/assets/img/fallback-poster.jpg\') this.src = \'/assets/img/fallback-poster.jpg\';"/></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
                       }
                     }
                 };
@@ -1113,6 +931,189 @@ var aeReview = angular.module('ae-review', [
     }
 ])
 
+
+  'use strict';
+
+  angular.module('fk.comments', [
+])
+
+  .directive('comments', ['Api','AlertService','$timeout',
+    function(Api,AlertService,$timeout){
+        return {
+            restrict: 'E',
+            scope:{
+              type : '@',
+              commentableId: '=',
+              filmId: '=',
+            },
+            templateUrl: '/assets/templates/comments/comments.tmpl.html',
+            link: function(scope, element, attrs) {
+
+              $timeout(function() {
+                element.find('.comment_input').focus();
+              });
+              
+              Api.Comments.query({type: scope.type, type_id: scope.commentableId}, function(response){
+                scope.comments = response.results;
+              });
+              scope.me = Api.meData();
+
+              scope.newComment = function(){
+                scope.comment = new Api.Comments();
+              }
+              
+              scope.addComment = function(){
+                scope.comment.type = scope.type;
+                scope.comment.type_id = scope.commentableId;
+                scope.comment.film_id = scope.filmId;
+                scope.comment.$save(function(response){
+                  AlertService.Notice("Your comment has been added.");
+                  scope.comments.push(scope.comment)
+                  scope.newComment();
+                },function(response){
+                  AlertService.Notice("Whoops, make sure you type a comment.");
+                  
+                })
+              }
+
+              scope.newComment();
+
+            }
+
+        }
+    }
+  ])
+
+  .directive('commentsForm', ['Api',
+    function(Api){
+        return {
+            restrict: 'E',
+            templateUrl: '/assets/templates/comments/comment_form.tmpl.html',
+            link: function(scope, element, attrs) {
+
+            }
+
+        }
+    }
+  ]);
+
+  'use strict';
+
+  angular.module('search', [
+])
+
+  .directive('search', ['$document','$filter','$state',
+    function($document,$filter,$state){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/search.tmpl.html',
+            link: function(scope, element, attrs) {
+
+              scope.search = {};
+              scope.search.query = null;  
+              
+
+                var people = new Bloodhound({
+                    datumTokenizer: function(d) {
+                        return Bloodhound.tokenizers.whitespace(title);
+                    },
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '/api/user/search?query=%QUERY',
+                        filter: function(list) {
+                            return $.map(list.results, function(data) {
+                                // if(data.avatar.length < 2) data.avatar = '/assets/img/default-profile.jpg';
+                                
+                                
+                                return {
+                                    name: data.name,
+                                    avatar: $filter('profileFilter')(data.avatar),
+                                    username: data.username
+                                };
+                            });
+                        }
+                    }
+                });
+
+                var films = new Bloodhound({
+                    datumTokenizer: function(d) {
+                        return Bloodhound.tokenizers.whitespace(title);
+                    },
+                    queryTokenizer: Bloodhound.tokenizers.whitespace,
+                    remote: {
+                        url: '/api/tmdb/%QUERY',
+                        filter: function(list) {
+                            return $.map(list.results, function(data) {
+                                return {
+                                    title: data.title ,
+                                    tmdb_id: data.id,
+                                    poster: $filter('imageFilter')(data.poster_path,'poster',0),
+                                    release_date: data.release_date.substring(0, 4)
+                                };
+                            });
+                        }
+                    }
+                });
+
+                people.initialize();
+                films.initialize();
+
+                scope.typeaheadOptions = {
+                    hint: true,
+                    highlight: true,
+                    minLength: 1
+                };
+
+                scope.mulitpleData = [
+                {
+                    name: 'people',
+                    displayKey: 'name',
+                    source: people.ttAdapter(),
+                    templates: {
+                      header: '<h3 class="search-title">People</h3>',
+                      suggestion: function (context) {
+                        return '<div>' +context.name+'<span></span></div>'
+                      }
+                    }
+                },
+                {
+                    name: 'films',
+                    displayKey: 'title',
+                    source: films.ttAdapter(),
+                    templates: {
+                      header: '<h3 class="search-title">Films</h3>',
+                      suggestion: function (context) {
+                        return '<div class="clearfix search-item"><div class="search-item-img"><img src="'+context.poster + '" onerror="if (this.src != \'/assets/img/fallback-poster.jpg\') this.src = \'/assets/img/fallback-poster.jpg\';"/></div> <div class="search-item-content">' +context.title+' <span class="release-date">('+context.release_date + ')</span></div></div>'
+                      }
+                    }
+                }
+                ]
+
+                scope.$on('typeahead:autocompleted', searchComplete);
+                scope.$on('typeahead:selected', searchComplete);
+                
+                function searchComplete(event, suggestion, dataset){
+
+                  if(dataset === 'people'){
+                    $state.go('root.user.filmkeep', {username: suggestion.username});
+                  }
+
+                  if(dataset === 'films'){
+                    $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
+                    
+                  }
+                  scope.search.query = null;
+
+                }
+
+                
+
+            }
+
+        }
+    }
+  ]);
 
   'use strict';
 

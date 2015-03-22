@@ -178,6 +178,7 @@ angular.module('myApp', [
           var modalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_watchlist.tmpl.html',
+                backdrop: 'static'
           
             });
 
@@ -204,7 +205,7 @@ angular.module('myApp', [
           var featureInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_wtf.tmpl.html',
-          
+                backdrop: 'static'
             });
 
           Api.getWtf().then(function(response){
@@ -270,7 +271,7 @@ angular.module('myApp', [
             reviewModalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_review.tmpl.html',
-          
+                backdrop: 'static'
             });
         }
 
@@ -282,7 +283,7 @@ angular.module('myApp', [
           var modalInstance = $modal.open({
                 scope: $scope,
                 templateUrl: '/assets/templates/modal_compare.tmpl.html',
-          
+                backdrop: 'static'
             });
 
           ReviewService.getCompares(obj.film_id).then(function(response){
@@ -320,14 +321,14 @@ angular.module('myApp', [
           var modalInstance = $modal.open({
               scope: $scope,
               templateUrl: '/assets/templates/modal_trailer.tmpl.html',
-        
+              
           });
         }
 
         $scope.showVideo = function(){
               $scope.trailer_source = $sce.trustAsResourceUrl('//www.youtube.com/embed/vmw2OVRDJ5g');
               $scope.current_trailer = 'vmw2OVRDJ5g';
-            trailerModal();
+              trailerModal();
         }
 
         $scope.slugify = function(input) {
