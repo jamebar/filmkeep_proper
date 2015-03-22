@@ -25,7 +25,8 @@ angular.module('myApp', [
     'angulartics',
     'angulartics.google.analytics',
     'fk.comments',
-    'templates'
+    'templates',
+    'monospaced.elastic'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
