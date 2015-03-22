@@ -1,7 +1,8 @@
 
 <div class="comment" ng-repeat="comment in comments">
-  <avatar class="avatar sm" info="comment.user"></avatar>
-  <span class="comment_desc" ng-class="{spoiler: comment.spoiler == true && comment.user.id !==me.user.id}">%%comment.comment%%</span>
-  <span class="comment_date">%%comment.updated_at | fDate %%</span>
+  <div class="media"><div class="media-left"><avatar class="avatar sm" info="comment.user"></avatar></div>
+    <div class="media-body"><span class="comment_desc" ng-class="{spoiler: comment.spoiler == true && comment.user.id !==me.user.id}">%%comment.comment%%</span></div>
+    <div class="media-right"><span class="comment_date">%%comment.updated_at | fDate %%</span></div>
+  </div>
 </div>
 <comments-form ng-if="me.user"></comments-form>
