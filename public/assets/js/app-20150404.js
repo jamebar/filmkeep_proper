@@ -26,7 +26,9 @@ angular.module('myApp', [
     'angulartics.google.analytics',
     'fk.comments',
     'templates',
-    'monospaced.elastic'
+    'monospaced.elastic',
+    'Filters',
+    'ngSanitize'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -403,12 +405,7 @@ angular.module('myApp', [
         
     }
 ])
-.filter('unsafe', function($sce) {
-    return function(val) {
-        return $sce.trustAsHtml(val);
-    };
 
-})
 .directive('closeMe', [ '$timeout', function($timeout) {
   return {
     restrict: 'A',
@@ -429,7 +426,7 @@ angular.module('myApp', [
     scope: {
       textMore: '@',
     },
-    template: '%%textMore | limitTo: max_length%%<a ng-click="max_length=1000000" ng-show="textMore.length > max_length ">... read more</a><a ng-click="max_length=max" ng-show="textMore.length < max_length && textMore.length > max"> <i class="glyphicon glyphicon-chevron-left" style="font-size:.8em"></i> less </a>',
+    template: '<span ng-bind-html="textMore | limitTo: max_length | linky"></span><a ng-click="max_length=1000000" ng-show="textMore.length > max_length ">... read more</a><a ng-click="max_length=max" ng-show="textMore.length < max_length && textMore.length > max"> <i class="glyphicon glyphicon-chevron-left" style="font-size:.8em"></i> less </a>',
     link: function(scope, element,attrs) {
         scope.max = attrs.max || 75;
         scope.max_length = scope.max;
@@ -572,21 +569,6 @@ angular.module('myApp', [
     
 }])
 
-.filter('imageFilter', [ function() {
-  return function(path, type, size)
-  {
-    var image_config = image_path_config;
-    
-    var s = size || 0;
-    var t = type || 'poster';
-
-    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
-
-  }
-    
-}])
-
-
 .factory('followerFactory', ['Api',function(Api){
   return {
     isFollowing : function(user)
@@ -602,28 +584,6 @@ angular.module('myApp', [
   }
 
 }])
-
-.filter('profileFilter', [ function() {
-  return function(path)
-  {
-    var p = path || '/assets/img/default-profile.jpg';
-    return p;
-
-  }
-    
-}])
-
-.filter('verb',function(){
-  return function(verb){
-    var keys = {'filmkeep\\review':'reviewed',
-                'filmkeep\\watchlist':'added',
-                'filmkeep\\comment':'commented',
-                'filmkeep\\follower':'started following'
-                };
-    return keys[verb];
-  }
-})
-
 
 .factory('msgBus', ['$rootScope', function($rootScope) {
     var msgBus = {};
@@ -1454,6 +1414,52 @@ var aeReview = angular.module('ae-review', [
 
   
   ;
+
+'use strict';
+
+angular.module('Filters',[])
+
+.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+
+})
+
+.filter('imageFilter', [ function() {
+  return function(path, type, size)
+  {
+    var image_config = image_path_config;
+    
+    var s = size || 0;
+    var t = type || 'poster';
+
+    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
+
+  }
+    
+}])
+
+.filter('profileFilter', [ function() {
+  return function(path)
+  {
+    var p = path || '/assets/img/default-profile.jpg';
+    return p;
+
+  }
+    
+}])
+
+.filter('verb',function(){
+  return function(verb){
+    var keys = {'filmkeep\\review':'reviewed',
+                'filmkeep\\watchlist':'added',
+                'filmkeep\\comment':'commented',
+                'filmkeep\\follower':'started following'
+                };
+    return keys[verb];
+  }
+})
 
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {

@@ -105,6 +105,7 @@ gulp.task('scripts', function() {
         'assets/bower_components/angulartics/dist/angulartics.min.js',
         'assets/bower_components/angulartics/dist/angulartics-ga.min.js',
         'assets/bower_components/angular-elastic/elastic.js',
+        'assets/bower_components/angular-sanitize/angular-sanitize.min.js',
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))
