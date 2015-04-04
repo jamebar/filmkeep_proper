@@ -145,7 +145,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
         return Response::json(['response'=>'false']);
 
       $user = User::with('followers')->where('id',Auth::user()->id)->first();
-      $announcements = Announcement::where('is_active', true)->get();
+      $announcements = Announcement::where('is_active', true)->orderBy('created_at', 'desc')->get();
 
       //feed creds
       $api_key = Config::get('stream-laravel::api_key');
