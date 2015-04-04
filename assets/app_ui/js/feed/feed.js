@@ -27,8 +27,8 @@
     });
   }])
 
-.controller('feedCtrl', ['$scope', 'msgBus','me', 'ReviewService','Api',
-  function($scope, msgBus,me,ReviewService,Api){
+.controller('feedCtrl', ['$scope', 'msgBus','me', 'ReviewService','Api','$state',
+  function($scope, msgBus,me,ReviewService,Api,$state){
     msgBus.emitMsg('pagetitle::change', 'My Feed' );
     $scope.loading = true;
     $scope.me = me;
@@ -77,7 +77,10 @@
     }
 
     $scope.openComments = function(obj){
-      $scope.watchlistModal(obj);
+      if(obj.commentable_type == 'Filmkeep\\Review')
+        $state.go('root.review', {reviewId: obj.commentable_id });
+      else
+        $scope.watchlistModal(obj);
     }
 
     getFeed();
