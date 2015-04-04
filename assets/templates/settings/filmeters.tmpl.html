@@ -2,7 +2,7 @@
 <div ng-repeat="type in types | filter: filterCommon">
   %%type.label%%
 </div> -->
-<h3>Your custom filmeters</h3>
+<h3>Your custom sliders</h3>
 <p>Create custom criteria. These will show up for you to use on all reviews, including past ones.</p>
 <div ng-repeat="type in types | filter: filterCustom" class="clearfix filmeter">
   <span ng-show="!type.edit"><a ng-click="type.edit = !type.edit;">%%type.label%%</a> <div class="criteria-actions pull-right"><a ng-click="type.edit = !type.edit; type.label = type.orig" ng-init="type.edit = false; type.orig = type.label"><span class="glyphicon glyphicon-pencil" ></span></a> <a ng-really-message='Are you sure you want to delete the filmeter: "%%type.label%%" ? This action will remove this rating from all films and cannot be undone.' ng-really-click="deleteFilmeter(type)"><span class="glyphicon glyphicon-trash"></span></a></div></span>
@@ -22,6 +22,6 @@
 </div>
 
 <form ng-submit="saveFilmeter()">
-    <input class="form-control" ng-model="newcriteria.label" placeholder="Create your own filmeter"/>
+    <input class="form-control" ng-model="newcriteria.label" placeholder="Create your own slider"/>
     <!-- <input type="submit" class="btn btn-submit" value="Save" /> -->
 </form>

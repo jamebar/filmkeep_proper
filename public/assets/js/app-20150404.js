@@ -2471,7 +2471,7 @@ angular.module('ReviewService', ['Api'])
     });
     $stateProvider.state('root.settings.filmeters', {
       url: '/filmeters',
-      title: 'Settings - filmeters',
+      title: 'Settings - sliders',
       views: {
         'page-child' : {
           templateUrl: '/assets/templates/settings/filmeters.tmpl.html',
@@ -2490,7 +2490,7 @@ angular.module('ReviewService', ['Api'])
         
       $scope.tabs = [
         {title: 'Profile', state:'root.settings.profile', active:false},
-        {title: 'Filmeters', state:'root.settings.filmeters', active:false}
+        {title: 'Sliders', state:'root.settings.filmeters', active:false}
       ];
 
       _.forEach($scope.tabs, function(tab){
@@ -2527,7 +2527,7 @@ angular.module('ReviewService', ['Api'])
 
   .controller('settingsFilmetersCtrl', ['$scope','me','AlertService','ReviewService','msgBus','Api',
     function ($scope, me,AlertService,ReviewService,msgBus,Api) {
-        msgBus.emitMsg('pagetitle::change', "Settings: Filmeters");
+        msgBus.emitMsg('pagetitle::change', "Settings: Sliders");
         $scope.newcriteria = new Api.RatingTypes();
         ReviewService.getRatingTypes().then(function(results){
           $scope.types = results;
@@ -2554,7 +2554,7 @@ angular.module('ReviewService', ['Api'])
           var t = new Api.RatingTypes();
           _.assign(t,type);
           t.$update(function(response){
-            AlertService.Notice("Your Filmeter is updated");
+            AlertService.Notice("Your slider is updated");
             type.orig = type.label;
             type.edit = false;
           })
