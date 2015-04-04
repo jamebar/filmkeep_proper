@@ -43,7 +43,7 @@ class ReviewsController extends BaseController {
         if(!$user)
           return App::abort(401);
         
-        $num = \Input::has('num') ? \Input::get('num') : 20;
+        $num = \Input::has('num') ? \Input::get('num') : 24;
         $page = \Input::has('page') ? \Input::get('page') : 1;
         $offset = $num * ($page -1);
         $sortBy = \Input::has('sort_by') ? \Input::get('sort_by') : 'id';

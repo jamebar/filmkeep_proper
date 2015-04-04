@@ -99,7 +99,7 @@
         msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Filmkeep" );
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
-        $scope.reviews_per_page = 20; // this should match however many results your API puts on one page
+        $scope.reviews_per_page = 24; // this should match however many results your API puts on one page
         
         $scope.sort_by = 'created_at'
         $scope.sort_by_rating_type = 'null';
