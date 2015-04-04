@@ -146,7 +146,19 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
       $user = User::with('followers')->where('id',Auth::user()->id)->first();
       $announcements = Announcement::where('is_active', true)->get();
-      return Response::json(['user'=> $user, 'response'=>'success', 'announcements' => $announcements]);
+
+      //feed creds
+      $api_key = Config::get('stream-laravel::api_key');
+      $api_secret = Config::get('stream-laravel::api_secret');
+      $client = new GetStream\Stream\Client($api_key, $api_secret );
+      $agg_feed = $client->feed('aggregated', Auth::id() );
+      $notif_feed = $client->feed('notification', Auth::id() );
+      $stream['agg_token'] = $agg_feed->getToken();
+      $stream['notif_token'] = $notif_feed->getToken();
+      $stream['key'] = $api_key;
+      $stream['id'] = Config::get('stream-laravel::api_site_id');
+
+      return Response::json(['user'=> $user, 'response'=>'success', 'announcements' => $announcements, 'stream' => $stream]);
     });
 
     $router->get('/wtf', function(){

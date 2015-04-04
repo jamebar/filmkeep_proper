@@ -148,9 +148,16 @@ angular.module('myApp', [
 .controller('wrapperCtrl', ['$scope','$rootScope','msgBus','$modal','Api',
     function($scope,$rootScope,msgBus,$modal,Api) {
 
+      var s_client, s_user;
 
       msgBus.onMsg('user::loaded', function(e, data){
-        $scope.header_user = data;
+        $scope.header_user = data.user;
+        s_client = stream.connect(data.stream.key, null, data.stream.id);
+        s_user = s_client.feed('notification', data.user.id, data.stream.notif_token);
+
+        s_user.subscribe(function(data){
+           getNotifications();
+        })
       });
 
       msgBus.onMsg('pagetitle::change', function(e, data){
@@ -172,29 +179,31 @@ angular.module('myApp', [
         msgBus.emitMsg('review::edit', id);
       }
 
-       $scope.watchlistModal = function(obj){
-          $scope.subject = obj;
-          $scope.subject.commentable_id = obj.commentable_id || obj.id;
-          // console.log(obj);
-          var modalInstance = $modal.open({
-                scope: $scope,
-                templateUrl: '/assets/templates/modal_watchlist.tmpl.html',
-                backdrop: 'static'
-          
-            });
+      $scope.watchlistModal = function(obj){
+        $scope.subject = obj;
+        $scope.subject.commentable_id = obj.commentable_id || obj.id;
+        // console.log(obj);
+        var modalInstance = $modal.open({
+              scope: $scope,
+              templateUrl: '/assets/templates/modal_watchlist.tmpl.html',
+              backdrop: 'static'
+        
+          });
 
-          
-        }
+        
+      }
 
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){ 
             $scope.navbarCollapsed = true;
         })
       
-      Api.Notifications.query(function(response){
-        $scope.notif_items = response;
-        $scope.notif_new = _.where(response, { 'is_seen' : false }).length;
-      })
+      function getNotifications(){
+        Api.Notifications.query(function(response){
+          $scope.notif_items = response;
+          $scope.notif_new = _.where(response, { 'is_seen' : false }).length;
+        })
+      }
 
       $scope.markSeen = function(){
         Api.Notifications.markSeen();
@@ -217,6 +226,8 @@ angular.module('myApp', [
           });
         }
 
+        getNotifications();
+
     }
   
 ])
@@ -228,7 +239,7 @@ angular.module('myApp', [
         reviewModalInstance.close();
        });
 
-       msgBus.emitMsg('user::loaded', me.user);
+       msgBus.emitMsg('user::loaded', me);
 
        msgBus.onMsg('review::new', function(e, data){
           $scope.newReview(data);

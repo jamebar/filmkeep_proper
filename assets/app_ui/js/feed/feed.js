@@ -34,6 +34,13 @@
     $scope.me = me;
     $scope.announcements = me.announcements;
 
+    var client = stream.connect(me.stream.key, null, me.stream.id);
+    var stream_user = client.feed('aggregated', me.user.id, me.stream.agg_token);
+
+    stream_user.subscribe(function(data){
+       getFeed();
+    })
+
     ReviewService.getRatingTypes().then(function(results){
       $scope.rating_types_new = results;
         
@@ -54,17 +61,22 @@
       return moment(d).format('YYYY');
     }
 
-    Api.getAggregated()
+    function getFeed(){
+      Api.getAggregated()
             .then(
               function(response){
                 $scope.feed_items = response;
                 $scope.loading = false;
                 
             });
+    }
+    
 
     $scope.toPercent = function(num){
         return (num/2000 * 100) + '%';
     }
+
+    getFeed();
   }])
 
 .directive('feedItems', [

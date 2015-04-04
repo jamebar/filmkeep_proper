@@ -13,7 +13,7 @@
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
     <script src="/assets/js/vendor.js"></script>
-    <script id="bundle" src="/assets/js/app-20150321.js"></script>
+    <script id="bundle" src="/assets/js/app-20150403.js"></script>
     <script id="templates" src="/assets/js/templates-20150321.js"></script>
 </head>
 <body class="body-bg">
