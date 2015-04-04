@@ -182,15 +182,12 @@ angular.module('myApp', [
       $scope.watchlistModal = function(obj){
         $scope.subject = obj;
         $scope.subject.commentable_id = obj.commentable_id || obj.id;
-        // console.log(obj);
         var modalInstance = $modal.open({
               scope: $scope,
-              templateUrl: '/assets/templates/modal_watchlist.tmpl.html',
+              templateUrl: '/assets/templates/modal_commentable.tmpl.html',
               backdrop: 'static'
         
           });
-
-        
       }
 
       $rootScope.$on('$stateChangeStart', 

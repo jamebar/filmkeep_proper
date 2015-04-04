@@ -76,6 +76,10 @@
         return (num/2000 * 100) + '%';
     }
 
+    $scope.openComments = function(obj){
+      $scope.watchlistModal(obj);
+    }
+
     getFeed();
   }])
 

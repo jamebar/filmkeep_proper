@@ -19,6 +19,10 @@
               $timeout(function() {
                 element.find('.comment_input').focus();
               });
+
+              if (scope.type.indexOf('Filmkeep') > -1) {
+                scope.type = scope.type.split('\\')[1].toLowerCase();
+              };
               
               Api.Comments.query({type: scope.type, type_id: scope.commentableId}, function(response){
                 scope.comments = response.results;

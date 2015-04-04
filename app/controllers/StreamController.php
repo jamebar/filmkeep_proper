@@ -21,34 +21,40 @@ class StreamController extends Controller{
     else
       $activities = $enricher->enrichActivities($activities);
 
-    $this->checkWatchlistReviewed($activities);
+    $this->customEnrich($activities);
 
     return  $activities;
   }
 
-  private function checkWatchlistReviewed($activities)
+  private function customEnrich($activities)
   {
     foreach($activities as &$activity_group)
     {
       foreach($activity_group['activities'] as &$activity)
       {
         
-        if($activity['verb'] !== 'filmkeep\follower' && $activity['verb'] !== 'filmkeep\comment')
-        {
-          $review = Review::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($activity)
-          {
-              $q->where('tmdb_id', '=', $activity['object']['film']['tmdb_id']);
+        switch($activity['verb']){
+          case 'filmkeep\follower':
+          break;
+          case 'filmkeep\comment':
+            // $activity['object']['commentable']['user'] = User::find($activity['object']['commentable']['user_id']);
+          break;
+          default:
 
-          })->first();
-          $activity['object']['film']['reviewed'] = is_null($review) ? 'false' : 'true';
+            $review = Review::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($activity)
+            {
+                $q->where('tmdb_id', '=', $activity['object']['film']['tmdb_id']);
 
-          
-          $watchlist = Watchlist::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($activity)
-          {
-              $q->where('tmdb_id', '=', $activity['object']['film']['tmdb_id']);
+            })->first();
+            $activity['object']['film']['reviewed'] = is_null($review) ? 'false' : 'true';
 
-          })->first();
-          $activity['object']['film']['on_watchlist'] = is_null($watchlist) ? 'false' : 'true';
+            
+            $watchlist = Watchlist::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($activity)
+            {
+                $q->where('tmdb_id', '=', $activity['object']['film']['tmdb_id']);
+
+            })->first();
+            $activity['object']['film']['on_watchlist'] = is_null($watchlist) ? 'false' : 'true';
         }
       }
     }

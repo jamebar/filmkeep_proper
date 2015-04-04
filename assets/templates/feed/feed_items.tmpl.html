@@ -109,4 +109,30 @@
     </span>
   </div>
 
+  <!-- COMMENT FEED ITEM -->
+  <div class="feed-item clearfix" ng-switch-when="filmkeep\comment">
+    <!-- <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" /> -->
+    <div class="media">
+      <div class="media-left"><avatar class="avatar" info="feed_item.activities[0].actor"></avatar></div>
+      <div class="media-body">
+        <span class="feed-actor">
+            <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
+        </span>
+        %% feed_item.verb | verb %% on 
+        <div style="height:15px;"></div>
+        <div ng-repeat="activity in feed_item.activities | limitTo:3" >
+          <div class="media">
+            <div class="media-body">
+              <a ng-click="openComments(activity.object)">%%activity.object.film.title%%</a><br>
+              <p class="feed-commentable" ng-class="{spoiler: activity.object.spoiler == true && activity.object.user.id !== me.user.id}" text-more="%%activity.object.comment%%" max="50"></p>
+            </div>
+            <div class="media-right"><span class="feed-date pull-right">%%activity.object.updated_at | fDate %%</span></div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    </span>
+  </div>
+
 </div>

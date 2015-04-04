@@ -1097,6 +1097,32 @@ feed-items .horizontal{
   margin-top:0px;
 }
 
-.watchlist-modal{
+.commentable-modal{
   padding:1em;
+}
+
+p.feed-commentable{
+  position: relative;
+  display: inline-block;
+  padding-left:17px;
+  padding-right:17px;
+
+  &:before, &:after{
+    position: absolute;
+    top:-8px;
+    font-size:2em;
+    color:rgba(0,0,0,.2);
+    font-family: 'Volkhov',"Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  }
+
+  &:before{
+    content: "\201C";
+    left:0px;
+  }
+
+  &:after{
+    content:"\201D";
+    right:0px;
+    top:0px;
+  }
 }

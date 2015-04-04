@@ -5,7 +5,7 @@ class Comment extends \Eloquent {
 
     protected $guarded = [];
 
-    public $activityLazyLoading = ['user','film'];
+    public $activityLazyLoading = ['user','film','commentable'];
 
     public function user()
     {
