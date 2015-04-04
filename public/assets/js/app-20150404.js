@@ -184,6 +184,7 @@ angular.module('myApp', [
       $scope.watchlistModal = function(obj){
         $scope.subject = obj;
         $scope.subject.commentable_id = obj.commentable_id || obj.id;
+        $scope.subject.commentable_type = obj.commentable_type || 'watchlist';
         var modalInstance = $modal.open({
               scope: $scope,
               templateUrl: '/assets/templates/modal_commentable.tmpl.html',
@@ -925,7 +926,6 @@ var aeReview = angular.module('ae-review', [
             },
             templateUrl: '/assets/templates/comments/comments.tmpl.html',
             link: function(scope, element, attrs) {
-
               $timeout(function() {
                 element.find('.comment_input').focus();
               });
@@ -1221,49 +1221,6 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
-  angular.module('film', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.film', {
-      url: '/f/{filmId}-{filmSlug}',
-      title: 'Film',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/film.tmpl.html',
-          controller: 'FilmCtrl'
-        }
-      },
-      resolve: {
-        FilmLoad:['$stateParams','Api', function($stateParams,Api) {
-          return Api.getFilm($stateParams.filmId);
-        }], 
-      }
-    });
-  }])
-
-  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
-    function ($scope,msgBus,$stateParams,me,FilmLoad) {
-        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
-        $scope.me = me;
-        FilmLoad.film.film_id = FilmLoad.film.id;
-        $scope.film = FilmLoad.film;
-        $scope.follower_reviews = FilmLoad.follower_reviews;
-
-        $scope.$on('watchlist::addremove', function(event, film_id) {
-
-          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
-                
-        });
-
-    }]) 
-
-  
-  ;
-
-
-  'use strict';
-
   angular.module('filmkeep', ['angularUtils.directives.dirPagination'
   ])
 
@@ -1411,6 +1368,49 @@ var aeReview = angular.module('ae-review', [
 
     }]) 
   
+
+  
+  ;
+
+
+  'use strict';
+
+  angular.module('film', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.film', {
+      url: '/f/{filmId}-{filmSlug}',
+      title: 'Film',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/film.tmpl.html',
+          controller: 'FilmCtrl'
+        }
+      },
+      resolve: {
+        FilmLoad:['$stateParams','Api', function($stateParams,Api) {
+          return Api.getFilm($stateParams.filmId);
+        }], 
+      }
+    });
+  }])
+
+  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
+    function ($scope,msgBus,$stateParams,me,FilmLoad) {
+        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
+        $scope.me = me;
+        FilmLoad.film.film_id = FilmLoad.film.id;
+        $scope.film = FilmLoad.film;
+        $scope.follower_reviews = FilmLoad.follower_reviews;
+
+        $scope.$on('watchlist::addremove', function(event, film_id) {
+
+          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
+                
+        });
+
+    }]) 
 
   
   ;

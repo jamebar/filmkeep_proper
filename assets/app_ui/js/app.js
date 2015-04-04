@@ -184,6 +184,7 @@ angular.module('myApp', [
       $scope.watchlistModal = function(obj){
         $scope.subject = obj;
         $scope.subject.commentable_id = obj.commentable_id || obj.id;
+        $scope.subject.commentable_type = obj.commentable_type || 'watchlist';
         var modalInstance = $modal.open({
               scope: $scope,
               templateUrl: '/assets/templates/modal_commentable.tmpl.html',

@@ -15,7 +15,6 @@
             },
             templateUrl: '/assets/templates/comments/comments.tmpl.html',
             link: function(scope, element, attrs) {
-
               $timeout(function() {
                 element.find('.comment_input').focus();
               });
