@@ -462,8 +462,7 @@ angular.module('myApp', [
         if(scope.review)
           scope.poster_path = scope.review.film.poster_path;
 
-        if(scope.horizontal !== 'true' || scope.horizontal !== true)
-        scope.show_trailer_icon = true
+        scope.show_watchlist_btn = (scope.film.on_watchlist != null);
 
         scope.watchlist = function(obj)
         {

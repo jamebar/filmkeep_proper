@@ -26,7 +26,7 @@
         <!-- <a ui-sref='root.review({reviewId: activity.object.id})'><img id="%%activity.id%%" ng-src="%%activity.object.film.poster_path | imageFilter:'poster':'1'%%" /></a> -->
       </span>
       <a class="action comment-icon" ng-show="comments_show" tooltip="Toggle comments" ng-click="openComments()" ng-init="film.showcomments = false"><i class="ficon glyphicon glyphicon-comment"></i><span class="comment-count" ng-show="comments > 0">%%comments%%</span></a>
-      <a class="action watchlist-btn" ng-click="watchlist(film)" ng-if="film.on_watchlist"><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="ficon glyphicon"></span> watchlist</a>
+      <a class="action watchlist-btn" ng-click="watchlist(film)" ng-if="show_watchlist_btn"><span ng-class="{'glyphicon-plus': film.on_watchlist === 'false','glyphicon-ok': film.on_watchlist === 'true'}" class="ficon glyphicon"></span> watchlist</a>
 
     </div>
   </span>
