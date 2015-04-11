@@ -67,9 +67,52 @@
     .poster{
       width:200px;
       height:304px;
+      
+
+
     }
   }
 
+}
+
+.poster{
+  position: relative;
+  .poster-overlay{
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        background: rgba(0,0,0,.6);
+        display: none;
+        
+        .top{
+          top:20%;
+          
+        }
+        .bottom{
+         
+          bottom:20%;
+
+        }
+        .overlay-action{
+          position: absolute;
+          font-size:2.5em;
+          left:50%;
+          color:#fff;
+          margin-left:-.75em;
+
+          .ficon{
+            padding:10px;
+            border-radius:40px;
+            border: 1px solid rgba(255,255,255,.8);
+          }
+        }
+      }
+
+      &:hover .poster-overlay{
+          display: block;
+      }
 }
 
 .activity-review.collapsed{
@@ -125,7 +168,7 @@
 
 }
 
-@media only screen and (max-width:40em)
+@media only screen and (max-width:768px)
 {
   .activity-review .film-object .poster{
     display: none;

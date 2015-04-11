@@ -12,6 +12,9 @@ angular.module('Filters',[])
 .filter('imageFilter', [ function() {
   return function(path, type, size)
   {
+    if(!path)
+      return '/assets/img/fallback-poster.jpg';
+
     var image_config = image_path_config;
     
     var s = size || 0;

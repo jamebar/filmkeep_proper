@@ -16,16 +16,8 @@ class WatchlistController extends \BaseController {
     $user_id = \Input::get('user_id');
 		$watchlist = Watchlist::with('film', 'comments')->where('user_id', $user_id)->orderBy('list_order', 'asc')->orderby('created_at','asc')->get();
     
-    if($user_id == Auth::user()->id)
-    {
-      foreach($watchlist as &$w){
-        $w['film']['on_watchlist'] = 'true';
-      }
-    }
-    else{
-      $this->checkWatchlistReviewed($watchlist);
-    }
-      
+    if(Auth::check())
+    $this->checkWatchlistReviewed($watchlist);
     
     return \Response::json(['status' => 200, 'results' => $watchlist]);
 	}
@@ -61,24 +53,33 @@ class WatchlistController extends \BaseController {
 
   private function checkWatchlistReviewed($items)
   {
+      $ids = [];
+      foreach($items as $item)
+      {
+        $ids[] = $item['film_id'];
+      }
+      
+      $review_matches = Review::where('user_id', Auth::user()->id)->whereIn('film_id', $ids)->get();
+      $watchlist_matches = Watchlist::where('user_id', Auth::user()->id)->whereIn('film_id', $ids)->get();
+
       foreach($items as &$item)
       {
+        $item['film']['reviewed'] = 'false';
+        $item['film']['on_watchlist'] = 'false';
 
-          $review = Review::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($item)
-          {
-              $q->where('tmdb_id', '=', $item['film']['tmdb_id']);
+        foreach($review_matches as $rm)
+        {
 
-          })->first();
-          $item['film']['reviewed'] = is_null($review) ? 'false' : 'true';
+          if($item['film_id'] == $rm->film_id)
+            $item['film']['reviewed'] = 'true';
+        }
+        foreach($watchlist_matches as $wm)
+        {
 
-          
-          $watchlist = Watchlist::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($item)
-          {
-              $q->where('tmdb_id', '=', $item['film']['tmdb_id']);
-
-          })->first();
-          $item['film']['on_watchlist'] = is_null($watchlist) ? 'false' : 'true';
-       
+          if($item['film_id'] == $wm->film_id)
+            $item['film']['on_watchlist'] = 'true';
+        }
+        
       }
     
   }

@@ -154,12 +154,15 @@ angular.module('myApp', [
 
       msgBus.onMsg('user::loaded', function(e, data){
         $scope.header_user = data.user;
-        s_client = stream.connect(data.stream.key, null, data.stream.id);
-        s_user = s_client.feed('notification', data.user.id, data.stream.notif_token);
+        if(data.user)
+        {
+          s_client = stream.connect(data.stream.key, null, data.stream.id);
+          s_user = s_client.feed('notification', data.user.id, data.stream.notif_token);
 
-        s_user.subscribe(function(data){
-           getNotifications();
-        })
+          s_user.subscribe(function(data){
+             getNotifications();
+          })
+        }
       });
 
       msgBus.onMsg('pagetitle::change', function(e, data){
@@ -435,7 +438,7 @@ angular.module('myApp', [
   }
 }])
 
-.directive('filmObject', ['$rootScope','msgBus','Slug','Api',function($rootScope,msgBus,Slug,Api) {
+.directive('filmObject', ['$rootScope','msgBus','Slug','Api', '$state', function($rootScope, msgBus, Slug, Api, $state) {
   return {
     restrict: 'E',
     scope:{
@@ -452,6 +455,15 @@ angular.module('myApp', [
 
         scope.me = Api.meData();
         scope.comments_show = angular.isDefined(scope.comments);
+
+        if(scope.film)
+          scope.poster_path = scope.film.poster_path;
+
+        if(scope.review)
+          scope.poster_path = scope.review.film.poster_path;
+
+        if(scope.horizontal !== 'true' || scope.horizontal !== true)
+        scope.show_trailer_icon = true
 
         scope.watchlist = function(obj)
         {
@@ -495,6 +507,15 @@ angular.module('myApp', [
               scope.film.on_watchlist = scope.film.on_watchlist === 'true' ? 'false' : 'true';
             }
         })
+
+        scope.goToLink = function(){
+          if(scope.film)
+            $state.go('root.film', {filmId: scope.film.tmdb_id, filmSlug: scope.slugify(scope.film.title) });
+
+          if(scope.review)
+            $state.go('root.review',{reviewId: scope.review.id})
+          
+        }
     }
   }
 }])

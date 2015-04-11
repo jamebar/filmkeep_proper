@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width"  />
     <title>Filmkeep</title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150404.css">
+    <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150410.css">
     <link rel="stylesheet" href="/assets/css/filmkeep-font.css">
     <!-- <link rel="stylesheet" href="/assets/css/animate.min.css"> -->
 
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
     <script src="/assets/js/vendor.js"></script>
-    <script id="bundle" src="/assets/js/app-20150404.js"></script>
-    <script id="templates" src="/assets/js/templates-20150404.js"></script>
+    <script id="bundle" src="/assets/js/app-20150410.js"></script>
+    <script id="templates" src="/assets/js/templates-20150410.js"></script>
 </head>
 <body class="body-bg">
 
