@@ -83,8 +83,8 @@ class FilmController extends BaseController {
 
     if($id)
     {
-      $f = Film::find($id);
-      $film->digestFilm($f->tmdb_id);
+      // $f = Film::where('tmdb_id', $id)->get();
+      $f = $film->digestFilm($id);
       return "{$f->title} has been updated";
     }
 
