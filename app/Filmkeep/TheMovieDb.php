@@ -40,7 +40,7 @@ class TheMovieDb {
 		if ( ! $film_info =  \Cache::get("film_info2-".$tmdb_id))
 		{
 			
-			$film_info = $this->tmdb->getMovie($tmdb_id, 'en');
+			$film_info = $this->tmdb->getMovie($tmdb_id, 'en', 'releases');
 		
 			// Save into the cache for 1 month
 			\Cache::put("film_info2-".$tmdb_id, $film_info,  40320);

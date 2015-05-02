@@ -162,10 +162,11 @@ class TMDb
 	 * @param mixed $lang				Filter the result with a language (ISO 3166-1) other then default, use FALSE to retrieve results from all languages
 	 * @return TMDb result array
 	 */
-	public function getMovie($id, $lang = NULL)
+	public function getMovie($id, $lang = NULL, $append = NULL)
 	{
 		$params = array(
 			'language' => ($lang !== NULL) ? $lang : $this->getLang(),
+      'append_to_response' => $append
 		);
 		return $this->_makeCall('movie/'.$id, $params);
 	}
@@ -313,7 +314,7 @@ class TMDb
 	{
 		$params = array(
 			'page' => (int) $page,
-			'language' => ($lang !== NULL) ? $lang : $this->getLang(),
+			'language' => ($lang !== NULL) ? $lang : $this->getLang()
 		);
 		return $this->_makeCall('movie/now_playing', $params);
 	}

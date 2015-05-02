@@ -28,7 +28,8 @@ class Film extends Model {
         'backdrop_path' => $backdrop_path,
         'release_date' => $release_date,
         'imdb_id' => $imdb_id,
-        'summary' => $overview
+        'summary' => $overview,
+        'certification' => $this->getCertification($tmdb_info)
       );
 
       //add the film
@@ -38,6 +39,21 @@ class Film extends Model {
       return $film;
     }
     
+  }
+
+  private function getCertification($info)
+  {
+    if (!isset($info['releases']))
+      return NULL;
+    $value = array_first($info['releases']['countries'], function($key, $value)
+    {
+        return $value['iso_3166_1'] == 'US';
+    });
+
+    if(isset($value['certification']))
+      return $value['certification'];
+
+    return NULL;
   }
 
   public function comments()

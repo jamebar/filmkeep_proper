@@ -76,6 +76,32 @@ class FilmController extends BaseController {
     return Response::json($nowPlaying);
   }
 
+  public function refresh($id = NULL)
+  {
+    $response = [];
+    $film = new Film();
+
+    if($id)
+    {
+      $f = Film::find($id);
+      $film->digestFilm($f->tmdb_id);
+      return "{$f->title} has been updated";
+    }
+
+    foreach(Film::all() as $f)
+    {
+      if(!isset($f->tmdb_id)) next;
+
+      $film->digestFilm($f->tmdb_id);
+      $response[] = "{$f->title} has been updated";
+      usleep(200000);
+    }
+
+    return $response;
+
+
+  }
+
   private function isReviewed($film)
   {
     
@@ -100,4 +126,5 @@ class FilmController extends BaseController {
 
 
   }
+
 }

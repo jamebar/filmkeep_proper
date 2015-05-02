@@ -9,7 +9,7 @@
             <!-- <a ui-sref='root.user.filmkeep({username: review.user.username})'>%%review.user.name%%</a> -->
           </div>
           <div class="fc-content">
-            <h2>%%review.film.title%%</h2>
+            <h2>%%review.film.title%% <span ng-if="review.film.certification">(%%review.film.certification%%)</span></h2>
             <div class="film-actions">
               <a class="visible-xs-inline" ng-click="getTrailer(review.film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
               <a ng-click="newReview(review.film)" ng-if="review.reviewed === 'false' ">review this</a>
@@ -36,7 +36,7 @@
       <p>%%review.film.summary%%</p>
     </div>
     <div class="col-xs-12 col-sm-2">
-      <div class="mpaa %%review.film.rotten.mpaa%%" ng-if="review.film.rotten && review.film.rotten.mpaa"><span>RATED</span><strong>%%review.film.rotten.mpaa%%</strong> </div>
+      <!-- <div class="mpaa %%review.film.rotten.mpaa%%" ng-if="review.film.rotten && review.film.rotten.mpaa"><span>RATED</span><strong>%%review.film.rotten.mpaa%%</strong> </div> -->
        <p ng-if="review.film.rotten && review.film.rotten.critics_score > -1" class="rotten-wrapper">
         <a ng-href="%%review.film.rotten.link%%"><span class="rotten-icon" ng-class="{fresh: review.film.rotten.critics_rating =='Fresh', certified_fresh: review.film.rotten.critics_rating =='Certified Fresh', rotten: review.film.rotten.critics_rating =='Rotten'}"></span>
         %%review.film.rotten.critics_score%%%</a>

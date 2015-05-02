@@ -13,7 +13,15 @@ use Filmkeep\Comment;
 use Filmkeep\Announcement;
 
 Route::get('/test', function(){
+  $apikey = 'f39589d9c877cecbe4032052979da1aa';
+  $tmdb = new \TMDb($apikey,'en');
+  $t = $tmdb->getMovie(76757, 'en', 'releases');
+  $value = array_first($t['releases']['countries'], function($key, $value)
+    {
+        return $value['iso_3166_1'] == 'US';
+    });
 
+  return $value['certification'];
   // $api_key = 'dppcz8n6xmkc';
   // $api_secret = 'a4ze5h59su875zxuthz3je7xxz4cf23g9aqtbwzs3vc7gtr2rxx6rcezqs8eapsj';
   // $client = new GetStream\Stream\Client($api_key, $api_secret );
@@ -78,6 +86,7 @@ Route::get('/test', function(){
 // $response = Mandrill::request('messages/send', $payload);
 });
 
+Route::get('refresh-films/{film_id?}', 'FilmController@refresh');
 
 // Confide routes
 Route::get('users/create', ['as'=>'join', 'uses'=>'AuthController@create']);

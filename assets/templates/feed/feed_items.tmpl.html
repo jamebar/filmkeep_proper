@@ -19,7 +19,7 @@
       <accordion close-others="false">
       <accordion-group  is-open="status.open" ng-class="{open: status.open }" ng-init="status.open = $index ==0 ? true : false"  ng-repeat="activity in feed_item.activities" class="activity-item activity-review" >
         <accordion-heading>
-            %%activity.object.film.title%% (%%releaseDate(activity.object.film.release_date)%%) <i class="pull-right glyphicon glyphicon-chevron-down" ></i>
+            %%activity.object.film.title%% <span ng-if="activity.object.film.certification">(%%activity.object.film.certification%%)</span> <i class="pull-right glyphicon glyphicon-chevron-down" ></i>
             <p ng-if="activity.object.notes.length > 1" text-more="%%activity.object.notes%%" max="50"></p>
         </accordion-heading>
           <div class="feed-review-cover" ng-style="{'background-image':'url(%%activity.object.film.backdrop_path | imageFilter :'backdrop':'1' %%)'}">
@@ -29,7 +29,7 @@
             <div class="feed-review-poster pull-left">
                 <film-object film="activity.object.film" comments="activity.object.comments.length" type="vertical" review="activity.object"></film-object>
             </div>
-            <a ui-sref='root.review({reviewId: activity.object.id})' class="title">%%activity.object.film.title%%</a>
+            <a ui-sref='root.review({reviewId: activity.object.id})' class="title">%%activity.object.film.title%% <span ng-if="activity.object.film.certification">(%%activity.object.film.certification%%)</span></a>
             <div class="feed-review-ratings " >
               <div ng-repeat="rating in activity.object.ratings | limitTo: 5">
                 <p type="rating.rating_type" rating-type-label></p>

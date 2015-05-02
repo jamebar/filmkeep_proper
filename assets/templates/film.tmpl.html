@@ -6,7 +6,7 @@
             <img ng-src="%%film.poster_path | imageFilter:'poster':'1'%%" onerror="if (this.src != '/assets/img/fallback-poster.jpg') this.src = '/assets/img/fallback-poster.jpg';"/>
           </div>
           <div class="fc-content">
-            <h2>%%film.title%%</h2>
+            <h2>%%film.title%% <span ng-if="film.certification">(%%film.certification%%)</span></h2>
             <div class="film-actions">
               <a class="visible-xs-inline" ng-click="getTrailer(film.tmdb_id)"><span class="glyphicon glyphicon-facetime-video"></span></a>
               <a ng-click="newReview(film)" ng-show="film.reviewed == 'false'">Review this</a>
@@ -34,7 +34,7 @@
     </div>
     <div class="col-xs-12 col-sm-2">
 
-      <div class="mpaa %%film.rotten.mpaa%%" ng-if="film.rotten && film.rotten.mpaa"><span>RATED</span><strong>%%film.rotten.mpaa%%</strong> </div>
+      <!-- <div class="mpaa %%film.rotten.mpaa%%" ng-if="film.rotten && film.rotten.mpaa"><span>RATED</span><strong>%%film.rotten.mpaa%%</strong> </div> -->
       <p ng-if="film.rotten && film.rotten.critics_score > -1" class="rotten-wrapper">
         <a ng-href="%%film.rotten.link%%"><span class="rotten-icon" ng-class="{fresh: film.rotten.critics_rating =='Fresh', certified_fresh: film.rotten.critics_rating =='Certified Fresh', rotten: film.rotten.critics_rating =='Rotten'}"></span>
         %%film.rotten.critics_score%%%</a>
