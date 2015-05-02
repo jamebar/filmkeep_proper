@@ -9,11 +9,11 @@ class Film extends Model {
 	protected $guarded = [];
 
 
-  public function digestFilm($tmdb_id)
+  public function digestFilm($tmdb_id, $caching = true)
   {
     
     $TheMovieDb = new TheMovieDb();
-    $tmdb_info = $TheMovieDb->getFilmTmdb($tmdb_id);
+    $tmdb_info = $TheMovieDb->getFilmTmdb($tmdb_id, $caching);
 
     if(is_array($tmdb_info) && isset($tmdb_info['id'])){
       $poster_path = (isset($tmdb_info['poster_path'])) ? $tmdb_info['poster_path'] : "";

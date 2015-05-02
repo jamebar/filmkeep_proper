@@ -33,9 +33,11 @@ class TheMovieDb {
 	 * Handles the Ajax call to get tmdb info for film 
 	 * 
 	 */
-	public function getFilmTmdb($tmdb_id)
+	public function getFilmTmdb($tmdb_id, $caching = true)
 	{
 
+    if(!$caching)
+      $film_info = $this->tmdb->getMovie($tmdb_id, 'en', 'releases');
 		
 		if ( ! $film_info =  \Cache::get("film_info2-".$tmdb_id))
 		{

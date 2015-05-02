@@ -84,7 +84,7 @@ class FilmController extends BaseController {
     if($id)
     {
       // $f = Film::where('tmdb_id', $id)->get();
-      $f = $film->digestFilm($id);
+      $f = $film->digestFilm($id, false);
       return "{$f->title} has been updated";
     }
 
@@ -92,7 +92,7 @@ class FilmController extends BaseController {
     {
       if(!isset($f->tmdb_id)) next;
 
-      $film->digestFilm($f->tmdb_id);
+      $film->digestFilm($f->tmdb_id, false);
       $response[] = "{$f->title} has been updated";
       usleep(200000);
     }
