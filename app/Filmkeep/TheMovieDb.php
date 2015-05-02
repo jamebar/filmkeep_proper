@@ -37,7 +37,7 @@ class TheMovieDb {
 	{
 
     if(!$caching)
-      $film_info = $this->tmdb->getMovie($tmdb_id, 'en', 'releases');
+      return $this->tmdb->getMovie($tmdb_id, 'en', 'releases');
 		
 		if ( ! $film_info =  \Cache::get("film_info2-".$tmdb_id))
 		{
