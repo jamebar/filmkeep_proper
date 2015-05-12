@@ -28,7 +28,8 @@ angular.module('myApp', [
     'templates',
     'monospaced.elastic',
     'Filters',
-    'ngSanitize'
+    'ngSanitize',
+    'getting-started'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -237,6 +238,7 @@ angular.module('myApp', [
 .controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','me','Slug','Api',
     function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,me,Slug,Api) {
        var reviewModalInstance;
+       $scope.first_name = me.user.name.split(' ')[0];
 
        $rootScope.$on('modal::close', function(){
         reviewModalInstance.close();
@@ -406,6 +408,18 @@ angular.module('myApp', [
 
             });
         }
+
+        $scope.changeState = function(s){
+          $scope.gs_state = s;
+        }
+
+        $scope.gs_state = 2;
+        console.log(me)
+        var gsModalInstance = $modal.open({
+            scope: $scope,
+            templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
+            backdrop: 'static'
+        });
         
     }
 ])
