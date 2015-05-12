@@ -53,7 +53,13 @@ class UserRepository
 
         //follow the feed
         if($user->id)
+        {
           FeedManager::followUser($user->id, $user->id);
+          Follower::firstOrCreate(['user_id'=>$user->id, 'follower_id'=>1]);
+          FeedManager::followUser($user->id, 1);
+          Follower::firstOrCreate(['user_id'=>$user->id, 'follower_id'=>4]);
+          FeedManager::followUser($user->id, 4);
+        }
 
         if (!is_null($username_check) && $user->id)
         {
