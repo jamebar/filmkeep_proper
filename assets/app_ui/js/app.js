@@ -415,11 +415,11 @@ angular.module('myApp', [
         }
 
         $scope.gs_state = 1;
-        // var gsModalInstance = $modal.open({
-        //     scope: $scope,
-        //     templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
-        //     backdrop: 'static'
-        // });
+        var gsModalInstance = $modal.open({
+            scope: $scope,
+            templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
+            backdrop: 'static'
+        });
         
     }
 ])
