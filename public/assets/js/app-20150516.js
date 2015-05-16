@@ -26,7 +26,11 @@ angular.module('myApp', [
     'angulartics.google.analytics',
     'fk.comments',
     'templates',
-    'monospaced.elastic'
+    'monospaced.elastic',
+    'Filters',
+    'ngSanitize',
+    'getting-started',
+    'custom-criteria'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -148,9 +152,19 @@ angular.module('myApp', [
 .controller('wrapperCtrl', ['$scope','$rootScope','msgBus','$modal','Api',
     function($scope,$rootScope,msgBus,$modal,Api) {
 
+      var s_client, s_user;
 
       msgBus.onMsg('user::loaded', function(e, data){
-        $scope.header_user = data;
+        $scope.header_user = data.user;
+        if(data.user)
+        {
+          s_client = stream.connect(data.stream.key, null, data.stream.id);
+          s_user = s_client.feed('notification', data.user.id, data.stream.notif_token);
+
+          s_user.subscribe(function(data){
+             getNotifications();
+          })
+        }
       });
 
       msgBus.onMsg('pagetitle::change', function(e, data){
@@ -172,29 +186,29 @@ angular.module('myApp', [
         msgBus.emitMsg('review::edit', id);
       }
 
-       $scope.watchlistModal = function(obj){
-          $scope.subject = obj;
-          $scope.subject.commentable_id = obj.commentable_id || obj.id;
-          // console.log(obj);
-          var modalInstance = $modal.open({
-                scope: $scope,
-                templateUrl: '/assets/templates/modal_watchlist.tmpl.html',
-                backdrop: 'static'
-          
-            });
-
-          
-        }
+      $scope.watchlistModal = function(obj){
+        $scope.subject = obj;
+        $scope.subject.commentable_id = obj.commentable_id || obj.id;
+        $scope.subject.commentable_type = obj.commentable_type || 'watchlist';
+        var modalInstance = $modal.open({
+              scope: $scope,
+              templateUrl: '/assets/templates/modal_commentable.tmpl.html',
+              backdrop: 'static'
+        
+          });
+      }
 
       $rootScope.$on('$stateChangeStart', 
         function(event, toState, toParams, fromState, fromParams){ 
             $scope.navbarCollapsed = true;
         })
       
-      Api.Notifications.query(function(response){
-        $scope.notif_items = response;
-        $scope.notif_new = _.where(response, { 'is_seen' : false }).length;
-      })
+      function getNotifications(){
+        Api.Notifications.query(function(response){
+          $scope.notif_items = response;
+          $scope.notif_new = _.where(response, { 'is_seen' : false }).length;
+        })
+      }
 
       $scope.markSeen = function(){
         Api.Notifications.markSeen();
@@ -217,18 +231,21 @@ angular.module('myApp', [
           });
         }
 
+        getNotifications();
+
     }
   
 ])
 .controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','me','Slug','Api',
     function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,me,Slug,Api) {
        var reviewModalInstance;
+       $scope.first_name = me.user.name.split(' ')[0];
 
        $rootScope.$on('modal::close', function(){
         reviewModalInstance.close();
        });
 
-       msgBus.emitMsg('user::loaded', me.user);
+       msgBus.emitMsg('user::loaded', me);
 
        msgBus.onMsg('review::new', function(e, data){
           $scope.newReview(data);
@@ -392,15 +409,21 @@ angular.module('myApp', [
 
             });
         }
+
+        $scope.changeState = function(s){
+          $scope.gs_state = s;
+        }
+
+        $scope.gs_state = 4;
+        var gsModalInstance = $modal.open({
+            scope: $scope,
+            templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
+            backdrop: 'static'
+        });
         
     }
 ])
-.filter('unsafe', function($sce) {
-    return function(val) {
-        return $sce.trustAsHtml(val);
-    };
 
-})
 .directive('closeMe', [ '$timeout', function($timeout) {
   return {
     restrict: 'A',
@@ -421,7 +444,7 @@ angular.module('myApp', [
     scope: {
       textMore: '@',
     },
-    template: '%%textMore | limitTo: max_length%%<a ng-click="max_length=1000000" ng-show="textMore.length > max_length ">... read more</a><a ng-click="max_length=max" ng-show="textMore.length < max_length && textMore.length > max"> <i class="glyphicon glyphicon-chevron-left" style="font-size:.8em"></i> less </a>',
+    template: '<span ng-bind-html="textMore | limitTo: max_length | linky"></span><a ng-click="max_length=1000000" ng-show="textMore.length > max_length ">... read more</a><a ng-click="max_length=max" ng-show="textMore.length < max_length && textMore.length > max"> <i class="glyphicon glyphicon-chevron-left" style="font-size:.8em"></i> less </a>',
     link: function(scope, element,attrs) {
         scope.max = attrs.max || 75;
         scope.max_length = scope.max;
@@ -429,7 +452,7 @@ angular.module('myApp', [
   }
 }])
 
-.directive('filmObject', ['$rootScope','msgBus','Slug','Api',function($rootScope,msgBus,Slug,Api) {
+.directive('filmObject', ['$rootScope','msgBus','Slug','Api', '$state', function($rootScope, msgBus, Slug, Api, $state) {
   return {
     restrict: 'E',
     scope:{
@@ -446,6 +469,14 @@ angular.module('myApp', [
 
         scope.me = Api.meData();
         scope.comments_show = angular.isDefined(scope.comments);
+
+        if(scope.film)
+          scope.poster_path = scope.film.poster_path;
+
+        if(scope.review)
+          scope.poster_path = scope.review.film.poster_path;
+
+        scope.show_watchlist_btn = (scope.film.on_watchlist != null);
 
         scope.watchlist = function(obj)
         {
@@ -489,6 +520,15 @@ angular.module('myApp', [
               scope.film.on_watchlist = scope.film.on_watchlist === 'true' ? 'false' : 'true';
             }
         })
+
+        scope.goToLink = function(){
+          if(scope.film)
+            $state.go('root.film', {filmId: scope.film.tmdb_id, filmSlug: scope.slugify(scope.film.title) });
+
+          if(scope.review)
+            $state.go('root.review',{reviewId: scope.review.id})
+          
+        }
     }
   }
 }])
@@ -564,58 +604,32 @@ angular.module('myApp', [
     
 }])
 
-.filter('imageFilter', [ function() {
-  return function(path, type, size)
-  {
-    var image_config = image_path_config;
-    
-    var s = size || 0;
-    var t = type || 'poster';
-
-    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
-
-  }
-    
-}])
-
-
 .factory('followerFactory', ['Api',function(Api){
   return {
     isFollowing : function(user)
     {
-      var me = Api.meData();
-      // console.log(me, user.id)
-      if(!angular.isDefined(me.user))
-        return false;
       
-       
-      return _.find(me.user.followers, {'id': user.id}) ? true : false;
+      return checkFollowing(user)
+    },
+
+    parseFollowing : function(users)
+    {
+      _.forEach(users, function(u){
+        u.following = checkFollowing(u);
+      })
+
+      return users;
     }
   }
 
-}])
-
-.filter('profileFilter', [ function() {
-  return function(path)
-  {
-    var p = path || '/assets/img/default-profile.jpg';
-    return p;
-
+  function checkFollowing(user){
+    var me = Api.meData();
+      if(!angular.isDefined(me.user))
+        return false;
+    return _.find(me.user.followers, {'id': user.id}) ? true : false;
   }
-    
+
 }])
-
-.filter('verb',function(){
-  return function(verb){
-    var keys = {'filmkeep\\review':'reviewed',
-                'filmkeep\\watchlist':'added',
-                'filmkeep\\comment':'commented',
-                'filmkeep\\follower':'started following'
-                };
-    return keys[verb];
-  }
-})
-
 
 .factory('msgBus', ['$rootScope', function($rootScope) {
     var msgBus = {};
@@ -957,10 +971,13 @@ var aeReview = angular.module('ae-review', [
             },
             templateUrl: '/assets/templates/comments/comments.tmpl.html',
             link: function(scope, element, attrs) {
-
               $timeout(function() {
                 element.find('.comment_input').focus();
               });
+
+              if (scope.type.indexOf('Filmkeep') > -1) {
+                scope.type = scope.type.split('\\')[1].toLowerCase();
+              };
               
               Api.Comments.query({type: scope.type, type_id: scope.commentableId}, function(response){
                 scope.comments = response.results;
@@ -999,6 +1016,156 @@ var aeReview = angular.module('ae-review', [
             restrict: 'E',
             templateUrl: '/assets/templates/comments/comment_form.tmpl.html',
             link: function(scope, element, attrs) {
+
+            }
+
+        }
+    }
+  ]);
+
+  'use strict';
+
+  angular.module('custom-criteria', [
+])
+
+  .directive('customCriteria', ['AlertService','ReviewService','msgBus','Api',
+    function(AlertService,ReviewService,msgBus,Api){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/custom_criteria.tmpl.html',
+            link: function($scope, element, attrs) {
+              var me = Api.me();
+              $scope.common = attrs.common || false;
+              $scope.custom = attrs.custom || true;
+
+              $scope.newcriteria = new Api.RatingTypes();
+              ReviewService.getRatingTypes().then(function(results){
+                $scope.types = results;
+              });
+
+              $scope.filterCommon = function(element) {
+                return element.user_id === 0 ? true : false;
+              };
+
+              $scope.filterCustom = function(element) {
+                return element.user_id !== 0 ? true : false;
+              };
+
+              $scope.saveFilmeter = function(){
+                $scope.newcriteria.$save(function(response){
+                  $scope.types.push(response);
+                  $scope.newcriteria = new Api.RatingTypes();
+
+                });
+              }
+
+              $scope.updateFilmeter = function(type){
+                var t = new Api.RatingTypes();
+                _.assign(t,type);
+                t.$update(function(response){
+                  AlertService.Notice("Your slider is updated");
+                  type.orig = type.label;
+                  type.edit = false;
+                })
+              }
+
+              $scope.deleteFilmeter = function(meter){
+                var filmeter = new Api.RatingTypes();
+              
+                filmeter.id = meter.id;
+                filmeter.$delete(function(response){
+                  $scope.types  = response.results;
+                  ReviewService.setRatingTypes(response.results);
+                });
+              }
+
+
+            }
+
+        }
+    }
+  ]);
+
+  'use strict';
+
+  angular.module('getting-started', [
+])
+
+  .directive('followFriends', ['Api','followerFactory', 
+    function(Api, followerFactory){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/getting_started/follow_friends.tmpl.html',
+            link: function(scope, element, attrs) {
+              $('.follow-friends').perfectScrollbar();
+              scope.loading = true;
+
+              Api.Users.query(function(response){
+                scope.users = followerFactory.parseFollowing(response);
+                $('.follow-friends').perfectScrollbar('update');
+                scope.loading = false;
+              });
+
+              scope.follow = function(user){
+                if(user.following){
+                  //make change immediately, should be in callback, but it's too slow
+                  user.following = false;
+                  Api.unfollow(user.id).then(function(response){
+                    // me.user.followers = response.followers;
+                  });
+                }else{
+                  user.following = true;
+                  Api.follow(user.id).then(function(response){
+                    // me.user.followers = response.followers;
+                  });
+                }
+              }
+
+            }
+
+        }
+    }
+  ])
+
+  .directive('gsCustomCriteria', ['Api', 
+    function(Api){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/getting_started/custom_criteria.tmpl.html',
+            link: function(scope, element, attrs) {
+              $('.custom-criteria').perfectScrollbar();
+
+
+            }
+
+        }
+    }
+  ])
+
+  .directive('gsRate', ['Api', 'msgBus',
+    function(Api, msgBus){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/getting_started/rate.tmpl.html',
+            link: function(scope, element, attrs) {
+              scope.rate = {};
+              var curr_pos = 'love';
+
+              $('.rate').perfectScrollbar();
+
+              scope.newReview = function(pos){
+                msgBus.emitMsg('review::new');
+                curr_pos = pos
+              }
+
+              msgBus.onMsg('review::added', function(e, data){
+                scope.rate[curr_pos] = data.film.poster_path;
+              });
+
 
             }
 
@@ -1126,110 +1293,6 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
-  angular.module('feed', [
-  ])
-
-.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-
-    $stateProvider.state('root.feed', {
-      url: '/feed',
-      title: 'feed',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/home.tmpl.html',
-          controller: 'feedCtrl'
-        }
-      },
-      resolve: {
-        isAuthorized: ['Api', function (Api) {
-            return Api.isAuthorized();
-        }] 
-      },
-      onEnter: function(isAuthorized){
-        if(isAuthorized == 0)
-          window.location.href = '/users/login';
-      }
-    });
-  }])
-
-.controller('feedCtrl', ['$scope', 'msgBus','me', 'ReviewService','Api',
-  function($scope, msgBus,me,ReviewService,Api){
-    msgBus.emitMsg('pagetitle::change', 'My Feed' );
-    $scope.loading = true;
-    $scope.me = me;
-    $scope.announcements = me.announcements;
-
-    ReviewService.getRatingTypes().then(function(results){
-      $scope.rating_types_new = results;
-        
-    });
-
-    Api.Lists.query({with_films:true}, function(results){
-      $scope.lists = results.results;
-    })
-
-    Api.getNowPlaying().then(function(response){
-      $scope.now_playing = response;
-    })
-
-    Api.getWatchlist(me.user.id).then(function(response) {
-                $scope.watchlist_items = response.results;
-            });
-    $scope.releaseDate = function(d){
-      return moment(d).format('YYYY');
-    }
-
-    Api.getAggregated()
-            .then(
-              function(response){
-                $scope.feed_items = response;
-                $scope.loading = false;
-                
-            });
-
-    $scope.toPercent = function(num){
-        return (num/2000 * 100) + '%';
-    }
-  }])
-
-.directive('feedItems', [
-  function(){
-    return {
-      restrict: 'E',
-      templateUrl: '/assets/templates/feed/feed_items.tmpl.html',
-      link: function(scope,element,attr){
-
-      }
-    }
-}])
-
-.filter('fDate',function(){
-  return function(date){
-    moment.locale('en', {
-      relativeTime : {
-          future: "in %s",
-          past:   "%s ago",
-          s:  "seconds",
-          m:  "1min",
-          mm: "%dmins",
-          h:  "1h",
-          hh: "%dh",
-          d:  "1d",
-          dd: "%dd",
-          M:  "1m",
-          MM: "%dm",
-          y:  "1y",
-          yy: "%dy"
-      }
-    });
-    // var now = moment.utc();
-    // console.log('now', date)
-    return moment.utc(date).fromNow(true);
-  }
-})
-
-  'use strict';
-
   angular.module('film', [
   ])
 
@@ -1270,6 +1333,129 @@ var aeReview = angular.module('ae-review', [
   
   ;
 
+
+  'use strict';
+
+  angular.module('feed', [
+  ])
+
+.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+
+    $stateProvider.state('root.feed', {
+      url: '/feed',
+      title: 'feed',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/home.tmpl.html',
+          controller: 'feedCtrl'
+        }
+      },
+      resolve: {
+        isAuthorized: ['Api', function (Api) {
+            return Api.isAuthorized();
+        }] 
+      },
+      onEnter: function(isAuthorized){
+        if(isAuthorized == 0)
+          window.location.href = '/users/login';
+      }
+    });
+  }])
+
+.controller('feedCtrl', ['$scope', 'msgBus','me', 'ReviewService','Api','$state',
+  function($scope, msgBus,me,ReviewService,Api,$state){
+    msgBus.emitMsg('pagetitle::change', 'My Feed' );
+    $scope.loading = true;
+    $scope.me = me;
+    $scope.announcements = me.announcements;
+
+    var client = stream.connect(me.stream.key, null, me.stream.id);
+    var stream_user = client.feed('aggregated', me.user.id, me.stream.agg_token);
+
+    stream_user.subscribe(function(data){
+       getFeed();
+    })
+
+    ReviewService.getRatingTypes().then(function(results){
+      $scope.rating_types_new = results;
+        
+    });
+
+    Api.Lists.query({with_films:true}, function(results){
+      $scope.lists = results.results;
+    })
+
+    Api.getNowPlaying().then(function(response){
+      $scope.now_playing = response;
+    })
+
+    Api.getWatchlist(me.user.id).then(function(response) {
+                $scope.watchlist_items = response.results;
+            });
+    $scope.releaseDate = function(d){
+      return moment(d).format('YYYY');
+    }
+
+    function getFeed(){
+      Api.getAggregated()
+            .then(
+              function(response){
+                $scope.feed_items = response;
+                $scope.loading = false;
+                
+            });
+    }
+    
+
+    $scope.toPercent = function(num){
+        return (num/2000 * 100) + '%';
+    }
+
+    $scope.openComments = function(obj){
+      if(obj.commentable_type == 'Filmkeep\\Review')
+        $state.go('root.review', {reviewId: obj.commentable_id });
+      else
+        $scope.watchlistModal(obj);
+    }
+
+    getFeed();
+  }])
+
+.directive('feedItems', [
+  function(){
+    return {
+      restrict: 'E',
+      templateUrl: '/assets/templates/feed/feed_items.tmpl.html',
+      link: function(scope,element,attr){
+
+      }
+    }
+}])
+
+.filter('fDate',function(){
+  return function(date){
+    moment.locale('en', {
+      relativeTime : {
+          future: "in %s",
+          past:   "%s ago",
+          s:  "seconds",
+          m:  "1min",
+          mm: "%dmins",
+          h:  "1h",
+          hh: "%dh",
+          d:  "1d",
+          dd: "%dd",
+          M:  "1m",
+          MM: "%dm",
+          y:  "1y",
+          yy: "%dy"
+      }
+    });
+    // var now = moment.utc();
+    // console.log('now', date)
+    return moment.utc(date).fromNow(true);
+  }
+})
 
   'use strict';
 
@@ -1341,7 +1527,7 @@ var aeReview = angular.module('ae-review', [
 
         $scope.showFollow = angular.isDefined(me.user) && !$scope.myPage;
 
-        $scope.page_user = page_user; 
+        $scope.page_user = page_user;
                 
         $scope.follow = function(page_user){
 
@@ -1371,7 +1557,7 @@ var aeReview = angular.module('ae-review', [
         msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Filmkeep" );
         $scope.user_reviews = [];
         $scope.total_reviews = 0;
-        $scope.reviews_per_page = 20; // this should match however many results your API puts on one page
+        $scope.reviews_per_page = 24; // this should match however many results your API puts on one page
         
         $scope.sort_by = 'created_at'
         $scope.sort_by_rating_type = 'null';
@@ -1423,6 +1609,55 @@ var aeReview = angular.module('ae-review', [
 
   
   ;
+
+'use strict';
+
+angular.module('Filters',[])
+
+.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+
+})
+
+.filter('imageFilter', [ function() {
+  return function(path, type, size)
+  {
+    if(!path)
+      return '/assets/img/fallback-poster.jpg';
+
+    var image_config = image_path_config;
+    
+    var s = size || 0;
+    var t = type || 'poster';
+
+    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
+
+  }
+    
+}])
+
+.filter('profileFilter', [ function() {
+  return function(path)
+  {
+    var p = path || '/assets/img/default-profile.jpg';
+    return p;
+
+  }
+    
+}])
+
+.filter('verb',function(){
+  return function(verb){
+    var keys = {'filmkeep\\review':'reviewed',
+                'filmkeep\\watchlist':'added',
+                'filmkeep\\comment':'commented',
+                'filmkeep\\follower':'started following'
+                };
+    return keys[verb];
+  }
+})
 
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {
@@ -2403,43 +2638,6 @@ angular.module('ReviewService', ['Api'])
 
   'use strict';
 
-  angular.module('watchlist', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.user.watchlist', {
-      url: '/watchlist',
-      title: 'watchlist',
-      views: {
-        'page-child' : {
-          templateUrl: '/assets/templates/watchlist.tmpl.html',
-          controller: 'WatchlistCtrl'
-        }
-      },
-      
-    });
-  }])
-
-  .controller('WatchlistCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','Api','page_user',
-    function ($scope,msgBus, $stateParams, ReviewService, Api,page_user) {
-        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Watchlist" );
-
-        Api.getWatchlist(page_user.id).then(function(response) {
-
-                $scope.watchlist_items = response.results;
-            });
-
-        $scope.htoggle = false;
-        
-
-    }]) 
-
-  
-  ;
-
-
-  'use strict';
-
   angular.module('settings', [
   ])
 
@@ -2477,7 +2675,7 @@ angular.module('ReviewService', ['Api'])
     });
     $stateProvider.state('root.settings.filmeters', {
       url: '/filmeters',
-      title: 'Settings - filmeters',
+      title: 'Settings - sliders',
       views: {
         'page-child' : {
           templateUrl: '/assets/templates/settings/filmeters.tmpl.html',
@@ -2496,7 +2694,7 @@ angular.module('ReviewService', ['Api'])
         
       $scope.tabs = [
         {title: 'Profile', state:'root.settings.profile', active:false},
-        {title: 'Filmeters', state:'root.settings.filmeters', active:false}
+        {title: 'Sliders', state:'root.settings.filmeters', active:false}
       ];
 
       _.forEach($scope.tabs, function(tab){
@@ -2533,48 +2731,8 @@ angular.module('ReviewService', ['Api'])
 
   .controller('settingsFilmetersCtrl', ['$scope','me','AlertService','ReviewService','msgBus','Api',
     function ($scope, me,AlertService,ReviewService,msgBus,Api) {
-        msgBus.emitMsg('pagetitle::change', "Settings: Filmeters");
-        $scope.newcriteria = new Api.RatingTypes();
-        ReviewService.getRatingTypes().then(function(results){
-          $scope.types = results;
-            
-        });
-
-        $scope.filterCommon = function(element) {
-          return element.user_id === 0 ? true : false;
-        };
-
-        $scope.filterCustom = function(element) {
-          return element.user_id !== 0 ? true : false;
-        };
-
-        $scope.saveFilmeter = function(){
-          $scope.newcriteria.$save(function(response){
-            $scope.types.push(response);
-            $scope.newcriteria = new Api.RatingTypes();
-
-          });
-        }
-
-        $scope.updateFilmeter = function(type){
-          var t = new Api.RatingTypes();
-          _.assign(t,type);
-          t.$update(function(response){
-            AlertService.Notice("Your Filmeter is updated");
-            type.orig = type.label;
-            type.edit = false;
-          })
-        }
-
-        $scope.deleteFilmeter = function(meter){
-          var filmeter = new Api.RatingTypes();
+        msgBus.emitMsg('pagetitle::change', "Settings: Sliders");
         
-          filmeter.id = meter.id;
-          filmeter.$delete(function(response){
-            $scope.types  = response.results;
-            ReviewService.setRatingTypes(response.results);
-          });
-        }
 
   }]) 
 
@@ -2636,6 +2794,43 @@ angular.module('ReviewService', ['Api'])
           }
         }
       ])
+
+  
+  ;
+
+
+  'use strict';
+
+  angular.module('watchlist', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.user.watchlist', {
+      url: '/watchlist',
+      title: 'watchlist',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/watchlist.tmpl.html',
+          controller: 'WatchlistCtrl'
+        }
+      },
+      
+    });
+  }])
+
+  .controller('WatchlistCtrl', ['$scope', 'msgBus','$stateParams','ReviewService','Api','page_user',
+    function ($scope,msgBus, $stateParams, ReviewService, Api,page_user) {
+        msgBus.emitMsg('pagetitle::change', $scope.page_user.name + "'s Watchlist" );
+
+        Api.getWatchlist(page_user.id).then(function(response) {
+
+                $scope.watchlist_items = response.results;
+            });
+
+        $scope.htoggle = false;
+        
+
+    }]) 
 
   
   ;

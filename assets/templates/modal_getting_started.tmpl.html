@@ -1,3 +1,4 @@
+<button type="button" class="close" ng-click="$close()" ><span class="modal-close glyphicon glyphicon-remove"></span></button>
 <div ng-switch="gs_state" >
   <div class="gs gs-1" ng-switch-when="1" style="background-image:url(/assets/img/getting-started/intro.jpg)">
     <h2>Welcome %%first_name%%</h2>
@@ -8,7 +9,7 @@
   <div class="gs gs-2" ng-switch-when="2">
     <div class="gs-header media">
       <div class="media-left">
-        <i class="icon-review-solid"></i>
+        <i class="icon-users-solid"></i>
       </div>
       <div class="media-right">
         <h2>Follow your Friends/Associates</h2>
@@ -35,7 +36,7 @@
       </div>
     </div>
     <div class="gs-content">
-      
+      <gs-custom-criteria></gs-custom-criteria>
     </div>
     <div class="gs-bottom">
       <a ng-click="changeState(4)" class="btn btn-primary">Next</a>
@@ -54,7 +55,7 @@
       </div>
     </div>
     <div class="gs-content">
-      
+      <gs-rate></gs-rate>
     </div>
     <div class="gs-bottom">
       <a ng-click="changeState(5)" class="btn btn-primary">Next</a>
@@ -65,7 +66,7 @@
   <div class="gs gs-5" ng-switch-when="5"  style="background-image:url(/assets/img/getting-started/theend.jpg)">
       <h2>Finished</h2>
       <p>Now you're ready for the ultimate social film experience.</p>
-      <a class="btn btn-primary">Done</a>
+      <a class="btn btn-primary" ng-click="$close()">Done</a>
       <a ng-click="changeState(4)">Back</a>
   </div>
 </div>

@@ -1,0 +1,32 @@
+<div class="rate row">
+  <div class="col-xs-12 col-sm-4">
+    <div class="gs-rate-new" ng-click="newReview('love')" >
+        <h4>One you love</h4>
+        <span>
+          <div class="gs-rate-poster" ng-show="rate.love" style="background-image:url(%% rate.love | imageFilter:'poster':'1'%%);">&nbsp;</div>
+          <i class="icon-happy"></i>
+          <a >+ Review</a>
+        </span>
+      </div>
+  </div>
+  <div class="col-xs-12 col-sm-4">
+    <div class="gs-rate-new" ng-click="newReview('meh')" style="background-image:url(%% rate.meh %%);background-size: cover;">
+      <h4>One that's "meh"</h4>
+      <span>
+        <div class="gs-rate-poster" ng-show="rate.meh" style="background-image:url(%% rate.meh | imageFilter:'poster':'1'%%);">&nbsp;</div>
+        <i class="icon-meh"></i>
+        <a >+ Review</a>
+      </span>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-4">
+    <div class="gs-rate-new" ng-click="newReview('hate')" style="background-image:url(%% rate.hate %%);background-size: cover;">
+      <h4>One you hate</h4>
+      <span>
+        <div class="gs-rate-poster" ng-show="rate.hate" style="background-image:url(%% rate.hate | imageFilter:'poster':'1'%%);">&nbsp;</div>
+        <i class="icon-frowny"></i>
+        <a>+ Review</a>
+      </span>
+    </div>
+  </div>
+</div>

@@ -69,7 +69,7 @@
 
         $scope.showFollow = angular.isDefined(me.user) && !$scope.myPage;
 
-        $scope.page_user = page_user; 
+        $scope.page_user = page_user;
                 
         $scope.follow = function(page_user){
 

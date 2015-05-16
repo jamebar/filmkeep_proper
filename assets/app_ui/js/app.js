@@ -29,7 +29,8 @@ angular.module('myApp', [
     'monospaced.elastic',
     'Filters',
     'ngSanitize',
-    'getting-started'
+    'getting-started',
+    'custom-criteria'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -413,8 +414,7 @@ angular.module('myApp', [
           $scope.gs_state = s;
         }
 
-        $scope.gs_state = 2;
-        console.log(me)
+        $scope.gs_state = 4;
         var gsModalInstance = $modal.open({
             scope: $scope,
             templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
@@ -608,14 +608,25 @@ angular.module('myApp', [
   return {
     isFollowing : function(user)
     {
-      var me = Api.meData();
-      // console.log(me, user.id)
+      
+      return checkFollowing(user)
+    },
+
+    parseFollowing : function(users)
+    {
+      _.forEach(users, function(u){
+        u.following = checkFollowing(u);
+      })
+
+      return users;
+    }
+  }
+
+  function checkFollowing(user){
+    var me = Api.meData();
       if(!angular.isDefined(me.user))
         return false;
-      
-       
-      return _.find(me.user.followers, {'id': user.id}) ? true : false;
-    }
+    return _.find(me.user.followers, {'id': user.id}) ? true : false;
   }
 
 }])
