@@ -32,7 +32,7 @@
                 $scope.newcriteria.$save(function(response){
                   $scope.types.push(response);
                   $scope.newcriteria = new Api.RatingTypes();
-
+                  msgBus.emitMsg('criteria::added', response);
                 });
               }
 

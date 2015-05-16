@@ -415,11 +415,11 @@ angular.module('myApp', [
         }
 
         $scope.gs_state = 1;
-        var gsModalInstance = $modal.open({
-            scope: $scope,
-            templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
-            backdrop: 'static'
-        });
+        // var gsModalInstance = $modal.open({
+        //     scope: $scope,
+        //     templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
+        //     backdrop: 'static'
+        // });
         
     }
 ])
@@ -803,6 +803,10 @@ var aeReview = angular.module('ae-review', [
                     // scope.review = new reviewApiService();
                 }
 
+                msgBus.onMsg('criteria::added', function(e, data){
+                  scope.rating_types.push(data);
+                });
+
                 scope.sliding = function(el) {
                     
                     if(currentSlider != el)
@@ -1056,7 +1060,7 @@ var aeReview = angular.module('ae-review', [
                 $scope.newcriteria.$save(function(response){
                   $scope.types.push(response);
                   $scope.newcriteria = new Api.RatingTypes();
-
+                  msgBus.emitMsg('criteria::added', response);
                 });
               }
 

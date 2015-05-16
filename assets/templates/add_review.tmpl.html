@@ -48,7 +48,8 @@
                     >
                 </slider> -->
             </div>
-            <custom-criteria custom="false"></custom-criteria>
+            <p style="cursor:pointer;" ng-click="show_cc = true" ng-init="show_cc = false" ng-hide="show_cc">+ add new slider</p>
+            <custom-criteria custom="false" ng-show="show_cc"></custom-criteria>
             <div class="form-group">
                 <label>Notes</label>
                 <textarea msd-elastic="\n" style="font-size:16px" class="form-control" ng-model="review.notes"></textarea>

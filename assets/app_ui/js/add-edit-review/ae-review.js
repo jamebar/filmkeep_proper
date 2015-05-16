@@ -86,6 +86,10 @@ var aeReview = angular.module('ae-review', [
                     // scope.review = new reviewApiService();
                 }
 
+                msgBus.onMsg('criteria::added', function(e, data){
+                  scope.rating_types.push(data);
+                });
+
                 scope.sliding = function(el) {
                     
                     if(currentSlider != el)
