@@ -12,7 +12,11 @@ class UsersController extends BaseController {
 	 */
 	public function index()
 	{
-		
+		if(Auth::guest())
+      App::abort(403, 'Unauthorized action.');
+
+    $limit = Input::has('limit') ? Input::get('limit') : 20;
+    return User::take($limit)->orderBy('id')->get();
 	}
 
 

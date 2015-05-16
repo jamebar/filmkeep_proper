@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width"  />
 	<title ng-bind-template="Filmkeep: %%page_title%%">Filmkeep</title>
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=12">
-    <!-- <link rel="stylesheet" href="/assets/css/vendor.css"> -->
+    <link rel="stylesheet" href="/assets/css/vendor.css">
     <!-- <link rel="stylesheet" href="/assets/css/animate.min.css"> -->
-  <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150502.css">
-  <link rel="stylesheet" href="/assets/css/filmkeep-font.css">
+  <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150516.css">
+  <link rel="stylesheet" href="/assets/css/filmkeep-font.css?v=2">
 
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>

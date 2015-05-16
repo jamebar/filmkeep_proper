@@ -113,3 +113,20 @@
 .icon-stars-solid:before {
   content: "y";
 }
+
+.icon-frowny:before {
+  content: "z";
+}
+.icon-happy:before {
+  content: "A";
+}
+.icon-meh:before {
+  content: "B";
+}
+.icon-users:before {
+  content: "C";
+}
+.icon-users-solid:before {
+  content: "D";
+}
+
