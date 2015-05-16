@@ -414,7 +414,7 @@ angular.module('myApp', [
           $scope.gs_state = s;
         }
 
-        $scope.gs_state = 4;
+        $scope.gs_state = 1;
         var gsModalInstance = $modal.open({
             scope: $scope,
             templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
