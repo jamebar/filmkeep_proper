@@ -14,8 +14,8 @@
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
     <script src="/assets/js/vendor.js?cache=1.2"></script>
-    <script id="bundle" src="/assets/js/app-20150410.js"></script>
-    <script id="templates" src="/assets/js/templates-20150506.js"></script>
+    <script id="bundle" src="/assets/js/app-20150519.js"></script>
+    <script id="templates" src="/assets/js/templates-20150519.js"></script>
     <base href="/" />
     <script>
       var image_path_config = {{json_encode($image_path_config)}};
