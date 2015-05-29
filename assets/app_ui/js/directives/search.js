@@ -47,6 +47,7 @@
                         url: '/api/tmdb/%QUERY',
                         filter: function(list) {
                             return $.map(list.results, function(data) {
+                                data.release_date  = data.release_date || 'N/A';
                                 return {
                                     title: data.title ,
                                     tmdb_id: data.id,
