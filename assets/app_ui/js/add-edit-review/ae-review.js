@@ -86,6 +86,10 @@ var aeReview = angular.module('ae-review', [
                     // scope.review = new reviewApiService();
                 }
 
+                msgBus.onMsg('criteria::added', function(e, data){
+                  scope.rating_types.push(data);
+                });
+
                 scope.sliding = function(el) {
                     
                     if(currentSlider != el)
@@ -186,6 +190,7 @@ var aeReview = angular.module('ae-review', [
                         url: '/api/tmdb/%QUERY',
                         filter: function(list) {
                             return $.map(list.results, function(data) {
+                                data.release_date  = data.release_date || 'N/A';
                                 return {
                                     title: data.title,
                                     tmdb_id: data.id,

@@ -1,0 +1,33 @@
+<!-- <h4>Preset filmeters, these can't be changed</h4> -->
+<span ng-if="common" >
+  <div ng-repeat="type in types | filter: filterCommon" class="clearfix filmeter">
+    %%type.label%% <em>(required)</em>
+  </div>
+</span>
+<div ng-repeat="type in types | filter: filterCustom" class="clearfix filmeter" ng-if="custom">
+  <span ng-show="!type.edit"><a ng-click="type.edit = !type.edit;">%%type.label%%</a> <div class="criteria-actions pull-right"><a ng-click="type.edit = !type.edit; type.label = type.orig" ng-init="type.edit = false; type.orig = type.label"><span class="glyphicon glyphicon-pencil" ></span></a> <a ng-really-message='Are you sure you want to delete the slider: %%type.label%% ? This action will remove this rating from all films and cannot be undone.' ng-really-click="deleteFilmeter(type)"><span class="glyphicon glyphicon-trash"></span></a></div></span>
+  <form ng-submit="updateFilmeter(type)" ng-show="type.edit">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8">
+        <input class="form-control" ng-model="type.label"/>
+      </div>
+      <div class="col-xs-12 col-sm-2">
+        <input type="cancel" class="btn btn-default" value="Cancel" ng-click="type.edit = false; type.label = type.orig"/>
+      </div>
+      <div class="col-xs-12 col-sm-2">
+        <input type="submit" class="btn btn-primary" value="Save" />
+      </div>
+    </div>
+  </form>
+</div>
+
+<form ng-submit="saveFilmeter()" style="margin-top:1em;">
+  <div class="media">
+    <!-- <div class="media-left"></div> -->
+    <div class="media-body"><input class="form-control criteria" ng-model="newcriteria.label" placeholder="Enter the title of a new slider"/></div>
+    <div class="media-right"><input type="submit" class="btn btn-primary" value="Save" /></div>
+
+  </div>
+    
+    
+</form>

@@ -154,6 +154,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
         return Response::json(['response'=>'false']);
 
       $user = User::with('followers')->where('id',Auth::user()->id)->first();
+      $user["new"] = $user->reviews->count() < 1;
       $announcements = Announcement::where('is_active', true)->orderBy('created_at', 'desc')->get();
 
       //feed creds

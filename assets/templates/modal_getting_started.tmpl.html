@@ -1,0 +1,72 @@
+<button type="button" class="close" ng-click="$close()" ><span class="modal-close glyphicon glyphicon-remove"></span></button>
+<div ng-switch="gs_state" >
+  <div class="gs gs-1" ng-switch-when="1" style="background-image:url(/assets/img/getting-started/intro.jpg)">
+    <h2>Welcome %%first_name%%</h2>
+    <p>To get the most out of Filmkeep, take a moment and complete the next few steps.</p>
+    <a ng-click="changeState(2)" class="btn btn-primary">Next</a>
+  </div>
+
+  <div class="gs gs-2" ng-switch-when="2">
+    <div class="gs-header media">
+      <div class="media-left">
+        <i class="icon-users-solid"></i>
+      </div>
+      <div class="media-right">
+        <h2>Follow your Friends/Associates</h2>
+        <p>and we'll build you a custom feed.</p>
+      </div>
+    </div>
+    <div class="gs-content">
+      <follow-friends></follow-friends>
+    </div>
+    <div class="gs-bottom">
+      <a ng-click="changeState(3)" class="btn btn-primary">Next</a>
+      <a ng-click="changeState(1)">Back</a>
+    </div>
+  </div>
+
+  <div class="gs gs-3" ng-switch-when="3">
+    <div class="gs-header media">
+      <div class="media-left">
+        <i class="icon-custom-solid"></i>
+      </div>
+      <div class="media-right">
+        <h2>Customize Your Criteria</h2>
+        <p>i.e. "how much will Lisa like this-ness?" or "Beer Movieness"</p>
+      </div>
+    </div>
+    <div class="gs-content">
+      <gs-custom-criteria></gs-custom-criteria>
+    </div>
+    <div class="gs-bottom">
+      <a ng-click="changeState(4)" class="btn btn-primary">Next</a>
+      <a ng-click="changeState(2)">Back</a>
+    </div>
+  </div>
+
+  <div class="gs gs-4" ng-switch-when="4">
+    <div class="gs-header media">
+      <div class="media-left">
+        <i class="icon-sliders-solid"></i>
+      </div>
+      <div class="media-right">
+        <h2>Rate Three Movies</h2>
+        <p>Last step, we promise</p>
+      </div>
+    </div>
+    <div class="gs-content">
+      <gs-rate></gs-rate>
+    </div>
+    <div class="gs-bottom">
+      <a ng-click="changeState(5)" class="btn btn-primary">Next</a>
+      <a ng-click="changeState(3)">Back</a>
+    </div>
+  </div>
+
+  <div class="gs gs-5" ng-switch-when="5"  style="background-image:url(/assets/img/getting-started/theend.jpg)">
+      <h2>Finished</h2>
+      <p>Now you're ready for the ultimate social film experience.</p>
+      <a class="btn btn-primary" ng-click="$close()">Done</a>
+      <a ng-click="changeState(4)">Back</a>
+  </div>
+</div>

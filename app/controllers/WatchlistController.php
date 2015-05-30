@@ -14,11 +14,11 @@ class WatchlistController extends \BaseController {
 	public function index()
 	{
     $user_id = \Input::get('user_id');
-		$watchlist = Watchlist::with('film', 'comments')->where('user_id', $user_id)->orderBy('list_order', 'asc')->orderby('created_at','asc')->get();
+    $watchlist = Watchlist::with('film', 'comments')->where('user_id', $user_id)->orderBy('list_order', 'asc')->orderby('created_at','asc')->get();
     
-    if(Auth::check())
+    if(Auth::check() && count($watchlist) > 0)
     $this->checkWatchlistReviewed($watchlist);
-    
+
     return \Response::json(['status' => 200, 'results' => $watchlist]);
 	}
 

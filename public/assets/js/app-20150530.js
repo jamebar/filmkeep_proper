@@ -28,7 +28,9 @@ angular.module('myApp', [
     'templates',
     'monospaced.elastic',
     'Filters',
-    'ngSanitize'
+    'ngSanitize',
+    'getting-started',
+    'custom-criteria'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -249,6 +251,8 @@ angular.module('myApp', [
 .controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','me','Slug','Api',
     function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,me,Slug,Api) {
        var reviewModalInstance;
+       if(me.user)
+       $scope.first_name = me.user.name.split(' ')[0];
 
        $rootScope.$on('modal::close', function(){
         reviewModalInstance.close();
@@ -418,7 +422,20 @@ angular.module('myApp', [
 
             });
         }
-        
+
+        $scope.changeState = function(s){
+          $scope.gs_state = s;
+        }
+
+        if(me.user && me.user.new)
+        {
+          $scope.gs_state = 1;
+          var gsModalInstance = $modal.open({
+              scope: $scope,
+              templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
+              backdrop: 'static'
+          });
+        }
     }
 ])
 
@@ -606,14 +623,25 @@ angular.module('myApp', [
   return {
     isFollowing : function(user)
     {
-      var me = Api.meData();
-      // console.log(me, user.id)
+      
+      return checkFollowing(user)
+    },
+
+    parseFollowing : function(users)
+    {
+      _.forEach(users, function(u){
+        u.following = checkFollowing(u);
+      })
+
+      return users;
+    }
+  }
+
+  function checkFollowing(user){
+    var me = Api.meData();
       if(!angular.isDefined(me.user))
         return false;
-      
-       
-      return _.find(me.user.followers, {'id': user.id}) ? true : false;
-    }
+    return _.find(me.user.followers, {'id': user.id}) ? true : false;
   }
 
 }])
@@ -790,6 +818,10 @@ var aeReview = angular.module('ae-review', [
                     // scope.review = new reviewApiService();
                 }
 
+                msgBus.onMsg('criteria::added', function(e, data){
+                  scope.rating_types.push(data);
+                });
+
                 scope.sliding = function(el) {
                     
                     if(currentSlider != el)
@@ -890,6 +922,7 @@ var aeReview = angular.module('ae-review', [
                         url: '/api/tmdb/%QUERY',
                         filter: function(list) {
                             return $.map(list.results, function(data) {
+                                data.release_date  = data.release_date || 'N/A';
                                 return {
                                     title: data.title,
                                     tmdb_id: data.id,
@@ -1003,6 +1036,157 @@ var aeReview = angular.module('ae-review', [
             restrict: 'E',
             templateUrl: '/assets/templates/comments/comment_form.tmpl.html',
             link: function(scope, element, attrs) {
+
+            }
+
+        }
+    }
+  ]);
+
+  'use strict';
+
+  angular.module('custom-criteria', [
+])
+
+  .directive('customCriteria', ['AlertService','ReviewService','msgBus','Api',
+    function(AlertService,ReviewService,msgBus,Api){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/custom_criteria.tmpl.html',
+            link: function($scope, element, attrs) {
+              var me = Api.me();
+              $scope.common = attrs.common || false;
+              $scope.custom = attrs.custom || true;
+
+              $scope.newcriteria = new Api.RatingTypes();
+              ReviewService.getRatingTypes().then(function(results){
+                $scope.types = results;
+              });
+
+              $scope.filterCommon = function(element) {
+                return element.user_id === 0 ? true : false;
+              };
+
+              $scope.filterCustom = function(element) {
+                return element.user_id !== 0 ? true : false;
+              };
+
+              $scope.saveFilmeter = function(){
+                $scope.newcriteria.$save(function(response){
+                  $scope.types.push(response);
+                  $scope.newcriteria = new Api.RatingTypes();
+                  msgBus.emitMsg('criteria::added', response);
+                });
+              }
+
+              $scope.updateFilmeter = function(type){
+                var t = new Api.RatingTypes();
+                _.assign(t,type);
+                t.$update(function(response){
+                  AlertService.Notice("Your slider is updated");
+                  type.orig = type.label;
+                  type.edit = false;
+                })
+              }
+
+              $scope.deleteFilmeter = function(meter){
+                var filmeter = new Api.RatingTypes();
+              
+                filmeter.id = meter.id;
+                filmeter.$delete(function(response){
+                  $scope.types  = response.results;
+                  ReviewService.setRatingTypes(response.results);
+                });
+              }
+
+
+            }
+
+        }
+    }
+  ]);
+
+  'use strict';
+
+  angular.module('getting-started', [
+])
+
+  .directive('followFriends', ['Api','followerFactory', 
+    function(Api, followerFactory){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/getting_started/follow_friends.tmpl.html',
+            link: function(scope, element, attrs) {
+              $('.follow-friends').perfectScrollbar();
+              scope.loading = true;
+
+              Api.Users.query(function(response){
+                scope.users = followerFactory.parseFollowing(response);
+                $('.follow-friends').scrollTop(1)
+                $('.follow-friends').perfectScrollbar('update');
+                scope.loading = false;
+              });
+
+              scope.follow = function(user){
+                if(user.following){
+                  //make change immediately, should be in callback, but it's too slow
+                  user.following = false;
+                  Api.unfollow(user.id).then(function(response){
+                    // me.user.followers = response.followers;
+                  });
+                }else{
+                  user.following = true;
+                  Api.follow(user.id).then(function(response){
+                    // me.user.followers = response.followers;
+                  });
+                }
+              }
+
+            }
+
+        }
+    }
+  ])
+
+  .directive('gsCustomCriteria', ['Api', 
+    function(Api){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/getting_started/custom_criteria.tmpl.html',
+            link: function(scope, element, attrs) {
+              $('.custom-criteria').perfectScrollbar();
+
+
+            }
+
+        }
+    }
+  ])
+
+  .directive('gsRate', ['Api', 'msgBus',
+    function(Api, msgBus){
+        return {
+            restrict: 'E',
+            scope:{},
+            templateUrl: '/assets/templates/getting_started/rate.tmpl.html',
+            link: function(scope, element, attrs) {
+              scope.rate = {};
+              var curr_pos = 'love';
+
+              $('.rate').perfectScrollbar();
+
+              scope.newReview = function(pos){
+                msgBus.emitMsg('review::new');
+                curr_pos = pos
+              }
+
+              msgBus.onMsg('review::added', function(e, data){
+                scope.rate[curr_pos] = data.film.poster_path;
+              });
+
 
             }
 
@@ -1365,7 +1549,7 @@ var aeReview = angular.module('ae-review', [
 
         $scope.showFollow = angular.isDefined(me.user) && !$scope.myPage;
 
-        $scope.page_user = page_user; 
+        $scope.page_user = page_user;
                 
         $scope.follow = function(page_user){
 
@@ -2570,47 +2754,7 @@ angular.module('ReviewService', ['Api'])
   .controller('settingsFilmetersCtrl', ['$scope','me','AlertService','ReviewService','msgBus','Api',
     function ($scope, me,AlertService,ReviewService,msgBus,Api) {
         msgBus.emitMsg('pagetitle::change', "Settings: Sliders");
-        $scope.newcriteria = new Api.RatingTypes();
-        ReviewService.getRatingTypes().then(function(results){
-          $scope.types = results;
-            
-        });
-
-        $scope.filterCommon = function(element) {
-          return element.user_id === 0 ? true : false;
-        };
-
-        $scope.filterCustom = function(element) {
-          return element.user_id !== 0 ? true : false;
-        };
-
-        $scope.saveFilmeter = function(){
-          $scope.newcriteria.$save(function(response){
-            $scope.types.push(response);
-            $scope.newcriteria = new Api.RatingTypes();
-
-          });
-        }
-
-        $scope.updateFilmeter = function(type){
-          var t = new Api.RatingTypes();
-          _.assign(t,type);
-          t.$update(function(response){
-            AlertService.Notice("Your slider is updated");
-            type.orig = type.label;
-            type.edit = false;
-          })
-        }
-
-        $scope.deleteFilmeter = function(meter){
-          var filmeter = new Api.RatingTypes();
         
-          filmeter.id = meter.id;
-          filmeter.$delete(function(response){
-            $scope.types  = response.results;
-            ReviewService.setRatingTypes(response.results);
-          });
-        }
 
   }]) 
 

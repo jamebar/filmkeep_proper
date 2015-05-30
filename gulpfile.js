@@ -72,13 +72,12 @@ gulp.task('styles', function() {
         .pipe(replace(/<link rel=\"stylesheet\" id=\"bundlecss\".*>/g, '<link rel="stylesheet" id="bundlecss" href="/assets/css/' + filename + '">'))  //so find the script tag with an id of bundle, and replace its src.
         .pipe(gulp.dest('./')); //Write the file back to the same spot.
 
-  // gulp.src([
-  //   'assets/bower_components/angular-snap/angular-snap.min.css',
-  //   ])
-  // .pipe(minifycss())
-  // .pipe(plumber())
-  // .pipe(concat('vendor.css'))
-  // .pipe(gulp.dest('public/assets/css'));
+  gulp.src([
+    'assets/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css',
+    ])
+  .pipe(plumber())
+  .pipe(concat('vendor.css'))
+  .pipe(gulp.dest('public/assets/css'));
 });
 
 gulp.task('scripts', function() {
@@ -106,6 +105,7 @@ gulp.task('scripts', function() {
         'assets/bower_components/angulartics/dist/angulartics-ga.min.js',
         'assets/bower_components/angular-elastic/elastic.js',
         'assets/bower_components/angular-sanitize/angular-sanitize.min.js',
+        'assets/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js'
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))

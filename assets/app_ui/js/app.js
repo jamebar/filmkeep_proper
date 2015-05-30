@@ -28,7 +28,9 @@ angular.module('myApp', [
     'templates',
     'monospaced.elastic',
     'Filters',
-    'ngSanitize'
+    'ngSanitize',
+    'getting-started',
+    'custom-criteria'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -249,6 +251,8 @@ angular.module('myApp', [
 .controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','me','Slug','Api',
     function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,me,Slug,Api) {
        var reviewModalInstance;
+       if(me.user)
+       $scope.first_name = me.user.name.split(' ')[0];
 
        $rootScope.$on('modal::close', function(){
         reviewModalInstance.close();
@@ -418,7 +422,20 @@ angular.module('myApp', [
 
             });
         }
-        
+
+        $scope.changeState = function(s){
+          $scope.gs_state = s;
+        }
+
+        if(me.user && me.user.new)
+        {
+          $scope.gs_state = 1;
+          var gsModalInstance = $modal.open({
+              scope: $scope,
+              templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
+              backdrop: 'static'
+          });
+        }
     }
 ])
 
@@ -606,14 +623,25 @@ angular.module('myApp', [
   return {
     isFollowing : function(user)
     {
-      var me = Api.meData();
-      // console.log(me, user.id)
+      
+      return checkFollowing(user)
+    },
+
+    parseFollowing : function(users)
+    {
+      _.forEach(users, function(u){
+        u.following = checkFollowing(u);
+      })
+
+      return users;
+    }
+  }
+
+  function checkFollowing(user){
+    var me = Api.meData();
       if(!angular.isDefined(me.user))
         return false;
-      
-       
-      return _.find(me.user.followers, {'id': user.id}) ? true : false;
-    }
+    return _.find(me.user.followers, {'id': user.id}) ? true : false;
   }
 
 }])
