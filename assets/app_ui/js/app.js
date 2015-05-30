@@ -105,6 +105,18 @@ angular.module('myApp', [
     }
   });
 
+  $stateProvider.state('root.upvote', {
+    url: '/upvote-turtle',
+    views: {
+        'page' : {
+          templateUrl: '/assets/templates/pages/upvoteturtle.tmpl.html',
+          controller: function(msgBus){
+            msgBus.emitMsg('pagetitle::change', 'Upvote Turtle' );
+          }
+        }
+    }
+  });
+
   $stateProvider.state('root.privacy', {
     url: '/pages/privacy',
     views: {

@@ -28,9 +28,7 @@ angular.module('myApp', [
     'templates',
     'monospaced.elastic',
     'Filters',
-    'ngSanitize',
-    'getting-started',
-    'custom-criteria'
+    'ngSanitize'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -251,7 +249,6 @@ angular.module('myApp', [
 .controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','me','Slug','Api',
     function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,me,Slug,Api) {
        var reviewModalInstance;
-       $scope.first_name = me.user.name.split(' ')[0];
 
        $rootScope.$on('modal::close', function(){
         reviewModalInstance.close();
@@ -421,17 +418,6 @@ angular.module('myApp', [
 
             });
         }
-
-        $scope.changeState = function(s){
-          $scope.gs_state = s;
-        }
-
-        $scope.gs_state = 1;
-        var gsModalInstance = $modal.open({
-            scope: $scope,
-            templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
-            backdrop: 'static'
-        });
         
     }
 ])
@@ -620,25 +606,14 @@ angular.module('myApp', [
   return {
     isFollowing : function(user)
     {
-      
-      return checkFollowing(user)
-    },
-
-    parseFollowing : function(users)
-    {
-      _.forEach(users, function(u){
-        u.following = checkFollowing(u);
-      })
-
-      return users;
-    }
-  }
-
-  function checkFollowing(user){
-    var me = Api.meData();
+      var me = Api.meData();
+      // console.log(me, user.id)
       if(!angular.isDefined(me.user))
         return false;
-    return _.find(me.user.followers, {'id': user.id}) ? true : false;
+      
+       
+      return _.find(me.user.followers, {'id': user.id}) ? true : false;
+    }
   }
 
 }])
@@ -814,10 +789,6 @@ var aeReview = angular.module('ae-review', [
                     // newReview
                     // scope.review = new reviewApiService();
                 }
-
-                msgBus.onMsg('criteria::added', function(e, data){
-                  scope.rating_types.push(data);
-                });
 
                 scope.sliding = function(el) {
                     
@@ -1041,156 +1012,6 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
-  angular.module('custom-criteria', [
-])
-
-  .directive('customCriteria', ['AlertService','ReviewService','msgBus','Api',
-    function(AlertService,ReviewService,msgBus,Api){
-        return {
-            restrict: 'E',
-            scope:{},
-            templateUrl: '/assets/templates/custom_criteria.tmpl.html',
-            link: function($scope, element, attrs) {
-              var me = Api.me();
-              $scope.common = attrs.common || false;
-              $scope.custom = attrs.custom || true;
-
-              $scope.newcriteria = new Api.RatingTypes();
-              ReviewService.getRatingTypes().then(function(results){
-                $scope.types = results;
-              });
-
-              $scope.filterCommon = function(element) {
-                return element.user_id === 0 ? true : false;
-              };
-
-              $scope.filterCustom = function(element) {
-                return element.user_id !== 0 ? true : false;
-              };
-
-              $scope.saveFilmeter = function(){
-                $scope.newcriteria.$save(function(response){
-                  $scope.types.push(response);
-                  $scope.newcriteria = new Api.RatingTypes();
-                  msgBus.emitMsg('criteria::added', response);
-                });
-              }
-
-              $scope.updateFilmeter = function(type){
-                var t = new Api.RatingTypes();
-                _.assign(t,type);
-                t.$update(function(response){
-                  AlertService.Notice("Your slider is updated");
-                  type.orig = type.label;
-                  type.edit = false;
-                })
-              }
-
-              $scope.deleteFilmeter = function(meter){
-                var filmeter = new Api.RatingTypes();
-              
-                filmeter.id = meter.id;
-                filmeter.$delete(function(response){
-                  $scope.types  = response.results;
-                  ReviewService.setRatingTypes(response.results);
-                });
-              }
-
-
-            }
-
-        }
-    }
-  ]);
-
-  'use strict';
-
-  angular.module('getting-started', [
-])
-
-  .directive('followFriends', ['Api','followerFactory', 
-    function(Api, followerFactory){
-        return {
-            restrict: 'E',
-            scope:{},
-            templateUrl: '/assets/templates/getting_started/follow_friends.tmpl.html',
-            link: function(scope, element, attrs) {
-              $('.follow-friends').perfectScrollbar();
-              scope.loading = true;
-
-              Api.Users.query(function(response){
-                scope.users = followerFactory.parseFollowing(response);
-                $('.follow-friends').perfectScrollbar('update');
-                scope.loading = false;
-              });
-
-              scope.follow = function(user){
-                if(user.following){
-                  //make change immediately, should be in callback, but it's too slow
-                  user.following = false;
-                  Api.unfollow(user.id).then(function(response){
-                    // me.user.followers = response.followers;
-                  });
-                }else{
-                  user.following = true;
-                  Api.follow(user.id).then(function(response){
-                    // me.user.followers = response.followers;
-                  });
-                }
-              }
-
-            }
-
-        }
-    }
-  ])
-
-  .directive('gsCustomCriteria', ['Api', 
-    function(Api){
-        return {
-            restrict: 'E',
-            scope:{},
-            templateUrl: '/assets/templates/getting_started/custom_criteria.tmpl.html',
-            link: function(scope, element, attrs) {
-              $('.custom-criteria').perfectScrollbar();
-
-
-            }
-
-        }
-    }
-  ])
-
-  .directive('gsRate', ['Api', 'msgBus',
-    function(Api, msgBus){
-        return {
-            restrict: 'E',
-            scope:{},
-            templateUrl: '/assets/templates/getting_started/rate.tmpl.html',
-            link: function(scope, element, attrs) {
-              scope.rate = {};
-              var curr_pos = 'love';
-
-              $('.rate').perfectScrollbar();
-
-              scope.newReview = function(pos){
-                msgBus.emitMsg('review::new');
-                curr_pos = pos
-              }
-
-              msgBus.onMsg('review::added', function(e, data){
-                scope.rate[curr_pos] = data.film.poster_path;
-              });
-
-
-            }
-
-        }
-    }
-  ]);
-
-  'use strict';
-
   angular.module('search', [
 ])
 
@@ -1237,7 +1058,6 @@ var aeReview = angular.module('ae-review', [
                         url: '/api/tmdb/%QUERY',
                         filter: function(list) {
                             return $.map(list.results, function(data) {
-                                data.release_date  = data.release_date || 'N/A';
                                 return {
                                     title: data.title ,
                                     tmdb_id: data.id,
@@ -1307,49 +1127,6 @@ var aeReview = angular.module('ae-review', [
         }
     }
   ]);
-
-  'use strict';
-
-  angular.module('film', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.film', {
-      url: '/f/{filmId}-{filmSlug}',
-      title: 'Film',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/film.tmpl.html',
-          controller: 'FilmCtrl'
-        }
-      },
-      resolve: {
-        FilmLoad:['$stateParams','Api', function($stateParams,Api) {
-          return Api.getFilm($stateParams.filmId);
-        }], 
-      }
-    });
-  }])
-
-  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
-    function ($scope,msgBus,$stateParams,me,FilmLoad) {
-        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
-        $scope.me = me;
-        FilmLoad.film.film_id = FilmLoad.film.id;
-        $scope.film = FilmLoad.film;
-        $scope.follower_reviews = FilmLoad.follower_reviews;
-
-        $scope.$on('watchlist::addremove', function(event, film_id) {
-
-          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
-                
-        });
-
-    }]) 
-
-  
-  ;
-
 
   'use strict';
 
@@ -1476,6 +1253,49 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
+  angular.module('film', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.film', {
+      url: '/f/{filmId}-{filmSlug}',
+      title: 'Film',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/film.tmpl.html',
+          controller: 'FilmCtrl'
+        }
+      },
+      resolve: {
+        FilmLoad:['$stateParams','Api', function($stateParams,Api) {
+          return Api.getFilm($stateParams.filmId);
+        }], 
+      }
+    });
+  }])
+
+  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
+    function ($scope,msgBus,$stateParams,me,FilmLoad) {
+        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
+        $scope.me = me;
+        FilmLoad.film.film_id = FilmLoad.film.id;
+        $scope.film = FilmLoad.film;
+        $scope.follower_reviews = FilmLoad.follower_reviews;
+
+        $scope.$on('watchlist::addremove', function(event, film_id) {
+
+          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
+                
+        });
+
+    }]) 
+
+  
+  ;
+
+
+  'use strict';
+
   angular.module('filmkeep', ['angularUtils.directives.dirPagination'
   ])
 
@@ -1544,7 +1364,7 @@ var aeReview = angular.module('ae-review', [
 
         $scope.showFollow = angular.isDefined(me.user) && !$scope.myPage;
 
-        $scope.page_user = page_user;
+        $scope.page_user = page_user; 
                 
         $scope.follow = function(page_user){
 
@@ -1802,6 +1622,209 @@ angular.module('AlertBox', [])
 
 
     }]) 
+
+  
+  ;
+
+
+  'use strict';
+
+  angular.module('settings', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.settings', {
+      abstract: true,
+      url: '/settings',
+      title: 'Settings',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/settings/settings.tmpl.html',
+          controller: 'settingsCtrl'
+        }
+      },
+      resolve: {
+        isAuthorized: function (Api) {
+            return Api.isAuthorized();
+        } 
+      },
+      onEnter: function(isAuthorized){
+        if(isAuthorized == 0)
+          window.location.href = '/users/login';
+      }
+    });
+
+    $stateProvider.state('root.settings.profile', {
+      url: '/profile',
+      title: 'Settings - profile',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/settings/profile.tmpl.html',
+          controller: 'settingsProfileCtrl'
+        }
+      },
+    });
+    $stateProvider.state('root.settings.filmeters', {
+      url: '/filmeters',
+      title: 'Settings - sliders',
+      views: {
+        'page-child' : {
+          templateUrl: '/assets/templates/settings/filmeters.tmpl.html',
+          controller: 'settingsFilmetersCtrl'
+        }
+      },
+    });
+
+  }])
+
+  .controller('settingsCtrl', ['$scope','me','AlertService','$state','Api',
+    function ($scope, me,AlertService,$state,Api) {
+
+      $scope.current_user = new Api.Users();
+        _.assign($scope.current_user, me.user);
+        
+      $scope.tabs = [
+        {title: 'Profile', state:'root.settings.profile', active:false},
+        {title: 'Sliders', state:'root.settings.filmeters', active:false}
+      ];
+
+      _.forEach($scope.tabs, function(tab){
+        if($state.includes(tab.state))
+          tab.active = true;
+      });
+
+      $scope.gotoTab = function(dest){
+        $state.go(dest);
+      }
+
+  }]) 
+
+  .controller('settingsProfileCtrl', ['$scope','me','AlertService','msgBus',
+    function ($scope, me,AlertService,msgBus) {
+        msgBus.emitMsg('pagetitle::change', "Settings: Profile");
+
+        $scope.saveUser = function(){
+          $scope.current_user.$update(function(response){
+              AlertService.Notice("Your changes have been saved");
+              _.assign(me.user, response);
+          },function(response_headers){
+              AlertService.Warning(response_headers.data);
+          });
+        }
+
+  }]) 
+
+  .controller('settingsInvitesCtrl', [
+    function () {
+
+
+  }]) 
+
+  .controller('settingsFilmetersCtrl', ['$scope','me','AlertService','ReviewService','msgBus','Api',
+    function ($scope, me,AlertService,ReviewService,msgBus,Api) {
+        msgBus.emitMsg('pagetitle::change', "Settings: Sliders");
+        $scope.newcriteria = new Api.RatingTypes();
+        ReviewService.getRatingTypes().then(function(results){
+          $scope.types = results;
+            
+        });
+
+        $scope.filterCommon = function(element) {
+          return element.user_id === 0 ? true : false;
+        };
+
+        $scope.filterCustom = function(element) {
+          return element.user_id !== 0 ? true : false;
+        };
+
+        $scope.saveFilmeter = function(){
+          $scope.newcriteria.$save(function(response){
+            $scope.types.push(response);
+            $scope.newcriteria = new Api.RatingTypes();
+
+          });
+        }
+
+        $scope.updateFilmeter = function(type){
+          var t = new Api.RatingTypes();
+          _.assign(t,type);
+          t.$update(function(response){
+            AlertService.Notice("Your slider is updated");
+            type.orig = type.label;
+            type.edit = false;
+          })
+        }
+
+        $scope.deleteFilmeter = function(meter){
+          var filmeter = new Api.RatingTypes();
+        
+          filmeter.id = meter.id;
+          filmeter.$delete(function(response){
+            $scope.types  = response.results;
+            ReviewService.setRatingTypes(response.results);
+          });
+        }
+
+  }]) 
+
+  .directive('pwCheck', [function () {
+        return {
+            require: 'ngModel',
+            link: function (scope, elem, attrs, ctrl) {
+                var firstPassword = '#' + attrs.pwCheck;
+                elem.add(firstPassword).on('keyup', function () {
+                    scope.$apply(function () {
+                        var v = elem.val()===$(firstPassword).val();
+                        ctrl.$setValidity('pwmatch', v);
+                    });
+                });
+            }
+        }
+    }])
+   
+   .directive('ngReallyClick', ['$modal',
+        function($modal) {
+
+          var ModalInstanceCtrl = function($scope, $modalInstance) {
+            $scope.ok = function() {
+              $modalInstance.close();
+            };
+
+            $scope.cancel = function() {
+              $modalInstance.dismiss('cancel');
+            };
+          };
+
+          return {
+            restrict: 'A',
+            scope: {
+              ngReallyClick:"&"
+            },
+            link: function(scope, element, attrs) {
+              element.bind('click', function() {
+                var message = attrs.ngReallyMessage || "Are you sure ?";
+
+                var modalHtml = '<div class="modal-body"><p>' + message + '</p></div>';
+                modalHtml += '<div class="modal-footer"><button class="btn btn-success" ng-click="ok()">OK</button><button class="btn btn-default" ng-click="cancel()">Cancel</button></div>';
+
+                var modalInstance = $modal.open({
+                  template: modalHtml,
+                  controller: ModalInstanceCtrl,
+                  size:'sm'
+                });
+
+                modalInstance.result.then(function() {
+                  scope.ngReallyClick();
+                }, function() {
+                  //Modal dismissed
+                });
+                
+              });
+
+            }
+          }
+        }
+      ])
 
   
   ;
@@ -2652,169 +2675,6 @@ angular.module('ReviewService', ['Api'])
 
 
 ]);
-
-  'use strict';
-
-  angular.module('settings', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.settings', {
-      abstract: true,
-      url: '/settings',
-      title: 'Settings',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/settings/settings.tmpl.html',
-          controller: 'settingsCtrl'
-        }
-      },
-      resolve: {
-        isAuthorized: function (Api) {
-            return Api.isAuthorized();
-        } 
-      },
-      onEnter: function(isAuthorized){
-        if(isAuthorized == 0)
-          window.location.href = '/users/login';
-      }
-    });
-
-    $stateProvider.state('root.settings.profile', {
-      url: '/profile',
-      title: 'Settings - profile',
-      views: {
-        'page-child' : {
-          templateUrl: '/assets/templates/settings/profile.tmpl.html',
-          controller: 'settingsProfileCtrl'
-        }
-      },
-    });
-    $stateProvider.state('root.settings.filmeters', {
-      url: '/filmeters',
-      title: 'Settings - sliders',
-      views: {
-        'page-child' : {
-          templateUrl: '/assets/templates/settings/filmeters.tmpl.html',
-          controller: 'settingsFilmetersCtrl'
-        }
-      },
-    });
-
-  }])
-
-  .controller('settingsCtrl', ['$scope','me','AlertService','$state','Api',
-    function ($scope, me,AlertService,$state,Api) {
-
-      $scope.current_user = new Api.Users();
-        _.assign($scope.current_user, me.user);
-        
-      $scope.tabs = [
-        {title: 'Profile', state:'root.settings.profile', active:false},
-        {title: 'Sliders', state:'root.settings.filmeters', active:false}
-      ];
-
-      _.forEach($scope.tabs, function(tab){
-        if($state.includes(tab.state))
-          tab.active = true;
-      });
-
-      $scope.gotoTab = function(dest){
-        $state.go(dest);
-      }
-
-  }]) 
-
-  .controller('settingsProfileCtrl', ['$scope','me','AlertService','msgBus',
-    function ($scope, me,AlertService,msgBus) {
-        msgBus.emitMsg('pagetitle::change', "Settings: Profile");
-
-        $scope.saveUser = function(){
-          $scope.current_user.$update(function(response){
-              AlertService.Notice("Your changes have been saved");
-              _.assign(me.user, response);
-          },function(response_headers){
-              AlertService.Warning(response_headers.data);
-          });
-        }
-
-  }]) 
-
-  .controller('settingsInvitesCtrl', [
-    function () {
-
-
-  }]) 
-
-  .controller('settingsFilmetersCtrl', ['$scope','me','AlertService','ReviewService','msgBus','Api',
-    function ($scope, me,AlertService,ReviewService,msgBus,Api) {
-        msgBus.emitMsg('pagetitle::change', "Settings: Sliders");
-        
-
-  }]) 
-
-  .directive('pwCheck', [function () {
-        return {
-            require: 'ngModel',
-            link: function (scope, elem, attrs, ctrl) {
-                var firstPassword = '#' + attrs.pwCheck;
-                elem.add(firstPassword).on('keyup', function () {
-                    scope.$apply(function () {
-                        var v = elem.val()===$(firstPassword).val();
-                        ctrl.$setValidity('pwmatch', v);
-                    });
-                });
-            }
-        }
-    }])
-   
-   .directive('ngReallyClick', ['$modal',
-        function($modal) {
-
-          var ModalInstanceCtrl = function($scope, $modalInstance) {
-            $scope.ok = function() {
-              $modalInstance.close();
-            };
-
-            $scope.cancel = function() {
-              $modalInstance.dismiss('cancel');
-            };
-          };
-
-          return {
-            restrict: 'A',
-            scope: {
-              ngReallyClick:"&"
-            },
-            link: function(scope, element, attrs) {
-              element.bind('click', function() {
-                var message = attrs.ngReallyMessage || "Are you sure ?";
-
-                var modalHtml = '<div class="modal-body"><p>' + message + '</p></div>';
-                modalHtml += '<div class="modal-footer"><button class="btn btn-success" ng-click="ok()">OK</button><button class="btn btn-default" ng-click="cancel()">Cancel</button></div>';
-
-                var modalInstance = $modal.open({
-                  template: modalHtml,
-                  controller: ModalInstanceCtrl,
-                  size:'sm'
-                });
-
-                modalInstance.result.then(function() {
-                  scope.ngReallyClick();
-                }, function() {
-                  //Modal dismissed
-                });
-                
-              });
-
-            }
-          }
-        }
-      ])
-
-  
-  ;
-
 
   'use strict';
 

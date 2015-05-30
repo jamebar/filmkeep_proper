@@ -70,7 +70,7 @@ class AuthController extends Controller
                 //add profile pic if doesn't exist
                 if( strlen($user->avatar) < 2)
                 {
-                  $user->avatar = "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250";
+                  $user->avatar = "http://graph.facebook.com/".$result['id']."/picture?width=250&height=250";
                   
                 }
                 $user->save();
@@ -89,7 +89,7 @@ class AuthController extends Controller
                   'confirmed' => 1,
                   'password'=> $random_password, //we set random password so confide doesn't fail
                   'password_confirmation'=> $random_password, //we set random password so confide doesn't fail
-                  'avatar' => "http://graph.facebook.com/".$result['username']."/picture?width=250&height=250"
+                  'avatar' => "http://graph.facebook.com/".$result['id']."/picture?width=250&height=250"
                 ];
                 $user = $repo->signup($input);
                 
