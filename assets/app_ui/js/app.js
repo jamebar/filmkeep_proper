@@ -427,13 +427,15 @@ angular.module('myApp', [
           $scope.gs_state = s;
         }
 
-        $scope.gs_state = 1;
-        var gsModalInstance = $modal.open({
-            scope: $scope,
-            templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
-            backdrop: 'static'
-        });
-        
+        if(me.user && me.user.new)
+        {
+          $scope.gs_state = 1;
+          var gsModalInstance = $modal.open({
+              scope: $scope,
+              templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
+              backdrop: 'static'
+          });
+        }
     }
 ])
 

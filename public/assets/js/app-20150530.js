@@ -427,13 +427,15 @@ angular.module('myApp', [
           $scope.gs_state = s;
         }
 
-        $scope.gs_state = 1;
-        var gsModalInstance = $modal.open({
-            scope: $scope,
-            templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
-            backdrop: 'static'
-        });
-        
+        if(me.user && me.user.new)
+        {
+          $scope.gs_state = 1;
+          var gsModalInstance = $modal.open({
+              scope: $scope,
+              templateUrl: '/assets/templates/modal_getting_started.tmpl.html',
+              backdrop: 'static'
+          });
+        }
     }
 ])
 
@@ -920,6 +922,7 @@ var aeReview = angular.module('ae-review', [
                         url: '/api/tmdb/%QUERY',
                         filter: function(list) {
                             return $.map(list.results, function(data) {
+                                data.release_date  = data.release_date || 'N/A';
                                 return {
                                     title: data.title,
                                     tmdb_id: data.id,
@@ -1121,6 +1124,7 @@ var aeReview = angular.module('ae-review', [
 
               Api.Users.query(function(response){
                 scope.users = followerFactory.parseFollowing(response);
+                $('.follow-friends').scrollTop(1)
                 $('.follow-friends').perfectScrollbar('update');
                 scope.loading = false;
               });
@@ -1474,55 +1478,6 @@ var aeReview = angular.module('ae-review', [
   
   ;
 
-'use strict';
-
-angular.module('Filters',[])
-
-.filter('unsafe', function($sce) {
-    return function(val) {
-        return $sce.trustAsHtml(val);
-    };
-
-})
-
-.filter('imageFilter', [ function() {
-  return function(path, type, size)
-  {
-    if(!path)
-      return '/assets/img/fallback-poster.jpg';
-
-    var image_config = image_path_config;
-    
-    var s = size || 0;
-    var t = type || 'poster';
-
-    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
-
-  }
-    
-}])
-
-.filter('profileFilter', [ function() {
-  return function(path)
-  {
-    var p = path || '/assets/img/default-profile.jpg';
-    return p;
-
-  }
-    
-}])
-
-.filter('verb',function(){
-  return function(verb){
-    var keys = {'filmkeep\\review':'reviewed',
-                'filmkeep\\watchlist':'added',
-                'filmkeep\\comment':'commented',
-                'filmkeep\\follower':'started following'
-                };
-    return keys[verb];
-  }
-})
-
 
   'use strict';
 
@@ -1676,6 +1631,55 @@ angular.module('Filters',[])
 
   
   ;
+
+'use strict';
+
+angular.module('Filters',[])
+
+.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+
+})
+
+.filter('imageFilter', [ function() {
+  return function(path, type, size)
+  {
+    if(!path)
+      return '/assets/img/fallback-poster.jpg';
+
+    var image_config = image_path_config;
+    
+    var s = size || 0;
+    var t = type || 'poster';
+
+    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
+
+  }
+    
+}])
+
+.filter('profileFilter', [ function() {
+  return function(path)
+  {
+    var p = path || '/assets/img/default-profile.jpg';
+    return p;
+
+  }
+    
+}])
+
+.filter('verb',function(){
+  return function(verb){
+    var keys = {'filmkeep\\review':'reviewed',
+                'filmkeep\\watchlist':'added',
+                'filmkeep\\comment':'commented',
+                'filmkeep\\follower':'started following'
+                };
+    return keys[verb];
+  }
+})
 
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {

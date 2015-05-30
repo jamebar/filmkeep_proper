@@ -16,6 +16,7 @@
 
               Api.Users.query(function(response){
                 scope.users = followerFactory.parseFollowing(response);
+                $('.follow-friends').scrollTop(1)
                 $('.follow-friends').perfectScrollbar('update');
                 scope.loading = false;
               });
