@@ -251,6 +251,7 @@ angular.module('myApp', [
 .controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','me','Slug','Api',
     function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,me,Slug,Api) {
        var reviewModalInstance;
+       if(me.user)
        $scope.first_name = me.user.name.split(' ')[0];
 
        $rootScope.$on('modal::close', function(){

@@ -251,6 +251,7 @@ angular.module('myApp', [
 .controller('appCtrl', ['$sce','msgBus','$scope','$rootScope','$modal','ReviewService','$timeout','me','Slug','Api',
     function($sce,msgBus,$scope,$rootScope,$modal,ReviewService,$timeout,me,Slug,Api) {
        var reviewModalInstance;
+       if(me.user)
        $scope.first_name = me.user.name.split(' ')[0];
 
        $rootScope.$on('modal::close', function(){
@@ -1310,49 +1311,6 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
-  angular.module('film', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.film', {
-      url: '/f/{filmId}-{filmSlug}',
-      title: 'Film',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/film.tmpl.html',
-          controller: 'FilmCtrl'
-        }
-      },
-      resolve: {
-        FilmLoad:['$stateParams','Api', function($stateParams,Api) {
-          return Api.getFilm($stateParams.filmId);
-        }], 
-      }
-    });
-  }])
-
-  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
-    function ($scope,msgBus,$stateParams,me,FilmLoad) {
-        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
-        $scope.me = me;
-        FilmLoad.film.film_id = FilmLoad.film.id;
-        $scope.film = FilmLoad.film;
-        $scope.follower_reviews = FilmLoad.follower_reviews;
-
-        $scope.$on('watchlist::addremove', function(event, film_id) {
-
-          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
-                
-        });
-
-    }]) 
-
-  
-  ;
-
-
-  'use strict';
-
   angular.module('feed', [
   ])
 
@@ -1473,6 +1431,98 @@ var aeReview = angular.module('ae-review', [
     return moment.utc(date).fromNow(true);
   }
 })
+
+  'use strict';
+
+  angular.module('film', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.film', {
+      url: '/f/{filmId}-{filmSlug}',
+      title: 'Film',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/film.tmpl.html',
+          controller: 'FilmCtrl'
+        }
+      },
+      resolve: {
+        FilmLoad:['$stateParams','Api', function($stateParams,Api) {
+          return Api.getFilm($stateParams.filmId);
+        }], 
+      }
+    });
+  }])
+
+  .controller('FilmCtrl', ['$scope', 'msgBus','$stateParams','me','FilmLoad',
+    function ($scope,msgBus,$stateParams,me,FilmLoad) {
+        msgBus.emitMsg('pagetitle::change', FilmLoad.film.title );
+        $scope.me = me;
+        FilmLoad.film.film_id = FilmLoad.film.id;
+        $scope.film = FilmLoad.film;
+        $scope.follower_reviews = FilmLoad.follower_reviews;
+
+        $scope.$on('watchlist::addremove', function(event, film_id) {
+
+          $scope.film.on_watchlist = $scope.film.on_watchlist === 'true' ? 'false' : 'true';
+                
+        });
+
+    }]) 
+
+  
+  ;
+
+'use strict';
+
+angular.module('Filters',[])
+
+.filter('unsafe', function($sce) {
+    return function(val) {
+        return $sce.trustAsHtml(val);
+    };
+
+})
+
+.filter('imageFilter', [ function() {
+  return function(path, type, size)
+  {
+    if(!path)
+      return '/assets/img/fallback-poster.jpg';
+
+    var image_config = image_path_config;
+    
+    var s = size || 0;
+    var t = type || 'poster';
+
+    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
+
+  }
+    
+}])
+
+.filter('profileFilter', [ function() {
+  return function(path)
+  {
+    var p = path || '/assets/img/default-profile.jpg';
+    return p;
+
+  }
+    
+}])
+
+.filter('verb',function(){
+  return function(verb){
+    var keys = {'filmkeep\\review':'reviewed',
+                'filmkeep\\watchlist':'added',
+                'filmkeep\\comment':'commented',
+                'filmkeep\\follower':'started following'
+                };
+    return keys[verb];
+  }
+})
+
 
   'use strict';
 
@@ -1626,55 +1676,6 @@ var aeReview = angular.module('ae-review', [
 
   
   ;
-
-'use strict';
-
-angular.module('Filters',[])
-
-.filter('unsafe', function($sce) {
-    return function(val) {
-        return $sce.trustAsHtml(val);
-    };
-
-})
-
-.filter('imageFilter', [ function() {
-  return function(path, type, size)
-  {
-    if(!path)
-      return '/assets/img/fallback-poster.jpg';
-
-    var image_config = image_path_config;
-    
-    var s = size || 0;
-    var t = type || 'poster';
-
-    return image_config.images.base_url + image_config.images[type + '_sizes'][size] +  path;
-
-  }
-    
-}])
-
-.filter('profileFilter', [ function() {
-  return function(path)
-  {
-    var p = path || '/assets/img/default-profile.jpg';
-    return p;
-
-  }
-    
-}])
-
-.filter('verb',function(){
-  return function(verb){
-    var keys = {'filmkeep\\review':'reviewed',
-                'filmkeep\\watchlist':'added',
-                'filmkeep\\comment':'commented',
-                'filmkeep\\follower':'started following'
-                };
-    return keys[verb];
-  }
-})
 
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {
