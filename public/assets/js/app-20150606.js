@@ -348,11 +348,15 @@ angular.module('myApp', [
           });
         }
 
+        Api.Lists.query({with_films:true}, function(results){
+          $scope.lists = results.results;
+        })
+        
         $scope.newList = function(){
           $scope.current_list = new Api.Lists();
           manageListModal();
         }
-        
+
         $scope.manageList = function(list){
           $scope.current_list = list;
           manageListModal();
@@ -1236,27 +1240,39 @@ var aeReview = angular.module('ae-review', [
                     var itemEl = evt.item; 
                     scope.$apply();
                     parseSortOrder(scope.list.films, evt.models);
-                    console.log(evt.models)
 
                 },
               }
-              
 
-              Api.Lists.get({id:scope.currentList.id},function(response) {
-                  response.films = parseSortOrder(response.films);
-                  scope.list = response;
-              });
+
+              scope.manageList = function(list){
+                Api.Lists.get({id:list.id},function(response) {
+                    response.films = parseSortOrder(response.films);
+                    scope.list = response;
+                });
+              }
 
               scope.saveList = function(){
                 if(scope.list.id){
                   scope.list.$update();
                   AlertService.Notice("Your list has been updated.");
+                  _.forEach(scope.lists, function(l){
+                    if(l.id == scope.list.id){
+                      _.assign(l, scope.list);
+                    }
+                  })  
                 }else{
                   scope.list.$save(function(response){
-
+                    scope.lists.push(response);
+                    AlertService.Notice("Your list has been created, now add films to it.");
                   })
                 }
               }
+
+              scope.newList = function(){
+                scope.list = new Api.Lists();
+              }
+
 
               function parseSortOrder(target, source)
               {
@@ -1274,15 +1290,27 @@ var aeReview = angular.module('ae-review', [
                 var sort_order = scope.list.films || {};
                 Api.addRemoveListItem({tmdb_id: item.tmdb_id, list_action: 'add', list_id: scope.list.id, sort_order: sort_order.length }).then(function(response) {
                   scope.list.films = parseSortOrder(response);
+                  updateLists(scope.list.films);
                 })
+              }
+
+              function updateLists(){
+                _.forEach(scope.lists, function(l){
+                    if(l.id == scope.list.id){
+                      _.set(l,'films', scope.list.films);
+                    }
+                  })
               }
 
               scope.removeListItem = function(film)
               {
                 Api.addRemoveListItem({film_id: film.id, list_action: 'remove', list_id: scope.list.id}).then(function(response) {
                   scope.list.films = response;
+                  updateLists(scope.list.films);
                 })
               }
+
+              scope.manageList(scope.currentList);
 
               // Instantiate the bloodhound suggestion engine
                 var films = new Bloodhound({
@@ -1507,9 +1535,7 @@ var aeReview = angular.module('ae-review', [
         
     });
 
-    Api.Lists.query({with_films:true}, function(results){
-      $scope.lists = results.results;
-    })
+    
 
     Api.getNowPlaying().then(function(response){
       $scope.now_playing = response;

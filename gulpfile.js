@@ -84,7 +84,7 @@ gulp.task('scripts', function() {
 
 	gulp.src([
         'assets/bower_components/jquery/dist/jquery.min.js',
-        'assets/bower_components/lodash/dist/lodash.min.js',
+        'assets/bower_components/lodash/lodash.min.js',
         'assets/bower_components/typeahead.js/dist/typeahead.bundle.min.js',
         'assets/bower_components/angular/angular.min.js',
 		    'assets/bower_components/angular-bootstrap/ui-bootstrap.min.js',

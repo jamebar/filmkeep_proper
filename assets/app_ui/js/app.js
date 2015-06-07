@@ -348,11 +348,15 @@ angular.module('myApp', [
           });
         }
 
+        Api.Lists.query({with_films:true}, function(results){
+          $scope.lists = results.results;
+        })
+        
         $scope.newList = function(){
           $scope.current_list = new Api.Lists();
           manageListModal();
         }
-        
+
         $scope.manageList = function(list){
           $scope.current_list = list;
           manageListModal();
