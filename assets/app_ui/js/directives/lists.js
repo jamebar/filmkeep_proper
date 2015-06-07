@@ -39,7 +39,9 @@
                   return scope.list = list;
 
                 Api.Lists.get({id:list.id},function(response) {
-                    scope.list = response.list;
+                    var l = new Api.Lists();
+                    _.assign(l, response.list);
+                    scope.list = l;
                 });
               }
 
