@@ -3,6 +3,13 @@
     <div class="col-md-4 list-info">
         <h2>%%list.name%%</h2>
         <p>%%list.description%%</p>
+
+        <span ng-show="all.length > 1">
+          <h3>Other lists by %%list.user.name%%</h3>
+          <ul>
+            <li ng-click="loadList(list)" style="cursor:pointer" ng-repeat="list in all | orderBy: 'name'">%%list.name%%</li>
+          </ul>
+        </span>
     </div>
     <div class="col-md-8 list-items" >
         <div class="list-item media" ng-repeat="l in list.films | orderBy: 'pivot.sort_order'" >

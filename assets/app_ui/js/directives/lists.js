@@ -35,8 +35,11 @@
 
 
               scope.manageList = function(list){
+                if(!list.id)
+                  return scope.list = list;
+
                 Api.Lists.get({id:list.id},function(response) {
-                    scope.list = response;
+                    scope.list = response.list;
                 });
               }
 
@@ -167,9 +170,14 @@
             templateUrl: '/assets/templates/lists/view_list.tmpl.html',
             link: function(scope, element, attrs) {
               
-              Api.Lists.get({id:scope.viewList.id},function(response) {
-                  scope.list = response;
-              });
+              scope.loadList = function(list){
+                Api.Lists.get({id:list.id, include_all: true},function(response) {
+                  scope.list = response.list;
+                  scope.all = response.all;
+                });
+              }
+
+              scope.loadList(scope.viewList);
 
             }
         }

@@ -97,8 +97,8 @@
         <li><a ui-sref='root.user.watchlist({username: header_user.username })'>Watchlist</a></li>
 
         <li ><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span> Review</a></li>
-        <li class="dropdown hidden-xs" >
-          <a href="#" class="dropdown-toggle notif-wrapper" data-toggle="dropdown" ng-click="markSeen()"><i class="icon-megaphone"></i> <span ng-show="notif_new > 0" class="notif_count">%%notif_new%%</span></a>
+        <li class="dropdown hidden-xs" dropdown >
+          <a href="#" class="dropdown-toggle notif-wrapper" data-toggle="dropdown" dropdown-toggle ng-click="markSeen()"><i class="icon-megaphone"></i> <span ng-show="notif_new > 0" class="notif_count">%%notif_new%%</span></a>
           <ul class="dropdown-menu notif " role="menu">
             <li ng-if="notif_items.length <1">You have no notifications</li>
             <li  ng-repeat="notif_item in notif_items">
@@ -106,8 +106,8 @@
             </li> 
           </ul>
         </li>
-        <li class="dropdown" ng-if="navbarCollapsed">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><avatar class="avatar sm" info="header_user" disable-click="true"></avatar></a>
+        <li class="dropdown" ng-if="navbarCollapsed" dropdown>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" dropdown-toggle><avatar class="avatar sm" info="header_user" disable-click="true"></avatar></a>
           <ul class="dropdown-menu" role="menu">
             <li><a ui-sref="root.settings.profile">Settings</a></li>
             

@@ -12,6 +12,8 @@ class CustomListsController extends \BaseController {
 	 */
 	public function index()
 	{
+    if(Auth::guest())
+      App::abort(403, 'Unauthorized action.');
     
 		$user_id = \Input::has('user_id') ? \Input::get('user_id') : Auth::user()->id;
     $list = CustomList::where('user_id', $user_id)->orderBy('name','asc');
@@ -94,7 +96,12 @@ class CustomListsController extends \BaseController {
 	 */
 	public function show($id)
 	{
-    return CustomList::with('films')->where('id',$id)->first();
+    $list = CustomList::with('films', 'user')->where('id',$id)->first();
+    $all = [];
+    if(\Input::has('include_all'))
+      $all = CustomList::where('user_id', $list['user_id'])->get();
+
+    return Response::json(['list'=>$list, 'all' => $all]);
 	}
 
 

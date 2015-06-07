@@ -19,7 +19,7 @@
       </ul>
     </div>
     <div class="col-md-8 list-items" >
-      <h2 ng-hide="list.id"><i class="glyphicon glyphicon-arrow-left"></i> Name and describe your list</h2>
+      <h2 ng-hide="list.id">First, Name and describe your list</h2>
       <div class="form-group" ng-if="typeaheadData && list.id" >
         <input  type="text" class="form-control" placeholder="Search for a movie to add to your list" options="typeaheadOptions" datasets="typeaheadData" ng-model="query" sf-typeahead >
       </div>

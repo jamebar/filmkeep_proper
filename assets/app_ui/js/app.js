@@ -37,9 +37,12 @@ angular.module('myApp', [
     $interpolateProvider.endSymbol('%%');
 })
 
-.run(['$rootScope','$state','$stateParams', function($rootScope, $state, $stateParams){
+.run(['$rootScope','$state','$stateParams','$modalStack', function($rootScope, $state, $stateParams, $modalStack){
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams; 
+
+   $rootScope.$on('$stateChangeSuccess', function (newVal, oldVal) { if (oldVal !== newVal) { $modalStack.dismissAll(); } });
+  
 }])
 
 .config(['$locationProvider','$stateProvider','$urlRouterProvider','$tooltipProvider','$urlMatcherFactoryProvider', function($locationProvider, $stateProvider,$urlRouterProvider,$tooltipProvider,$urlMatcherFactoryProvider) {
@@ -47,30 +50,29 @@ angular.module('myApp', [
   $urlMatcherFactoryProvider.strictMode(false);
   $locationProvider.html5Mode(true);
 
-  var tooltipFactory = $tooltipProvider.$get[$tooltipProvider.$get.length - 1];
-  // decorate the tooltip getter
-  $tooltipProvider.$get = [
-      '$window',
-      '$compile',
-      '$timeout',
-      '$parse',
-      '$document',
-      '$position',
-      '$interpolate',
-      function ( $window, $compile, $timeout, $parse, $document, $position, $interpolate ) {
-          // for touch devices, don't return tooltips
-          if ('ontouchstart' in $window) {
-              return function () {
-                  return {
-                      compile: function () { }
-                  };
-              };
-          } else {
-              // run the default behavior
-              return tooltipFactory($window, $compile, $timeout, $parse, $document, $position, $interpolate);
-          }
-      }
-  ];
+  // var tooltipFactory = $tooltipProvider.$get[$tooltipProvider.$get.length - 1];
+  // $tooltipProvider.$get = [
+  //     '$window',
+  //     '$compile',
+  //     '$timeout',
+  //     '$parse',
+  //     '$document',
+  //     '$position',
+  //     '$interpolate',
+  //     function ( $window, $compile, $timeout, $parse, $document, $position, $interpolate ) {
+  //         // for touch devices, don't return tooltips
+  //         if ('ontouchstart' in $window) {
+  //             return function () {
+  //                 return {
+  //                     compile: function () { }
+  //                 };
+  //             };
+  //         } else {
+  //             // run the default behavior
+  //             return tooltipFactory($window, $compile, $timeout, $parse, $document, $position, $interpolate);
+  //         }
+  //     }
+  // ];
 
   $stateProvider.state('root', {
     abstract: true,

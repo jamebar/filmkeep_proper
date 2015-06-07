@@ -37,9 +37,12 @@ angular.module('myApp', [
     $interpolateProvider.endSymbol('%%');
 })
 
-.run(['$rootScope','$state','$stateParams', function($rootScope, $state, $stateParams){
+.run(['$rootScope','$state','$stateParams','$modalStack', function($rootScope, $state, $stateParams, $modalStack){
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams; 
+
+   $rootScope.$on('$stateChangeSuccess', function (newVal, oldVal) { if (oldVal !== newVal) { $modalStack.dismissAll(); } });
+  
 }])
 
 .config(['$locationProvider','$stateProvider','$urlRouterProvider','$tooltipProvider','$urlMatcherFactoryProvider', function($locationProvider, $stateProvider,$urlRouterProvider,$tooltipProvider,$urlMatcherFactoryProvider) {
@@ -47,30 +50,29 @@ angular.module('myApp', [
   $urlMatcherFactoryProvider.strictMode(false);
   $locationProvider.html5Mode(true);
 
-  var tooltipFactory = $tooltipProvider.$get[$tooltipProvider.$get.length - 1];
-  // decorate the tooltip getter
-  $tooltipProvider.$get = [
-      '$window',
-      '$compile',
-      '$timeout',
-      '$parse',
-      '$document',
-      '$position',
-      '$interpolate',
-      function ( $window, $compile, $timeout, $parse, $document, $position, $interpolate ) {
-          // for touch devices, don't return tooltips
-          if ('ontouchstart' in $window) {
-              return function () {
-                  return {
-                      compile: function () { }
-                  };
-              };
-          } else {
-              // run the default behavior
-              return tooltipFactory($window, $compile, $timeout, $parse, $document, $position, $interpolate);
-          }
-      }
-  ];
+  // var tooltipFactory = $tooltipProvider.$get[$tooltipProvider.$get.length - 1];
+  // $tooltipProvider.$get = [
+  //     '$window',
+  //     '$compile',
+  //     '$timeout',
+  //     '$parse',
+  //     '$document',
+  //     '$position',
+  //     '$interpolate',
+  //     function ( $window, $compile, $timeout, $parse, $document, $position, $interpolate ) {
+  //         // for touch devices, don't return tooltips
+  //         if ('ontouchstart' in $window) {
+  //             return function () {
+  //                 return {
+  //                     compile: function () { }
+  //                 };
+  //             };
+  //         } else {
+  //             // run the default behavior
+  //             return tooltipFactory($window, $compile, $timeout, $parse, $document, $position, $interpolate);
+  //         }
+  //     }
+  // ];
 
   $stateProvider.state('root', {
     abstract: true,
@@ -1267,8 +1269,11 @@ var aeReview = angular.module('ae-review', [
 
 
               scope.manageList = function(list){
+                if(!list.id)
+                  return scope.list = list;
+
                 Api.Lists.get({id:list.id},function(response) {
-                    scope.list = response;
+                    scope.list = response.list;
                 });
               }
 
@@ -1399,9 +1404,14 @@ var aeReview = angular.module('ae-review', [
             templateUrl: '/assets/templates/lists/view_list.tmpl.html',
             link: function(scope, element, attrs) {
               
-              Api.Lists.get({id:scope.viewList.id},function(response) {
-                  scope.list = response;
-              });
+              scope.loadList = function(list){
+                Api.Lists.get({id:list.id, include_all: true},function(response) {
+                  scope.list = response.list;
+                  scope.all = response.all;
+                });
+              }
+
+              scope.loadList(scope.viewList);
 
             }
         }
@@ -1894,6 +1904,63 @@ angular.module('Filters',[])
   }
 })
 
+
+  'use strict';
+
+  angular.module('review', [
+  ])
+
+  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('root.review', {
+      url: '/r/{reviewId}',
+      title: 'Review',
+      views: {
+        'page' : {
+          templateUrl: '/assets/templates/review.tmpl.html',
+          controller: 'ReviewCtrl'
+        }
+      },
+      resolve: {
+        ReviewLoad: function($stateParams,ReviewService) {
+         
+          return ReviewService.getReview($stateParams.reviewId)
+          
+        }, 
+      }
+    });
+  }])
+
+  .controller('ReviewCtrl', ['$scope','msgBus','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
+    function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
+            msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
+            $scope.rating_types = ReviewLoad.rating_types;
+            $scope.review = ReviewLoad.review;
+            $scope.me = me;
+            
+            // console.log($scope.review);
+            $scope.toPercent = function(num){
+                return (num/2000 * 100) + '%';
+            }
+
+            $scope.$on('watchlist::addremove', function(event, film_id) {
+
+              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
+                    
+            });
+
+            $rootScope.$on('review::updated',function(e,review){
+              ReviewService.getReview($stateParams.reviewId).then(function(response){
+                $scope.rating_types = response.rating_types;
+                $scope.review = response.review;
+              })
+            })
+
+
+    }]) 
+
+  
+  ;
+
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {
 
@@ -1967,63 +2034,6 @@ angular.module('AlertBox', [])
         };
 
     } ] );
-
-  'use strict';
-
-  angular.module('review', [
-  ])
-
-  .config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-    $stateProvider.state('root.review', {
-      url: '/r/{reviewId}',
-      title: 'Review',
-      views: {
-        'page' : {
-          templateUrl: '/assets/templates/review.tmpl.html',
-          controller: 'ReviewCtrl'
-        }
-      },
-      resolve: {
-        ReviewLoad: function($stateParams,ReviewService) {
-         
-          return ReviewService.getReview($stateParams.reviewId)
-          
-        }, 
-      }
-    });
-  }])
-
-  .controller('ReviewCtrl', ['$scope','msgBus','$rootScope', '$stateParams','ReviewService','ReviewLoad','me',
-    function ($scope,msgBus,$rootScope,$stateParams,ReviewService,ReviewLoad,me) {
-            msgBus.emitMsg('pagetitle::change', "Review: " +  ReviewLoad.review.film.title );
-            $scope.rating_types = ReviewLoad.rating_types;
-            $scope.review = ReviewLoad.review;
-            $scope.me = me;
-            
-            // console.log($scope.review);
-            $scope.toPercent = function(num){
-                return (num/2000 * 100) + '%';
-            }
-
-            $scope.$on('watchlist::addremove', function(event, film_id) {
-
-              $scope.review.film.on_watchlist = $scope.review.film.on_watchlist === 'true' ? 'false' : 'true';
-                    
-            });
-
-            $rootScope.$on('review::updated',function(e,review){
-              ReviewService.getReview($stateParams.reviewId).then(function(response){
-                $scope.rating_types = response.rating_types;
-                $scope.review = response.review;
-              })
-            })
-
-
-    }]) 
-
-  
-  ;
-
 
 angular.module('Api', ['ngResource'])
 
