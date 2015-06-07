@@ -73,7 +73,7 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('./')); //Write the file back to the same spot.
 
   gulp.src([
-    'assets/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css',
+    'assets/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css'
     ])
   .pipe(plumber())
   .pipe(concat('vendor.css'))
@@ -84,11 +84,11 @@ gulp.task('scripts', function() {
 
 	gulp.src([
         'assets/bower_components/jquery/dist/jquery.min.js',
-        'assets/bower_components/lodash/dist/lodash.min.js',
+        'assets/bower_components/lodash/lodash.min.js',
         'assets/bower_components/typeahead.js/dist/typeahead.bundle.min.js',
         'assets/bower_components/angular/angular.min.js',
-		    'assets/bower_components/angular-bootstrap/ui-bootstrap.min.js',
-        'assets/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+		    'assets/bower_components/angular-bootstrap/ui-bootstrap.js',
+        'assets/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
         'assets/bower_components/angular-ui-router/release/angular-ui-router.min.js',
         'assets/bower_components/angular-resource/angular-resource.min.js',
         'assets/bower_components/angular-animate/angular-animate.min.js',
@@ -105,7 +105,9 @@ gulp.task('scripts', function() {
         'assets/bower_components/angulartics/dist/angulartics-ga.min.js',
         'assets/bower_components/angular-elastic/elastic.js',
         'assets/bower_components/angular-sanitize/angular-sanitize.min.js',
-        'assets/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js'
+        'assets/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js',
+        'assets/bower_components/Sortable/Sortable.min.js',
+        'assets/bower_components/Sortable/ng-sortable.js'
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))

@@ -8,10 +8,10 @@ class CustomList extends \Eloquent {
 
     protected $table = 'lists';
     
-    public $activityLazyLoading = ['film','user'];
+    public $activityLazyLoading = ['user','films'];
 
     public function films(){
-      return $this->belongsToMany('Filmkeep\Film', 'film_list','list_id','film_id');
+      return $this->belongsToMany('Filmkeep\Film', 'film_list','list_id','film_id')->withPivot(['sort_order']);
     }
 
     public function user(){
@@ -21,6 +21,14 @@ class CustomList extends \Eloquent {
     public function deleteList(){
       $this->films()->detach();
       return $this->delete();
+    }
+
+    public function setSortOrder($ordered_ids)
+    {
+      foreach($ordered_ids as $key => $id)
+      {
+        $this->films()->updateExistingPivot($id, ['sort_order'=> $key], false);
+      }
     }
     
 }

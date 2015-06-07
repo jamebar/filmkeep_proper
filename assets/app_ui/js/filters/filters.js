@@ -41,6 +41,7 @@ angular.module('Filters',[])
     var keys = {'filmkeep\\review':'reviewed',
                 'filmkeep\\watchlist':'added',
                 'filmkeep\\comment':'commented',
+                'filmkeep\\customlist':'created',
                 'filmkeep\\follower':'started following'
                 };
     return keys[verb];

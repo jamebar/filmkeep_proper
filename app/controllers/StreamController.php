@@ -39,6 +39,8 @@ class StreamController extends Controller{
           case 'filmkeep\comment':
             // $activity['object']['commentable']['user'] = User::find($activity['object']['commentable']['user_id']);
           break;
+          case 'filmkeep\customlist':
+          break;
           default:
 
             $review = Review::where('user_id', Auth::user()->id)->whereHas('film', function($q) use ($activity)

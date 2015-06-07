@@ -46,9 +46,7 @@
         
     });
 
-    Api.Lists.query({with_films:true}, function(results){
-      $scope.lists = results.results;
-    })
+    
 
     Api.getNowPlaying().then(function(response){
       $scope.now_playing = response;

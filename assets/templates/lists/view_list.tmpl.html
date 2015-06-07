@@ -1,0 +1,25 @@
+<div class="list" ng-if="list">
+  <div class="row">
+    <div class="col-md-4 list-info">
+        <h2>%%list.name%%</h2>
+        <p>%%list.description%%</p>
+
+        <span ng-show="all.length > 1">
+          <h3>Other lists by %%list.user.name%%</h3>
+          <ul>
+            <li ng-click="loadList(list)" style="cursor:pointer" ng-repeat="list in all | orderBy: 'name'">%%list.name%%</li>
+          </ul>
+        </span>
+    </div>
+    <div class="col-md-8 list-items" >
+        <div class="list-item media" ng-repeat="l in list.films | orderBy: 'pivot.sort_order'" >
+          <div class="media-left">
+            <h3>%%l.pivot.sort_order + 1%%</h3>
+          </div>
+          <div class="media-body">
+            <film-object film="l"  horizontal="true"></film-object>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

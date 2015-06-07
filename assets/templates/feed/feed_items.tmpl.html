@@ -132,7 +132,34 @@
       </div>
       
     </div>
-    </span>
+  </div>
+
+  <!-- LIST FEED ITEM -->
+  <div class="feed-item clearfix" ng-switch-when="filmkeep\customlist">
+    <!-- <img ng-src="%%feed_item.activities[0].actor.avatar | profileFilter%%" width="60" height="60" class="circle-corners avatar" /> -->
+    <div class="media">
+      <div class="media-left"><avatar class="avatar" info="feed_item.activities[0].actor"></avatar></div>
+      <div class="media-body">
+        <span class="feed-actor">
+            <a ui-sref='root.user.filmkeep({username: feed_item.activities[0].actor.username})'>%%feed_item.activities[0].actor.name%%</a>
+        </span>
+        %% feed_item.verb | verb %% a new list:  
+        <div style="height:15px;"></div>
+        <div ng-repeat="activity in feed_item.activities | limitTo:3" class="feed-list">
+          <div class="media" ng-click="viewList(activity.object)">
+            <div class="media-body">
+              <a >%%activity.object.name%%</a>
+              <p ng-show="activity.object.description.length > 2" text-more="%%activity.object.description%%" max="50">%%activity.object.description%%</p>
+              <div class="list-posters">
+                <span ng-repeat="f in activity.object.films | orderBy: 'pivot.sort_order' | limitTo: 7" ng-style="{ 'z-index': (activity.object.films.length - $index)}"><img ng-src="%%f.poster_path | imageFilter:'poster':'1'%%"></span>
+              </div>
+            </div>
+            <div class="media-right"><span class="feed-date pull-right">%%activity.object.created_at | fDate %%</span></div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
   </div>
 
 </div>

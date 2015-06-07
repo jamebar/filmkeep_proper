@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=12">
     <link rel="stylesheet" href="/assets/css/vendor.css">
     <!-- <link rel="stylesheet" href="/assets/css/animate.min.css"> -->
-  <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150530.css">
+  <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150607.css">
   <link rel="stylesheet" href="/assets/css/filmkeep-font.css?v=2">
 
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
-    <script src="/assets/js/vendor.js?cache=1.2"></script>
+    <script src="/assets/js/vendor.js?cache=1.3"></script>
     <script id="bundle" src="/assets/js/app-20150607.js"></script>
     <script id="templates" src="/assets/js/templates-20150607.js"></script>
     <base href="/" />
@@ -66,7 +66,7 @@
       <span class="dropdown visible-xs-block">
         <a href="#" class="dropdown-toggle notif-wrapper  add-review-mobile pull-right" data-toggle="dropdown" ng-click="markSeen()"><i class="icon-megaphone"></i> <span class="notif_count" ng-show="notif_new > 0">%%notif_new%%</span></a>
         <ul class="dropdown-menu notif" role="menu">
-          <li ng-if="notif_items.length <1">You have no notifications</li>
+          <li ng-if="notif_items.length < 1">You have no notifications</li>
           <li  ng-repeat="notif_item in notif_items">
             <notif-items></notif-items>
           </li> 
@@ -97,8 +97,8 @@
         <li><a ui-sref='root.user.watchlist({username: header_user.username })'>Watchlist</a></li>
 
         <li ><a ng-click="newReview()" target="_self"><span class="glyphicon-plus glyphicon"></span> Review</a></li>
-        <li class="dropdown hidden-xs" >
-          <a href="#" class="dropdown-toggle notif-wrapper" data-toggle="dropdown" ng-click="markSeen()"><i class="icon-megaphone"></i> <span ng-show="notif_new > 0" class="notif_count">%%notif_new%%</span></a>
+        <li class="dropdown hidden-xs" dropdown >
+          <a href="#" class="dropdown-toggle notif-wrapper" data-toggle="dropdown" dropdown-toggle ng-click="markSeen()"><i class="icon-megaphone"></i> <span ng-show="notif_new > 0" class="notif_count">%%notif_new%%</span></a>
           <ul class="dropdown-menu notif " role="menu">
             <li ng-if="notif_items.length <1">You have no notifications</li>
             <li  ng-repeat="notif_item in notif_items">
@@ -106,8 +106,8 @@
             </li> 
           </ul>
         </li>
-        <li class="dropdown" ng-if="navbarCollapsed">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><avatar class="avatar sm" info="header_user" disable-click="true"></avatar></a>
+        <li class="dropdown" ng-if="navbarCollapsed" dropdown>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" dropdown-toggle><avatar class="avatar sm" info="header_user" disable-click="true"></avatar></a>
           <ul class="dropdown-menu" role="menu">
             <li><a ui-sref="root.settings.profile">Settings</a></li>
             

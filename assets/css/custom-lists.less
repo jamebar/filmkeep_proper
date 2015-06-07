@@ -1,0 +1,74 @@
+.drag-handle {
+    cursor: move;
+    cursor: -webkit-grabbing;
+    margin-bottom: 1em;
+    display: block;
+}
+
+.sortable-ghost {
+  opacity: 0.1;
+  border:1px dashed #000;
+}
+
+.list{
+  background:@filmkeep-red;
+  .row{
+    margin:0;
+  }
+
+  .list-info, .list-item .media-left {
+    h3, h3 a{
+      color: rgba(0,0,0,.3);
+      text-transform: uppercase;
+      font-family: Volkhov,"Helvetica Neue",Helvetica,Helvetica,Arial,sans-serif;
+      font-weight: 700;
+      font-size: .9em;
+    }
+  }
+
+  input[type=text], textarea {
+    background-color: rgba(0,0,0,.1);
+    
+  }
+
+  form input, textarea{
+    margin-bottom: 1em;
+    color:@filmkeep-beige;
+  }
+
+  .film-object.horizontal{
+    background:none;
+  }
+
+  .search-item-img{
+    width:50px;
+  }
+}
+
+.list-items{
+  padding:2em;
+  padding-top: 3em;
+  background:@filmkeep-beige;
+  min-height: 500px;
+}
+
+.list-info{
+  padding:2em;
+    color: @filmkeep-beige;
+}
+
+.feed-list{
+  margin-bottom: 1em;
+}
+
+.list-posters span img {
+  width: 60px;
+  height:90px;
+  box-shadow: 3px 0px 3px 0px rgba(0,0,0,.6);
+}
+.list-posters span {
+  position: relative;
+  width: 30px;
+  display: block;
+  float: left;
+}

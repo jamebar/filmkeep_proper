@@ -1,0 +1,42 @@
+<div class="list" ng-if="list">
+  <div class="row">
+    <div class="col-md-4 list-info">
+      <span >
+        
+        <form ng-submit="saveList()">
+              <h3>List Title</h3>
+              <input type=text class="form-control" ng-model="list.name" placeholder="Name of your list"/>
+              <h3>List Description</h3>
+              <textarea msd-elastic="\n" style="font-size:16px" class="form-control" ng-model="list.description" placeholder="Describe your list"></textarea>
+              <input type="submit" class="btn btn-primary" value="%% list.id ? 'Update List Info' : 'Create List'%%" />
+        </form>
+      </span>
+      <h3>Lists <a class="pull-right " ng-click="newList()"><span class="glyphicon-plus glyphicon"></span> New list</a></h3>
+      <ul>
+        <li ng-repeat="list in lists | limitTo: 15" ng-click="manageList(list)" style="cursor:pointer">
+          %%list.name%% (%%list.films.length%%)
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-8 list-items" >
+      <h2 ng-hide="list.id">First, Name and describe your list</h2>
+      <div class="form-group" ng-if="typeaheadData && list.id" >
+        <input  type="text" class="form-control" placeholder="Search for a movie to add to your list" options="typeaheadOptions" datasets="typeaheadData" ng-model="query" sf-typeahead >
+      </div>
+      <div ng-sortable="dragOptions">
+        <div class="list-item media" ng-repeat="l in list.films | orderBy: 'pivot.sort_order'" >
+          <div class="media-left">
+            <h3>%%l.pivot.sort_order + 1%%</h3>
+          </div>
+          <div class="media-body">
+            <film-object film="l"  horizontal="true"></film-object>
+          </div>
+          <div class="media-right">
+            <a class="drag-handle"><i class="glyphicon glyphicon-move"></i></a>
+            <a ng-click="removeListItem(l)"><i class="glyphicon glyphicon-remove"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -30,15 +30,19 @@ angular.module('myApp', [
     'Filters',
     'ngSanitize',
     'getting-started',
-    'custom-criteria'
+    'custom-criteria',
+    'lists'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
 })
 
-.run(['$rootScope','$state','$stateParams', function($rootScope, $state, $stateParams){
+.run(['$rootScope','$state','$stateParams','$modalStack', function($rootScope, $state, $stateParams, $modalStack){
   $rootScope.$state = $state;
   $rootScope.$stateParams = $stateParams; 
+
+   $rootScope.$on('$stateChangeSuccess', function (newVal, oldVal) { if (oldVal !== newVal) { $modalStack.dismissAll(); } });
+  
 }])
 
 .config(['$locationProvider','$stateProvider','$urlRouterProvider','$tooltipProvider','$urlMatcherFactoryProvider', function($locationProvider, $stateProvider,$urlRouterProvider,$tooltipProvider,$urlMatcherFactoryProvider) {
@@ -46,30 +50,29 @@ angular.module('myApp', [
   $urlMatcherFactoryProvider.strictMode(false);
   $locationProvider.html5Mode(true);
 
-  var tooltipFactory = $tooltipProvider.$get[$tooltipProvider.$get.length - 1];
-  // decorate the tooltip getter
-  $tooltipProvider.$get = [
-      '$window',
-      '$compile',
-      '$timeout',
-      '$parse',
-      '$document',
-      '$position',
-      '$interpolate',
-      function ( $window, $compile, $timeout, $parse, $document, $position, $interpolate ) {
-          // for touch devices, don't return tooltips
-          if ('ontouchstart' in $window) {
-              return function () {
-                  return {
-                      compile: function () { }
-                  };
-              };
-          } else {
-              // run the default behavior
-              return tooltipFactory($window, $compile, $timeout, $parse, $document, $position, $interpolate);
-          }
-      }
-  ];
+  // var tooltipFactory = $tooltipProvider.$get[$tooltipProvider.$get.length - 1];
+  // $tooltipProvider.$get = [
+  //     '$window',
+  //     '$compile',
+  //     '$timeout',
+  //     '$parse',
+  //     '$document',
+  //     '$position',
+  //     '$interpolate',
+  //     function ( $window, $compile, $timeout, $parse, $document, $position, $interpolate ) {
+  //         // for touch devices, don't return tooltips
+  //         if ('ontouchstart' in $window) {
+  //             return function () {
+  //                 return {
+  //                     compile: function () { }
+  //                 };
+  //             };
+  //         } else {
+  //             // run the default behavior
+  //             return tooltipFactory($window, $compile, $timeout, $parse, $document, $position, $interpolate);
+  //         }
+  //     }
+  // ];
 
   $stateProvider.state('root', {
     abstract: true,
@@ -313,8 +316,7 @@ angular.module('myApp', [
           $scope.cancompare = true;
           var modalInstance = $modal.open({
                 scope: $scope,
-                templateUrl: '/assets/templates/modal_compare.tmpl.html',
-                backdrop: 'static'
+                templateUrl: '/assets/templates/modal_compare.tmpl.html'
             });
 
           ReviewService.getCompares(obj.film_id).then(function(response){
@@ -345,6 +347,43 @@ angular.module('myApp', [
 
             $scope.showcompare = true;
             
+          });
+        }
+
+        Api.Lists.query({with_films:true}, function(results){
+          $scope.lists = results.results;
+        })
+        
+        $scope.newList = function(){
+          $scope.current_list = new Api.Lists();
+          manageListModal();
+        }
+
+        $scope.manageList = function(list){
+          $scope.current_list = list;
+          manageListModal();
+        }
+
+        $scope.viewList = function(list){
+          $scope.view_list = list;
+          viewListModal();
+        }
+
+        function manageListModal(id){
+          var modalInstance = $modal.open({
+              scope: $scope,
+              size:'lg',
+              templateUrl: '/assets/templates/modal_manage_list.tmpl.html',
+              // backdrop: 'static'
+          });
+        }
+
+        function viewListModal(id){
+          var modalInstance = $modal.open({
+              scope: $scope,
+              size:'lg',
+              templateUrl: '/assets/templates/modal_view_list.tmpl.html',
+              // backdrop: 'static'
           });
         }
 

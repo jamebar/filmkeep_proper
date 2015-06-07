@@ -106,7 +106,7 @@
                     $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
                     
                   }
-                  scope.search.query = null;
+                  $('.tt-input').typeahead('val', null);
 
                 }
 

@@ -19,15 +19,15 @@
           </li>
         </ul>
       </div>
-      <!-- <div class="sidebar-item lists-sidebar clearfix">
+      <div class="sidebar-item lists-sidebar clearfix">
         <h3>Lists <a class="pull-right " ng-click="newList()"><span class="glyphicon-plus glyphicon"></span> New list</a></h3>
         <ul>
-          <li ng-repeat="item in lists | limitTo: 6">
-            %%item.name%% (%%item.films.length%%)
+          <li ng-repeat="list in lists | limitTo: 15" ng-click="manageList(list)" style="cursor:pointer">
+            %%list.name%% (%%list.films.length%%)
           </li>
         </ul>
         <p ng-show="lists.length == 0">Create custom lists of films e.g., favorite christmas films, etc. </p>
-      </div> -->
+      </div>
       <div class="sidebar-item announcements-sidebar clearfix" ng-if="announcements.length > 0">
         <h3>Latest </h3>
         <ul>
