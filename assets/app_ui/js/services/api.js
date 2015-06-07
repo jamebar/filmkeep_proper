@@ -35,6 +35,9 @@ angular.module('Api', ['ngResource'])
         addRemoveListItem: function(params){
             return $http({ method: "post", url: "/api/lists/add-remove", params: params }).then( handleSuccess, handleError );
         },
+        updateListSortOrder: function(list_id, ordered_ids){
+            return $http({ method: "post", url: "/api/lists/sort-order", params: {list_id: list_id, ordered_ids: ordered_ids} }).then( handleSuccess, handleError );
+        },
         getWatchlist: function(user_id) {
             return $http({ method: "get", url: "/api/watchlist", params: { action: "get", user_id: user_id } }).then( handleSuccess, handleError );
         },

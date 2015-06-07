@@ -1,6 +1,8 @@
 .drag-handle {
     cursor: move;
     cursor: -webkit-grabbing;
+    margin-bottom: 1em;
+    display: block;
 }
 
 .sortable-ghost {
@@ -14,7 +16,7 @@
     margin:0;
   }
 
-  .list-info {
+  .list-info, .list-item .media-left {
     h3, h3 a{
       color: rgba(0,0,0,.3);
       text-transform: uppercase;
@@ -53,4 +55,20 @@
 .list-info{
   padding:2em;
     color: @filmkeep-beige;
+}
+
+.feed-list{
+  margin-bottom: 1em;
+}
+
+.list-posters span img {
+  width: 60px;
+  height:90px;
+  box-shadow: 3px 0px 3px 0px rgba(0,0,0,.6);
+}
+.list-posters span {
+  position: relative;
+  width: 30px;
+  display: block;
+  float: left;
 }

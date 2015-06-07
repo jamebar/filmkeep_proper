@@ -19,17 +19,23 @@
                 draggable: ".list-item",
                 animation: 550,
                 onUpdate: function (evt) {
-                    var itemEl = evt.item; 
+                    updateSortOrder(evt.models);
                     scope.$apply();
-                    parseSortOrder(scope.list.films, evt.models);
-
                 },
+              }
+
+              function updateSortOrder(items)
+              {
+                scope.show_loader = true;
+                parseSortOrder(scope.list.films, items);
+                Api.updateListSortOrder(scope.list.id, _.pluck(items, 'id').join(',')).then(function(response) {
+                  scope.show_loader = false;
+                })
               }
 
 
               scope.manageList = function(list){
                 Api.Lists.get({id:list.id},function(response) {
-                    response.films = parseSortOrder(response.films);
                     scope.list = response;
                 });
               }
@@ -42,7 +48,7 @@
                     if(l.id == scope.list.id){
                       _.assign(l, scope.list);
                     }
-                  })  
+                  })  ;
                 }else{
                   scope.list.$save(function(response){
                     scope.lists.push(response);
@@ -71,7 +77,7 @@
                 AlertService.Notice("Adding " + item.title + " to your list...");
                 var sort_order = scope.list.films || {};
                 Api.addRemoveListItem({tmdb_id: item.tmdb_id, list_action: 'add', list_id: scope.list.id, sort_order: sort_order.length }).then(function(response) {
-                  scope.list.films = parseSortOrder(response);
+                  scope.list.films = response;
                   updateLists(scope.list.films);
                 })
               }
@@ -147,6 +153,25 @@
 
             }
 
+        }
+    }
+  ])
+
+
+.directive('viewList', ['Api', '$filter','$compile', 
+    function(Api, $filter, $compile){
+        return {
+            restrict: 'E',
+            scope:{ viewList: '='
+                  },
+            templateUrl: '/assets/templates/lists/view_list.tmpl.html',
+            link: function(scope, element, attrs) {
+              
+              Api.Lists.get({id:scope.viewList.id},function(response) {
+                  scope.list = response;
+              });
+
+            }
         }
     }
   ])

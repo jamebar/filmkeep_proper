@@ -14,7 +14,7 @@ class CustomListsController extends \BaseController {
 	{
     
 		$user_id = \Input::has('user_id') ? \Input::get('user_id') : Auth::user()->id;
-    $list = CustomList::where('user_id', $user_id);
+    $list = CustomList::where('user_id', $user_id)->orderBy('name','asc');
     if(\Input::has('with_films'))
       $list->with('films');
 
@@ -52,6 +52,8 @@ class CustomListsController extends \BaseController {
 
         case 'remove':
         $c->films()->detach($film_id);
+        $ids = array_pluck($c->films()->get(), 'id');
+        $c->setSortOrder($ids);
         return Response::json($c->films()->get());
         break;
       }
@@ -122,6 +124,23 @@ class CustomListsController extends \BaseController {
     }
 
 	}
+
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function updateSortOrder()
+  {
+    $list_id = \Input::get('list_id');
+    $ordered_ids = explode( ',', \Input::get('ordered_ids'));
+    $c = CustomList::with('films')->where('id',$list_id)->first();
+    $c->setSortOrder($ordered_ids);
+    
+    return Response::json($c->films()->orderBy('film_list.sort_order', 'asc')->get());
+
+  }
 
 
 	/**

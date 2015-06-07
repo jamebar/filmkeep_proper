@@ -362,11 +362,25 @@ angular.module('myApp', [
           manageListModal();
         }
 
+        $scope.viewList = function(list){
+          $scope.view_list = list;
+          viewListModal();
+        }
+
         function manageListModal(id){
           var modalInstance = $modal.open({
               scope: $scope,
               size:'lg',
               templateUrl: '/assets/templates/modal_manage_list.tmpl.html',
+              // backdrop: 'static'
+          });
+        }
+
+        function viewListModal(id){
+          var modalInstance = $modal.open({
+              scope: $scope,
+              size:'lg',
+              templateUrl: '/assets/templates/modal_view_list.tmpl.html',
               // backdrop: 'static'
           });
         }
@@ -1237,17 +1251,23 @@ var aeReview = angular.module('ae-review', [
                 draggable: ".list-item",
                 animation: 550,
                 onUpdate: function (evt) {
-                    var itemEl = evt.item; 
+                    updateSortOrder(evt.models);
                     scope.$apply();
-                    parseSortOrder(scope.list.films, evt.models);
-
                 },
+              }
+
+              function updateSortOrder(items)
+              {
+                scope.show_loader = true;
+                parseSortOrder(scope.list.films, items);
+                Api.updateListSortOrder(scope.list.id, _.pluck(items, 'id').join(',')).then(function(response) {
+                  scope.show_loader = false;
+                })
               }
 
 
               scope.manageList = function(list){
                 Api.Lists.get({id:list.id},function(response) {
-                    response.films = parseSortOrder(response.films);
                     scope.list = response;
                 });
               }
@@ -1260,7 +1280,7 @@ var aeReview = angular.module('ae-review', [
                     if(l.id == scope.list.id){
                       _.assign(l, scope.list);
                     }
-                  })  
+                  })  ;
                 }else{
                   scope.list.$save(function(response){
                     scope.lists.push(response);
@@ -1289,7 +1309,7 @@ var aeReview = angular.module('ae-review', [
                 AlertService.Notice("Adding " + item.title + " to your list...");
                 var sort_order = scope.list.films || {};
                 Api.addRemoveListItem({tmdb_id: item.tmdb_id, list_action: 'add', list_id: scope.list.id, sort_order: sort_order.length }).then(function(response) {
-                  scope.list.films = parseSortOrder(response);
+                  scope.list.films = response;
                   updateLists(scope.list.films);
                 })
               }
@@ -1305,7 +1325,7 @@ var aeReview = angular.module('ae-review', [
               scope.removeListItem = function(film)
               {
                 Api.addRemoveListItem({film_id: film.id, list_action: 'remove', list_id: scope.list.id}).then(function(response) {
-                  scope.list.films = parseSortOrder(response);
+                  scope.list.films = response;
                   updateLists(scope.list.films);
                 })
               }
@@ -1365,6 +1385,25 @@ var aeReview = angular.module('ae-review', [
 
             }
 
+        }
+    }
+  ])
+
+
+.directive('viewList', ['Api', '$filter','$compile', 
+    function(Api, $filter, $compile){
+        return {
+            restrict: 'E',
+            scope:{ viewList: '='
+                  },
+            templateUrl: '/assets/templates/lists/view_list.tmpl.html',
+            link: function(scope, element, attrs) {
+              
+              Api.Lists.get({id:scope.viewList.id},function(response) {
+                  scope.list = response;
+              });
+
+            }
         }
     }
   ])
@@ -1848,6 +1887,7 @@ angular.module('Filters',[])
     var keys = {'filmkeep\\review':'reviewed',
                 'filmkeep\\watchlist':'added',
                 'filmkeep\\comment':'commented',
+                'filmkeep\\customlist':'created',
                 'filmkeep\\follower':'started following'
                 };
     return keys[verb];
@@ -1857,7 +1897,7 @@ angular.module('Filters',[])
 angular.module('AlertBox', [])
     .service('AlertService', [ '$timeout', function($timeout) {
 
-        this.delay = 2000;
+        this.delay = 3000;
         
         this.alerts = [];
         this.warnings = [];
@@ -2020,6 +2060,9 @@ angular.module('Api', ['ngResource'])
             }),
         addRemoveListItem: function(params){
             return $http({ method: "post", url: "/api/lists/add-remove", params: params }).then( handleSuccess, handleError );
+        },
+        updateListSortOrder: function(list_id, ordered_ids){
+            return $http({ method: "post", url: "/api/lists/sort-order", params: {list_id: list_id, ordered_ids: ordered_ids} }).then( handleSuccess, handleError );
         },
         getWatchlist: function(user_id) {
             return $http({ method: "get", url: "/api/watchlist", params: { action: "get", user_id: user_id } }).then( handleSuccess, handleError );

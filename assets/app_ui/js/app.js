@@ -362,11 +362,25 @@ angular.module('myApp', [
           manageListModal();
         }
 
+        $scope.viewList = function(list){
+          $scope.view_list = list;
+          viewListModal();
+        }
+
         function manageListModal(id){
           var modalInstance = $modal.open({
               scope: $scope,
               size:'lg',
               templateUrl: '/assets/templates/modal_manage_list.tmpl.html',
+              // backdrop: 'static'
+          });
+        }
+
+        function viewListModal(id){
+          var modalInstance = $modal.open({
+              scope: $scope,
+              size:'lg',
+              templateUrl: '/assets/templates/modal_view_list.tmpl.html',
               // backdrop: 'static'
           });
         }

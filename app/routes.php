@@ -122,6 +122,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
 
     $router->resource('lists', 'CustomListsController');
     $router->resource('lists/add-remove', 'CustomListsController@addRemove');
+    $router->resource('lists/sort-order', 'CustomListsController@updateSortOrder');
     $router->resource('rating_types', 'RatingTypesController');
     $router->get('followers', 'FollowerController@getFollowers');
     $router->post('follow/{follower_id}', 'FollowerController@follow');

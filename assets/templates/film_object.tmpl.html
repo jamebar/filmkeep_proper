@@ -13,8 +13,8 @@
   </div>
 
   <span class="film-object-content">
-    <h3 ng-if="horizontal"><a ng-click="goToLink()">%%film.title%% <span ng-if="film.certification">(%%film.certification%%)</span></a></h3>
-    <p ng-if="horizontal" text-more="%%film.summary%%" ></p>
+    <h3 ng-if="horizontal == 'true'"><a ng-click="goToLink()">%%film.title%% <span ng-if="film.certification">(%%film.certification%%)</span></a></h3>
+    <p ng-if="horizontal == 'true'" text-more="%%film.summary%%" ></p>
     <div class="fo-actions">
       <a class="action "  ng-if="horizontal" tooltip="Watch Trailer" ng-click="getTrailer(film.tmdb_id)"><span class="ficon glyphicon glyphicon-facetime-video"></span></a>
       <a class="action" tooltip="Review this" ng-click="newReview(film)" ng-if="film.reviewed === 'false'"><span class="ficon glyphicon glyphicon-tasks"></span><!--  <span class="review-label">review</span>  --></a>
