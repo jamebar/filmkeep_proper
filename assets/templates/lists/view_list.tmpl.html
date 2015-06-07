@@ -1,9 +1,12 @@
 <div class="list" ng-if="list">
   <div class="row">
     <div class="col-md-4 list-info">
-        <h2>%%list.name%%</h2>
-        <p>%%list.description%%</p>
 
+        <h2>%%list.name%%</h2>
+        <div class="list-meta">
+          <p>by: <strong>%%list.user.name%%</strong> <br>last updated: <strong>%%list.updated_at%%</strong></p>
+        </div>
+        <p>%%list.description%%</p>
         <span ng-show="all.length > 1">
           <h3>Other lists by %%list.user.name%%</h3>
           <ul>
