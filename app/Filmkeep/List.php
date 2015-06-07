@@ -8,10 +8,10 @@ class CustomList extends \Eloquent {
 
     protected $table = 'lists';
     
-    public $activityLazyLoading = ['film','user'];
+    public $activityLazyLoading = ['user'];
 
     public function films(){
-      return $this->belongsToMany('Filmkeep\Film', 'film_list','list_id','film_id');
+      return $this->belongsToMany('Filmkeep\Film', 'film_list','list_id','film_id')->withPivot(['sort_order']);
     }
 
     public function user(){

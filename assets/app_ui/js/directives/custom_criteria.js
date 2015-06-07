@@ -13,7 +13,7 @@
             link: function($scope, element, attrs) {
               var me = Api.me();
               $scope.common = attrs.common || false;
-              $scope.custom = attrs.custom || true;
+              $scope.custom = attrs.custom || false;
 
               $scope.newcriteria = new Api.RatingTypes();
               ReviewService.getRatingTypes().then(function(results){

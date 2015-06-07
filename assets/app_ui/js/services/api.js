@@ -19,7 +19,7 @@ angular.module('Api', ['ngResource'])
         Comments: build_resource('/comments/:id', null, { update: { method:'PUT' }, 'query':{ method: 'GET'}}),
         RatingTypes: build_resource('/rating_types/:id', null, { update: { method:'PUT', params:{id:'@id'}}, delete: { method:'DELETE', params:{id:'@id'}}, 'query':{ method: 'GET'}}),
         Users: build_resource('/user/:id', null, { update: { method:'PUT', params:{id:'@id'}}, search: { method:'GET'}, 'query':{ method: 'GET', isArray:true}}),
-        Lists: build_resource('/rating_types:id', null, {
+        Lists: build_resource('/lists/:id', null, {
                 'update': {
                   method: 'PUT', 
                   params: {id: '@id'},
@@ -30,12 +30,11 @@ angular.module('Api', ['ngResource'])
                 },
                 'query': {
                     method: 'GET'
-                },
-                'addRemove':{
-                    method: 'POST',
-                    params: {film_id: '@film_id'}
                 }
             }),
+        addRemoveListItem: function(params){
+            return $http({ method: "post", url: "/api/lists/add-remove", params: params }).then( handleSuccess, handleError );
+        },
         getWatchlist: function(user_id) {
             return $http({ method: "get", url: "/api/watchlist", params: { action: "get", user_id: user_id } }).then( handleSuccess, handleError );
         },

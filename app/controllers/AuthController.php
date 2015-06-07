@@ -138,7 +138,6 @@ class AuthController extends Controller
 
             // Send a request with it
             $result = json_decode( $googleService->request( 'https://www.googleapis.com/oauth2/v1/userinfo' ), true );
-
             $user = User::where('google_id' , $result['id'] )->orWhere('email', $result['email'])->first();
             //If user is found in DB, log them in and update the profile pic
             if($user)

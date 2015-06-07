@@ -73,7 +73,7 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('./')); //Write the file back to the same spot.
 
   gulp.src([
-    'assets/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css',
+    'assets/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css'
     ])
   .pipe(plumber())
   .pipe(concat('vendor.css'))
@@ -105,7 +105,9 @@ gulp.task('scripts', function() {
         'assets/bower_components/angulartics/dist/angulartics-ga.min.js',
         'assets/bower_components/angular-elastic/elastic.js',
         'assets/bower_components/angular-sanitize/angular-sanitize.min.js',
-        'assets/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js'
+        'assets/bower_components/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js',
+        'assets/bower_components/Sortable/Sortable.min.js',
+        'assets/bower_components/Sortable/ng-sortable.js'
         ])  
         .pipe(plumber())
         .pipe(concat('vendor.js'))

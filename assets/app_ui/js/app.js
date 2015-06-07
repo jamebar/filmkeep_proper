@@ -30,7 +30,8 @@ angular.module('myApp', [
     'Filters',
     'ngSanitize',
     'getting-started',
-    'custom-criteria'
+    'custom-criteria',
+    'lists'
 ], function($interpolateProvider) {
     $interpolateProvider.startSymbol('%%');
     $interpolateProvider.endSymbol('%%');
@@ -313,8 +314,7 @@ angular.module('myApp', [
           $scope.cancompare = true;
           var modalInstance = $modal.open({
                 scope: $scope,
-                templateUrl: '/assets/templates/modal_compare.tmpl.html',
-                backdrop: 'static'
+                templateUrl: '/assets/templates/modal_compare.tmpl.html'
             });
 
           ReviewService.getCompares(obj.film_id).then(function(response){
@@ -345,6 +345,25 @@ angular.module('myApp', [
 
             $scope.showcompare = true;
             
+          });
+        }
+
+        $scope.newList = function(){
+          $scope.current_list = new Api.Lists();
+          manageListModal();
+        }
+        
+        $scope.manageList = function(list){
+          $scope.current_list = list;
+          manageListModal();
+        }
+
+        function manageListModal(id){
+          var modalInstance = $modal.open({
+              scope: $scope,
+              size:'lg',
+              templateUrl: '/assets/templates/modal_manage_list.tmpl.html',
+              // backdrop: 'static'
           });
         }
 

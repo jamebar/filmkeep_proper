@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=12">
     <link rel="stylesheet" href="/assets/css/vendor.css">
     <!-- <link rel="stylesheet" href="/assets/css/animate.min.css"> -->
-  <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150530.css">
+  <link rel="stylesheet" id="bundlecss" href="/assets/css/styles-20150606.css">
   <link rel="stylesheet" href="/assets/css/filmkeep-font.css?v=2">
 
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700italic' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Volkhov:400,700italic' rel='stylesheet' type='text/css'>
-    <script src="/assets/js/vendor.js?cache=1.2"></script>
-    <script id="bundle" src="/assets/js/app-20150530.js"></script>
-    <script id="templates" src="/assets/js/templates-20150530.js"></script>
+    <script src="/assets/js/vendor.js?cache=1.3"></script>
+    <script id="bundle" src="/assets/js/app-20150606.js"></script>
+    <script id="templates" src="/assets/js/templates-20150606.js"></script>
     <base href="/" />
     <script>
       var image_path_config = {{json_encode($image_path_config)}};
@@ -66,7 +66,7 @@
       <span class="dropdown visible-xs-block">
         <a href="#" class="dropdown-toggle notif-wrapper  add-review-mobile pull-right" data-toggle="dropdown" ng-click="markSeen()"><i class="icon-megaphone"></i> <span class="notif_count" ng-show="notif_new > 0">%%notif_new%%</span></a>
         <ul class="dropdown-menu notif" role="menu">
-          <li ng-if="notif_items.length <1">You have no notifications</li>
+          <li ng-if="notif_items.length < 1">You have no notifications</li>
           <li  ng-repeat="notif_item in notif_items">
             <notif-items></notif-items>
           </li> 

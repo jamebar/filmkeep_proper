@@ -22,6 +22,9 @@ class UserRepository
         $user = new User;
 
         $user->name = array_get($input, 'name');
+        if(empty($user->name))
+          $user->name  = $this->nameFromEmail( array_get($input, 'email') );
+          
         $user->email    = array_get($input, 'email');
         $user->password = array_get($input, 'password');
         $user->avatar = array_get($input, 'avatar');
@@ -66,8 +69,13 @@ class UserRepository
             $user->username = $new_username . $user->id;
             $user->save();
         }
-        // dd($user);
         return $user;
+    }
+
+    public function nameFromEmail($email)
+    {
+      $email_parts = explode("@", $email);
+      return $email_parts[0];
     }
 
     /**

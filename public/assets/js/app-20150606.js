@@ -314,8 +314,7 @@ angular.module('myApp', [
           $scope.cancompare = true;
           var modalInstance = $modal.open({
                 scope: $scope,
-                templateUrl: '/assets/templates/modal_compare.tmpl.html',
-                backdrop: 'static'
+                templateUrl: '/assets/templates/modal_compare.tmpl.html'
             });
 
           ReviewService.getCompares(obj.film_id).then(function(response){
@@ -353,6 +352,7 @@ angular.module('myApp', [
           $scope.current_list = new Api.Lists();
           manageListModal();
         }
+        
         $scope.manageList = function(list){
           $scope.current_list = list;
           manageListModal();
@@ -361,6 +361,7 @@ angular.module('myApp', [
         function manageListModal(id){
           var modalInstance = $modal.open({
               scope: $scope,
+              size:'lg',
               templateUrl: '/assets/templates/modal_manage_list.tmpl.html',
               // backdrop: 'static'
           });
@@ -1075,7 +1076,7 @@ var aeReview = angular.module('ae-review', [
             link: function($scope, element, attrs) {
               var me = Api.me();
               $scope.common = attrs.common || false;
-              $scope.custom = attrs.custom || true;
+              $scope.custom = attrs.custom || false;
 
               $scope.newcriteria = new Api.RatingTypes();
               ReviewService.getRatingTypes().then(function(results){
@@ -1214,28 +1215,73 @@ var aeReview = angular.module('ae-review', [
 
   'use strict';
 
-  angular.module('lists', [
+  angular.module('lists', ['ng-sortable'
 ])
 
-  .directive('manageList', ['Api', '$filter','$compile', 
-    function(Api, $filter, $compile){
+  .directive('manageList', ['Api', '$filter','$compile', 'AlertService','$timeout',
+    function(Api, $filter, $compile, AlertService, $timeout){
         return {
             restrict: 'E',
-            scope:{ currentList: '='},
+            scope:{ currentList: '=',
+                    lists: '='
+                  },
             templateUrl: '/assets/templates/lists/manage_list.tmpl.html',
             link: function(scope, element, attrs) {
+              scope.query = null;
+              scope.dragOptions = {
+                handle: ".drag-handle",
+                draggable: ".list-item",
+                animation: 550,
+                onUpdate: function (evt) {
+                    var itemEl = evt.item; 
+                    scope.$apply();
+                    parseSortOrder(scope.list.films, evt.models);
+                    console.log(evt.models)
+
+                },
+              }
+              
+
               Api.Lists.get({id:scope.currentList.id},function(response) {
+                  response.films = parseSortOrder(response.films);
                   scope.list = response;
               });
 
               scope.saveList = function(){
                 if(scope.list.id){
                   scope.list.$update();
+                  AlertService.Notice("Your list has been updated.");
                 }else{
                   scope.list.$save(function(response){
 
                   })
                 }
+              }
+
+              function parseSortOrder(target, source)
+              {
+                source =  (typeof source !== 'undefined') ? source : target;
+                _.forEach(source, function(s, key){
+                  target[key].pivot.sort_order = key;
+                })
+
+                return target;
+              }
+
+              function addListItem(item)
+              {
+                AlertService.Notice("Adding " + item.title + " to your list...");
+                var sort_order = scope.list.films || {};
+                Api.addRemoveListItem({tmdb_id: item.tmdb_id, list_action: 'add', list_id: scope.list.id, sort_order: sort_order.length }).then(function(response) {
+                  scope.list.films = parseSortOrder(response);
+                })
+              }
+
+              scope.removeListItem = function(film)
+              {
+                Api.addRemoveListItem({film_id: film.id, list_action: 'remove', list_id: scope.list.id}).then(function(response) {
+                  scope.list.films = response;
+                })
               }
 
               // Instantiate the bloodhound suggestion engine
@@ -1279,8 +1325,15 @@ var aeReview = angular.module('ae-review', [
                     }
                 };
 
-                scope.$on('typeahead:selected', function(a, b) {
-                })
+                scope.$on('typeahead:autocompleted', searchComplete);
+                scope.$on('typeahead:selected', searchComplete);
+                
+                function searchComplete(event, suggestion, dataset){
+                  addListItem(suggestion);
+                  $('.tt-input').typeahead('val', null);
+                }
+
+
 
             }
 
@@ -1395,7 +1448,7 @@ var aeReview = angular.module('ae-review', [
                     $state.go('root.film', {filmId: suggestion.tmdb_id, filmSlug: $filter('slugify')(suggestion.title) });
                     
                   }
-                  scope.search.query = null;
+                  $('.tt-input').typeahead('val', null);
 
                 }
 
@@ -1937,12 +1990,11 @@ angular.module('Api', ['ngResource'])
                 },
                 'query': {
                     method: 'GET'
-                },
-                'addRemove':{
-                    method: 'POST',
-                    params: {film_id: '@film_id'}
                 }
             }),
+        addRemoveListItem: function(params){
+            return $http({ method: "post", url: "/api/lists/add-remove", params: params }).then( handleSuccess, handleError );
+        },
         getWatchlist: function(user_id) {
             return $http({ method: "get", url: "/api/watchlist", params: { action: "get", user_id: user_id } }).then( handleSuccess, handleError );
         },
