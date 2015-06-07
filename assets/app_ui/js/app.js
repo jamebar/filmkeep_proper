@@ -365,8 +365,15 @@ angular.module('myApp', [
         }
 
         $scope.viewList = function(list){
-          $scope.view_list = list;
-          viewListModal();
+          if(me.user.id == list.user.id)
+          {
+            return $scope.manageList(list);
+          }
+          else{
+            $scope.view_list = list;
+            viewListModal();
+          }
+          
         }
 
         function manageListModal(id){
