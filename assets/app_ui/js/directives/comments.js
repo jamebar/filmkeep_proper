@@ -46,6 +46,18 @@
                 })
               }
 
+              scope.deleteComment = function(c){
+                var resource = new Api.Comments();
+                resource.id = c.id;
+
+                resource.$delete(function(response){
+                  scope.comments = _.reject(scope.comments, function(com){
+                    return com.id == c.id;
+                  })
+                  AlertService.Notice("Your comment has been deleted.");
+                });
+              }
+
               scope.newComment();
 
             }

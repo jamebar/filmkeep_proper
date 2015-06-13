@@ -23,6 +23,11 @@ class CommentsController extends \BaseController {
       return [];
   }
 
+  public function show($id)
+  {
+    Response::json( Comment::find($id) );
+  }
+
 
   /**
    * Store a newly created resource in storage.
@@ -51,6 +56,17 @@ class CommentsController extends \BaseController {
       return $object->comments()->save($comment)->load('user');
     else
       return [];
+  }
+
+  public function destroy($id)
+  {
+    if(Auth::guest())
+      App::abort(403, 'Unauthorized action.');
+
+    $c = Comment::where('id', $id)->where('user_id', Auth::user()->id)->first()->delete();
+
+    return \Response::json(['status' => 200, 'results'=> $c]);
+
   }
 
   private function klass($type, $id)

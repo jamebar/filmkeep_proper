@@ -16,7 +16,7 @@ angular.module('Api', ['ngResource'])
       return {
         Reviews: build_resource('/review/:review_id', null, { update: { method:'PUT' }, 'query':{ method: 'GET'}}),
         Notifications: build_resource('/notifications', null, { markSeen: { method:'post', params:{action: "post"} }, 'query':{ method: 'GET', isArray:true}}),
-        Comments: build_resource('/comments/:id', null, { update: { method:'PUT' }, 'query':{ method: 'GET'}}),
+        Comments: build_resource('/comments/:id', null, { update: { method:'PUT' }, delete: { method:'DELETE', params:{id:'@id'}}, 'query':{ method: 'GET'}}),
         RatingTypes: build_resource('/rating_types/:id', null, { update: { method:'PUT', params:{id:'@id'}}, delete: { method:'DELETE', params:{id:'@id'}}, 'query':{ method: 'GET'}}),
         Users: build_resource('/user/:id', null, { update: { method:'PUT', params:{id:'@id'}}, search: { method:'GET'}, 'query':{ method: 'GET', isArray:true}}),
         Lists: build_resource('/lists/:id', null, {

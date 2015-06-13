@@ -2,7 +2,17 @@
 <div class="comment" ng-repeat="comment in comments">
   <div class="media"><div class="media-left"><avatar class="avatar sm" info="comment.user"></avatar></div>
     <div class="media-body"><span class="comment_desc" ng-class="{spoiler: comment.spoiler == true && comment.user.id !==me.user.id}" ng-bind-html="comment.comment | linky"> </span></div>
-    <div class="media-right"><span class="comment_date">%%comment.updated_at | fDate %%</span></div>
+    <div class="media-right">
+      <div class="media">
+        <div class="media-left">
+          <span class="comment_date">%%comment.updated_at | fDate %%</span> 
+        </div>
+        <div class="media-body">
+          <a ng-if="comment.user.id ==me.user.id" ng-really-message='Are you sure you want to delete this comment?' ng-really-click="deleteComment(comment)"><i class="glyphicon glyphicon-remove-circle"></i></a>
+        </div>
+      </div>
+      <!-- <a ng-click="deleteComment(comment)"><i class="glyphicon glyphicon-remove"></i></a> -->
+    </div>
   </div>
 </div>
 <comments-form ng-if="me.user"></comments-form>

@@ -117,8 +117,7 @@ Route::group(['prefix' => 'api', 'after' => 'allowOrigin'], function($router) {
     $router->get('user/search', 'UsersController@search');
     $router->resource('user', 'UsersController');
 
-    $router->get('comments', 'CommentsController@index');
-    $router->post('comments', 'CommentsController@store');
+    $router->resource('comments', 'CommentsController');
 
     $router->resource('lists', 'CustomListsController');
     $router->resource('lists/add-remove', 'CustomListsController@addRemove');
