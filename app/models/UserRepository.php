@@ -31,14 +31,8 @@ class UserRepository
         $user->google_id = array_get($input, 'google_id');
         $user->facebook_id = array_get($input, 'facebook_id');
         $user->confirmed = (array_get($input, 'confirmed')) ?  array_get($input, 'confirmed') : 0;
-
-        $new_username =  preg_replace("/[^A-Za-z0-9]/", "", $user->name);
-        $username_check = User::where('username', $new_username)->first();
-
-        if (is_null($username_check))
-        {
-            $user->username = $new_username;
-        }
+        $user->username =  $this->unique_username($user->name);
+        
 
         // The password confirmation will be removed from model
         // before saving. This field will be used in Ardent's
@@ -51,9 +45,6 @@ class UserRepository
         // Save if valid. Password field will be hashed before save
         $this->save($user);
 
-        //have user follow itself
-        // Follower::firstOrCreate(['user_id'=>$user->id, 'follower_id'=>$user->id]);
-
         //follow the feed
         if($user->id)
         {
@@ -64,12 +55,29 @@ class UserRepository
           FeedManager::followUser($user->id, 4);
         }
 
-        if (!is_null($username_check) && $user->id)
-        {
-            $user->username = $new_username . $user->id;
-            $user->save();
-        }
         return $user;
+    }
+
+    public function unique_username($name)
+    {
+      $username = preg_replace("/[^A-Za-z0-9]/", "", strtolower($name));
+      $u = User::where('username', $username)->first();
+      $i = 0;
+      $unique = false;
+
+      while($unique == false)
+      {
+        $i++;
+        if (is_null($u))
+        {
+          $unique = true;
+          return $username;
+        }else{
+          $username = $name . $i;
+          $u = User::where('username', $username)->first();
+        }
+      }
+      
     }
 
     public function nameFromEmail($email)
