@@ -15,6 +15,8 @@
             },
             templateUrl: '/assets/templates/comments/comments.tmpl.html',
             link: function(scope, element, attrs) {
+              scope.flag = false;
+
               $timeout(function() {
                 element.find('.comment_input').focus();
               });
@@ -33,6 +35,7 @@
               }
               
               scope.addComment = function(){
+                scope.flag = true;
                 scope.comment.type = scope.type;
                 scope.comment.type_id = scope.commentableId;
                 scope.comment.film_id = scope.filmId;
@@ -40,9 +43,10 @@
                   AlertService.Notice("Your comment has been added.");
                   scope.comments.push(scope.comment)
                   scope.newComment();
+                  scope.flag = false;
                 },function(response){
                   AlertService.Notice("Whoops, make sure you type a comment.");
-                  
+                  scope.flag = false;
                 })
               }
 
